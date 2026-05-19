@@ -14,6 +14,10 @@ const categories = [
   { id: "equipment", label: "Equipment & Repair", icon: "🔧" },
   { id: "hearth", label: "Home & Hearth", icon: "🔥" },
 ];
+{ id: "equipment", label: "Equipment & Repair", icon: "🔧" },
+  { id: "hearth", label: "Home & Hearth", icon: "🔥" },
+  { id: "farmservices", label: "Farm Services", icon: "🐄" },
+];
 
 const sampleListings = [
   { name: "Altamont Feed & Farm Supply", category: "feed", town: "Altamont", county: "Albany", description: "Full-service farm and feed store serving the Capital Region since 1962. Chick days every spring. Carries Purina, Dumor, and bulk grain. Fencing, waterers, and small animal supplies.", tags: ["Bulk Grain", "Chick Days", "Fencing", "Small Animal"], phone: "(518) 555-0134", hours: "Mon–Sat 8am–6pm, Sun 9am–3pm", address: "Route 156, Altamont, NY 12009", featured: true, established: 1962, status: "published" },
