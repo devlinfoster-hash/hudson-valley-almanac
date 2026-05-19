@@ -58,7 +58,7 @@ function HomePage() {
         .from("listings")
         .select("*")
         .eq("status", "published")
-        .order("featured", { ascending: false });
+        .order("featured", { ascending: false }).limit(1000);
 
       if (error) throw error;
 
