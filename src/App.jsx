@@ -13,8 +13,6 @@ const categories = [
   { id: "learn", label: "Learn & Community", icon: "📖" },
   { id: "equipment", label: "Equipment & Repair", icon: "🔧" },
   { id: "hearth", label: "Home & Hearth", icon: "🔥" },
-  { id: "equipment", label: "Equipment & Repair", icon: "🔧" },
-  { id: "hearth", label: "Home & Hearth", icon: "🔥" },
   { id: "farmservices", label: "Farm Services", icon: "🐄" },
 ];
 
