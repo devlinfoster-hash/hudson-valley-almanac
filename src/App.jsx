@@ -12,6 +12,7 @@ const categories = [
   { id: "seeds", label: "Seeds & Plants", icon: "🌱" },
   { id: "learn", label: "Learn & Community", icon: "📖" },
   { id: "equipment", label: "Equipment & Repair", icon: "🔧" },
+  { id: "hearth", label: "Home & Hearth", icon: "🔥" },
 ];
 
 const sampleListings = [
