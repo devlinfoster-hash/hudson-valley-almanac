@@ -543,9 +543,9 @@ function AdminPage() {
     >
       Submit Your Business
     </a>
-    <p style={{ color: '#9e8070', fontSize: '0.85rem', marginTop: '8px' }}>
-      Already listed? Email us to update your information or report an error.
-    </p>
+<p style={{ color: '#9e8070', fontSize: '0.85rem', marginTop: '8px' }}>
+  {'Already listed? Email us to update your information or report an error.'}
+</p>
   </div>
 </div>
 
