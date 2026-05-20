@@ -588,8 +588,6 @@ function AdminPage() {
     </div>
 
   </div>
+<footer>
+  Hudson Valley Almanac · Hudson Valley & Capital Region · © 2024
 </footer>
-      </div>
-    </div>
-  );
-}
