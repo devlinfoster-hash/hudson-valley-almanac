@@ -512,38 +512,6 @@ function AdminPage() {
             </div>
           </div>
         ))}
-        {/* SUBMIT YOUR BUSINESS SECTION */}
-<div style={{
-  backgroundColor: '#f9f5ef',
-  borderTop: '2px solid #e8dcc8',
-  padding: '48px 24px',
-  textAlign: 'center',
-  marginTop: '48px'
-}}>
-  <div style={{ maxWidth: '560px', margin: '0 auto' }}>
-    <h2 style={{ fontSize: '1.8rem', color: '#3d2b1f', marginBottom: '12px' }}>
-      🌾 Get Listed on Hudson Valley Almanac
-    </h2>
-    <p style={{ color: '#6b5344', fontSize: '1rem', marginBottom: '24px' }}>
-      Are you a local farm, maker, service provider, or community resource in the Hudson Valley or Capital Region? Listings are completely free. Submit your business and we'll add you within 48 hours.
-    </p>
-    
-      href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac"
-      style={{
-        display: 'inline-block',
-        backgroundColor: '#6b8f47',
-        color: 'white',
-        padding: '14px 32px',
-        borderRadius: '8px',
-        textDecoration: 'none',
-        fontWeight: '600',
-        fontSize: '1rem',
-        marginBottom: '12px'
-      }}
-    >
-      Submit Your Business
-    </a>
-<p style={{ color: '#9e8070', fontSize: '0.85rem', marginTop: '8px' }}>
 <div style={{backgroundColor:'#f9f5ef',borderTop:'2px solid #e8dcc8',padding:'48px 24px',textAlign:'center',marginTop:'48px'}}>
   <div style={{maxWidth:'560px',margin:'0 auto'}}>
     <h2 style={{fontSize:'1.8rem',color:'#3d2b1f',marginBottom:'12px'}}>
