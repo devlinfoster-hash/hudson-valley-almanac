@@ -321,8 +321,9 @@ function HomePage() {
                 <div className="modal-field"><label>Category</label><span>{categories.find((c) => c.id === selected.category)?.label}</span></div>
               </div>
               <div className="claim-box">
-                <p>Own or manage <strong>{selected.name}</strong>? Claim your listing to add photos, update details, and reach more local homesteaders.</p>
-                <button className="btn-primary" onClick={() => { setSelected(null); setShowSubmit(true); }}>Claim This Listing</button>
+  <p>Own or manage <strong>{selected.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
+  <a href={`mailto:hello@hudsonvalleyalmanac.com?subject=Update My Listing - ${selected.name}`} className="btn-primary" style={{display:'inline-block',textDecoration:'none'}}>Update My Listing</a>
+</div>
               </div>
             </div>
           </div>
