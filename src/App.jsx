@@ -28,16 +28,16 @@ const categories = [
 ];
 
 const sampleListings = [
-  { name: "Altamont Feed & Farm Supply", category: "feed", town: "Altamont", county: "Albany", description: "Full-service farm and feed store serving the Capital Region since 1962. Chick days every spring. Carries Purina, Dumor, and bulk grain. Fencing, waterers, and small animal supplies.", tags: ["Bulk Grain", "Chick Days", "Fencing", "Small Animal"], phone: "(518) 555-0134", hours: "Mon–Sat 8am–6pm, Sun 9am–3pm", address: "Route 156, Altamont, NY 12009", featured: true, established: 1962, status: "published" },
+  { name: "Altamont Feed & Farm Supply", category: "feed", town: "Altamont", county: "Albany", description: "Full-service farm and feed store serving the Capital Region since 1962. Chick days every spring. Carries Purina, Dumor, and bulk grain. Fencing, waterers, and small animal supplies.", tags: ["Bulk Grain", "Chick Days", "Fencing", "Small Animal"], phone: "(518) 555-0134", hours: "Mon-Sat 8am-6pm, Sun 9am-3pm", address: "Route 156, Altamont, NY 12009", featured: true, established: 1962, status: "published" },
   { name: "Kinderhook Heritage Meats", category: "animals", town: "Kinderhook", county: "Columbia", description: "USDA-inspected small-scale slaughter and processing facility accepting individual animals. Beef, pork, lamb, and goat. Custom cuts, vacuum sealing, and freezer wrap.", tags: ["USDA Inspected", "Beef", "Pork", "Lamb", "Custom Cuts"], phone: "(518) 555-0247", hours: "By appointment", address: "42 County Route 21, Kinderhook, NY 12106", featured: true, established: 2008, status: "published" },
-  { name: "Catskill Mountain Seeds", category: "seeds", town: "Tannersville", county: "Greene", description: "Heirloom and open-pollinated vegetable, herb, and flower seeds adapted for Zone 5b–6a growing conditions. Locally trialed varieties. Seed saving workshops offered every February.", tags: ["Heirloom", "Open-Pollinated", "Zone 5b-6a", "Seed Saving"], phone: "(518) 555-0461", hours: "Online year-round; farm stand May–Oct", address: "Tannersville, NY 12485", featured: true, established: 2014, status: "published" },
-  { name: "Greene County Well & Water", category: "water", town: "Catskill", county: "Greene", description: "Residential and agricultural well drilling, pump installation, and water quality testing. Serving Greene, Columbia, and Ulster counties. Licensed and insured. Free estimates.", tags: ["Well Drilling", "Pump Repair", "Water Testing", "Agricultural"], phone: "(518) 555-0358", hours: "Mon–Fri 7am–5pm", address: "Catskill, NY 12414", featured: false, established: 1987, status: "published" },
+  { name: "Catskill Mountain Seeds", category: "seeds", town: "Tannersville", county: "Greene", description: "Heirloom and open-pollinated vegetable, herb, and flower seeds adapted for Zone 5b-6a growing conditions. Locally trialed varieties. Seed saving workshops offered every February.", tags: ["Heirloom", "Open-Pollinated", "Zone 5b-6a", "Seed Saving"], phone: "(518) 555-0461", hours: "Online year-round; farm stand May-Oct", address: "Tannersville, NY 12485", featured: true, established: 2014, status: "published" },
+  { name: "Greene County Well and Water", category: "water", town: "Catskill", county: "Greene", description: "Residential and agricultural well drilling, pump installation, and water quality testing. Serving Greene, Columbia, and Ulster counties. Licensed and insured. Free estimates.", tags: ["Well Drilling", "Pump Repair", "Water Testing", "Agricultural"], phone: "(518) 555-0358", hours: "Mon-Fri 7am-5pm", address: "Catskill, NY 12414", featured: false, established: 1987, status: "published" },
   { name: "Rensselaer Plateau Farm School", category: "learn", town: "Grafton", county: "Rensselaer", description: "Year-round workshops on small-scale farming, animal husbandry, food preservation, and rural skills. Courses in cheesemaking, butchery, fermentation, timber framing, and draft animal work.", tags: ["Workshops", "Cheesemaking", "Butchery", "Fermentation"], phone: "(518) 555-0683", hours: "See online calendar", address: "Grafton, NY 12082", featured: true, established: 2016, status: "published" },
-  { name: "Ulster County Grain Project", category: "food", town: "Stone Ridge", county: "Ulster", description: "Locally grown and stone-milled whole grains, flours, and cornmeal from Hudson Valley farms. Bulk purchasing available. Subscribers receive monthly grain shares.", tags: ["Stone Milled", "Bulk Grain", "Flour", "Cornmeal", "CSA"], phone: "(845) 555-1037", hours: "Pick-up Fridays 2–6pm", address: "Stone Ridge, NY 12484", featured: true, established: 2018, status: "published" },
-  { name: "Helderberg Land Clearing", category: "land", town: "Berne", county: "Albany", description: "Land clearing, brush hogging, stump grinding, and small-scale logging for rural properties in the Helderbergs. Firewood cut and split to order. Free on-site estimates.", tags: ["Land Clearing", "Brush Hogging", "Stump Grinding", "Firewood"], phone: "(518) 555-0926", hours: "Mon–Sat 7am–5pm", address: "Berne, NY 12023", featured: false, established: 2003, status: "published" },
-  { name: "Ironwood Small Engine Repair", category: "equipment", town: "Voorheesville", county: "Albany", description: "Repair and maintenance for tractors, tillers, chainsaws, generators, wood splitters, and all small engines. Husqvarna and Stihl dealer. Mobile service available.", tags: ["Tractor Repair", "Chainsaw", "Generator", "Husqvarna", "Stihl"], phone: "(518) 555-1362", hours: "Mon–Fri 8am–5pm, Sat 8am–12pm", address: "Voorheesville, NY 12186", featured: false, established: 1995, status: "published" },
-  { name: "Schoharie Valley Propane", category: "water", town: "Cobleskill", county: "Schoharie", description: "Residential and agricultural propane delivery, tank installation, and service. Budget billing and will-call options. Emergency service available 24/7.", tags: ["Propane Delivery", "Tank Install", "Agricultural", "24/7 Emergency"], phone: "(518) 555-1148", hours: "Mon–Fri 8am–5pm, 24/7 emergency", address: "Cobleskill, NY 12043", featured: false, established: 1978, status: "published" },
-  { name: "Hudson Valley Beekeeping Supply", category: "feed", town: "Red Hook", county: "Dutchess", description: "Everything for the backyard and commercial beekeeper. Nucs and package bees available in spring. Langstroth and top-bar equipment, protective gear, honey extraction rentals.", tags: ["Bees & Nucs", "Equipment", "Extraction Rental", "Raw Honey"], phone: "(845) 555-0572", hours: "Tue–Sat 9am–5pm", address: "7 Mill Rd, Red Hook, NY 12571", featured: false, established: 2010, status: "published" },
+  { name: "Ulster County Grain Project", category: "food", town: "Stone Ridge", county: "Ulster", description: "Locally grown and stone-milled whole grains, flours, and cornmeal from Hudson Valley farms. Bulk purchasing available. Subscribers receive monthly grain shares.", tags: ["Stone Milled", "Bulk Grain", "Flour", "Cornmeal", "CSA"], phone: "(845) 555-1037", hours: "Pick-up Fridays 2-6pm", address: "Stone Ridge, NY 12484", featured: true, established: 2018, status: "published" },
+  { name: "Helderberg Land Clearing", category: "land", town: "Berne", county: "Albany", description: "Land clearing, brush hogging, stump grinding, and small-scale logging for rural properties in the Helderbergs. Firewood cut and split to order. Free on-site estimates.", tags: ["Land Clearing", "Brush Hogging", "Stump Grinding", "Firewood"], phone: "(518) 555-0926", hours: "Mon-Sat 7am-5pm", address: "Berne, NY 12023", featured: false, established: 2003, status: "published" },
+  { name: "Ironwood Small Engine Repair", category: "equipment", town: "Voorheesville", county: "Albany", description: "Repair and maintenance for tractors, tillers, chainsaws, generators, wood splitters, and all small engines. Husqvarna and Stihl dealer. Mobile service available.", tags: ["Tractor Repair", "Chainsaw", "Generator", "Husqvarna", "Stihl"], phone: "(518) 555-1362", hours: "Mon-Fri 8am-5pm, Sat 8am-12pm", address: "Voorheesville, NY 12186", featured: false, established: 1995, status: "published" },
+  { name: "Schoharie Valley Propane", category: "water", town: "Cobleskill", county: "Schoharie", description: "Residential and agricultural propane delivery, tank installation, and service. Budget billing and will-call options. Emergency service available 24/7.", tags: ["Propane Delivery", "Tank Install", "Agricultural", "24/7 Emergency"], phone: "(518) 555-1148", hours: "Mon-Fri 8am-5pm, 24/7 emergency", address: "Cobleskill, NY 12043", featured: false, established: 1978, status: "published" },
+  { name: "Hudson Valley Beekeeping Supply", category: "feed", town: "Red Hook", county: "Dutchess", description: "Everything for the backyard and commercial beekeeper. Nucs and package bees available in spring. Langstroth and top-bar equipment, protective gear, honey extraction rentals.", tags: ["Bees and Nucs", "Equipment", "Extraction Rental", "Raw Honey"], phone: "(845) 555-0572", hours: "Tue-Sat 9am-5pm", address: "7 Mill Rd, Red Hook, NY 12571", featured: false, established: 2010, status: "published" },
 ];
 
 export default function App() {
@@ -45,8 +45,6 @@ export default function App() {
   if (page === "admin") return <AdminPage />;
   return <HomePage />;
 }
-
-// ─── HOME PAGE ────────────────────────────────────────────────────────────────
 
 function HomePage() {
   const [listings, setListings] = useState([]);
@@ -58,57 +56,33 @@ function HomePage() {
   const [showSubmit, setShowSubmit] = useState(false);
   const [dbError, setDbError] = useState(false);
 
-  useEffect(() => {
-    fetchListings();
-  }, []);
+  useEffect(() => { fetchListings(); }, []);
 
   async function fetchListings() {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("listings")
-        .select("*")
-        .eq("status", "published")
-        .order("featured", { ascending: false }).limit(1000);
-
+      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("featured", { ascending: false }).limit(1000);
       if (error) throw error;
-
-      if (!data || data.length === 0) {
-        await seedDatabase();
-        return fetchListings();
-      }
+      if (!data || data.length === 0) { await seedDatabase(); return fetchListings(); }
       setListings(data);
     } catch (err) {
       console.error("DB error, using sample data:", err);
       setListings(sampleListings.map((l, i) => ({ ...l, id: i + 1 })));
       setDbError(true);
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }
 
   async function seedDatabase() {
-    try {
-      await supabase.from("listings").insert(sampleListings);
-    } catch (err) {
-      console.error("Seed error:", err);
-    }
+    try { await supabase.from("listings").insert(sampleListings); } catch (err) { console.error("Seed error:", err); }
   }
 
   const allTowns = [...new Set(listings.map((d) => d.town))].sort();
-
   const filtered = listings.filter((d) => {
     const matchCat = activeCategory === "all" || d.category === activeCategory;
-    const matchSearch =
-      search === "" ||
-      d.name?.toLowerCase().includes(search.toLowerCase()) ||
-      d.description?.toLowerCase().includes(search.toLowerCase()) ||
-      (d.tags || []).some((t) => t.toLowerCase().includes(search.toLowerCase())) ||
-      d.town?.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = search === "" || d.name?.toLowerCase().includes(search.toLowerCase()) || d.description?.toLowerCase().includes(search.toLowerCase()) || (d.tags || []).some((t) => t.toLowerCase().includes(search.toLowerCase())) || d.town?.toLowerCase().includes(search.toLowerCase());
     const matchTown = townFilter === "All" || d.town === townFilter;
     return matchCat && matchSearch && matchTown;
   });
-
   const featured = listings.filter((d) => d.featured);
   const showFiltered = search !== "" || townFilter !== "All" || activeCategory !== "all";
 
@@ -188,8 +162,6 @@ function HomePage() {
         .submit-form label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #7A5C2E; display: block; margin-bottom: 4px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .modal-info-grid { grid-template-columns: 1fr; } }
-        footer { background: #2C1F0E; color: rgba(244,239,228,0.45); text-align: center; padding: 28px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; }
-        footer strong { color: #C4622D; }
         .loading { text-align: center; padding: 60px; font-style: italic; color: #7A5C2E; }
       `}</style>
 
@@ -202,7 +174,7 @@ function HomePage() {
         <span className="ornament">✦ ✦ ✦</span>
         <p className="masthead-sub">The homesteading & rural living resource guide for upstate New York</p>
         <div className="search-row">
-          <input className="search-input" placeholder="Search by resource, specialty, or town…" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <input className="search-input" placeholder="Search by resource, specialty, or town" value={search} onChange={(e) => setSearch(e.target.value)} />
           <select className="town-select" value={townFilter} onChange={(e) => setTownFilter(e.target.value)}>
             <option value="All">All Towns</option>
             {allTowns.map((t) => <option key={t} value={t}>{t}</option>)}
@@ -212,9 +184,9 @@ function HomePage() {
 
       <div className="cat-nav">
         <div className="cat-nav-inner">
-          <button className={`cat-btn ${activeCategory === "all" ? "active" : ""}`} onClick={() => setActiveCategory("all")}>All Resources</button>
+          <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setActiveCategory("all")}>All Resources</button>
           {categories.map((c) => (
-            <button key={c.id} className={`cat-btn ${activeCategory === c.id ? "active" : ""}`} onClick={() => setActiveCategory(c.id)}>
+            <button key={c.id} className={"cat-btn " + (activeCategory === c.id ? "active" : "")} onClick={() => setActiveCategory(c.id)}>
               {c.icon} {c.label}
             </button>
           ))}
@@ -224,15 +196,15 @@ function HomePage() {
       {!showFiltered && featured.length > 0 && (
         <div className="featured-strip">
           <div className="featured-strip-inner">
-            <div className="featured-strip-label">★ Featured Resources</div>
+            <div className="featured-strip-label">Featured Resources</div>
             <div className="featured-grid">
               {featured.map((d) => {
                 const cat = categories.find((c) => c.id === d.category);
                 return (
                   <div key={d.id} className="featured-item" onClick={() => setSelected(d)}>
-                    <span className="featured-item-icon">{cat?.icon || "📍"}</span>
+                    <span className="featured-item-icon">{cat ? cat.icon : ""}</span>
                     <div className="featured-item-name">{d.name}</div>
-                    <div className="featured-item-loc">{d.town} · {d.county} Co.</div>
+                    <div className="featured-item-loc">{d.town} - {d.county} Co.</div>
                   </div>
                 );
               })}
@@ -246,13 +218,13 @@ function HomePage() {
           <div className="sidebar-box">
             <div className="sidebar-box-header">Browse by Category</div>
             <div className="sidebar-box-body">
-              <div className={`sidebar-cat-item ${activeCategory === "all" ? "active" : ""}`} onClick={() => setActiveCategory("all")}>
+              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setActiveCategory("all")}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
                 const count = listings.filter((d) => d.category === c.id).length;
                 return (
-                  <div key={c.id} className={`sidebar-cat-item ${activeCategory === c.id ? "active" : ""}`} onClick={() => setActiveCategory(c.id)}>
+                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setActiveCategory(c.id)}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
                   </div>
                 );
@@ -262,7 +234,7 @@ function HomePage() {
           <div className="sidebar-box">
             <div className="sidebar-box-header">Are You Listed?</div>
             <div className="sidebar-box-body">
-              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#4A3320", marginBottom: 14, fontStyle: "italic" }}>Local homestead-related businesses can claim a free basic listing.</p>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#4A3320", marginBottom: 14, fontStyle: "italic" }}>Local homestead-related businesses can request a free basic listing.</p>
               <button className="btn-primary" style={{ width: "100%" }} onClick={() => setShowSubmit(true)}>Request a Listing</button>
             </div>
           </div>
@@ -270,29 +242,29 @@ function HomePage() {
 
         <div>
           <div className="listings-header">
-            <div className="listings-title">{activeCategory === "all" ? "All Resources" : categories.find((c) => c.id === activeCategory)?.label}</div>
+            <div className="listings-title">{activeCategory === "all" ? "All Resources" : (categories.find((c) => c.id === activeCategory) || {}).label}</div>
             <div className="result-count">{filtered.length} {filtered.length === 1 ? "resource" : "resources"}</div>
           </div>
 
           {loading ? (
-            <div className="loading">Loading resources…</div>
+            <div className="loading">Loading resources</div>
           ) : filtered.length === 0 ? (
-            <div className="no-results">Nothing found — try a different search or category.</div>
+            <div className="no-results">Nothing found. Try a different search or category.</div>
           ) : (
             filtered.map((d) => {
               const cat = categories.find((c) => c.id === d.category);
               return (
-                <div key={d.id} className={`listing-card ${d.featured ? "is-featured" : ""}`} onClick={() => setSelected(d)}>
+                <div key={d.id} className={"listing-card " + (d.featured ? "is-featured" : "")} onClick={() => setSelected(d)}>
                   <div className="listing-card-top">
                     <div>
                       <div className="listing-name">{d.name}</div>
-                      <div className="listing-meta">{cat?.icon} {cat?.label} · {d.town}, {d.county} Co. · Est. {d.established}</div>
+                      <div className="listing-meta">{cat ? cat.icon : ""} {cat ? cat.label : ""} - {d.town}, {d.county} Co. - Est. {d.established}</div>
                     </div>
-                    {d.featured && <span className="featured-badge">★ Featured</span>}
+                    {d.featured && <span className="featured-badge">Featured</span>}
                   </div>
                   <p className="listing-desc">{d.description}</p>
                   <div className="tag-row">{(d.tags || []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
-                  <div className="hours-line">⏱ {d.hours}</div>
+                  <div className="hours-line">{d.hours}</div>
                 </div>
               );
             })
@@ -304,10 +276,10 @@ function HomePage() {
         <div className="modal-overlay" onClick={() => setSelected(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <button className="modal-close" onClick={() => setSelected(null)}>✕</button>
-              {selected.featured && <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, letterSpacing: "0.2em", color: "#C4622D", textTransform: "uppercase", marginBottom: 8 }}>★ Featured Resource</div>}
+              <button className="modal-close" onClick={() => setSelected(null)}>X</button>
+              {selected.featured && <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, letterSpacing: "0.2em", color: "#C4622D", textTransform: "uppercase", marginBottom: 8 }}>Featured Resource</div>}
               <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, color: "#F4EFE4", lineHeight: 1.2, marginBottom: 6 }}>{selected.name}</div>
-              <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "rgba(244,239,228,0.6)", letterSpacing: "0.08em" }}>{selected.town}, {selected.county} County · Est. {selected.established}</div>
+              <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "rgba(244,239,228,0.6)", letterSpacing: "0.08em" }}>{selected.town}, {selected.county} County - Est. {selected.established}</div>
               <div className="tag-row" style={{ marginTop: 12 }}>
                 {(selected.tags || []).map((t) => <span key={t} style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, padding: "3px 7px", border: "1px solid rgba(196,98,45,0.5)", color: "#C4622D", letterSpacing: "0.08em", textTransform: "uppercase" }}>{t}</span>)}
               </div>
@@ -318,46 +290,46 @@ function HomePage() {
                 <div className="modal-field"><label>Address</label><span>{selected.address}</span></div>
                 <div className="modal-field"><label>Phone</label><span>{selected.phone}</span></div>
                 <div className="modal-field"><label>Hours</label><span>{selected.hours}</span></div>
-                <div className="modal-field"><label>Category</label><span>{categories.find((c) => c.id === selected.category)?.label}</span></div>
+                <div className="modal-field"><label>Category</label><span>{(categories.find((c) => c.id === selected.category) || {}).label}</span></div>
               </div>
               <div className="claim-box">
                 <p>Own or manage <strong>{selected.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
-                <a href={"mailto:hello@hudsonvalleyalmanac.com?subject=Update My Listing - " + selected.name} className="btn-primary" style={{display:'inline-block',textDecoration:'none'}}>Update My Listing</a>
-              </div>          </div>
+                <a href={"mailto:hello@hudsonvalleyalmanac.com?subject=Update My Listing - " + selected.name} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
       {showSubmit && <SubmitForm onClose={() => setShowSubmit(false)} />}
 
-      <div style={{backgroundColor:'#f9f5ef',borderTop:'2px solid #e8dcc8',padding:'48px 24px',textAlign:'center',marginTop:'48px'}}>
-        <div style={{maxWidth:'560px',margin:'0 auto'}}>
-          <h2 style={{fontSize:'1.8rem',color:'#3d2b1f',marginBottom:'12px'}}>Get Listed on Hudson Valley Almanac</h2>
-          <p style={{color:'#6b5344',fontSize:'1rem',marginBottom:'24px'}}>Are you a local farm, maker, or service provider in the Hudson Valley or Capital Region? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
-          <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{display:'inline-block',backgroundColor:'#6b8f47',color:'white',padding:'14px 32px',borderRadius:'8px',textDecoration:'none',fontWeight:'600',fontSize:'1rem',marginBottom:'12px'}}>Submit Your Business</a>
-          <p style={{color:'#9e8070',fontSize:'0.85rem',marginTop:'8px'}}>Already listed? Email us to update your info or report an error.</p>
+      <div style={{backgroundColor:"#f9f5ef",borderTop:"2px solid #e8dcc8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
+        <div style={{maxWidth:"560px",margin:"0 auto"}}>
+          <h2 style={{fontSize:"1.8rem",color:"#3d2b1f",marginBottom:"12px"}}>Get Listed on Hudson Valley Almanac</h2>
+          <p style={{color:"#6b5344",fontSize:"1rem",marginBottom:"24px"}}>Are you a local farm, maker, or service provider in the Hudson Valley or Capital Region? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
+          <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{display:"inline-block",backgroundColor:"#6b8f47",color:"white",padding:"14px 32px",borderRadius:"8px",textDecoration:"none",fontWeight:"600",fontSize:"1rem",marginBottom:"12px"}}>Submit Your Business</a>
+          <p style={{color:"#9e8070",fontSize:"0.85rem",marginTop:"8px"}}>Already listed? Email us to update your info or report an error.</p>
         </div>
       </div>
 
-      <footer style={{backgroundColor:'#2c1f14',color:'#c9b89a',padding:'40px 24px',textAlign:'center'}}>
-        <div style={{maxWidth:'800px',margin:'0 auto'}}>
-          <h3 style={{color:'#f0e6d3',fontSize:'1.4rem',marginBottom:'6px'}}>Hudson Valley Almanac</h3>
-          <p style={{fontSize:'0.85rem',color:'#9e8070',marginBottom:'24px'}}>The definitive homesteading and rural living directory for the Hudson Valley and Capital Region of New York State.</p>
-          <div style={{display:'flex',justifyContent:'center',gap:'24px',flexWrap:'wrap',marginBottom:'24px'}}>
-            <a href="mailto:hello@hudsonvalleyalmanac.com" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Contact Us</a>
-            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Submit a Listing</a>
-            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Report an Error - Hudson Valley Almanac" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Report an Error</a>
+      <footer style={{backgroundColor:"#2c1f14",color:"#c9b89a",padding:"40px 24px",textAlign:"center"}}>
+        <div style={{maxWidth:"800px",margin:"0 auto"}}>
+          <h3 style={{color:"#f0e6d3",fontSize:"1.4rem",marginBottom:"6px"}}>Hudson Valley Almanac</h3>
+          <p style={{fontSize:"0.85rem",color:"#9e8070",marginBottom:"24px"}}>The definitive homesteading and rural living directory for the Hudson Valley and Capital Region of New York State.</p>
+          <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
+            <a href="mailto:hello@hudsonvalleyalmanac.com" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
+            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
+            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Report an Error - Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
           </div>
-          <p style={{fontSize:'0.78rem',color:'#7a6555',marginBottom:'24px',lineHeight:'1.6'}}>Serving Albany, Rensselaer, Saratoga, Schenectady, Washington, Columbia, Greene, Delaware, Schoharie, Ulster, Dutchess, Sullivan, Orange, Putnam and Westchester Counties</p>
-          <div style={{borderTop:'1px solid #3d2b1f',paddingTop:'20px'}}>
-            <p style={{fontSize:'0.78rem',color:'#5a4535',margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Capital Region of New York State.</p>
+          <p style={{fontSize:"0.78rem",color:"#7a6555",marginBottom:"24px",lineHeight:"1.6"}}>Serving Albany, Rensselaer, Saratoga, Schenectady, Washington, Columbia, Greene, Delaware, Schoharie, Ulster, Dutchess, Sullivan, Orange, Putnam and Westchester Counties</p>
+          <div style={{borderTop:"1px solid #3d2b1f",paddingTop:"20px"}}>
+            <p style={{fontSize:"0.78rem",color:"#5a4535",margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Capital Region of New York State.</p>
           </div>
         </div>
       </footer>
     </div>
   );
 }
-
-// ─── SUBMIT FORM ──────────────────────────────────────────────────────────────
 
 function SubmitForm({ onClose }) {
   const [form, setForm] = useState({ name: "", category: "", town: "", county: "", description: "", tags: "", phone: "", hours: "", address: "", established: "" });
@@ -368,53 +340,45 @@ function SubmitForm({ onClose }) {
     if (!form.name || !form.category || !form.town) return alert("Please fill in name, category, and town.");
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("listings").insert([{
-        ...form,
-        tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
-        established: parseInt(form.established) || null,
-        status: "pending",
-        featured: false,
-      }]);
+      const { error } = await supabase.from("listings").insert([{ ...form, tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean), established: parseInt(form.established) || null, status: "pending", featured: false }]);
       if (error) throw error;
       setSubmitted(true);
     } catch (err) {
       alert("Submission failed. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
+    } finally { setSubmitting(false); }
   }
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <button className="modal-close" onClick={onClose}>X</button>
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, fontWeight: 700, color: "#F4EFE4" }}>Request a Free Listing</div>
-          <div style={{ fontSize: 13, color: "rgba(244,239,228,0.6)", marginTop: 6 }}>Submissions are reviewed before publishing — usually within 48 hours.</div>
+          <div style={{ fontSize: 13, color: "rgba(244,239,228,0.6)", marginTop: 6 }}>Submissions are reviewed before publishing. Usually within 48 hours.</div>
         </div>
         <div className="modal-body">
           {submitted ? (
             <div style={{ textAlign: "center", padding: "40px 0" }}>
               <div style={{ fontSize: 40, marginBottom: 16 }}>✦</div>
-              <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, marginBottom: 12 }}>Thank you!</div>
+              <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, marginBottom: 12 }}>Thank you</div>
               <p style={{ color: "#7A5C2E", fontStyle: "italic" }}>Your listing has been submitted for review. We will be in touch within 48 hours.</p>
               <button className="btn-primary" style={{ marginTop: 24 }} onClick={onClose}>Close</button>
             </div>
           ) : (
             <div className="submit-form">
-              <label>Business Name *</label>
+              <label>Business Name</label>
               <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your business name" />
-              <label>Category *</label>
+              <label>Category</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
                 <option value="">Select a category</option>
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
               </select>
               <div className="form-row">
-                <div><label>Town *</label><input value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} placeholder="e.g. Catskill" /></div>
+                <div><label>Town</label><input value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} placeholder="e.g. Catskill" /></div>
                 <div><label>County</label><input value={form.county} onChange={(e) => setForm({ ...form, county: e.target.value })} placeholder="e.g. Greene" /></div>
               </div>
               <label>Description</label>
-              <textarea rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Tell people what you offer…" />
+              <textarea rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Tell people what you offer" />
               <label>Tags (comma separated)</label>
               <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="e.g. Bulk Grain, Chick Days, Fencing" />
               <div className="form-row">
@@ -424,9 +388,9 @@ function SubmitForm({ onClose }) {
               <label>Address</label>
               <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Street address" />
               <label>Hours</label>
-              <input value={form.hours} onChange={(e) => setForm({ ...form, hours: e.target.value })} placeholder="e.g. Mon–Sat 8am–6pm" />
+              <input value={form.hours} onChange={(e) => setForm({ ...form, hours: e.target.value })} placeholder="e.g. Mon-Sat 8am-6pm" />
               <button className="btn-primary" style={{ width: "100%", padding: "14px", fontSize: 13, marginTop: 8 }} onClick={handleSubmit} disabled={submitting}>
-                {submitting ? "Submitting…" : "Submit Listing for Review"}
+                {submitting ? "Submitting" : "Submit Listing for Review"}
               </button>
             </div>
           )}
@@ -435,8 +399,6 @@ function SubmitForm({ onClose }) {
     </div>
   );
 }
-
-// ─── ADMIN PAGE ───────────────────────────────────────────────────────────────
 
 function AdminPage() {
   const [authed, setAuthed] = useState(false);
@@ -457,20 +419,9 @@ function AdminPage() {
     setLoading(false);
   }
 
-  async function approve(id) {
-    await supabase.from("listings").update({ status: "published" }).eq("id", id);
-    fetchAll();
-  }
-
-  async function reject(id) {
-    await supabase.from("listings").delete().eq("id", id);
-    fetchAll();
-  }
-
-  async function toggleFeatured(id, current) {
-    await supabase.from("listings").update({ featured: !current }).eq("id", id);
-    fetchAll();
-  }
+  async function approve(id) { await supabase.from("listings").update({ status: "published" }).eq("id", id); fetchAll(); }
+  async function reject(id) { await supabase.from("listings").delete().eq("id", id); fetchAll(); }
+  async function toggleFeatured(id, current) { await supabase.from("listings").update({ featured: !current }).eq("id", id); fetchAll(); }
 
   const pending = listings.filter((l) => l.status === "pending");
   const published = listings.filter((l) => l.status === "published");
@@ -492,7 +443,7 @@ function AdminPage() {
     <div style={{ fontFamily: "'Lora',serif", background: "#F4EFE4", minHeight: "100vh" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
       <div style={{ background: "#3B4A28", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#F4EFE4", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac — Admin</div>
+        <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#F4EFE4", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac - Admin</div>
         <a href="/" style={{ color: "rgba(244,239,228,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>View Site</a>
       </div>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
@@ -503,14 +454,16 @@ function AdminPage() {
             </button>
           ))}
         </div>
-        {loading ? <div style={{ textAlign: "center", padding: 40, color: "#7A5C2E", fontStyle: "italic" }}>Loading…</div> : shown.length === 0 ? (
+        {loading ? (
+          <div style={{ textAlign: "center", padding: 40, color: "#7A5C2E", fontStyle: "italic" }}>Loading</div>
+        ) : shown.length === 0 ? (
           <div style={{ textAlign: "center", padding: 40, color: "#7A5C2E", fontStyle: "italic" }}>No {tab} listings.</div>
         ) : shown.map((l) => (
           <div key={l.id} style={{ background: "#FBF8F0", border: "1.5px solid rgba(59,74,40,0.2)", padding: "20px 24px", marginBottom: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
               <div>
                 <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{l.name}</div>
-                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "#7A5C2E", marginBottom: 8 }}>{l.category} · {l.town}, {l.county} · {l.phone}</div>
+                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "#7A5C2E", marginBottom: 8 }}>{l.category} - {l.town}, {l.county} - {l.phone}</div>
                 <div style={{ fontSize: 14, color: "#4A3320", lineHeight: 1.6 }}>{l.description}</div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 140 }}>
