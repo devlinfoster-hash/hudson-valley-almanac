@@ -14,6 +14,17 @@ const categories = [
   { id: "equipment", label: "Equipment & Repair", icon: "🔧" },
   { id: "hearth", label: "Home & Hearth", icon: "🔥" },
   { id: "farmservices", label: "Farm Services", icon: "🐄" },
+  { id: "health", label: "Health & Wellness", icon: "🌿" },
+  { id: "fiber", label: "Fiber & Textile", icon: "🧶" },
+  { id: "maple", label: "Maple & Honey", icon: "🍯" },
+  { id: "trades", label: "Building & Trades", icon: "🪚" },
+  { id: "makers", label: "Food & Drink Makers", icon: "🧀" },
+  { id: "markets", label: "Markets & Events", icon: "📅" },
+  { id: "legal", label: "Land & Legal", icon: "📋" },
+  { id: "outdoor", label: "Outdoor & Recreation", icon: "🏕️" },
+  { id: "apothecary", label: "Soap, Candles & Apothecary", icon: "🕯️" },
+  { id: "forage", label: "Mushroom & Forage", icon: "🍄" },
+  { id: "artisan", label: "Artisan & Craft", icon: "🏺" },
 ];
 
 const sampleListings = [
