@@ -583,8 +583,8 @@ function AdminPage() {
 
     <div style={{ borderTop: '1px solid #3d2b1f', paddingTop: '20px' }}>
       <p style={{ fontSize: '0.78rem', color: '#5a4535', margin: 0 }}>
-        © {new Date().getFullYear()} Hudson Valley Almanac · Built with care in the Capital Region of New York State
-      </p>
+  {'© '}{new Date().getFullYear()}{' Hudson Valley Almanac · Built with care in the Capital Region of New York State'}
+</p>
     </div>
 
   </div>
