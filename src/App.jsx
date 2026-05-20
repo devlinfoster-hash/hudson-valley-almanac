@@ -537,7 +537,8 @@ function AdminPage() {
           </div>
         </footer>
       </div>
+    </div>
     );
-}
+  }
 
 export default App;
