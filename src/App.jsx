@@ -42,7 +42,6 @@ const sampleListings = [
 
 export default function App() {
   const page = window.location.pathname === "/admin" ? "admin" : "home";
-
   if (page === "admin") return <AdminPage />;
   return <HomePage />;
 }
@@ -332,11 +331,29 @@ function HomePage() {
 
       {showSubmit && <SubmitForm onClose={() => setShowSubmit(false)} />}
 
-      <footer>
-        <strong>Hudson Valley Almanac</strong> · Hudson Valley & Capital Region · © 2024
-        <span style={{ marginLeft: 16 }}>
-          <a href="/admin" style={{ color: "rgba(244,239,228,0.3)", textDecoration: "none", fontSize: 10 }}>admin</a>
-        </span>
+      <div style={{backgroundColor:'#f9f5ef',borderTop:'2px solid #e8dcc8',padding:'48px 24px',textAlign:'center',marginTop:'48px'}}>
+        <div style={{maxWidth:'560px',margin:'0 auto'}}>
+          <h2 style={{fontSize:'1.8rem',color:'#3d2b1f',marginBottom:'12px'}}>Get Listed on Hudson Valley Almanac</h2>
+          <p style={{color:'#6b5344',fontSize:'1rem',marginBottom:'24px'}}>Are you a local farm, maker, or service provider in the Hudson Valley or Capital Region? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
+          <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{display:'inline-block',backgroundColor:'#6b8f47',color:'white',padding:'14px 32px',borderRadius:'8px',textDecoration:'none',fontWeight:'600',fontSize:'1rem',marginBottom:'12px'}}>Submit Your Business</a>
+          <p style={{color:'#9e8070',fontSize:'0.85rem',marginTop:'8px'}}>Already listed? Email us to update your info or report an error.</p>
+        </div>
+      </div>
+
+      <footer style={{backgroundColor:'#2c1f14',color:'#c9b89a',padding:'40px 24px',textAlign:'center'}}>
+        <div style={{maxWidth:'800px',margin:'0 auto'}}>
+          <h3 style={{color:'#f0e6d3',fontSize:'1.4rem',marginBottom:'6px'}}>Hudson Valley Almanac</h3>
+          <p style={{fontSize:'0.85rem',color:'#9e8070',marginBottom:'24px'}}>The definitive homesteading and rural living directory for the Hudson Valley and Capital Region of New York State.</p>
+          <div style={{display:'flex',justifyContent:'center',gap:'24px',flexWrap:'wrap',marginBottom:'24px'}}>
+            <a href="mailto:hello@hudsonvalleyalmanac.com" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Contact Us</a>
+            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Submit a Listing</a>
+            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Report an Error - Hudson Valley Almanac" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Report an Error</a>
+          </div>
+          <p style={{fontSize:'0.78rem',color:'#7a6555',marginBottom:'24px',lineHeight:'1.6'}}>Serving Albany, Rensselaer, Saratoga, Schenectady, Washington, Columbia, Greene, Delaware, Schoharie, Ulster, Dutchess, Sullivan, Orange, Putnam and Westchester Counties</p>
+          <div style={{borderTop:'1px solid #3d2b1f',paddingTop:'20px'}}>
+            <p style={{fontSize:'0.78rem',color:'#5a4535',margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Capital Region of New York State.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
@@ -382,7 +399,7 @@ function SubmitForm({ onClose }) {
             <div style={{ textAlign: "center", padding: "40px 0" }}>
               <div style={{ fontSize: 40, marginBottom: 16 }}>✦</div>
               <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, marginBottom: 12 }}>Thank you!</div>
-              <p style={{ color: "#7A5C2E", fontStyle: "italic" }}>Your listing has been submitted for review. We'll be in touch within 48 hours.</p>
+              <p style={{ color: "#7A5C2E", fontStyle: "italic" }}>Your listing has been submitted for review. We will be in touch within 48 hours.</p>
               <button className="btn-primary" style={{ marginTop: 24 }} onClick={onClose}>Close</button>
             </div>
           ) : (
@@ -468,7 +485,7 @@ function AdminPage() {
         <div style={{ fontSize: 13, color: "#7A5C2E", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
         <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} placeholder="Enter password" style={{ width: "100%", padding: "10px 14px", fontFamily: "'Lora',serif", fontSize: 15, border: "1.5px solid #3B4A28", background: "#F4EFE4", outline: "none", marginBottom: 14 }} />
         <button onClick={login} style={{ width: "100%", background: "#3B4A28", color: "#F4EFE4", border: "none", padding: "12px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>Enter</button>
-        <a href="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#7A5C2E" }}>← Back to site</a>
+        <a href="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#7A5C2E" }}>Back to site</a>
       </div>
     </div>
   );
@@ -478,7 +495,7 @@ function AdminPage() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
       <div style={{ background: "#3B4A28", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#F4EFE4", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac — Admin</div>
-        <a href="/" style={{ color: "rgba(244,239,228,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>← View Site</a>
+        <a href="/" style={{ color: "rgba(244,239,228,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>View Site</a>
       </div>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
         <div style={{ display: "flex", gap: 2, marginBottom: 24 }}>
@@ -500,45 +517,19 @@ function AdminPage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 140 }}>
                 {tab === "pending" && (
-                  <button onClick={() => approve(l.id)} style={{ background: "#3B4A28", color: "#F4EFE4", border: "none", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>✓ Approve</button>
+                  <button onClick={() => approve(l.id)} style={{ background: "#3B4A28", color: "#F4EFE4", border: "none", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>Approve</button>
                 )}
                 {tab === "published" && (
                   <button onClick={() => toggleFeatured(l.id, l.featured)} style={{ background: l.featured ? "#C4622D" : "#FBF8F0", color: l.featured ? "#F4EFE4" : "#3B4A28", border: "1.5px solid #C4622D", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, cursor: "pointer" }}>
-                    {l.featured ? "★ Featured" : "☆ Feature"}
+                    {l.featured ? "Featured" : "Feature"}
                   </button>
                 )}
-                <button onClick={() => reject(l.id)} style={{ background: "#FBF8F0", color: "#C4622D", border: "1.5px solid #C4622D", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>✕ {tab === "pending" ? "Reject" : "Delete"}</button>
+                <button onClick={() => reject(l.id)} style={{ background: "#FBF8F0", color: "#C4622D", border: "1.5px solid #C4622D", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>{tab === "pending" ? "Reject" : "Delete"}</button>
               </div>
             </div>
           </div>
         ))}
-        {/* SUBMIT YOUR BUSINESS SECTION */}
-                <div style={{backgroundColor:'#f9f5ef',borderTop:'2px solid #e8dcc8',padding:'48px 24px',textAlign:'center',marginTop:'48px'}}>
-          <div style={{maxWidth:'560px',margin:'0 auto'}}>
-            <h2 style={{fontSize:'1.8rem',color:'#3d2b1f',marginBottom:'12px'}}>Get Listed on Hudson Valley Almanac</h2>
-            <p style={{color:'#6b5344',fontSize:'1rem',marginBottom:'24px'}}>Are you a local farm, maker, or service provider in the Hudson Valley or Capital Region? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
-            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{display:'inline-block',backgroundColor:'#6b8f47',color:'white',padding:'14px 32px',borderRadius:'8px',textDecoration:'none',fontWeight:'600',fontSize:'1rem',marginBottom:'12px'}}>Submit Your Business</a>
-            <p style={{color:'#9e8070',fontSize:'0.85rem',marginTop:'8px'}}>Already listed? Email us to update your info or report an error.</p>
-          </div>
-        </div>
-        <footer style={{backgroundColor:'#2c1f14',color:'#c9b89a',padding:'40px 24px',textAlign:'center'}}>
-          <div style={{maxWidth:'800px',margin:'0 auto'}}>
-            <h3 style={{color:'#f0e6d3',fontSize:'1.4rem',marginBottom:'6px'}}>Hudson Valley Almanac</h3>
-            <p style={{fontSize:'0.85rem',color:'#9e8070',marginBottom:'24px'}}>The definitive homesteading and rural living directory for the Hudson Valley and Capital Region of New York State.</p>
-            <div style={{display:'flex',justifyContent:'center',gap:'24px',flexWrap:'wrap',marginBottom:'24px'}}>
-              <a href="mailto:hello@hudsonvalleyalmanac.com" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Contact Us</a>
-              <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Submit a Listing</a>
-              <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Report an Error - Hudson Valley Almanac" style={{color:'#c9b89a',textDecoration:'none',fontSize:'0.9rem'}}>Report an Error</a>
-            </div>
-            <p style={{fontSize:'0.78rem',color:'#7a6555',marginBottom:'24px',lineHeight:'1.6'}}>Serving Albany, Rensselaer, Saratoga, Schenectady, Washington, Columbia, Greene, Delaware, Schoharie, Ulster, Dutchess, Sullivan, Orange, Putnam and Westchester Counties</p>
-            <div style={{borderTop:'1px solid #3d2b1f',paddingTop:'20px'}}>
-              <p style={{fontSize:'0.78rem',color:'#5a4535',margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Capital Region of New York State.</p>
-            </div>
-          </div>
-        </footer>
       </div>
     </div>
-    );
+  );
 }
-
-export default App;
