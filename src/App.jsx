@@ -513,7 +513,7 @@ function AdminPage() {
           </div>
         ))}
         {/* SUBMIT YOUR BUSINESS SECTION */}
-        <div style={{backgroundColor:'#f9f5ef',borderTop:'2px solid #e8dcc8',padding:'48px 24px',textAlign:'center',marginTop:'48px'}}>
+                <div style={{backgroundColor:'#f9f5ef',borderTop:'2px solid #e8dcc8',padding:'48px 24px',textAlign:'center',marginTop:'48px'}}>
           <div style={{maxWidth:'560px',margin:'0 auto'}}>
             <h2 style={{fontSize:'1.8rem',color:'#3d2b1f',marginBottom:'12px'}}>Get Listed on Hudson Valley Almanac</h2>
             <p style={{color:'#6b5344',fontSize:'1rem',marginBottom:'24px'}}>Are you a local farm, maker, or service provider in the Hudson Valley or Capital Region? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
@@ -537,8 +537,7 @@ function AdminPage() {
           </div>
         </footer>
       </div>
-    </div>
     );
-  }
+}
 
 export default App;
