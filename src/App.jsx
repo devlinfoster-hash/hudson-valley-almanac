@@ -659,7 +659,7 @@ function AdminPage() {
 
     <div style={{ borderTop: '1px solid #3d2b1f', paddingTop: '20px' }}>
       <p style={{ fontSize: '0.78rem', color: '#5a4535', margin: 0 }}>
-        {'© '}{new Date().getFullYear()}{' Hudson Valley Almanac · Built with care in the Capital Region of New York State'}
+        {'\u00A9 '}{new Date().getFullYear()}{' Hudson Valley Almanac \u00B7 Built with care in the Capital Region of New York State'}
       </p>
     </div>
 
