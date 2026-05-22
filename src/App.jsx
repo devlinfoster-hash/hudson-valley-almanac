@@ -93,8 +93,6 @@ function HomePage() {
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .topbar { background: #3B4A28; color: rgba(244,239,228,0.7); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-align: center; padding: 8px; text-transform: uppercase; }
         .hero { background: #F4EFE4; border-bottom: 3px double #3B4A28; padding: 48px 24px 40px; text-align: center; }
-        .masthead-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7A5C2E; margin-bottom: 14px; }
-        .masthead-rule { width: 80px; height: 1px; background: #3B4A28; margin: 0 auto 20px; }
         .masthead-title { font-family: 'Libre Baskerville', serif; font-size: clamp(32px, 6vw, 64px); font-weight: 700; line-height: 1.05; color: #2C1F0E; margin-bottom: 8px; }
         .masthead-title em { font-style: italic; color: #3B4A28; }
         .masthead-sub { font-family: 'Lora', serif; font-size: 17px; color: #7A5C2E; font-style: italic; margin: 10px 0 32px; }
@@ -168,11 +166,9 @@ function HomePage() {
       <div className="topbar">Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer Counties</div>
 
       <div className="hero">
-        <div className="masthead-eyebrow">Hudson Valley & Capital Region</div>
-        <div className="masthead-rule" />
         <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
         <span className="ornament">✦ ✦ ✦</span>
-        <p className="masthead-sub">The homesteading & rural living resource guide for upstate New York</p>
+        <p className="masthead-sub">The Hudson Valley and Capital Region's homesteading & rural living guide</p>
         <div className="search-row">
           <input className="search-input" placeholder="Search by resource, specialty, or town" value={search} onChange={(e) => setSearch(e.target.value)} />
           <select className="town-select" value={townFilter} onChange={(e) => setTownFilter(e.target.value)}>
@@ -315,7 +311,7 @@ function HomePage() {
       <footer style={{backgroundColor:"#2c1f14",color:"#c9b89a",padding:"40px 24px",textAlign:"center"}}>
         <div style={{maxWidth:"800px",margin:"0 auto"}}>
           <h3 style={{color:"#f0e6d3",fontSize:"1.4rem",marginBottom:"6px"}}>Hudson Valley Almanac</h3>
-          <p style={{fontSize:"0.85rem",color:"#9e8070",marginBottom:"24px"}}>The definitive homesteading and rural living directory for the Hudson Valley and Capital Region of New York State.</p>
+          <p style={{fontSize:"0.85rem",color:"#9e8070",marginBottom:"24px"}}>The Hudson Valley and Capital Region's homesteading & rural living guide.</p>
           <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
             <a href="mailto:hello@hudsonvalleyalmanac.com" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
             <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
