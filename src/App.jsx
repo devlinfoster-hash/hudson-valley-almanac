@@ -28,6 +28,7 @@ const categories = [
   { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
 ];
 
+// Main app component
 export default function App() {
   const page = window.location.pathname === "/admin" ? "admin" : "home";
   if (page === "admin") return <AdminPage />;
