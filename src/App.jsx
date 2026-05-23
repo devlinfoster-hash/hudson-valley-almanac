@@ -25,20 +25,7 @@ const categories = [
   { id: "apothecary", label: "Soap, Candles & Apothecary", icon: "🕯️" },
   { id: "forage", label: "Mushroom & Forage", icon: "🍄" },
   { id: "artisan", label: "Artisan & Craft", icon: "🏺" },
-  {id:"cannabis",label:"Craft Cannabis",icon:"🌿"},
-];
-
-const sampleListings = [
-  { name: "Altamont Feed & Farm Supply", category: "feed", town: "Altamont", county: "Albany", description: "Full-service farm and feed store serving the Capital Region since 1962. Chick days every spring. Carries Purina, Dumor, and bulk grain. Fencing, waterers, and small animal supplies.", tags: ["Bulk Grain", "Chick Days", "Fencing", "Small Animal"], phone: "(518) 555-0134", hours: "Mon-Sat 8am-6pm, Sun 9am-3pm", address: "Route 156, Altamont, NY 12009", featured: true, established: 1962, status: "published" },
-  { name: "Kinderhook Heritage Meats", category: "animals", town: "Kinderhook", county: "Columbia", description: "USDA-inspected small-scale slaughter and processing facility accepting individual animals. Beef, pork, lamb, and goat. Custom cuts, vacuum sealing, and freezer wrap.", tags: ["USDA Inspected", "Beef", "Pork", "Lamb", "Custom Cuts"], phone: "(518) 555-0247", hours: "By appointment", address: "42 County Route 21, Kinderhook, NY 12106", featured: true, established: 2008, status: "published" },
-  { name: "Catskill Mountain Seeds", category: "seeds", town: "Tannersville", county: "Greene", description: "Heirloom and open-pollinated vegetable, herb, and flower seeds adapted for Zone 5b-6a growing conditions. Locally trialed varieties. Seed saving workshops offered every February.", tags: ["Heirloom", "Open-Pollinated", "Zone 5b-6a", "Seed Saving"], phone: "(518) 555-0461", hours: "Online year-round; farm stand May-Oct", address: "Tannersville, NY 12485", featured: true, established: 2014, status: "published" },
-  { name: "Greene County Well and Water", category: "water", town: "Catskill", county: "Greene", description: "Residential and agricultural well drilling, pump installation, and water quality testing. Serving Greene, Columbia, and Ulster counties. Licensed and insured. Free estimates.", tags: ["Well Drilling", "Pump Repair", "Water Testing", "Agricultural"], phone: "(518) 555-0358", hours: "Mon-Fri 7am-5pm", address: "Catskill, NY 12414", featured: false, established: 1987, status: "published" },
-  { name: "Rensselaer Plateau Farm School", category: "learn", town: "Grafton", county: "Rensselaer", description: "Year-round workshops on small-scale farming, animal husbandry, food preservation, and rural skills. Courses in cheesemaking, butchery, fermentation, timber framing, and draft animal work.", tags: ["Workshops", "Cheesemaking", "Butchery", "Fermentation"], phone: "(518) 555-0683", hours: "See online calendar", address: "Grafton, NY 12082", featured: true, established: 2016, status: "published" },
-  { name: "Ulster County Grain Project", category: "food", town: "Stone Ridge", county: "Ulster", description: "Locally grown and stone-milled whole grains, flours, and cornmeal from Hudson Valley farms. Bulk purchasing available. Subscribers receive monthly grain shares.", tags: ["Stone Milled", "Bulk Grain", "Flour", "Cornmeal", "CSA"], phone: "(845) 555-1037", hours: "Pick-up Fridays 2-6pm", address: "Stone Ridge, NY 12484", featured: true, established: 2018, status: "published" },
-  { name: "Helderberg Land Clearing", category: "land", town: "Berne", county: "Albany", description: "Land clearing, brush hogging, stump grinding, and small-scale logging for rural properties in the Helderbergs. Firewood cut and split to order. Free on-site estimates.", tags: ["Land Clearing", "Brush Hogging", "Stump Grinding", "Firewood"], phone: "(518) 555-0926", hours: "Mon-Sat 7am-5pm", address: "Berne, NY 12023", featured: false, established: 2003, status: "published" },
-  { name: "Ironwood Small Engine Repair", category: "equipment", town: "Voorheesville", county: "Albany", description: "Repair and maintenance for tractors, tillers, chainsaws, generators, wood splitters, and all small engines. Husqvarna and Stihl dealer. Mobile service available.", tags: ["Tractor Repair", "Chainsaw", "Generator", "Husqvarna", "Stihl"], phone: "(518) 555-1362", hours: "Mon-Fri 8am-5pm, Sat 8am-12pm", address: "Voorheesville, NY 12186", featured: false, established: 1995, status: "published" },
-  { name: "Schoharie Valley Propane", category: "water", town: "Cobleskill", county: "Schoharie", description: "Residential and agricultural propane delivery, tank installation, and service. Budget billing and will-call options. Emergency service available 24/7.", tags: ["Propane Delivery", "Tank Install", "Agricultural", "24/7 Emergency"], phone: "(518) 555-1148", hours: "Mon-Fri 8am-5pm, 24/7 emergency", address: "Cobleskill, NY 12043", featured: false, established: 1978, status: "published" },
-  { name: "Hudson Valley Beekeeping Supply", category: "feed", town: "Red Hook", county: "Dutchess", description: "Everything for the backyard and commercial beekeeper. Nucs and package bees available in spring. Langstroth and top-bar equipment, protective gear, honey extraction rentals.", tags: ["Bees and Nucs", "Equipment", "Extraction Rental", "Raw Honey"], phone: "(845) 555-0572", hours: "Tue-Sat 9am-5pm", address: "7 Mill Rd, Red Hook, NY 12571", featured: false, established: 2010, status: "published" },
+  { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
 ];
 
 export default function App() {
@@ -55,26 +42,18 @@ function HomePage() {
   const [townFilter, setTownFilter] = useState("All");
   const [selected, setSelected] = useState(null);
   const [showSubmit, setShowSubmit] = useState(false);
-  const [dbError, setDbError] = useState(false);
 
   useEffect(() => { fetchListings(); }, []);
 
   async function fetchListings() {
     setLoading(true);
     try {
-      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("featured", { ascending: false }).limit(1000);
+      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("featured", { ascending: false }).limit(2000);
       if (error) throw error;
-      if (!data || data.length === 0) { await seedDatabase(); return fetchListings(); }
-      setListings(data);
+      setListings(data || []);
     } catch (err) {
-      console.error("DB error, using sample data:", err);
-      setListings(sampleListings.map((l, i) => ({ ...l, id: i + 1 })));
-      setDbError(true);
+      console.error("DB error:", err);
     } finally { setLoading(false); }
-  }
-
-  async function seedDatabase() {
-    try { await supabase.from("listings").insert(sampleListings); } catch (err) { console.error("Seed error:", err); }
   }
 
   const allTowns = [...new Set(listings.map((d) => d.town))].sort();
@@ -151,6 +130,8 @@ function HomePage() {
         .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(59,74,40,0.2); }
         .modal-field label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #7A5C2E; display: block; margin-bottom: 3px; }
         .modal-field span { font-size: 15px; color: #2C1F0E; }
+        .modal-field a { font-size: 15px; color: #C4622D; text-decoration: none; }
+        .modal-field a:hover { text-decoration: underline; }
         .modal-desc { font-size: 17px; line-height: 1.7; color: #3A2810; margin-bottom: 24px; font-style: italic; border-left: 3px solid #C4622D; padding-left: 16px; }
         .claim-box { background: rgba(59,74,40,0.07); border: 1.5px solid #3B4A28; padding: 20px; text-align: center; }
         .claim-box p { font-size: 14px; color: #4A3320; margin-bottom: 12px; font-style: italic; }
@@ -288,6 +269,14 @@ function HomePage() {
                 <div className="modal-field"><label>Phone</label><span>{selected.phone}</span></div>
                 <div className="modal-field"><label>Hours</label><span>{selected.hours}</span></div>
                 <div className="modal-field"><label>Category</label><span>{(categories.find((c) => c.id === selected.category) || {}).label}</span></div>
+                {selected.website && (
+                  <div className="modal-field" style={{ gridColumn: "1 / -1" }}>
+                    <label>Website</label>
+                    <a href={selected.website.startsWith("http") ? selected.website : "https://" + selected.website} target="_blank" rel="noreferrer">
+                      {selected.website}
+                    </a>
+                  </div>
+                )}
               </div>
               <div className="claim-box">
                 <p>Own or manage <strong>{selected.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
