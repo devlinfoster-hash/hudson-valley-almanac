@@ -41,6 +41,7 @@ function HomePage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [townFilter, setTownFilter] = useState("All");
+  const [countyFilter, setCountyFilter] = useState("All");
   const [selected, setSelected] = useState(null);
   const [showSubmit, setShowSubmit] = useState(false);
 
@@ -57,15 +58,17 @@ function HomePage() {
     } finally { setLoading(false); }
   }
 
-  const allTowns = [...new Set(listings.map((d) => d.town))].sort();
+  const allCounties = [...new Set(listings.map((d) => d.county))].sort();
+  const allTowns = [...new Set(listings.filter((d) => countyFilter === "All" || d.county === countyFilter).map((d) => d.town))].sort();
   const filtered = listings.filter((d) => {
     const matchCat = activeCategory === "all" || d.category === activeCategory;
     const matchSearch = search === "" || d.name?.toLowerCase().includes(search.toLowerCase()) || d.description?.toLowerCase().includes(search.toLowerCase()) || (d.tags || []).some((t) => t.toLowerCase().includes(search.toLowerCase())) || d.town?.toLowerCase().includes(search.toLowerCase());
     const matchTown = townFilter === "All" || d.town === townFilter;
-    return matchCat && matchSearch && matchTown;
+    const matchCounty = countyFilter === "All" || d.county === countyFilter;
+    return matchCat && matchSearch && matchTown && matchCounty;
   });
   const featured = listings.filter((d) => d.featured);
-  const showFiltered = search !== "" || townFilter !== "All" || activeCategory !== "all";
+  const showFiltered = search !== "" || townFilter !== "All" || countyFilter !== "All" || activeCategory !== "all";
 
   return (
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#F4EFE4", minHeight: "100vh", color: "#2C1F0E" }}>
@@ -154,6 +157,10 @@ function HomePage() {
         <p className="masthead-sub">The Hudson Valley and Capital Region's homesteading & rural living guide</p>
         <div className="search-row">
           <input className="search-input" placeholder="Search by resource, specialty, or town" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <select className="town-select" value={countyFilter} onChange={(e) => { setCountyFilter(e.target.value); setTownFilter("All"); }}>
+            <option value="All">All Counties</option>
+            {allCounties.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
           <select className="town-select" value={townFilter} onChange={(e) => setTownFilter(e.target.value)}>
             <option value="All">All Towns</option>
             {allTowns.map((t) => <option key={t} value={t}>{t}</option>)}
