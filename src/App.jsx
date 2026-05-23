@@ -19,7 +19,6 @@ const categories = [
   { id: "fiber", label: "Fiber & Textile", icon: "🧶" },
   { id: "maple", label: "Maple & Honey", icon: "🍯" },
   { id: "trades", label: "Building & Trades", icon: "🪚" },
-  { id: "makers", label: "Food & Drink Makers", icon: "🧀" },
   { id: "markets", label: "Markets & Events", icon: "📅" },
   { id: "legal", label: "Land & Legal", icon: "📋" },
   { id: "outdoor", label: "Outdoor & Recreation", icon: "🏕️" },
