@@ -25,6 +25,7 @@ const categories = [
   { id: "apothecary", label: "Soap, Candles & Apothecary", icon: "🕯️" },
   { id: "forage", label: "Mushroom & Forage", icon: "🍄" },
   { id: "artisan", label: "Artisan & Craft", icon: "🏺" },
+  {id:"cannabis",label:"Craft Cannabis",icon:"🌿"},
 ];
 
 const sampleListings = [
