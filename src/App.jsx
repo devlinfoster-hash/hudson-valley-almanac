@@ -7,8 +7,6 @@ const categories = [
   { id: "feed", label: "Feed & Supply", icon: "🌾" },
   { id: "animals", label: "Animals & Livestock", icon: "🐓" },
   { id: "makers", label: "Food & Drink Makers", icon: "🧀" },
-  { id: "beverage", label: "Wineries, Cideries & Breweries", icon: "🍷" },
-  { id: "parks", label: "Parks & Public Lands", icon: "🏞️" },
   { id: "land", label: "Land & Property Services", icon: "🪵" },
   { id: "food", label: "Food & Preservation", icon: "🫙" },
   { id: "water", label: "Water & Utilities", icon: "💧" },
