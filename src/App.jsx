@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "./supabase";
 
 const ADMIN_PASSWORD = "almanac2024";
@@ -28,12 +29,110 @@ const categories = [
   { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
 ];
 
+function slugify(name) {
+  return (name || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "listing";
+}
+
 // Main app component
 export default function App() {
-  const page = window.location.pathname === "/admin" ? "admin" : "home";
-  if (page === "admin") return <AdminPage />;
-  return <HomePage />;
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/listing/:slug" element={<ListingPage />} />
+    </Routes>
+  );
 }
+
+const sharedStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .topbar { background: #3B4A28; color: rgba(244,239,228,0.7); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-align: center; padding: 8px; text-transform: uppercase; }
+  .hero { background: #F4EFE4; border-bottom: 3px double #3B4A28; padding: 48px 24px 40px; text-align: center; }
+  .masthead-title { font-family: 'Libre Baskerville', serif; font-size: clamp(32px, 6vw, 64px); font-weight: 700; line-height: 1.05; color: #2C1F0E; margin-bottom: 8px; }
+  .masthead-title em { font-style: italic; color: #3B4A28; }
+  .masthead-sub { font-family: 'Lora', serif; font-size: 17px; color: #7A5C2E; font-style: italic; margin: 10px 0 32px; }
+  .ornament { color: #C4622D; font-size: 20px; letter-spacing: 8px; margin: 8px 0; display: block; }
+  .search-row { display: flex; gap: 10px; max-width: 700px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .search-input { flex: 1; min-width: 220px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #3B4A28; background: #FBF8F0; color: #2C1F0E; outline: none; transition: border-color 0.2s; }
+  .search-input:focus { border-color: #C4622D; }
+  .search-input::placeholder { color: #B8A88A; font-style: italic; }
+  .town-select { padding: 11px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #3B4A28; background: #FBF8F0; color: #2C1F0E; outline: none; cursor: pointer; min-width: 150px; }
+  .cat-nav { background: #3B4A28; overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 3px solid #C4622D; }
+  .cat-nav::-webkit-scrollbar { display: none; }
+  .cat-nav-inner { display: inline-flex; padding: 0 16px; }
+  .cat-btn { background: none; border: none; color: rgba(244,239,228,0.65); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; transition: color 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .cat-btn:hover { color: #F4EFE4; }
+  .cat-btn.active { color: #F4EFE4; border-bottom-color: #C4622D; }
+  .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
+  @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  .sidebar-box { border: 1.5px solid #3B4A28; background: #FBF8F0; margin-bottom: 20px; overflow: hidden; }
+  .sidebar-box-header { background: #3B4A28; color: #F4EFE4; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 16px; }
+  .sidebar-box-body { padding: 16px; }
+  .sidebar-cat-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(59,74,40,0.1); cursor: pointer; font-size: 14px; color: #4A3320; transition: color 0.15s; }
+  .sidebar-cat-item:last-child { border-bottom: none; }
+  .sidebar-cat-item:hover, .sidebar-cat-item.active { color: #C4622D; font-weight: 600; }
+  .sidebar-count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: #B8A88A; }
+  .featured-strip { background: #3B4A28; padding: 32px 24px; border-bottom: 3px solid #C4622D; }
+  .featured-strip-inner { max-width: 1140px; margin: 0 auto; }
+  .featured-strip-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #C4622D; margin-bottom: 16px; }
+  .featured-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: rgba(196,98,45,0.3); }
+  .featured-item { background: #3B4A28; padding: 20px; cursor: pointer; transition: background 0.2s; text-decoration: none; display: block; }
+  .featured-item:hover { background: #2e3b1f; }
+  .featured-item-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+  .featured-item-name { font-family: 'Lora', serif; font-size: 15px; font-weight: 700; color: #F4EFE4; line-height: 1.3; margin-bottom: 4px; }
+  .featured-item-loc { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(244,239,228,0.55); letter-spacing: 0.06em; text-transform: uppercase; }
+  .listings-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #3B4A28; padding-bottom: 12px; }
+  .listings-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #2C1F0E; }
+  .result-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #7A5C2E; letter-spacing: 0.08em; }
+  .listing-card { background: #FBF8F0; border: 1.5px solid rgba(59,74,40,0.2); padding: 22px 24px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; text-decoration: none; color: inherit; display: block; }
+  .listing-card:hover { border-color: #3B4A28; box-shadow: 3px 3px 0 #3B4A28; transform: translate(-1px,-1px); }
+  .listing-card.is-featured { border-color: #C4622D; border-left: 4px solid #C4622D; }
+  .listing-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .listing-name { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: #2C1F0E; margin-bottom: 3px; line-height: 1.2; }
+  .listing-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #7A5C2E; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .listing-desc { font-size: 15px; line-height: 1.65; color: #4A3320; margin-bottom: 12px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 8px; background: rgba(59,74,40,0.1); color: #3B4A28; text-transform: uppercase; border: 1px solid rgba(59,74,40,0.2); }
+  .featured-badge { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: #C4622D; border: 1px solid #C4622D; padding: 3px 8px; white-space: nowrap; }
+  .hours-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #7A5C2E; margin-top: 8px; }
+  .no-results { text-align: center; padding: 60px 0; font-style: italic; color: #7A5C2E; font-size: 18px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(44,31,14,0.8); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+  .modal { background: #FBF8F0; max-width: 660px; width: 100%; max-height: 88vh; overflow-y: auto; border: 2px solid #3B4A28; box-shadow: 8px 8px 0 #3B4A28; }
+  .modal-header { background: #3B4A28; padding: 28px 28px 24px; position: sticky; top: 0; }
+  .modal-close { float: right; background: none; border: none; color: rgba(244,239,228,0.6); font-size: 20px; cursor: pointer; }
+  .modal-close:hover { color: #F4EFE4; }
+  .modal-body { padding: 28px; }
+  .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(59,74,40,0.2); }
+  .modal-field label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #7A5C2E; display: block; margin-bottom: 3px; }
+  .modal-field span { font-size: 15px; color: #2C1F0E; }
+  .modal-field a { font-size: 15px; color: #C4622D; text-decoration: none; }
+  .modal-field a:hover { text-decoration: underline; }
+  .modal-desc { font-size: 17px; line-height: 1.7; color: #3A2810; margin-bottom: 24px; font-style: italic; border-left: 3px solid #C4622D; padding-left: 16px; }
+  .claim-box { background: rgba(59,74,40,0.07); border: 1.5px solid #3B4A28; padding: 20px; text-align: center; }
+  .claim-box p { font-size: 14px; color: #4A3320; margin-bottom: 12px; font-style: italic; }
+  .btn-primary { background: #3B4A28; color: #F4EFE4; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: #2e3b1f; }
+  .submit-form input, .submit-form select, .submit-form textarea { width: 100%; padding: 10px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid rgba(59,74,40,0.3); background: #FBF8F0; color: #2C1F0E; outline: none; margin-bottom: 14px; }
+  .submit-form input:focus, .submit-form textarea:focus { border-color: #C4622D; }
+  .submit-form label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #7A5C2E; display: block; margin-bottom: 4px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .modal-info-grid { grid-template-columns: 1fr; } }
+  .loading { text-align: center; padding: 60px; font-style: italic; color: #7A5C2E; }
+  .listing-page-wrap { font-family: 'Lora', Georgia, serif; background: #F4EFE4; min-height: 100vh; color: #2C1F0E; }
+  .listing-page-nav { max-width: 760px; margin: 0 auto; padding: 24px 24px 0; }
+  .back-link { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #3B4A28; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+  .back-link:hover { border-bottom-color: #C4622D; color: #C4622D; }
+  .listing-page-article { max-width: 760px; margin: 0 auto; padding: 24px 24px 80px; }
+  .listing-page-masthead { background: #3B4A28; padding: 32px 32px 28px; border: 2px solid #3B4A28; }
+  .listing-page-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #C4622D; margin-bottom: 10px; }
+  .listing-page-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 36px); font-weight: 700; color: #F4EFE4; line-height: 1.15; margin-bottom: 8px; }
+  .listing-page-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(244,239,228,0.6); letter-spacing: 0.08em; }
+  .listing-page-body { background: #FBF8F0; border: 2px solid #3B4A28; border-top: none; padding: 32px; }
+`;
 
 function HomePage() {
   const [listings, setListings] = useState([]);
@@ -42,7 +141,6 @@ function HomePage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [townFilter, setTownFilter] = useState("All");
   const [countyFilter, setCountyFilter] = useState("All");
-  const [selected, setSelected] = useState(null);
   const [showSubmit, setShowSubmit] = useState(false);
 
   useEffect(() => { fetchListings(); }, []);
@@ -72,82 +170,7 @@ function HomePage() {
 
   return (
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#F4EFE4", minHeight: "100vh", color: "#2C1F0E" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        .topbar { background: #3B4A28; color: rgba(244,239,228,0.7); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-align: center; padding: 8px; text-transform: uppercase; }
-        .hero { background: #F4EFE4; border-bottom: 3px double #3B4A28; padding: 48px 24px 40px; text-align: center; }
-        .masthead-title { font-family: 'Libre Baskerville', serif; font-size: clamp(32px, 6vw, 64px); font-weight: 700; line-height: 1.05; color: #2C1F0E; margin-bottom: 8px; }
-        .masthead-title em { font-style: italic; color: #3B4A28; }
-        .masthead-sub { font-family: 'Lora', serif; font-size: 17px; color: #7A5C2E; font-style: italic; margin: 10px 0 32px; }
-        .ornament { color: #C4622D; font-size: 20px; letter-spacing: 8px; margin: 8px 0; display: block; }
-        .search-row { display: flex; gap: 10px; max-width: 700px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
-        .search-input { flex: 1; min-width: 220px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #3B4A28; background: #FBF8F0; color: #2C1F0E; outline: none; transition: border-color 0.2s; }
-        .search-input:focus { border-color: #C4622D; }
-        .search-input::placeholder { color: #B8A88A; font-style: italic; }
-        .town-select { padding: 11px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #3B4A28; background: #FBF8F0; color: #2C1F0E; outline: none; cursor: pointer; min-width: 150px; }
-        .cat-nav { background: #3B4A28; overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 3px solid #C4622D; }
-        .cat-nav::-webkit-scrollbar { display: none; }
-        .cat-nav-inner { display: inline-flex; padding: 0 16px; }
-        .cat-btn { background: none; border: none; color: rgba(244,239,228,0.65); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; transition: color 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; }
-        .cat-btn:hover { color: #F4EFE4; }
-        .cat-btn.active { color: #F4EFE4; border-bottom-color: #C4622D; }
-        .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
-        @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
-        .sidebar-box { border: 1.5px solid #3B4A28; background: #FBF8F0; margin-bottom: 20px; overflow: hidden; }
-        .sidebar-box-header { background: #3B4A28; color: #F4EFE4; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 16px; }
-        .sidebar-box-body { padding: 16px; }
-        .sidebar-cat-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(59,74,40,0.1); cursor: pointer; font-size: 14px; color: #4A3320; transition: color 0.15s; }
-        .sidebar-cat-item:last-child { border-bottom: none; }
-        .sidebar-cat-item:hover, .sidebar-cat-item.active { color: #C4622D; font-weight: 600; }
-        .sidebar-count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: #B8A88A; }
-        .featured-strip { background: #3B4A28; padding: 32px 24px; border-bottom: 3px solid #C4622D; }
-        .featured-strip-inner { max-width: 1140px; margin: 0 auto; }
-        .featured-strip-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #C4622D; margin-bottom: 16px; }
-        .featured-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: rgba(196,98,45,0.3); }
-        .featured-item { background: #3B4A28; padding: 20px; cursor: pointer; transition: background 0.2s; }
-        .featured-item:hover { background: #2e3b1f; }
-        .featured-item-icon { font-size: 22px; margin-bottom: 8px; display: block; }
-        .featured-item-name { font-family: 'Lora', serif; font-size: 15px; font-weight: 700; color: #F4EFE4; line-height: 1.3; margin-bottom: 4px; }
-        .featured-item-loc { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(244,239,228,0.55); letter-spacing: 0.06em; text-transform: uppercase; }
-        .listings-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #3B4A28; padding-bottom: 12px; }
-        .listings-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #2C1F0E; }
-        .result-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #7A5C2E; letter-spacing: 0.08em; }
-        .listing-card { background: #FBF8F0; border: 1.5px solid rgba(59,74,40,0.2); padding: 22px 24px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; }
-        .listing-card:hover { border-color: #3B4A28; box-shadow: 3px 3px 0 #3B4A28; transform: translate(-1px,-1px); }
-        .listing-card.is-featured { border-color: #C4622D; border-left: 4px solid #C4622D; }
-        .listing-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
-        .listing-name { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: #2C1F0E; margin-bottom: 3px; line-height: 1.2; }
-        .listing-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #7A5C2E; letter-spacing: 0.06em; margin-bottom: 10px; }
-        .listing-desc { font-size: 15px; line-height: 1.65; color: #4A3320; margin-bottom: 12px; }
-        .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
-        .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 8px; background: rgba(59,74,40,0.1); color: #3B4A28; text-transform: uppercase; border: 1px solid rgba(59,74,40,0.2); }
-        .featured-badge { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: #C4622D; border: 1px solid #C4622D; padding: 3px 8px; white-space: nowrap; }
-        .hours-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #7A5C2E; margin-top: 8px; }
-        .no-results { text-align: center; padding: 60px 0; font-style: italic; color: #7A5C2E; font-size: 18px; }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(44,31,14,0.8); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
-        .modal { background: #FBF8F0; max-width: 660px; width: 100%; max-height: 88vh; overflow-y: auto; border: 2px solid #3B4A28; box-shadow: 8px 8px 0 #3B4A28; }
-        .modal-header { background: #3B4A28; padding: 28px 28px 24px; position: sticky; top: 0; }
-        .modal-close { float: right; background: none; border: none; color: rgba(244,239,228,0.6); font-size: 20px; cursor: pointer; }
-        .modal-close:hover { color: #F4EFE4; }
-        .modal-body { padding: 28px; }
-        .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(59,74,40,0.2); }
-        .modal-field label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #7A5C2E; display: block; margin-bottom: 3px; }
-        .modal-field span { font-size: 15px; color: #2C1F0E; }
-        .modal-field a { font-size: 15px; color: #C4622D; text-decoration: none; }
-        .modal-field a:hover { text-decoration: underline; }
-        .modal-desc { font-size: 17px; line-height: 1.7; color: #3A2810; margin-bottom: 24px; font-style: italic; border-left: 3px solid #C4622D; padding-left: 16px; }
-        .claim-box { background: rgba(59,74,40,0.07); border: 1.5px solid #3B4A28; padding: 20px; text-align: center; }
-        .claim-box p { font-size: 14px; color: #4A3320; margin-bottom: 12px; font-style: italic; }
-        .btn-primary { background: #3B4A28; color: #F4EFE4; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background: #2e3b1f; }
-        .submit-form input, .submit-form select, .submit-form textarea { width: 100%; padding: 10px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid rgba(59,74,40,0.3); background: #FBF8F0; color: #2C1F0E; outline: none; margin-bottom: 14px; }
-        .submit-form input:focus, .submit-form textarea:focus { border-color: #C4622D; }
-        .submit-form label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #7A5C2E; display: block; margin-bottom: 4px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .modal-info-grid { grid-template-columns: 1fr; } }
-        .loading { text-align: center; padding: 60px; font-style: italic; color: #7A5C2E; }
-      `}</style>
+      <style>{sharedStyles}</style>
 
       <div className="topbar">Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer Counties</div>
 
@@ -187,11 +210,11 @@ function HomePage() {
               {featured.map((d) => {
                 const cat = categories.find((c) => c.id === d.category);
                 return (
-                  <div key={d.id} className="featured-item" onClick={() => setSelected(d)}>
+                  <Link key={d.id} to={`/listing/${d.slug}`} className="featured-item">
                     <span className="featured-item-icon">{cat ? cat.icon : ""}</span>
                     <div className="featured-item-name">{d.name}</div>
                     <div className="featured-item-loc">{d.town} - {d.county} Co.</div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
@@ -240,7 +263,7 @@ function HomePage() {
             filtered.map((d) => {
               const cat = categories.find((c) => c.id === d.category);
               return (
-                <div key={d.id} className={"listing-card " + (d.featured ? "is-featured" : "")} onClick={() => setSelected(d)}>
+                <Link key={d.id} to={`/listing/${d.slug}`} className={"listing-card " + (d.featured ? "is-featured" : "")}>
                   <div className="listing-card-top">
                     <div>
                       <div className="listing-name">{d.name}</div>
@@ -251,49 +274,12 @@ function HomePage() {
                   <p className="listing-desc">{d.description}</p>
                   <div className="tag-row">{(d.tags || []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
                   <div className="hours-line">{d.hours}</div>
-                </div>
+                </Link>
               );
             })
           )}
         </div>
       </div>
-
-      {selected && (
-        <div className="modal-overlay" onClick={() => setSelected(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <button className="modal-close" onClick={() => setSelected(null)}>X</button>
-              {selected.featured && <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, letterSpacing: "0.2em", color: "#C4622D", textTransform: "uppercase", marginBottom: 8 }}>Featured Resource</div>}
-              <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, color: "#F4EFE4", lineHeight: 1.2, marginBottom: 6 }}>{selected.name}</div>
-              <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "rgba(244,239,228,0.6)", letterSpacing: "0.08em" }}>{selected.town}, {selected.county} County - Est. {selected.established}</div>
-              <div className="tag-row" style={{ marginTop: 12 }}>
-                {(selected.tags || []).map((t) => <span key={t} style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, padding: "3px 7px", border: "1px solid rgba(196,98,45,0.5)", color: "#C4622D", letterSpacing: "0.08em", textTransform: "uppercase" }}>{t}</span>)}
-              </div>
-            </div>
-            <div className="modal-body">
-              <p className="modal-desc">{selected.description}</p>
-              <div className="modal-info-grid">
-                <div className="modal-field"><label>Address</label><span>{selected.address}</span></div>
-                <div className="modal-field"><label>Phone</label><span>{selected.phone}</span></div>
-                <div className="modal-field"><label>Hours</label><span>{selected.hours}</span></div>
-                <div className="modal-field"><label>Category</label><span>{(categories.find((c) => c.id === selected.category) || {}).label}</span></div>
-                {selected.website && (
-                  <div className="modal-field" style={{ gridColumn: "1 / -1" }}>
-                    <label>Website</label>
-                    <a href={selected.website.startsWith("http") ? selected.website : "https://" + selected.website} target="_blank" rel="noreferrer">
-                      {selected.website}
-                    </a>
-                  </div>
-                )}
-              </div>
-              <div className="claim-box">
-                <p>Own or manage <strong>{selected.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
-                <a href={"mailto:hello@hudsonvalleyalmanac.com?subject=Update My Listing - " + selected.name} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showSubmit && <SubmitForm onClose={() => setShowSubmit(false)} />}
 
@@ -306,21 +292,133 @@ function HomePage() {
         </div>
       </div>
 
-      <footer style={{backgroundColor:"#2c1f14",color:"#c9b89a",padding:"40px 24px",textAlign:"center"}}>
-        <div style={{maxWidth:"800px",margin:"0 auto"}}>
-          <h3 style={{color:"#f0e6d3",fontSize:"1.4rem",marginBottom:"6px"}}>Hudson Valley Almanac</h3>
-          <p style={{fontSize:"0.85rem",color:"#9e8070",marginBottom:"24px"}}>The Hudson Valley and Capital Region's homesteading & rural living guide.</p>
-          <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
-            <a href="mailto:hello@hudsonvalleyalmanac.com" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
-            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
-            <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Report an Error - Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
-          </div>
-          <p style={{fontSize:"0.78rem",color:"#7a6555",marginBottom:"24px",lineHeight:"1.6"}}>Serving Albany, Rensselaer, Saratoga, Schenectady, Washington, Columbia, Greene, Delaware, Schoharie, Ulster, Dutchess, Sullivan, Orange, Putnam and Westchester Counties</p>
-          <div style={{borderTop:"1px solid #3d2b1f",paddingTop:"20px"}}>
-            <p style={{fontSize:"0.78rem",color:"#5a4535",margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Capital Region of New York State.</p>
-          </div>
+      <Footer />
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{backgroundColor:"#2c1f14",color:"#c9b89a",padding:"40px 24px",textAlign:"center"}}>
+      <div style={{maxWidth:"800px",margin:"0 auto"}}>
+        <h3 style={{color:"#f0e6d3",fontSize:"1.4rem",marginBottom:"6px"}}>Hudson Valley Almanac</h3>
+        <p style={{fontSize:"0.85rem",color:"#9e8070",marginBottom:"24px"}}>The Hudson Valley and Capital Region's homesteading & rural living guide.</p>
+        <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
+          <a href="mailto:hello@hudsonvalleyalmanac.com" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
+          <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
+          <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Report an Error - Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
         </div>
-      </footer>
+        <p style={{fontSize:"0.78rem",color:"#7a6555",marginBottom:"24px",lineHeight:"1.6"}}>Serving Albany, Rensselaer, Saratoga, Schenectady, Washington, Columbia, Greene, Delaware, Schoharie, Ulster, Dutchess, Sullivan, Orange, Putnam and Westchester Counties</p>
+        <div style={{borderTop:"1px solid #3d2b1f",paddingTop:"20px"}}>
+          <p style={{fontSize:"0.78rem",color:"#5a4535",margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Capital Region of New York State.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function ListingPage() {
+  const { slug } = useParams();
+  const [listing, setListing] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchListing() {
+      setLoading(true);
+      setNotFound(false);
+      const { data, error } = await supabase
+        .from("listings")
+        .select("*")
+        .eq("slug", slug)
+        .eq("status", "published")
+        .maybeSingle();
+      if (cancelled) return;
+      if (error || !data) {
+        setNotFound(true);
+        setListing(null);
+      } else {
+        setListing(data);
+      }
+      setLoading(false);
+    }
+    fetchListing();
+    return () => { cancelled = true; };
+  }, [slug]);
+
+  useEffect(() => {
+    if (listing) {
+      document.title = `${listing.name} - Hudson Valley Almanac`;
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta && listing.description) {
+        meta.setAttribute("content", listing.description.slice(0, 160));
+      }
+    }
+    return () => { document.title = "Hudson Valley Almanac"; };
+  }, [listing]);
+
+  const cat = listing ? categories.find((c) => c.id === listing.category) : null;
+
+  return (
+    <div className="listing-page-wrap">
+      <style>{sharedStyles}</style>
+      <div className="topbar">Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer Counties</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="listing-page-article">
+        {loading ? (
+          <div className="loading">Loading listing</div>
+        ) : notFound || !listing ? (
+          <div style={{ background: "#FBF8F0", border: "2px solid #3B4A28", padding: 40, textAlign: "center" }}>
+            <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Listing not found</div>
+            <p style={{ color: "#7A5C2E", fontStyle: "italic", marginBottom: 24 }}>We couldn't find a resource at this address.</p>
+            <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Browse all resources</Link>
+          </div>
+        ) : (
+          <>
+            <div className="listing-page-masthead">
+              {listing.featured && <div className="listing-page-eyebrow">Featured Resource</div>}
+              <h1 className="listing-page-title">{listing.name}</h1>
+              <div className="listing-page-sub">
+                {cat ? `${cat.icon} ${cat.label} - ` : ""}
+                {listing.town}{listing.county ? `, ${listing.county} County` : ""}
+                {listing.established ? ` - Est. ${listing.established}` : ""}
+              </div>
+              {(listing.tags || []).length > 0 && (
+                <div className="tag-row" style={{ marginTop: 14 }}>
+                  {(listing.tags || []).map((t) => (
+                    <span key={t} style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, padding: "3px 7px", border: "1px solid rgba(196,98,45,0.5)", color: "#C4622D", letterSpacing: "0.08em", textTransform: "uppercase" }}>{t}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="listing-page-body">
+              {listing.description && <p className="modal-desc">{listing.description}</p>}
+              <div className="modal-info-grid">
+                {listing.address && <div className="modal-field"><label>Address</label><span>{listing.address}</span></div>}
+                {listing.phone && <div className="modal-field"><label>Phone</label><span>{listing.phone}</span></div>}
+                {listing.hours && <div className="modal-field"><label>Hours</label><span>{listing.hours}</span></div>}
+                {cat && <div className="modal-field"><label>Category</label><span>{cat.label}</span></div>}
+                {listing.website && (
+                  <div className="modal-field" style={{ gridColumn: "1 / -1" }}>
+                    <label>Website</label>
+                    <a href={listing.website.startsWith("http") ? listing.website : "https://" + listing.website} target="_blank" rel="noreferrer">
+                      {listing.website}
+                    </a>
+                  </div>
+                )}
+              </div>
+              <div className="claim-box">
+                <p>Own or manage <strong>{listing.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
+                <a href={"mailto:hello@hudsonvalleyalmanac.com?subject=Update My Listing - " + listing.name} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 }
@@ -334,7 +432,9 @@ function SubmitForm({ onClose }) {
     if (!form.name || !form.category || !form.town) return alert("Please fill in name, category, and town.");
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("listings").insert([{ ...form, tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean), established: parseInt(form.established) || null, status: "pending", featured: false }]);
+      const baseSlug = slugify(form.name);
+      const slug = `${baseSlug}-${Date.now().toString(36)}`;
+      const { error } = await supabase.from("listings").insert([{ ...form, slug, tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean), established: parseInt(form.established) || null, status: "pending", featured: false }]);
       if (error) throw error;
       setSubmitted(true);
     } catch (err) {
@@ -428,7 +528,7 @@ function AdminPage() {
         <div style={{ fontSize: 13, color: "#7A5C2E", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
         <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} placeholder="Enter password" style={{ width: "100%", padding: "10px 14px", fontFamily: "'Lora',serif", fontSize: 15, border: "1.5px solid #3B4A28", background: "#F4EFE4", outline: "none", marginBottom: 14 }} />
         <button onClick={login} style={{ width: "100%", background: "#3B4A28", color: "#F4EFE4", border: "none", padding: "12px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>Enter</button>
-        <a href="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#7A5C2E" }}>Back to site</a>
+        <Link to="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#7A5C2E" }}>Back to site</Link>
       </div>
     </div>
   );
@@ -438,7 +538,7 @@ function AdminPage() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
       <div style={{ background: "#3B4A28", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#F4EFE4", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac - Admin</div>
-        <a href="/" style={{ color: "rgba(244,239,228,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>View Site</a>
+        <Link to="/" style={{ color: "rgba(244,239,228,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}>View Site</Link>
       </div>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
         <div style={{ display: "flex", gap: 2, marginBottom: 24 }}>
