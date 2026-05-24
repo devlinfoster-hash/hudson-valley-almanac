@@ -457,7 +457,16 @@ function ListingPage() {
               {listing.description && <p className="modal-desc">{listing.description}</p>}
               <div className="modal-info-grid">
                 {listing.address && <div className="modal-field"><label>Address</label><span><a href={"https://maps.google.com/?q=" + encodeURIComponent(listing.address)} target="_blank" rel="noreferrer" style={{color:"inherit",textDecoration:"none"}}>{listing.address}</a></span></div>}
-                {listing.phone && <div className="modal-field"><label>Phone</label><span><a href={"tel:" + listing.phone.replace(/\D/g, "")} style={{color:"inherit",textDecoration:"none"}}>{listing.phone}</a></span></div>}
+                {listing.phone && (
+                  <div className="modal-field">
+                    <label>Phone</label>
+                    <span>
+                      <a href={`tel:${listing.phone.replace(/[^\d+]/g, '')}`} style={{color: "#C4622D", textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: 11}}>
+                        {listing.phone}
+                      </a>
+                    </span>
+                  </div>
+                )}
                 {listing.hours && <div className="modal-field"><label>Hours</label><span>{listing.hours}</span></div>}
                 {cat && <div className="modal-field"><label>Category</label><span>{cat.label}</span></div>}
                 {listing.website && (
@@ -616,7 +625,12 @@ function AdminPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
               <div>
                 <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{l.name}</div>
-                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "#7A5C2E", marginBottom: 8 }}>{l.category} - {l.town}, {l.county} - {l.phone}</div>
+                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "#7A5C2E", marginBottom: 8 }}>
+                  {l.category} - {l.town}, {l.county}
+                  {l.phone && (
+                    <> - <a href={`tel:${l.phone.replace(/[^\d+]/g, '')}`} style={{color: "#C4622D", textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: 11}}>{l.phone}</a></>
+                  )}
+                </div>
                 <div style={{ fontSize: 14, color: "#4A3320", lineHeight: 1.6 }}>{l.description}</div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 140 }}>
