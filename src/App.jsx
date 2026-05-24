@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "./supabase";
 
-const ADMIN_PASSWORD = "almanac2024";
-
 const categories = [
   { id: "feed", label: "Feed & Supply", icon: "🌾" },
   { id: "animals", label: "Animals & Livestock", icon: "🐓" },
@@ -586,7 +584,7 @@ function AdminPage() {
   const [loading, setLoading] = useState(false);
 
   async function login() {
-    if (pw === ADMIN_PASSWORD) { setAuthed(true); fetchAll(); }
+    if (pw === import.meta.env.VITE_ADMIN_PASSWORD) { setAuthed(true); fetchAll(); }
     else alert("Incorrect password.");
   }
 
