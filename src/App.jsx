@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "./supabase";
 
 const ADMIN_PASSWORD = "almanac2024";
@@ -154,12 +154,28 @@ const sharedStyles = `
 function HomePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [townFilter, setTownFilter] = useState("All");
-  const [countyFilter, setCountyFilter] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("q") || "";
+  const activeCategory = searchParams.get("category") || "all";
+  const countyFilter = searchParams.get("county") || "All";
+  const townFilter = searchParams.get("town") || "All";
   const [showSubmit, setShowSubmit] = useState(false);
   const [showMobileCats, setShowMobileCats] = useState(false);
+
+  function setParam(key, value, defaultValue) {
+    const next = new URLSearchParams(searchParams);
+    if (!value || value === defaultValue) next.delete(key);
+    else next.set(key, value);
+    setSearchParams(next, { replace: true });
+  }
+
+  function setCounty(value) {
+    const next = new URLSearchParams(searchParams);
+    if (!value || value === "All") next.delete("county");
+    else next.set("county", value);
+    next.delete("town");
+    setSearchParams(next, { replace: true });
+  }
 
   useEffect(() => { fetchListings(); }, []);
 
@@ -197,12 +213,12 @@ function HomePage() {
         <span className="ornament">✦ ✦ ✦</span>
         <p className="masthead-sub">The Hudson Valley and Capital Region's homesteading & rural living guide</p>
         <div className="search-row">
-          <input className="search-input" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setSearch(e.target.value)} />
-          <select className="town-select" value={countyFilter} onChange={(e) => { setCountyFilter(e.target.value); setTownFilter("All"); }}>
+          <input className="search-input" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
+          <select className="town-select" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
             <option value="All">All Counties</option>
             {allCounties.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
-          <select className="town-select" value={townFilter} onChange={(e) => setTownFilter(e.target.value)}>
+          <select className="town-select" value={townFilter} onChange={(e) => setParam("town", e.target.value, "All")}>
             <option value="All">All Towns</option>
             {allTowns.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
@@ -212,9 +228,9 @@ function HomePage() {
 
       <div className="cat-nav">
         <div className="cat-nav-inner">
-          <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setActiveCategory("all")}>All Resources</button>
+          <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>All Resources</button>
           {categories.map((c) => (
-            <button key={c.id} className={"cat-btn " + (activeCategory === c.id ? "active" : "")} onClick={() => setActiveCategory(c.id)}>
+            <button key={c.id} className={"cat-btn " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
               {c.icon} {c.label}
             </button>
           ))}
@@ -246,13 +262,13 @@ function HomePage() {
           <div className="sidebar-box">
             <div className="sidebar-box-header">Browse by Category</div>
             <div className="sidebar-box-body">
-              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setActiveCategory("all")}>
+              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
                 const count = listings.filter((d) => d.category === c.id).length;
                 return (
-                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setActiveCategory(c.id)}>
+                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
                   </div>
                 );
@@ -310,13 +326,13 @@ function HomePage() {
               <button className="mobile-drawer-close" onClick={() => setShowMobileCats(false)}>X</button>
             </div>
             <div className="mobile-drawer-body">
-              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setActiveCategory("all"); setShowMobileCats(false); }}>
+              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setParam("category", "all", "all"); setShowMobileCats(false); }}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
                 const count = listings.filter((d) => d.category === c.id).length;
                 return (
-                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setActiveCategory(c.id); setShowMobileCats(false); }}>
+                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
                   </div>
                 );
