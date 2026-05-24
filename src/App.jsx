@@ -148,7 +148,7 @@ function HomePage() {
   async function fetchListings() {
     setLoading(true);
     try {
-      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("featured", { ascending: false }).limit(2000);
+      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("name", { ascending: true }).limit(2000);
       if (error) throw error;
       setListings(data || []);
     } catch (err) {
