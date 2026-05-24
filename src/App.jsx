@@ -36,6 +36,8 @@ function slugify(name) {
     .replace(/^-+|-+$/g, "") || "listing";
 }
 
+const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
+
 // Main app component
 export default function App() {
   return (
@@ -121,7 +123,22 @@ const sharedStyles = `
   .submit-form label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #7A5C2E; display: block; margin-bottom: 4px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .modal-info-grid { grid-template-columns: 1fr; } }
-  .loading { text-align: center; padding: 60px; font-style: italic; color: #7A5C2E; }
+  .loading { text-align: center; padding: 60px; }
+  .spinner { width: 40px; height: 40px; border: 3px solid rgba(59,74,40,0.2); border-top-color: #3B4A28; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
+  .loading-text { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #7A5C2E; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .mobile-category-toggle { display: none; }
+  @media (max-width: 760px) {
+    .mobile-category-toggle { display: inline-block; margin: 18px auto 0; padding: 11px 24px; background: #3B4A28; color: #F4EFE4; border: none; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+  }
+  .mobile-drawer-overlay { position: fixed; inset: 0; background: rgba(44,31,14,0.8); z-index: 300; display: flex; align-items: flex-start; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+  .mobile-drawer { background: #FBF8F0; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; border: 2px solid #3B4A28; box-shadow: 6px 6px 0 #3B4A28; }
+  .mobile-drawer-header { background: #3B4A28; color: #F4EFE4; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; position: sticky; top: 0; }
+  .mobile-drawer-close { background: none; border: none; color: rgba(244,239,228,0.7); font-size: 18px; cursor: pointer; padding: 0 4px; }
+  .mobile-drawer-close:hover { color: #F4EFE4; }
+  .mobile-drawer-body { padding: 12px 18px 18px; }
+  .share-btn { background: transparent; color: #3B4A28; border: 1.5px solid #3B4A28; padding: 8px 18px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s; }
+  .share-btn:hover { background: #3B4A28; color: #F4EFE4; }
   .listing-page-wrap { font-family: 'Lora', Georgia, serif; background: #F4EFE4; min-height: 100vh; color: #2C1F0E; }
   .listing-page-nav { max-width: 760px; margin: 0 auto; padding: 24px 24px 0; }
   .back-link { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #3B4A28; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
@@ -142,6 +159,7 @@ function HomePage() {
   const [townFilter, setTownFilter] = useState("All");
   const [countyFilter, setCountyFilter] = useState("All");
   const [showSubmit, setShowSubmit] = useState(false);
+  const [showMobileCats, setShowMobileCats] = useState(false);
 
   useEffect(() => { fetchListings(); }, []);
 
@@ -160,7 +178,7 @@ function HomePage() {
   const allTowns = [...new Set(listings.filter((d) => countyFilter === "All" || d.county === countyFilter).map((d) => d.town))].sort();
   const filtered = listings.filter((d) => {
     const matchCat = activeCategory === "all" || d.category === activeCategory;
-    const matchSearch = search === "" || d.name?.toLowerCase().includes(search.toLowerCase()) || d.description?.toLowerCase().includes(search.toLowerCase()) || (d.tags || []).some((t) => t.toLowerCase().includes(search.toLowerCase())) || d.town?.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = search === "" || d.name?.toLowerCase().includes(search.toLowerCase()) || d.description?.toLowerCase().includes(search.toLowerCase()) || (d.tags || []).some((t) => t.toLowerCase().includes(search.toLowerCase())) || d.town?.toLowerCase().includes(search.toLowerCase()) || d.county?.toLowerCase().includes(search.toLowerCase());
     const matchTown = townFilter === "All" || d.town === townFilter;
     const matchCounty = countyFilter === "All" || d.county === countyFilter;
     return matchCat && matchSearch && matchTown && matchCounty;
@@ -172,14 +190,14 @@ function HomePage() {
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#F4EFE4", minHeight: "100vh", color: "#2C1F0E" }}>
       <style>{sharedStyles}</style>
 
-      <div className="topbar">Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer Counties</div>
+      <div className="topbar">{TOPBAR_TEXT}</div>
 
       <div className="hero">
         <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
         <span className="ornament">✦ ✦ ✦</span>
         <p className="masthead-sub">The Hudson Valley and Capital Region's homesteading & rural living guide</p>
         <div className="search-row">
-          <input className="search-input" placeholder="Search by resource, specialty, or town" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <input className="search-input" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setSearch(e.target.value)} />
           <select className="town-select" value={countyFilter} onChange={(e) => { setCountyFilter(e.target.value); setTownFilter("All"); }}>
             <option value="All">All Counties</option>
             {allCounties.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -189,6 +207,7 @@ function HomePage() {
             {allTowns.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
+        <button className="mobile-category-toggle" onClick={() => setShowMobileCats(true)}>Browse Categories</button>
       </div>
 
       <div className="cat-nav">
@@ -256,7 +275,7 @@ function HomePage() {
           </div>
 
           {loading ? (
-            <div className="loading">Loading resources</div>
+            <div className="loading"><div className="spinner" /><div className="loading-text">Loading resources</div></div>
           ) : filtered.length === 0 ? (
             <div className="no-results">Nothing found. Try a different search or category.</div>
           ) : (
@@ -267,7 +286,7 @@ function HomePage() {
                   <div className="listing-card-top">
                     <div>
                       <div className="listing-name">{d.name}</div>
-                      <div className="listing-meta">{cat ? cat.icon : ""} {cat ? cat.label : ""} - {d.town}, {d.county} Co. - Est. {d.established}</div>
+                      <div className="listing-meta">{cat ? cat.icon : ""} {cat ? cat.label : ""} - {d.town}, {d.county} Co.{d.established ? " - Est. " + d.established : ""}</div>
                     </div>
                     {d.featured && <span className="featured-badge">Featured</span>}
                   </div>
@@ -282,6 +301,30 @@ function HomePage() {
       </div>
 
       {showSubmit && <SubmitForm onClose={() => setShowSubmit(false)} />}
+
+      {showMobileCats && (
+        <div className="mobile-drawer-overlay" onClick={() => setShowMobileCats(false)}>
+          <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-drawer-header">
+              <span>Browse by Category</span>
+              <button className="mobile-drawer-close" onClick={() => setShowMobileCats(false)}>X</button>
+            </div>
+            <div className="mobile-drawer-body">
+              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setActiveCategory("all"); setShowMobileCats(false); }}>
+                <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
+              </div>
+              {categories.map((c) => {
+                const count = listings.filter((d) => d.category === c.id).length;
+                return (
+                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setActiveCategory(c.id); setShowMobileCats(false); }}>
+                    <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div style={{backgroundColor:"#f9f5ef",borderTop:"2px solid #e8dcc8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
@@ -308,7 +351,7 @@ function Footer() {
           <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Add My Business to Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
           <a href="mailto:hello@hudsonvalleyalmanac.com?subject=Report an Error - Hudson Valley Almanac" style={{color:"#c9b89a",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
         </div>
-        <p style={{fontSize:"0.78rem",color:"#7a6555",marginBottom:"24px",lineHeight:"1.6"}}>Serving Albany, Rensselaer, Saratoga, Schenectady, Washington, Columbia, Greene, Delaware, Schoharie, Ulster, Dutchess, Sullivan, Orange, Putnam and Westchester Counties</p>
+        <p style={{fontSize:"0.78rem",color:"#7a6555",marginBottom:"24px",lineHeight:"1.6"}}>Serving Albany, Columbia, Greene, Ulster, Dutchess, Schoharie, Rensselaer, Saratoga, Delaware, Washington, Orange, Sullivan, Otsego, Westchester, Warren, Putnam, Rockland, Montgomery and Schenectady Counties</p>
         <div style={{borderTop:"1px solid #3d2b1f",paddingTop:"20px"}}>
           <p style={{fontSize:"0.78rem",color:"#5a4535",margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Capital Region of New York State.</p>
         </div>
@@ -360,16 +403,32 @@ function ListingPage() {
 
   const cat = listing ? categories.find((c) => c.id === listing.category) : null;
 
+  async function handleShare() {
+    if (!listing) return;
+    const shareData = { title: listing.name, text: listing.description || "", url: window.location.href };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch { /* user cancelled */ }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard");
+    } catch {
+      alert(window.location.href);
+    }
+  }
+
   return (
     <div className="listing-page-wrap">
       <style>{sharedStyles}</style>
-      <div className="topbar">Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer Counties</div>
-      <div className="listing-page-nav">
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
         <Link to="/" className="back-link">← Back to all resources</Link>
+        {listing && <button className="share-btn" onClick={handleShare}>Share</button>}
       </div>
       <div className="listing-page-article">
         {loading ? (
-          <div className="loading">Loading listing</div>
+          <div className="loading"><div className="spinner" /><div className="loading-text">Loading listing</div></div>
         ) : notFound || !listing ? (
           <div style={{ background: "#FBF8F0", border: "2px solid #3B4A28", padding: 40, textAlign: "center" }}>
             <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Listing not found</div>
@@ -397,8 +456,8 @@ function ListingPage() {
             <div className="listing-page-body">
               {listing.description && <p className="modal-desc">{listing.description}</p>}
               <div className="modal-info-grid">
-                {listing.address && <div className="modal-field"><label>Address</label><span>{listing.address}</span></div>}
-                {listing.phone && <div className="modal-field"><label>Phone</label><span>{listing.phone}</span></div>}
+                {listing.address && <div className="modal-field"><label>Address</label><span><a href={"https://maps.google.com/?q=" + encodeURIComponent(listing.address)} target="_blank" rel="noreferrer" style={{color:"inherit",textDecoration:"none"}}>{listing.address}</a></span></div>}
+                {listing.phone && <div className="modal-field"><label>Phone</label><span><a href={"tel:" + listing.phone.replace(/\D/g, "")} style={{color:"inherit",textDecoration:"none"}}>{listing.phone}</a></span></div>}
                 {listing.hours && <div className="modal-field"><label>Hours</label><span>{listing.hours}</span></div>}
                 {cat && <div className="modal-field"><label>Category</label><span>{cat.label}</span></div>}
                 {listing.website && (
