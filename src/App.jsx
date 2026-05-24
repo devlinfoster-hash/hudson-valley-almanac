@@ -34,9 +34,9 @@ function slugify(name) {
     .replace(/^-+|-+$/g, "") || "listing";
 }
 
-const TOPBAR_TEXT = "Montgomery · Fulton · Herkimer · Oneida · Madison · Schoharie · Otsego · Schenectady Counties";
-const FOOTER_COUNTIES = "Serving Montgomery, Fulton, Herkimer, Oneida, Madison, Schoharie, Otsego and Schenectady Counties";
-const CONTACT_EMAIL = "hello@mohawkvalleyalmanac.com";
+const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
+const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and the adjacent Catskill highlands";
+const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 
 export default function App() {
   return (
@@ -195,9 +195,8 @@ function HomePage() {
       <div className="topbar">{TOPBAR_TEXT}</div>
 
       <div className="hero">
-        <h1 className="masthead-title">Mohawk Valley<br /><em>Almanac</em></h1>
-        <span className="ornament">✦ ✦ ✦</span>
-        <p className="masthead-sub">The Mohawk Valley's homesteading & rural living guide</p>
+        <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
+        <p className="masthead-sub">The Hudson Valley's directory of farms, makers, markets & stewards</p>
         <div className="search-row">
           <input className="search-input" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
           <select className="town-select" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
@@ -309,9 +308,9 @@ function HomePage() {
 
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
-          <h2 style={{fontSize:"1.8rem",color:"#1A2B3C",marginBottom:"12px",fontFamily:"'Libre Baskerville',serif"}}>Get Listed on Mohawk Valley Almanac</h2>
-          <p style={{color:"#5C7A8A",fontSize:"1rem",marginBottom:"24px"}}>Are you a local farm, maker, or service provider in the Mohawk Valley? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
-          <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Mohawk Valley Almanac`} style={{display:"inline-block",backgroundColor:"#1C3A5E",color:"#EFF0E8",padding:"14px 32px",borderRadius:"8px",textDecoration:"none",fontWeight:"600",fontSize:"1rem",marginBottom:"12px"}}>Submit Your Business</a>
+          <h2 style={{fontSize:"1.8rem",color:"#1A2B3C",marginBottom:"12px",fontFamily:"'Libre Baskerville',serif"}}>Get Listed on Hudson Valley Almanac</h2>
+          <p style={{color:"#5C7A8A",fontSize:"1rem",marginBottom:"24px"}}>Are you a local farm, maker, or service provider in the Hudson Valley? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
+          <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{display:"inline-block",backgroundColor:"#1C3A5E",color:"#EFF0E8",padding:"14px 32px",borderRadius:"8px",textDecoration:"none",fontWeight:"600",fontSize:"1rem",marginBottom:"12px"}}>Submit Your Business</a>
           <p style={{color:"#8AA0AE",fontSize:"0.85rem",marginTop:"8px"}}>Already listed? Email us to update your info or report an error.</p>
         </div>
       </div>
@@ -325,16 +324,16 @@ function Footer() {
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
       <div style={{maxWidth:"800px",margin:"0 auto"}}>
-        <h3 style={{color:"#EFF0E8",fontSize:"1.4rem",marginBottom:"6px",fontFamily:"'Libre Baskerville',serif"}}>Mohawk Valley Almanac</h3>
-        <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Mohawk Valley's homesteading & rural living guide.</p>
+        <h3 style={{color:"#EFF0E8",fontSize:"1.4rem",marginBottom:"6px",fontFamily:"'Libre Baskerville',serif"}}>Hudson Valley Almanac</h3>
+        <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
-          <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Mohawk Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
-          <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Mohawk Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
+          <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
+          <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
         </div>
         <p style={{fontSize:"0.78rem",color:"#5C7A8A",marginBottom:"24px",lineHeight:"1.6"}}>{FOOTER_COUNTIES}</p>
         <div style={{borderTop:"1px solid #1C3A5E",paddingTop:"20px"}}>
-          <p style={{fontSize:"0.78rem",color:"#5C7A8A",margin:0}}>Copyright {new Date().getFullYear()} Mohawk Valley Almanac. Built with care in the Mohawk Valley of New York State.</p>
+          <p style={{fontSize:"0.78rem",color:"#5C7A8A",margin:0}}>Copyright {new Date().getFullYear()} Hudson Valley Almanac. Built with care in the Hudson Valley of New York State.</p>
         </div>
       </div>
     </footer>
@@ -373,13 +372,13 @@ function ListingPage() {
 
   useEffect(() => {
     if (listing) {
-      document.title = `${listing.name} - Mohawk Valley Almanac`;
+      document.title = `${listing.name} - Hudson Valley Almanac`;
       const meta = document.querySelector('meta[name="description"]');
       if (meta && listing.description) {
         meta.setAttribute("content", listing.description.slice(0, 160));
       }
     }
-    return () => { document.title = "Mohawk Valley Almanac"; };
+    return () => { document.title = "Hudson Valley Almanac"; };
   }, [listing]);
 
   const cat = listing ? categories.find((c) => c.id === listing.category) : null;
@@ -574,7 +573,7 @@ function AdminPage() {
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 360, width: "100%", textAlign: "center" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8, color: "#1A2B3C" }}>Admin Access</div>
-        <div style={{ fontSize: 13, color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>Mohawk Valley Almanac</div>
+        <div style={{ fontSize: 13, color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
         <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} placeholder="Enter password" style={{ width: "100%", padding: "10px 14px", fontFamily: "'Lora',serif", fontSize: 15, border: "1.5px solid #1C3A5E", background: "#EFF0E8", outline: "none", marginBottom: 14, color: "#1A2B3C" }} />
         <button onClick={login} style={{ width: "100%", background: "#1C3A5E", color: "#EFF0E8", border: "none", padding: "12px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>Enter</button>
         <Link to="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#5C7A8A" }}>Back to site</Link>
@@ -586,7 +585,7 @@ function AdminPage() {
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh" }}>
       <style>{`* { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
       <div style={{ background: "#1C3A5E", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#EFF0E8", fontSize: 18, fontWeight: 700 }}>Mohawk Valley Almanac - Admin</div>
+        <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#EFF0E8", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac - Admin</div>
         <Link to="/" style={{ color: "rgba(239,240,232,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}>View Site</Link>
       </div>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
