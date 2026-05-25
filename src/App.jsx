@@ -24,6 +24,7 @@ const categories = [
   { id: "apothecary", label: "Soap, Candles & Apothecary", icon: "🕯️" },
   { id: "forage", label: "Mushroom & Forage", icon: "🍄" },
   { id: "artisan", label: "Artisan & Craft", icon: "🏺" },
+  { id: "mutualaid", label: "Mutual Aid & Food Sharing", icon: "🤝" },
   { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
 ];
 
@@ -209,7 +210,7 @@ function HomePage() {
     const q = search.toLowerCase();
     const matchSearch = search === "" || d.name?.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q) || (d.tags || []).some((t) => t.toLowerCase().includes(q)) || d.town?.toLowerCase().includes(q) || d.county?.toLowerCase().includes(q);
     const matchTown = townFilter === "All" || d.town === townFilter;
-    const matchCounty = countyFilter === "All" || d.county === countyFilter;
+    const matchCounty = countyFilter === "All" || d.county === countyFilter || (d.tags || []).includes(countyFilter);
     return matchCat && matchSearch && matchTown && matchCounty;
   });
 
