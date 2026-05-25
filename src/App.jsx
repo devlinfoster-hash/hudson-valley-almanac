@@ -34,6 +34,28 @@ function slugify(name) {
     .replace(/^-+|-+$/g, "") || "listing";
 }
 
+function linkifyDescription(text) {
+  if (!text) return null;
+  const urlRegex = /(?<!@)(https?:\/\/\S+|(?:[a-zA-Z0-9-]+\.)+(?:com|org|net|edu|gov|io|co|farm|store|shop)(?:\/\S*)?)/gi;
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+  while ((match = urlRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+    const url = match[0];
+    const href = url.startsWith("http") ? url : "https://" + url;
+    parts.push(
+      <a key={key++} href={href} target="_blank" rel="noreferrer" style={{ color: "#C4862D", textDecoration: "underline" }}>
+        {url}
+      </a>
+    );
+    lastIndex = match.index + url.length;
+  }
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts;
+}
+
 const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
 const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and the adjacent Catskill highlands";
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
@@ -44,6 +66,7 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/listing/:slug" element={<ListingPage />} />
+      <Route path="/listings/:slug" element={<ListingPage />} />
     </Routes>
   );
 }
@@ -85,6 +108,7 @@ const sharedStyles = `
   .listing-name { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: #1A2B3C; margin-bottom: 3px; line-height: 1.2; }
   .listing-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.06em; margin-bottom: 10px; }
   .listing-desc { font-size: 15px; line-height: 1.65; color: #1A2B3C; margin-bottom: 12px; }
+  .listing-desc a { color: #C4862D; text-decoration: underline; }
   .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
   .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 8px; background: rgba(28,58,94,0.1); color: #1C3A5E; text-transform: uppercase; border: 1px solid rgba(28,58,94,0.2); }
   .hours-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; margin-top: 8px; }
@@ -98,9 +122,10 @@ const sharedStyles = `
   .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
   .modal-field label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #5C7A8A; display: block; margin-bottom: 3px; }
   .modal-field span { font-size: 15px; color: #1A2B3C; }
-  .modal-field a { font-size: 15px; color: #C4862D; text-decoration: none; }
+  .modal-field a { font-size: 15px; color: #C4862D; text-decoration: underline; }
   .modal-field a:hover { text-decoration: underline; }
   .modal-desc { font-size: 17px; line-height: 1.7; color: #1A2B3C; margin-bottom: 24px; font-style: italic; border-left: 3px solid #C4862D; padding-left: 16px; }
+  .modal-desc a { color: #C4862D; text-decoration: underline; font-style: normal; }
   .claim-box { background: rgba(28,58,94,0.07); border: 1.5px solid #1C3A5E; padding: 20px; text-align: center; }
   .claim-box p { font-size: 14px; color: #1A2B3C; margin-bottom: 12px; font-style: italic; }
   .btn-primary { background: #1C3A5E; color: #EFF0E8; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
@@ -270,7 +295,7 @@ function HomePage() {
                       <div className="listing-meta">{cat ? cat.icon : ""} {cat ? cat.label : ""} - {d.town}, {d.county} Co.{d.established ? " - Est. " + d.established : ""}</div>
                     </div>
                   </div>
-                  <p className="listing-desc">{d.description}</p>
+                  <p className="listing-desc">{linkifyDescription(d.description)}</p>
                   <div className="tag-row">{(d.tags || []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
                   <div className="hours-line">{d.hours}</div>
                 </Link>
@@ -433,7 +458,7 @@ function ListingPage() {
               )}
             </div>
             <div className="listing-page-body">
-              {listing.description && <p className="modal-desc">{listing.description}</p>}
+              {listing.description && <p className="modal-desc">{linkifyDescription(listing.description)}</p>}
               <div className="modal-info-grid">
                 {listing.address && <div className="modal-field"><label>Address</label><span><a href={"https://maps.google.com/?q=" + encodeURIComponent(listing.address)} target="_blank" rel="noreferrer" style={{color:"inherit",textDecoration:"none"}}>{listing.address}</a></span></div>}
                 {listing.phone && (
@@ -618,7 +643,7 @@ function AdminPage() {
                   <button onClick={() => approve(l.id)} style={{ background: "#1C3A5E", color: "#EFF0E8", border: "none", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>Approve</button>
                 )}
                 <button onClick={() => reject(l.id)} style={{ background: "#F5F6F0", color: "#C4862D", border: "1.5px solid #C4862D", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>{tab === "pending" ? "Reject" : "Delete"}</button>
-              </div>
+                </div>
             </div>
           </div>
         ))}
