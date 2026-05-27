@@ -17,6 +17,7 @@ const categories = [
   { id: "health", label: "Health & Wellness", icon: "🌿" },
   { id: "fiber", label: "Fiber & Textile", icon: "🧶" },
   { id: "maple", label: "Maple & Honey", icon: "🍯" },
+  { id: "craftbeverages", label: "Craft Beverages", icon: "🍻" },
   { id: "trades", label: "Building & Trades", icon: "🪚" },
   { id: "markets", label: "Markets & Events", icon: "📅" },
   { id: "legal", label: "Land & Legal", icon: "📋" },
@@ -100,6 +101,11 @@ const sharedStyles = `
   .sidebar-cat-item:last-child { border-bottom: none; }
   .sidebar-cat-item:hover, .sidebar-cat-item.active { color: #C4862D; font-weight: 600; }
   .sidebar-count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: #8AA0AE; }
+  .filter-pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .filter-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .filter-pill:hover { background: rgba(28,58,94,0.08); }
+  .filter-pill.active { background: #1C3A5E; color: #EFF0E8; }
+  .filter-pill.active:hover { background: #14304F; }
   .listings-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #1C3A5E; padding-bottom: 12px; }
   .listings-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1A2B3C; }
   .result-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.08em; }
@@ -172,6 +178,7 @@ function HomePage() {
   const activeCategory = searchParams.get("category") || "all";
   const countyFilter = searchParams.get("county") || "All";
   const townFilter = searchParams.get("town") || "All";
+  const agOnly = searchParams.get("ag") === "1";
   const [showSubmit, setShowSubmit] = useState(false);
   const [showMobileCats, setShowMobileCats] = useState(false);
 
@@ -195,7 +202,7 @@ function HomePage() {
   async function fetchListings() {
     setLoading(true);
     try {
-      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("name", { ascending: true }).limit(2000);
+      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("name", { ascending: true }).range(0, 9999);
       if (error) throw error;
       setListings(data || []);
     } catch (err) {
@@ -211,8 +218,18 @@ function HomePage() {
     const matchSearch = search === "" || d.name?.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q) || (d.tags || []).some((t) => t.toLowerCase().includes(q)) || d.town?.toLowerCase().includes(q) || d.county?.toLowerCase().includes(q);
     const matchTown = townFilter === "All" || d.town === townFilter;
     const matchCounty = countyFilter === "All" || d.county === countyFilter || (d.tags || []).includes(countyFilter);
-    return matchCat && matchSearch && matchTown && matchCounty;
+    const matchAg = !agOnly || activeCategory !== "craftbeverages" || (d.tags || []).includes("agricultural-registry");
+    return matchCat && matchSearch && matchTown && matchCounty && matchAg;
   });
+
+  if (activeCategory === "craftbeverages") {
+    filtered.sort((a, b) => {
+      const af = a.featured ? 1 : 0;
+      const bf = b.featured ? 1 : 0;
+      if (af !== bf) return bf - af;
+      return (a.name || "").localeCompare(b.name || "");
+    });
+  }
 
   return (
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
@@ -280,6 +297,19 @@ function HomePage() {
             <div className="listings-title">{activeCategory === "all" ? "All Resources" : (categories.find((c) => c.id === activeCategory) || {}).label}</div>
             <div className="result-count">{filtered.length} {filtered.length === 1 ? "resource" : "resources"}</div>
           </div>
+
+          {activeCategory === "craftbeverages" && (
+            <div className="filter-pill-row">
+              <button
+                type="button"
+                className={"filter-pill " + (agOnly ? "active" : "")}
+                aria-pressed={agOnly}
+                onClick={() => setParam("ag", agOnly ? null : "1", null)}
+              >
+                Working Farms Only
+              </button>
+            </div>
+          )}
 
           {loading ? (
             <div className="loading"><div className="spinner" /><div className="loading-text">Loading resources</div></div>
