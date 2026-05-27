@@ -217,6 +217,11 @@ function HomePage() {
     } finally { setLoading(false); }
   }
 
+  function hasAgRegistry(d) {
+    const tagList = Array.isArray(d.tags) ? d.tags : [];
+    return tagList.some((t) => typeof t === "string" && t.trim().toLowerCase() === "agricultural-registry");
+  }
+
   const allCounties = [...new Set(listings.map((d) => d.county))].filter(Boolean).sort();
   const allTowns = [...new Set(listings.filter((d) => countyFilter === "All" || d.county === countyFilter).map((d) => d.town))].filter(Boolean).sort();
   const filtered = listings.filter((d) => {
@@ -225,9 +230,7 @@ function HomePage() {
     const matchSearch = search === "" || d.name?.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q) || (d.tags || []).some((t) => t.toLowerCase().includes(q)) || d.town?.toLowerCase().includes(q) || d.county?.toLowerCase().includes(q);
     const matchTown = townFilter === "All" || d.town === townFilter;
     const matchCounty = countyFilter === "All" || d.county === countyFilter || (d.tags || []).includes(countyFilter);
-    const tagList = Array.isArray(d.tags) ? d.tags : [];
-    const hasAgRegistry = tagList.some((t) => typeof t === "string" && t.trim().toLowerCase() === "agricultural-registry");
-    const matchAg = !agOnly || activeCategory !== "craftbeverages" || hasAgRegistry;
+    const matchAg = !agOnly || activeCategory !== "craftbeverages" || hasAgRegistry(d);
     return matchCat && matchSearch && matchTown && matchCounty && matchAg;
   });
 
@@ -283,7 +286,7 @@ function HomePage() {
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
-                const count = listings.filter((d) => d.category === c.id).length;
+                const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
                   <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
@@ -359,7 +362,7 @@ function HomePage() {
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
-                const count = listings.filter((d) => d.category === c.id).length;
+                const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
                   <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
