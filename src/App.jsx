@@ -202,9 +202,16 @@ function HomePage() {
   async function fetchListings() {
     setLoading(true);
     try {
-      const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("name", { ascending: true }).range(0, 9999);
-      if (error) throw error;
-      setListings(data || []);
+      const pageSize = 1000;
+      const all = [];
+      for (let from = 0; ; from += pageSize) {
+        const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("name", { ascending: true }).range(from, from + pageSize - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        all.push(...data);
+        if (data.length < pageSize) break;
+      }
+      setListings(all);
     } catch (err) {
       console.error("DB error:", err);
     } finally { setLoading(false); }
