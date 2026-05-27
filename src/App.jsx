@@ -225,7 +225,9 @@ function HomePage() {
     const matchSearch = search === "" || d.name?.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q) || (d.tags || []).some((t) => t.toLowerCase().includes(q)) || d.town?.toLowerCase().includes(q) || d.county?.toLowerCase().includes(q);
     const matchTown = townFilter === "All" || d.town === townFilter;
     const matchCounty = countyFilter === "All" || d.county === countyFilter || (d.tags || []).includes(countyFilter);
-    const matchAg = !agOnly || activeCategory !== "craftbeverages" || (d.tags || []).includes("agricultural-registry");
+    const tagList = Array.isArray(d.tags) ? d.tags : [];
+    const hasAgRegistry = tagList.some((t) => typeof t === "string" && t.trim().toLowerCase() === "agricultural-registry");
+    const matchAg = !agOnly || activeCategory !== "craftbeverages" || hasAgRegistry;
     return matchCat && matchSearch && matchTown && matchCounty && matchAg;
   });
 
