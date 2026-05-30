@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Link, useParams, useSearchParams } from "react-router-dom";
+import { Routes, Route, Link, useParams, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from "./supabase";
 
 const categories = [
@@ -63,6 +63,21 @@ const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and 
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 
 export default function App() {
+  const location = useLocation();
+
+  // SPA page_view tracking: gtag.js only auto-logs the first load, so we send
+  // a GA4 page_view on every React Router location change (and the initial
+  // mount). Initial auto page_view is disabled via send_page_view:false in
+  // index.html, so this is the single source of truth for page_views.
+  useEffect(() => {
+    if (typeof window.gtag !== "function") return;
+    window.gtag("event", "page_view", {
+      page_path: location.pathname + location.search,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  }, [location.pathname, location.search]);
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />

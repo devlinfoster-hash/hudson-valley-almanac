@@ -3,6 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CC4ZRHVJDQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // send_page_view disabled here; the SPA sends page_view on every
+      // React Router location change (including the initial load) in App.jsx.
+      gtag('config', 'G-CC4ZRHVJDQ', { send_page_view: false });
+    </script>
     <meta name="description" content="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,200 listings across 24 categories, with a focus on farm-licensed producers who grow what they sell.">
     <meta property="og:title" content="Hudson Valley Almanac">
     <meta property="og:description" content="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,200 listings across 24 categories, with a focus on farm-licensed producers who grow what they sell.">
