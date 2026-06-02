@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Component } from "react";
 import { Routes, Route, Link, useParams, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from "./supabase";
 
@@ -112,6 +112,35 @@ const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 // Canonical production origin used for <link rel="canonical"> and JSON-LD urls.
 const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
 
+// Top-level error boundary so an unexpected render error (or a thrown failure
+// while building the page) shows a graceful message instead of a blank screen.
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    console.error("Render error:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+          <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 480, textAlign: "center" }}>
+            <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Something went wrong</div>
+            <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We hit an unexpected error loading this page. Please try reloading.</p>
+            <a href="/" style={{ display: "inline-block", background: "#1C3A5E", color: "#EFF0E8", padding: "11px 28px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none" }}>Reload the directory</a>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   const location = useLocation();
 
@@ -139,7 +168,7 @@ export default function App() {
   }, [pageViewKey]);
 
   return (
-    <>
+    <ErrorBoundary>
       {/* Injected once here so HomePage / ListingPage / NotFound share a single
           stylesheet instead of each component re-injecting the same <style>. */}
       <style>{sharedStyles}</style>
@@ -150,7 +179,7 @@ export default function App() {
         <Route path="/listings/:slug" element={<ListingPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </ErrorBoundary>
   );
 }
 
@@ -254,6 +283,7 @@ const sharedStyles = `
 function HomePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") || "";
   const activeCategory = searchParams.get("category") || "all";
@@ -282,6 +312,7 @@ function HomePage() {
 
   async function fetchListings() {
     setLoading(true);
+    setLoadError(false);
     try {
       // Supabase enforces a server-side db-max-rows cap (1000), so a single
       // .range(0, 9999) is silently clipped. Page through until a short page returns.
@@ -297,6 +328,7 @@ function HomePage() {
       setListings(all);
     } catch (err) {
       console.error("DB error:", err);
+      setLoadError(true);
     } finally { setLoading(false); }
   }
 
@@ -427,6 +459,11 @@ function HomePage() {
 
           {loading ? (
             <div className="loading"><div className="spinner" /><div className="loading-text">Loading resources</div></div>
+          ) : loadError ? (
+            <div className="no-results">
+              We couldn't load the directory just now. Please check your connection and{" "}
+              <button type="button" onClick={fetchListings} style={{ background: "none", border: "none", color: "#C4862D", textDecoration: "underline", cursor: "pointer", font: "inherit" }}>try again</button>.
+            </div>
           ) : filtered.length === 0 ? (
             <div className="no-results">Nothing found. Try a different search or category.</div>
           ) : (
