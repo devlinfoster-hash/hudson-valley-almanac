@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, Component } from "react";
 import { Routes, Route, Link, useParams, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from "./supabase";
 
@@ -68,6 +68,15 @@ const categories = [
   { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
 ];
 
+// Lets a clickable non-button element (role="button" + tabIndex) be activated
+// by keyboard the way a real <button> is — Enter and Space.
+function handleKeyActivate(e, fn) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    fn();
+  }
+}
+
 function slugify(name) {
   return (name || "")
     .toLowerCase()
@@ -100,6 +109,37 @@ function linkifyDescription(text) {
 const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
 const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and the adjacent Catskill highlands";
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
+// Canonical production origin used for <link rel="canonical"> and JSON-LD urls.
+const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
+
+// Top-level error boundary so an unexpected render error (or a thrown failure
+// while building the page) shows a graceful message instead of a blank screen.
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    console.error("Render error:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+          <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 480, textAlign: "center" }}>
+            <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Something went wrong</div>
+            <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We hit an unexpected error loading this page. Please try reloading.</p>
+            <a href="/" style={{ display: "inline-block", background: "#1C3A5E", color: "#EFF0E8", padding: "11px 28px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none" }}>Reload the directory</a>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export default function App() {
   const location = useLocation();
@@ -108,6 +148,15 @@ export default function App() {
   // a GA4 page_view on every React Router location change (and the initial
   // mount). Initial auto page_view is disabled via send_page_view:false in
   // index.html, so this is the single source of truth for page_views.
+  //
+  // The live search term lives in the ?q= param and is updated on every
+  // keystroke, so depending on the full location.search would log a page_view
+  // per character typed. We build a navigation key from the pathname plus all
+  // search params EXCEPT q, so page_view fires only on real navigations
+  // (route, category, county, town, ag) and not while someone is searching.
+  const navParams = new URLSearchParams(location.search);
+  navParams.delete("q");
+  const pageViewKey = location.pathname + "?" + navParams.toString();
   useEffect(() => {
     if (typeof window.gtag !== "function") return;
     window.gtag("event", "page_view", {
@@ -115,15 +164,22 @@ export default function App() {
       page_location: window.location.href,
       page_title: document.title,
     });
-  }, [location.pathname, location.search]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageViewKey]);
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="/listing/:slug" element={<ListingPage />} />
-      <Route path="/listings/:slug" element={<ListingPage />} />
-    </Routes>
+    <ErrorBoundary>
+      {/* Injected once here so HomePage / ListingPage / NotFound share a single
+          stylesheet instead of each component re-injecting the same <style>. */}
+      <style>{sharedStyles}</style>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/listing/:slug" element={<ListingPage />} />
+        <Route path="/listings/:slug" element={<ListingPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </ErrorBoundary>
   );
 }
 
@@ -227,6 +283,7 @@ const sharedStyles = `
 function HomePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") || "";
   const activeCategory = searchParams.get("category") || "all";
@@ -255,6 +312,7 @@ function HomePage() {
 
   async function fetchListings() {
     setLoading(true);
+    setLoadError(false);
     try {
       // Supabase enforces a server-side db-max-rows cap (1000), so a single
       // .range(0, 9999) is silently clipped. Page through until a short page returns.
@@ -270,6 +328,7 @@ function HomePage() {
       setListings(all);
     } catch (err) {
       console.error("DB error:", err);
+      setLoadError(true);
     } finally { setLoading(false); }
   }
 
@@ -312,22 +371,28 @@ function HomePage() {
     return () => clearTimeout(t);
   }, [search]);
 
+  // Close the mobile category drawer on Escape.
+  useEffect(() => {
+    if (!showMobileCats) return;
+    const onKey = (e) => { if (e.key === "Escape") setShowMobileCats(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [showMobileCats]);
+
   return (
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
-      <style>{sharedStyles}</style>
-
       <div className="topbar">{TOPBAR_TEXT}</div>
 
       <div className="hero">
         <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
         <p className="masthead-sub">The Hudson Valley's directory of farms, makers, markets & stewards</p>
         <div className="search-row">
-          <input className="search-input" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
-          <select className="town-select" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
+          <input className="search-input" aria-label="Search resources by name, specialty, town, or county" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
+          <select className="town-select" aria-label="Filter by county" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
             <option value="All">All Counties</option>
             {allCounties.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
-          <select className="town-select" value={townFilter} onChange={(e) => setParam("town", e.target.value, "All")}>
+          <select className="town-select" aria-label="Filter by town" value={townFilter} onChange={(e) => setParam("town", e.target.value, "All")}>
             <option value="All">All Towns</option>
             {allTowns.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
@@ -351,13 +416,13 @@ function HomePage() {
           <div className="sidebar-box">
             <div className="sidebar-box-header">Browse by Category</div>
             <div className="sidebar-box-body">
-              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>
+              <div role="button" tabIndex={0} aria-pressed={activeCategory === "all"} className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")} onKeyDown={(e) => handleKeyActivate(e, () => setParam("category", "all", "all"))}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
                 const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
-                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
+                  <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")} onKeyDown={(e) => handleKeyActivate(e, () => setParam("category", c.id, "all"))}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
                   </div>
                 );
@@ -394,6 +459,11 @@ function HomePage() {
 
           {loading ? (
             <div className="loading"><div className="spinner" /><div className="loading-text">Loading resources</div></div>
+          ) : loadError ? (
+            <div className="no-results">
+              We couldn't load the directory just now. Please check your connection and{" "}
+              <button type="button" onClick={fetchListings} style={{ background: "none", border: "none", color: "#C4862D", textDecoration: "underline", cursor: "pointer", font: "inherit" }}>try again</button>.
+            </div>
           ) : filtered.length === 0 ? (
             <div className="no-results">Nothing found. Try a different search or category.</div>
           ) : (
@@ -421,19 +491,19 @@ function HomePage() {
 
       {showMobileCats && (
         <div className="mobile-drawer-overlay" onClick={() => setShowMobileCats(false)}>
-          <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
+          <div className="mobile-drawer" role="dialog" aria-modal="true" aria-label="Browse by category" onClick={(e) => e.stopPropagation()}>
             <div className="mobile-drawer-header">
               <span>Browse by Category</span>
-              <button className="mobile-drawer-close" onClick={() => setShowMobileCats(false)}>X</button>
+              <button className="mobile-drawer-close" aria-label="Close" onClick={() => setShowMobileCats(false)}>X</button>
             </div>
             <div className="mobile-drawer-body">
-              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setParam("category", "all", "all"); setShowMobileCats(false); }}>
+              <div role="button" tabIndex={0} aria-pressed={activeCategory === "all"} className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setParam("category", "all", "all"); setShowMobileCats(false); }} onKeyDown={(e) => handleKeyActivate(e, () => { setParam("category", "all", "all"); setShowMobileCats(false); })}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
                 const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
-                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }}>
+                  <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }} onKeyDown={(e) => handleKeyActivate(e, () => { setParam("category", c.id, "all"); setShowMobileCats(false); })}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
                   </div>
                 );
@@ -474,6 +544,26 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function NotFoundPage() {
+  return (
+    <div className="listing-page-wrap">
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="listing-page-article">
+        <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, textAlign: "center" }}>
+          <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 48, fontWeight: 700, color: "#C4862D", marginBottom: 8 }}>404</div>
+          <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Page not found</div>
+          <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We couldn't find the page you were looking for. It may have moved or never existed.</p>
+          <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Browse all resources</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
@@ -523,6 +613,60 @@ function ListingPage() {
     if (listing) trackListingView(listing);
   }, [listing?.id]);
 
+  // SEO: per-listing canonical URL + LocalBusiness JSON-LD. These are injected
+  // into <head> when a listing loads and removed (canonical reset to the site
+  // root) on unmount, so crawlers that execute JS see structured data.
+  useEffect(() => {
+    if (!listing) return;
+    const canonicalHref = `${SITE_ORIGIN}/listing/${listing.slug || slug}`;
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    const hadCanonical = !!canonical;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", canonicalHref);
+
+    const catLabel = (categories.find((c) => c.id === listing.category) || {}).label;
+    const ld = {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: listing.name,
+      url: canonicalHref,
+    };
+    if (listing.description) ld.description = listing.description;
+    if (listing.website) ld.sameAs = listing.website.startsWith("http") ? listing.website : "https://" + listing.website;
+    if (listing.phone) ld.telephone = listing.phone;
+    if (catLabel) ld.additionalType = catLabel;
+    if (listing.address || listing.town || listing.county) {
+      ld.address = {
+        "@type": "PostalAddress",
+        ...(listing.address ? { streetAddress: listing.address } : {}),
+        ...(listing.town ? { addressLocality: listing.town } : {}),
+        ...(listing.county ? { addressRegion: `${listing.county} County, NY` } : {}),
+        addressCountry: "US",
+      };
+    }
+    if (listing.latitude != null && listing.longitude != null) {
+      ld.geo = { "@type": "GeoCoordinates", latitude: listing.latitude, longitude: listing.longitude };
+    }
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.setAttribute("data-listing-jsonld", "");
+    script.textContent = JSON.stringify(ld);
+    document.head.appendChild(script);
+
+    return () => {
+      script.remove();
+      // Restore the site-root canonical that index.html ships with.
+      if (hadCanonical) canonical.setAttribute("href", `${SITE_ORIGIN}/`);
+      else canonical.remove();
+    };
+  }, [listing, slug]);
+
   const cat = listing ? categories.find((c) => c.id === listing.category) : null;
 
   async function handleShare() {
@@ -542,7 +686,6 @@ function ListingPage() {
 
   return (
     <div className="listing-page-wrap">
-      <style>{sharedStyles}</style>
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
         <Link to="/" className="back-link">← Back to all resources</Link>
@@ -616,6 +759,16 @@ function SubmitForm({ onClose }) {
   const [form, setForm] = useState({ name: "", category: "", town: "", county: "", description: "", tags: "", phone: "", hours: "", address: "", website: "", established: "" });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const modalRef = useRef(null);
+
+  // Modal a11y: close on Escape and move focus into the dialog on open so
+  // keyboard users aren't left behind the overlay.
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    modalRef.current?.focus();
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   async function handleSubmit() {
     if (!form.name || !form.category || !form.town) return alert("Please fill in name, category, and town.");
@@ -633,9 +786,9 @@ function SubmitForm({ onClose }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal" role="dialog" aria-modal="true" aria-label="Request a free listing" tabIndex={-1} ref={modalRef} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <button className="modal-close" onClick={onClose}>X</button>
+          <button className="modal-close" aria-label="Close" onClick={onClose}>X</button>
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, fontWeight: 700, color: "#EFF0E8" }}>Request a Free Listing</div>
           <div style={{ fontSize: 13, color: "rgba(239,240,232,0.6)", marginTop: 6 }}>Submissions are reviewed before publishing. Usually within 48 hours.</div>
         </div>
