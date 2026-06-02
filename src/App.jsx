@@ -108,6 +108,15 @@ export default function App() {
   // a GA4 page_view on every React Router location change (and the initial
   // mount). Initial auto page_view is disabled via send_page_view:false in
   // index.html, so this is the single source of truth for page_views.
+  //
+  // The live search term lives in the ?q= param and is updated on every
+  // keystroke, so depending on the full location.search would log a page_view
+  // per character typed. We build a navigation key from the pathname plus all
+  // search params EXCEPT q, so page_view fires only on real navigations
+  // (route, category, county, town, ag) and not while someone is searching.
+  const navParams = new URLSearchParams(location.search);
+  navParams.delete("q");
+  const pageViewKey = location.pathname + "?" + navParams.toString();
   useEffect(() => {
     if (typeof window.gtag !== "function") return;
     window.gtag("event", "page_view", {
@@ -115,7 +124,8 @@ export default function App() {
       page_location: window.location.href,
       page_title: document.title,
     });
-  }, [location.pathname, location.search]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageViewKey]);
 
   return (
     <Routes>
