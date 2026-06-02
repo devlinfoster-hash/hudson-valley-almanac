@@ -137,6 +137,7 @@ export default function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/listing/:slug" element={<ListingPage />} />
         <Route path="/listings/:slug" element={<ListingPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
@@ -487,6 +488,26 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function NotFoundPage() {
+  return (
+    <div className="listing-page-wrap">
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="listing-page-article">
+        <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, textAlign: "center" }}>
+          <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 48, fontWeight: 700, color: "#C4862D", marginBottom: 8 }}>404</div>
+          <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Page not found</div>
+          <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We couldn't find the page you were looking for. It may have moved or never existed.</p>
+          <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Browse all resources</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
