@@ -856,6 +856,7 @@ function AdminPage() {
   const [listings, setListings] = useState([]);
   const [tab, setTab] = useState("pending");
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
 
   // Restore any existing session and subscribe to auth changes.
   useEffect(() => {
@@ -918,9 +919,34 @@ function AdminPage() {
 
   async function fetchAll() {
     setLoading(true);
-    const { data } = await supabase.from("listings").select("*").order("created_at", { ascending: false });
-    setListings(data || []);
-    setLoading(false);
+    setLoadError("");
+    try {
+      // PostgREST silently caps a single select at 1000 rows, so the admin
+      // dashboard previously missed every listing past the first 1000. Page
+      // through with .range() until a short page returns — same approach as the
+      // public homepage fetch. Order by id so ranged pages never overlap or skip.
+      const pageSize = 1000;
+      const all = [];
+      for (let from = 0; ; from += pageSize) {
+        const { data, error } = await supabase
+          .from("listings")
+          .select("*")
+          .order("id", { ascending: true })
+          .range(from, from + pageSize - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        all.push(...data);
+        if (data.length < pageSize) break;
+      }
+      // Preserve the dashboard's newest-first display order.
+      all.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      setListings(all);
+    } catch (err) {
+      console.error("Admin fetch error:", err);
+      setLoadError(err.message || "Failed to load listings.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function approve(id) {
@@ -1010,6 +1036,11 @@ function AdminPage() {
         </div>
         {loading ? (
           <div style={{ textAlign: "center", padding: 40, color: "#5C7A8A", fontStyle: "italic" }}>Loading</div>
+        ) : loadError ? (
+          <div style={{ textAlign: "center", padding: 40, color: "#9B2C2C" }}>
+            Couldn't load listings: {loadError}{" "}
+            <button type="button" onClick={fetchAll} style={{ background: "none", border: "none", color: "#C4862D", textDecoration: "underline", cursor: "pointer", font: "inherit" }}>Retry</button>
+          </div>
         ) : shown.length === 0 ? (
           <div style={{ textAlign: "center", padding: 40, color: "#5C7A8A", fontStyle: "italic" }}>No {tab} listings.</div>
         ) : shown.map((l) => (
