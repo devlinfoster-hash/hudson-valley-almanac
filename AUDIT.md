@@ -89,13 +89,31 @@ improvements.
 
 ## 2. Owner must do (not changed here — secrets / auth / infra)
 
-### ⚠️ a. Admin auth — FIX FIRST
-`/admin` (`AdminPage` in `App.jsx`) gates on
-`pw === import.meta.env.VITE_ADMIN_PASSWORD`. **Vite inlines every `VITE_*`
-variable into the public client bundle**, so the admin password ships in
-plaintext in the shipped JavaScript and is trivially recoverable by anyone
-(view-source / search the bundle for the string). Treat it as already
-compromised: **rotate/remove `VITE_ADMIN_PASSWORD` now.**
+### ⚠️ a. Admin auth — IMPLEMENTED in code; owner setup remaining
+**Original problem:** `/admin` gated on
+`pw === import.meta.env.VITE_ADMIN_PASSWORD`. Vite inlines every `VITE_*`
+variable into the public client bundle, so the admin password shipped in
+plaintext in the shipped JavaScript, recoverable by anyone.
+
+**Done (code):** the password gate is removed and `/admin` now authenticates
+via **Supabase Auth passwordless email OTP** — the admin enters their email,
+receives a 6-digit code, and signs in. Admin rights are confirmed server-side
+with the `is_admin()` RPC (true only when the signed-in email is in
+`public.admins`) and enforced by RLS; non-admins get a clear message. No
+secret ships in the bundle anymore.
+
+**Owner must still do (dashboard, not code):**
+1. **Add the admin email to `public.admins`** (the table already has 1 row —
+   confirm it's the address you'll sign in with). `is_admin()` matches the
+   JWT email against this table.
+2. **Make the OTP email template include the code.** Supabase's default
+   "Magic Link" email sends a link, not a 6-digit code. In
+   *Authentication → Email Templates → Magic Link*, ensure the body contains
+   `{{ .Token }}` so the numeric code is delivered. (Email sending must be
+   working — the built-in SMTP is fine for a single admin; a custom SMTP is
+   recommended for reliability.)
+3. **Remove `VITE_ADMIN_PASSWORD`** from the Vercel project env vars (it is no
+   longer read by the code) and treat the old value as compromised.
 
 **Important nuance (verified against the live DB, read-only):** the actual
 data is *not* currently writable through this page, because Row-Level Security

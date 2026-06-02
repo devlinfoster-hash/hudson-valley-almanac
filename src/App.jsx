@@ -839,15 +839,81 @@ function SubmitForm({ onClose }) {
 }
 
 function AdminPage() {
-  const [authed, setAuthed] = useState(false);
-  const [pw, setPw] = useState("");
+  // Auth is handled by Supabase Auth (passwordless email OTP). The database
+  // grants admin rights via the is_admin() RLS check, which is true when the
+  // signed-in user's email is present in the public.admins table — so simply
+  // being signed in is not enough; the email must be an allow-listed admin.
+  const [session, setSession] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(null); // null = still checking
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [step, setStep] = useState("email"); // "email" | "code"
+  const [sending, setSending] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [authError, setAuthError] = useState("");
+
   const [listings, setListings] = useState([]);
   const [tab, setTab] = useState("pending");
   const [loading, setLoading] = useState(false);
 
-  async function login() {
-    if (pw === import.meta.env.VITE_ADMIN_PASSWORD) { setAuthed(true); fetchAll(); }
-    else alert("Incorrect password.");
+  // Restore any existing session and subscribe to auth changes.
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      setAuthReady(true);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  // Once signed in, confirm admin status (server-side) and load listings.
+  useEffect(() => {
+    if (!session) { setIsAdmin(null); return; }
+    let cancelled = false;
+    (async () => {
+      // is_admin() is the source of truth. If the RPC isn't callable (e.g.
+      // EXECUTE was revoked), fall back to optimistic — RLS still guards writes.
+      let admin = true;
+      const { data, error } = await supabase.rpc("is_admin");
+      if (!error && typeof data === "boolean") admin = data;
+      if (cancelled) return;
+      setIsAdmin(admin);
+      if (admin) fetchAll();
+    })();
+    return () => { cancelled = true; };
+  }, [session]);
+
+  async function sendCode() {
+    const addr = email.trim();
+    if (!addr) return;
+    setSending(true);
+    setAuthError("");
+    const { error } = await supabase.auth.signInWithOtp({ email: addr });
+    setSending(false);
+    if (error) setAuthError(error.message);
+    else setStep("code");
+  }
+
+  async function verifyCode() {
+    const token = code.trim();
+    if (!token) return;
+    setVerifying(true);
+    setAuthError("");
+    // On success onAuthStateChange fires and sets the session.
+    const { error } = await supabase.auth.verifyOtp({ email: email.trim(), token, type: "email" });
+    setVerifying(false);
+    if (error) setAuthError(error.message);
+  }
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    setSession(null);
+    setIsAdmin(null);
+    setStep("email");
+    setEmail("");
+    setCode("");
+    setListings([]);
   }
 
   async function fetchAll() {
@@ -857,31 +923,82 @@ function AdminPage() {
     setLoading(false);
   }
 
-  async function approve(id) { await supabase.from("listings").update({ status: "published" }).eq("id", id); fetchAll(); }
-  async function reject(id) { await supabase.from("listings").delete().eq("id", id); fetchAll(); }
+  async function approve(id) {
+    const { error } = await supabase.from("listings").update({ status: "published" }).eq("id", id);
+    if (error) { alert("Approve failed: " + error.message); return; }
+    fetchAll();
+  }
+  async function reject(id) {
+    const { error } = await supabase.from("listings").delete().eq("id", id);
+    if (error) { alert("Delete failed: " + error.message); return; }
+    fetchAll();
+  }
 
   const pending = listings.filter((l) => l.status === "pending");
   const published = listings.filter((l) => l.status === "published");
   const shown = tab === "pending" ? pending : published;
 
-  if (!authed) return (
-    <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 360, width: "100%", textAlign: "center" }}>
+  const cardWrap = (children) => (
+    <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 380, width: "100%", textAlign: "center" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8, color: "#1A2B3C" }}>Admin Access</div>
         <div style={{ fontSize: 13, color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
-        <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} placeholder="Enter password" style={{ width: "100%", padding: "10px 14px", fontFamily: "'Lora',serif", fontSize: 15, border: "1.5px solid #1C3A5E", background: "#EFF0E8", outline: "none", marginBottom: 14, color: "#1A2B3C" }} />
-        <button onClick={login} style={{ width: "100%", background: "#1C3A5E", color: "#EFF0E8", border: "none", padding: "12px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>Enter</button>
+        {children}
         <Link to="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#5C7A8A" }}>Back to site</Link>
       </div>
     </div>
   );
+
+  const inputStyle = { width: "100%", padding: "10px 14px", fontFamily: "'Lora',serif", fontSize: 15, border: "1.5px solid #1C3A5E", background: "#EFF0E8", outline: "none", marginBottom: 14, color: "#1A2B3C" };
+  const buttonStyle = { width: "100%", background: "#1C3A5E", color: "#EFF0E8", border: "none", padding: "12px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" };
+  const errorLine = authError ? <div style={{ color: "#9B2C2C", fontSize: 13, marginBottom: 12 }}>{authError}</div> : null;
+
+  // Still determining whether a session exists.
+  if (!authReady) return cardWrap(<div style={{ color: "#5C7A8A", fontStyle: "italic" }}>Loading…</div>);
+
+  // Not signed in — show the passwordless email-code flow.
+  if (!session) {
+    if (step === "email") return cardWrap(
+      <>
+        <label htmlFor="admin-email" style={{ display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#5C7A8A", marginBottom: 6, textAlign: "left" }}>Admin email</label>
+        <input id="admin-email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendCode()} placeholder="you@example.com" style={inputStyle} />
+        {errorLine}
+        <button onClick={sendCode} disabled={sending} style={buttonStyle}>{sending ? "Sending…" : "Send code"}</button>
+      </>
+    );
+    return cardWrap(
+      <>
+        <div style={{ fontSize: 13, color: "#1A2B3C", marginBottom: 14, fontStyle: "italic" }}>Enter the 6-digit code sent to {email}.</div>
+        <label htmlFor="admin-code" style={{ display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#5C7A8A", marginBottom: 6, textAlign: "left" }}>Verification code</label>
+        <input id="admin-code" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(e) => setCode(e.target.value)} onKeyDown={(e) => e.key === "Enter" && verifyCode()} placeholder="123456" style={inputStyle} />
+        {errorLine}
+        <button onClick={verifyCode} disabled={verifying} style={buttonStyle}>{verifying ? "Verifying…" : "Verify & sign in"}</button>
+        <button onClick={() => { setStep("email"); setCode(""); setAuthError(""); }} style={{ background: "none", border: "none", color: "#5C7A8A", fontSize: 12, marginTop: 12, cursor: "pointer", textDecoration: "underline" }}>Use a different email</button>
+      </>
+    );
+  }
+
+  // Signed in but the email is not an allow-listed admin.
+  if (isAdmin === false) return cardWrap(
+    <>
+      <div style={{ color: "#1A2B3C", fontSize: 14, marginBottom: 16 }}>Signed in as <strong>{session.user?.email}</strong>, but this account is not an administrator.</div>
+      <button onClick={signOut} style={buttonStyle}>Sign out</button>
+    </>
+  );
+
+  // Signed in, admin check still running.
+  if (isAdmin === null) return cardWrap(<div style={{ color: "#5C7A8A", fontStyle: "italic" }}>Verifying access…</div>);
 
   return (
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh" }}>
       <style>{`* { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
       <div style={{ background: "#1C3A5E", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#EFF0E8", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac - Admin</div>
-        <Link to="/" style={{ color: "rgba(239,240,232,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}>View Site</Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <span style={{ color: "rgba(239,240,232,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace" }}>{session.user?.email}</span>
+          <button onClick={signOut} style={{ background: "none", border: "1px solid rgba(239,240,232,0.4)", color: "rgba(239,240,232,0.8)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 12px", cursor: "pointer" }}>Sign out</button>
+          <Link to="/" style={{ color: "rgba(239,240,232,0.6)", fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}>View Site</Link>
+        </div>
       </div>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
         <div style={{ display: "flex", gap: 2, marginBottom: 24 }}>
