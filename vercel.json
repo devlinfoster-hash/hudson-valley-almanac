@@ -2,6 +2,14 @@
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "hudsonvalleyalmanac.com" }],
+      "destination": "https://www.hudsonvalleyalmanac.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/((?!api|.*\\.).*)", "destination": "/index.html" }
   ],
