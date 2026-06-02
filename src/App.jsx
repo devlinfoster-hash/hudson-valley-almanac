@@ -128,12 +128,17 @@ export default function App() {
   }, [pageViewKey]);
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="/listing/:slug" element={<ListingPage />} />
-      <Route path="/listings/:slug" element={<ListingPage />} />
-    </Routes>
+    <>
+      {/* Injected once here so HomePage / ListingPage / NotFound share a single
+          stylesheet instead of each component re-injecting the same <style>. */}
+      <style>{sharedStyles}</style>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/listing/:slug" element={<ListingPage />} />
+        <Route path="/listings/:slug" element={<ListingPage />} />
+      </Routes>
+    </>
   );
 }
 
@@ -324,8 +329,6 @@ function HomePage() {
 
   return (
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
-      <style>{sharedStyles}</style>
-
       <div className="topbar">{TOPBAR_TEXT}</div>
 
       <div className="hero">
@@ -552,7 +555,6 @@ function ListingPage() {
 
   return (
     <div className="listing-page-wrap">
-      <style>{sharedStyles}</style>
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
         <Link to="/" className="back-link">← Back to all resources</Link>
