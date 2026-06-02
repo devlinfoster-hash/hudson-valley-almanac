@@ -109,6 +109,8 @@ function linkifyDescription(text) {
 const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
 const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and the adjacent Catskill highlands";
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
+// Canonical production origin used for <link rel="canonical"> and JSON-LD urls.
+const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
 
 export default function App() {
   const location = useLocation();
@@ -573,6 +575,60 @@ function ListingPage() {
   useEffect(() => {
     if (listing) trackListingView(listing);
   }, [listing?.id]);
+
+  // SEO: per-listing canonical URL + LocalBusiness JSON-LD. These are injected
+  // into <head> when a listing loads and removed (canonical reset to the site
+  // root) on unmount, so crawlers that execute JS see structured data.
+  useEffect(() => {
+    if (!listing) return;
+    const canonicalHref = `${SITE_ORIGIN}/listing/${listing.slug || slug}`;
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    const hadCanonical = !!canonical;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", canonicalHref);
+
+    const catLabel = (categories.find((c) => c.id === listing.category) || {}).label;
+    const ld = {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: listing.name,
+      url: canonicalHref,
+    };
+    if (listing.description) ld.description = listing.description;
+    if (listing.website) ld.sameAs = listing.website.startsWith("http") ? listing.website : "https://" + listing.website;
+    if (listing.phone) ld.telephone = listing.phone;
+    if (catLabel) ld.additionalType = catLabel;
+    if (listing.address || listing.town || listing.county) {
+      ld.address = {
+        "@type": "PostalAddress",
+        ...(listing.address ? { streetAddress: listing.address } : {}),
+        ...(listing.town ? { addressLocality: listing.town } : {}),
+        ...(listing.county ? { addressRegion: `${listing.county} County, NY` } : {}),
+        addressCountry: "US",
+      };
+    }
+    if (listing.latitude != null && listing.longitude != null) {
+      ld.geo = { "@type": "GeoCoordinates", latitude: listing.latitude, longitude: listing.longitude };
+    }
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.setAttribute("data-listing-jsonld", "");
+    script.textContent = JSON.stringify(ld);
+    document.head.appendChild(script);
+
+    return () => {
+      script.remove();
+      // Restore the site-root canonical that index.html ships with.
+      if (hadCanonical) canonical.setAttribute("href", `${SITE_ORIGIN}/`);
+      else canonical.remove();
+    };
+  }, [listing, slug]);
 
   const cat = listing ? categories.find((c) => c.id === listing.category) : null;
 
