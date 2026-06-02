@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Routes, Route, Link, useParams, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from "./supabase";
 
@@ -67,6 +67,15 @@ const categories = [
   { id: "mutualaid", label: "Mutual Aid & Food Sharing", icon: "🤝" },
   { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
 ];
+
+// Lets a clickable non-button element (role="button" + tabIndex) be activated
+// by keyboard the way a real <button> is — Enter and Space.
+function handleKeyActivate(e, fn) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    fn();
+  }
+}
 
 function slugify(name) {
   return (name || "")
@@ -328,6 +337,14 @@ function HomePage() {
     return () => clearTimeout(t);
   }, [search]);
 
+  // Close the mobile category drawer on Escape.
+  useEffect(() => {
+    if (!showMobileCats) return;
+    const onKey = (e) => { if (e.key === "Escape") setShowMobileCats(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [showMobileCats]);
+
   return (
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
       <div className="topbar">{TOPBAR_TEXT}</div>
@@ -336,12 +353,12 @@ function HomePage() {
         <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
         <p className="masthead-sub">The Hudson Valley's directory of farms, makers, markets & stewards</p>
         <div className="search-row">
-          <input className="search-input" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
-          <select className="town-select" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
+          <input className="search-input" aria-label="Search resources by name, specialty, town, or county" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
+          <select className="town-select" aria-label="Filter by county" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
             <option value="All">All Counties</option>
             {allCounties.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
-          <select className="town-select" value={townFilter} onChange={(e) => setParam("town", e.target.value, "All")}>
+          <select className="town-select" aria-label="Filter by town" value={townFilter} onChange={(e) => setParam("town", e.target.value, "All")}>
             <option value="All">All Towns</option>
             {allTowns.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
@@ -365,13 +382,13 @@ function HomePage() {
           <div className="sidebar-box">
             <div className="sidebar-box-header">Browse by Category</div>
             <div className="sidebar-box-body">
-              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>
+              <div role="button" tabIndex={0} aria-pressed={activeCategory === "all"} className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")} onKeyDown={(e) => handleKeyActivate(e, () => setParam("category", "all", "all"))}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
                 const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
-                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
+                  <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")} onKeyDown={(e) => handleKeyActivate(e, () => setParam("category", c.id, "all"))}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
                   </div>
                 );
@@ -435,19 +452,19 @@ function HomePage() {
 
       {showMobileCats && (
         <div className="mobile-drawer-overlay" onClick={() => setShowMobileCats(false)}>
-          <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
+          <div className="mobile-drawer" role="dialog" aria-modal="true" aria-label="Browse by category" onClick={(e) => e.stopPropagation()}>
             <div className="mobile-drawer-header">
               <span>Browse by Category</span>
-              <button className="mobile-drawer-close" onClick={() => setShowMobileCats(false)}>X</button>
+              <button className="mobile-drawer-close" aria-label="Close" onClick={() => setShowMobileCats(false)}>X</button>
             </div>
             <div className="mobile-drawer-body">
-              <div className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setParam("category", "all", "all"); setShowMobileCats(false); }}>
+              <div role="button" tabIndex={0} aria-pressed={activeCategory === "all"} className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setParam("category", "all", "all"); setShowMobileCats(false); }} onKeyDown={(e) => handleKeyActivate(e, () => { setParam("category", "all", "all"); setShowMobileCats(false); })}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
                 const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
-                  <div key={c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }}>
+                  <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }} onKeyDown={(e) => handleKeyActivate(e, () => { setParam("category", c.id, "all"); setShowMobileCats(false); })}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
                   </div>
                 );
@@ -649,6 +666,16 @@ function SubmitForm({ onClose }) {
   const [form, setForm] = useState({ name: "", category: "", town: "", county: "", description: "", tags: "", phone: "", hours: "", address: "", website: "", established: "" });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const modalRef = useRef(null);
+
+  // Modal a11y: close on Escape and move focus into the dialog on open so
+  // keyboard users aren't left behind the overlay.
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    modalRef.current?.focus();
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   async function handleSubmit() {
     if (!form.name || !form.category || !form.town) return alert("Please fill in name, category, and town.");
@@ -666,9 +693,9 @@ function SubmitForm({ onClose }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal" role="dialog" aria-modal="true" aria-label="Request a free listing" tabIndex={-1} ref={modalRef} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <button className="modal-close" onClick={onClose}>X</button>
+          <button className="modal-close" aria-label="Close" onClick={onClose}>X</button>
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, fontWeight: 700, color: "#EFF0E8" }}>Request a Free Listing</div>
           <div style={{ fontSize: 13, color: "rgba(239,240,232,0.6)", marginTop: 6 }}>Submissions are reviewed before publishing. Usually within 48 hours.</div>
         </div>
