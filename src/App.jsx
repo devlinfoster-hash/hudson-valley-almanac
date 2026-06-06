@@ -174,6 +174,7 @@ export default function App() {
       <style>{sharedStyles}</style>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/fire-towers" element={<FireTowersPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/listing/:slug" element={<ListingPage />} />
         <Route path="/listings/:slug" element={<ListingPage />} />
@@ -199,7 +200,7 @@ const sharedStyles = `
   .cat-nav { background: #1C3A5E; overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 3px solid #C4862D; }
   .cat-nav::-webkit-scrollbar { display: none; }
   .cat-nav-inner { display: inline-flex; padding: 0 16px; }
-  .cat-btn { background: none; border: none; color: rgba(239,240,232,0.65); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; transition: color 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .cat-btn { background: none; border: none; color: rgba(239,240,232,0.65); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; transition: color 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; text-decoration: none; }
   .cat-btn:hover { color: #EFF0E8; }
   .cat-btn.active { color: #EFF0E8; border-bottom-color: #C4862D; }
   .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
@@ -278,6 +279,33 @@ const sharedStyles = `
   .listing-page-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 36px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin-bottom: 8px; }
   .listing-page-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.6); letter-spacing: 0.08em; }
   .listing-page-body { background: #F5F6F0; border: 2px solid #1C3A5E; border-top: none; padding: 32px; }
+  .ft-article { max-width: 1140px; margin: 0 auto; padding: 24px 24px 80px; }
+  .ft-masthead { background: #1C3A5E; padding: 32px 32px 28px; border: 2px solid #1C3A5E; margin-bottom: 36px; }
+  .ft-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 38px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin: 8px 0; }
+  .ft-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.6); letter-spacing: 0.06em; line-height: 1.5; }
+  .ft-section { margin-bottom: 52px; }
+  .ft-section-title { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: #1A2B3C; border-bottom: 2px solid #1C3A5E; padding-bottom: 10px; margin-bottom: 12px; }
+  .ft-section-intro { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #5C7A8A; line-height: 1.6; margin-bottom: 26px; max-width: 680px; }
+  .ft-county-group { margin-bottom: 32px; }
+  .ft-county { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #C4862D; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid rgba(196,134,45,0.4); }
+  .ft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .ft-card { background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 22px 24px; display: flex; flex-direction: column; }
+  .ft-card-name { font-family: 'Libre Baskerville', serif; font-size: 19px; font-weight: 700; color: #1A2B3C; line-height: 1.2; margin-bottom: 4px; }
+  .ft-card-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .ft-stats { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 14px; }
+  .ft-stat-label { display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 2px; }
+  .ft-stat-value { font-family: 'Lora', serif; font-size: 16px; color: #1A2B3C; }
+  .ft-field { margin-bottom: 14px; }
+  .ft-field-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 3px; }
+  .ft-field-text { font-family: 'Lora', serif; font-size: 14px; line-height: 1.6; color: #1A2B3C; }
+  .ft-links { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 14px; }
+  .ft-link { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #C4862D; text-decoration: none; border-bottom: 1px solid rgba(196,134,45,0.5); padding-bottom: 1px; }
+  .ft-link:hover { border-bottom-color: #C4862D; color: #14304F; }
+  .ft-details { margin-top: auto; border-top: 1px solid rgba(28,58,94,0.12); padding-top: 12px; }
+  .ft-details summary { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #1C3A5E; cursor: pointer; }
+  .ft-details summary:hover { color: #C4862D; }
+  .ft-details p { font-family: 'Lora', serif; font-size: 14px; line-height: 1.65; color: #1A2B3C; margin-top: 10px; }
+  @media (max-width: 600px) { .ft-grid { grid-template-columns: 1fr; } .ft-masthead { padding: 24px 20px; } .ft-article { padding: 16px 16px 64px; } }
 `;
 
 function HomePage() {
@@ -402,6 +430,7 @@ function HomePage() {
 
       <div className="cat-nav">
         <div className="cat-nav-inner">
+          <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
           <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>All Resources</button>
           {categories.map((c) => (
             <button key={c.id} className={"cat-btn " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
@@ -534,6 +563,7 @@ function Footer() {
         <h3 style={{color:"#EFF0E8",fontSize:"1.4rem",marginBottom:"6px",fontFamily:"'Libre Baskerville',serif"}}>Hudson Valley Almanac</h3>
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
+          <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
@@ -544,6 +574,195 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+// One card for a single fire tower. The fire_towers data is intentionally
+// uneven, so every optional field degrades gracefully: a missing value is
+// omitted entirely rather than rendered as an empty/"null" stat. numeric
+// columns (elevation_ft, round_trip_mi, latitude, longitude) arrive from
+// PostgREST as strings, so they're coerced with Number() before display.
+function TowerCard({ tower, nameTag = "h3" }) {
+  const NameTag = nameTag;
+  const elevation = tower.elevation_ft == null ? null : Number(tower.elevation_ft);
+  const roundTrip = tower.round_trip_mi == null ? null : Number(tower.round_trip_mi);
+  const showElevation = elevation != null && Number.isFinite(elevation);
+  const showRoundTrip = roundTrip != null && Number.isFinite(roundTrip);
+  // A directions link is only meaningful with real coordinates; when either is
+  // missing (intentionally absent) we lean on the trailhead text instead.
+  const hasCoords = tower.latitude != null && tower.longitude != null;
+  const directionsUrl = hasCoords
+    ? `https://www.google.com/maps/dir/?api=1&destination=${tower.latitude},${tower.longitude}`
+    : null;
+  const mapLabel = tower.dec_map_label || "Trail map";
+
+  const place = [tower.town, tower.county ? `${tower.county} County` : null].filter(Boolean).join(", ");
+  const subMeta = [tower.mountain, place].filter(Boolean).join(" · ");
+
+  return (
+    <article className="ft-card">
+      <NameTag className="ft-card-name">{tower.name}</NameTag>
+      {subMeta && <div className="ft-card-meta">{subMeta}</div>}
+
+      {(showElevation || showRoundTrip) && (
+        <div className="ft-stats">
+          {showElevation && (
+            <div>
+              <span className="ft-stat-label">Elevation</span>
+              <span className="ft-stat-value">{elevation.toLocaleString()} ft</span>
+            </div>
+          )}
+          {showRoundTrip && (
+            <div>
+              <span className="ft-stat-label">Round trip</span>
+              <span className="ft-stat-value">{roundTrip} mi</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {tower.difficulty && (
+        <div className="ft-field">
+          <div className="ft-field-label">Difficulty</div>
+          <p className="ft-field-text">{tower.difficulty}</p>
+        </div>
+      )}
+
+      {tower.trailhead && (
+        <div className="ft-field">
+          <div className="ft-field-label">Trailhead</div>
+          <p className="ft-field-text">{tower.trailhead}</p>
+        </div>
+      )}
+
+      {(directionsUrl || tower.dec_map_pdf_url) && (
+        <div className="ft-links">
+          {directionsUrl && (
+            <a className="ft-link" href={directionsUrl} target="_blank" rel="noreferrer">
+              Get directions <span aria-hidden="true">↗</span>
+            </a>
+          )}
+          {tower.dec_map_pdf_url && (
+            <a className="ft-link" href={tower.dec_map_pdf_url} target="_blank" rel="noreferrer">
+              {mapLabel} <span aria-hidden="true">↗</span>
+            </a>
+          )}
+        </div>
+      )}
+
+      {tower.access_notes && (
+        <details className="ft-details">
+          <summary>Access notes</summary>
+          <p>{tower.access_notes}</p>
+        </details>
+      )}
+    </article>
+  );
+}
+
+function FireTowersPage() {
+  const [towers, setTowers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => { fetchTowers(); }, []);
+
+  async function fetchTowers() {
+    setLoading(true);
+    setLoadError(false);
+    try {
+      // One query for every published tower; the page splits challenge vs. bonus
+      // in JS so both grids share a single fetch. Ordered county-then-name so the
+      // bonus section's county groups come out grouped and alphabetical. The
+      // unpublished Sterling row is excluded by published = true. (16 rows total,
+      // well under PostgREST's 1000-row cap, so no pagination loop needed here.)
+      const { data, error } = await supabase
+        .from("fire_towers")
+        .select("*")
+        .eq("published", true)
+        .order("county", { ascending: true })
+        .order("name", { ascending: true });
+      if (error) throw error;
+      setTowers(data || []);
+    } catch (err) {
+      console.error("Fire tower DB error:", err);
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    document.title = "Hudson Valley Fire Towers - Hudson Valley Almanac";
+    return () => { document.title = "Hudson Valley Almanac"; };
+  }, []);
+
+  const challenge = towers.filter((t) => t.on_challenge);
+  const bonus = towers.filter((t) => !t.on_challenge);
+
+  // Group bonus towers by county, preserving the county-then-name order the
+  // query already returned them in.
+  const bonusByCounty = [];
+  for (const t of bonus) {
+    let group = bonusByCounty.find((g) => g.county === t.county);
+    if (!group) {
+      group = { county: t.county, towers: [] };
+      bonusByCounty.push(group);
+    }
+    group.towers.push(t);
+  }
+
+  return (
+    <div className="listing-page-wrap">
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="ft-article">
+        <header className="ft-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac · Field Notes</div>
+          <h1 className="ft-title">Hudson Valley Fire Towers</h1>
+          <p className="ft-sub">Standing, climbable fire towers across the Hudson Valley and the Catskill highlands.</p>
+        </header>
+
+        {loading ? (
+          <div className="loading"><div className="spinner" /><div className="loading-text">Loading fire towers</div></div>
+        ) : loadError ? (
+          <div className="no-results">
+            We couldn't load the fire towers just now. Please check your connection and{" "}
+            <button type="button" onClick={fetchTowers} style={{ background: "none", border: "none", color: "#C4862D", textDecoration: "underline", cursor: "pointer", font: "inherit" }}>try again</button>.
+          </div>
+        ) : (
+          <>
+            {challenge.length > 0 && (
+              <section className="ft-section" aria-labelledby="ft-challenge-heading">
+                <h2 id="ft-challenge-heading" className="ft-section-title">Catskills Fire Tower Challenge</h2>
+                <p className="ft-section-intro">New York's fire towers once watched for smoke across the wilderness. Today they're restored lookouts with some of the best views in the state — and the Catskills Fire Tower Challenge strings the region's together into one rewarding quest. Climb them, sign the registers, and earn your patch.</p>
+                <div className="ft-grid">
+                  {challenge.map((t) => <TowerCard key={t.id} tower={t} nameTag="h3" />)}
+                </div>
+              </section>
+            )}
+
+            {bonus.length > 0 && (
+              <section className="ft-section" aria-labelledby="ft-bonus-heading">
+                <h2 id="ft-bonus-heading" className="ft-section-title">Off-Challenge Bonus Fire Towers</h2>
+                <p className="ft-section-intro">The Catskills Fire Tower Challenge has its famous five, but the Hudson Valley has other standing, climbable fire towers worth the trip.</p>
+                {bonusByCounty.map((g) => (
+                  <div key={g.county} className="ft-county-group">
+                    <h3 className="ft-county">{g.county} County</h3>
+                    <div className="ft-grid">
+                      {g.towers.map((t) => <TowerCard key={t.id} tower={t} nameTag="h4" />)}
+                    </div>
+                  </div>
+                ))}
+              </section>
+            )}
+          </>
+        )}
+      </div>
+      <Footer />
+    </div>
   );
 }
 
