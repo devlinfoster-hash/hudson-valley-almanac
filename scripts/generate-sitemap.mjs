@@ -54,7 +54,9 @@ async function fetchPublishedListings() {
 
 async function main() {
   const today = new Date().toISOString().slice(0, 10);
-  const entries = [urlEntry(`${SITE_ORIGIN}/`, today)];
+  // Static routes not generated from the listings table (see src/App.jsx Routes).
+  const STATIC_ROUTES = ["/", "/fire-towers"];
+  const entries = STATIC_ROUTES.map((path) => urlEntry(`${SITE_ORIGIN}${path}`, today));
 
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     try {
