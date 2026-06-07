@@ -600,7 +600,7 @@ function HomePage() {
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
       <PageMeta
         title="Hudson Valley Almanac — a directory of working farms and makers."
-        description="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,200 listings across 24 categories, with a focus on farm-licensed producers who grow what they sell."
+        description="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,400 listings across 25 categories, with a focus on farm-licensed producers who grow what they sell."
         canonical={homeCanonical}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
