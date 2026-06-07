@@ -13,24 +13,23 @@
       // React Router location change (including the initial load) in App.jsx.
       gtag('config', 'G-CC4ZRHVJDQ', { send_page_view: false });
     </script>
-    <meta name="description" content="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,200 listings across 24 categories, with a focus on farm-licensed producers who grow what they sell.">
-    <link rel="canonical" href="https://www.hudsonvalleyalmanac.com/">
-    <meta property="og:title" content="Hudson Valley Almanac">
-    <meta property="og:description" content="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,200 listings across 24 categories, with a focus on farm-licensed producers who grow what they sell.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.hudsonvalleyalmanac.com">
+    <!-- Neutral, site-level fallback only. Per-page title, description,
+         canonical, and Open Graph / Twitter tags are rendered at build time by
+         react-helmet (vite-react-ssg Head) into each prerendered page, and on
+         the client for any non-prerendered route. Do NOT add a hardcoded
+         canonical or per-page OG block here — it would ship on every URL and
+         reintroduce the duplicate-content problem this setup fixes. -->
+    <meta name="description" content="A directory of working farms, makers, and producers across the Hudson Valley.">
     <meta property="og:image" content="https://www.hudsonvalleyalmanac.com/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hudson Valley Almanac">
-    <meta name="twitter:description" content="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,200 listings across 24 categories, with a focus on farm-licensed producers who grow what they sell.">
-    <meta name="twitter:image" content="https://www.hudsonvalleyalmanac.com/og-image.png">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <title>Hudson Valley Almanac — a directory of working farms and makers.</title>
+    <!-- No static page title here: it's rendered at build time by react-helmet
+         (and client-side for non-prerendered routes), so a static one would
+         just duplicate it on every prerendered page. -->
   </head>
   <body>
     <div id="root"></div>

@@ -1,5 +1,7 @@
 node_modules
 dist
+# Generated at build time by scripts/snapshot.mjs (data snapshot for SSG + sitemap).
+src/data/listings.json
 .env
 .env.local
 *.log
