@@ -43,6 +43,39 @@ function trackSearch(term, resultCount) {
   trackEvent("search", { search_term: q, result_count: resultCount });
 }
 
+// Key conversion events. These fire on the actual click handler BEFORE the
+// browser navigates so they're not lost to page unload — gtag.js ships them via
+// navigator.sendBeacon, and the outbound website link opens in a new tab anyway.
+// Mark outbound_listing_click, directory_contact_click, and newsletter_signup as
+// key events in the GA4 Admin UI (Claude can't set that flag — see report).
+
+// The core "directory did its job" event: a real visit sent to a producer's site.
+function trackOutboundListingClick(listing) {
+  if (!listing) return;
+  trackEvent("outbound_listing_click", {
+    listing_slug: listing.slug,
+    county: listing.county,
+    category: listing.category,
+  });
+}
+
+// Phone (tel:) or claim/update (mailto:) click on a listing page. type: phone|email
+function trackContactClick(listing, type) {
+  if (!listing) return;
+  trackEvent("directory_contact_click", { listing_slug: listing.slug, type });
+}
+
+// Successful newsletter insert (fired from <NewsletterSignup>, on success only).
+function trackNewsletterSignup(source) {
+  trackEvent("newsletter_signup", { source });
+}
+
+// Cross-funnel click toward the MeanderNY ecosystem (e.g. the free 1863 book
+// card). placement is where the link lives, e.g. "1863-book".
+function trackMeanderNYClick(placement) {
+  trackEvent("outbound_meanderny_click", { placement });
+}
+
 // Lets a clickable non-button element (role="button" + tabIndex) be activated
 // by keyboard the way a real <button> is — Enter and Space.
 function handleKeyActivate(e, fn) {
@@ -765,6 +798,10 @@ function FireTowersPage() {
 
   useEffect(() => { fetchTowers(); }, []);
 
+  // Editorial page marker, separable from the generic page_view so the fire-tower
+  // guide's pull can be measured on its own.
+  useEffect(() => { trackEvent("fire_towers_view"); }, []);
+
   async function fetchTowers() {
     setLoading(true);
     setLoadError(false);
@@ -1165,7 +1202,7 @@ function ListingPage() {
                   <div className="modal-field">
                     <label>Phone</label>
                     <span>
-                      <a href={`tel:${listing.phone.replace(/[^\d+]/g, '')}`} style={{color: "#C4862D", textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: 11}}>
+                      <a href={`tel:${listing.phone.replace(/[^\d+]/g, '')}`} onClick={() => trackContactClick(listing, "phone")} style={{color: "#C4862D", textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: 11}}>
                         {listing.phone}
                       </a>
                     </span>
@@ -1176,7 +1213,7 @@ function ListingPage() {
                 {listing.website && (
                   <div className="modal-field" style={{ gridColumn: "1 / -1" }}>
                     <label>Website</label>
-                    <a href={listing.website.startsWith("http") ? listing.website : "https://" + listing.website} target="_blank" rel="noreferrer">
+                    <a href={listing.website.startsWith("http") ? listing.website : "https://" + listing.website} onClick={() => trackOutboundListingClick(listing)} target="_blank" rel="noreferrer">
                       {listing.website}
                     </a>
                   </div>
@@ -1184,7 +1221,7 @@ function ListingPage() {
               </div>
               <div className="claim-box">
                 <p>Own or manage <strong>{listing.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
-                <a href={`mailto:${CONTACT_EMAIL}?subject=Update My Listing - ${listing.name}`} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
+                <a href={`mailto:${CONTACT_EMAIL}?subject=Update My Listing - ${listing.name}`} onClick={() => trackContactClick(listing, "email")} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
               </div>
             </div>
           </>
