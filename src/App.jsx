@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, Component } from "react";
-import { Routes, Route, Link, useParams, useSearchParams, useLocation } from "react-router-dom";
+import { Link, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
+import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
+import { categories, getCategory, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -41,33 +43,6 @@ function trackSearch(term, resultCount) {
   trackEvent("search", { search_term: q, result_count: resultCount });
 }
 
-const categories = [
-  { id: "feed", label: "Feed & Supply", icon: "🌾" },
-  { id: "animals", label: "Animals & Livestock", icon: "🐓" },
-  { id: "makers", label: "Food & Drink Makers", icon: "🧀" },
-  { id: "land", label: "Land & Property Services", icon: "🪵" },
-  { id: "food", label: "Food & Preservation", icon: "🫙" },
-  { id: "water", label: "Water & Utilities", icon: "💧" },
-  { id: "seeds", label: "Seeds & Plants", icon: "🌱" },
-  { id: "learn", label: "Learn & Community", icon: "📖" },
-  { id: "equipment", label: "Equipment & Repair", icon: "🔧" },
-  { id: "hearth", label: "Home & Hearth", icon: "🔥" },
-  { id: "farmservices", label: "Farm Services", icon: "🐄" },
-  { id: "health", label: "Health & Wellness", icon: "🌿" },
-  { id: "fiber", label: "Fiber & Textile", icon: "🧶" },
-  { id: "maple", label: "Maple & Honey", icon: "🍯" },
-  { id: "craftbeverages", label: "Craft Beverages", icon: "🍻" },
-  { id: "trades", label: "Building & Trades", icon: "🪚" },
-  { id: "markets", label: "Markets & Events", icon: "📅" },
-  { id: "legal", label: "Land & Legal", icon: "📋" },
-  { id: "outdoor", label: "Outdoor & Recreation", icon: "🏕️" },
-  { id: "apothecary", label: "Soap, Candles & Apothecary", icon: "🕯️" },
-  { id: "forage", label: "Mushroom & Forage", icon: "🍄" },
-  { id: "artisan", label: "Artisan & Craft", icon: "🏺" },
-  { id: "mutualaid", label: "Mutual Aid & Food Sharing", icon: "🤝" },
-  { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
-];
-
 // Lets a clickable non-button element (role="button" + tabIndex) be activated
 // by keyboard the way a real <button> is — Enter and Space.
 function handleKeyActivate(e, fn) {
@@ -75,13 +50,6 @@ function handleKeyActivate(e, fn) {
     e.preventDefault();
     fn();
   }
-}
-
-function slugify(name) {
-  return (name || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") || "listing";
 }
 
 function linkifyDescription(text) {
@@ -109,8 +77,6 @@ function linkifyDescription(text) {
 const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
 const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and the adjacent Catskill highlands";
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
-// Canonical production origin used for <link rel="canonical"> and JSON-LD urls.
-const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
 
 // Top-level error boundary so an unexpected render error (or a thrown failure
 // while building the page) shows a graceful message instead of a blank screen.
@@ -141,13 +107,18 @@ class ErrorBoundary extends Component {
   }
 }
 
-export default function App() {
+// Root layout: shared <style>, GA4 page_view tracking, and the <Outlet> every
+// route renders into. With vite-react-ssg this is the parent route element —
+// the page_view effect below runs once per real navigation across all pages.
+function Layout() {
   const location = useLocation();
 
   // SPA page_view tracking: gtag.js only auto-logs the first load, so we send
   // a GA4 page_view on every React Router location change (and the initial
   // mount). Initial auto page_view is disabled via send_page_view:false in
-  // index.html, so this is the single source of truth for page_views.
+  // index.html, so this is the single source of truth for page_views. The
+  // effect runs after hydration, so a fresh prerendered load fires exactly one
+  // page_view (not zero, not two).
   //
   // The live search term lives in the ?q= param and is updated on every
   // keystroke, so depending on the full location.search would log a page_view
@@ -158,7 +129,7 @@ export default function App() {
   navParams.delete("q");
   const pageViewKey = location.pathname + "?" + navParams.toString();
   useEffect(() => {
-    if (typeof window.gtag !== "function") return;
+    if (typeof window === "undefined" || typeof window.gtag !== "function") return;
     window.gtag("event", "page_view", {
       page_path: location.pathname + location.search,
       page_location: window.location.href,
@@ -169,20 +140,87 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      {/* Injected once here so HomePage / ListingPage / NotFound share a single
-          stylesheet instead of each component re-injecting the same <style>. */}
+      {/* Injected once here so every page shares a single stylesheet instead of
+          each component re-injecting the same <style>. */}
       <style>{sharedStyles}</style>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/fire-towers" element={<FireTowersPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/listing/:slug" element={<ListingPage />} />
-        <Route path="/listings/:slug" element={<ListingPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <Outlet />
     </ErrorBoundary>
   );
 }
+
+// Route table consumed by vite-react-ssg (src/main.jsx). Dynamic routes declare
+// getStaticPaths() to enumerate the concrete URLs to prerender and loader() to
+// supply each page's data at build time — both pull from the build-only snapshot
+// (src/data/build-data.js), which is dynamically imported so it (and the listings
+// JSON) never ships to the browser. /admin is excluded from prerendering in
+// vite.config.js (ssgOptions.includedRoutes).
+export const routes = [
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, Component: HomePage },
+      { path: "fire-towers", Component: FireTowersPage },
+      { path: "admin", Component: AdminPage },
+      {
+        path: "county/:countySlug",
+        Component: CountyPage,
+        async getStaticPaths() {
+          if (!import.meta.env.SSR) return [];
+          return (await import("./data/build-data.js")).countyPaths();
+        },
+        async loader({ params }) {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).countyLoader(params.countySlug);
+        },
+      },
+      {
+        path: "category/:categorySlug",
+        Component: CategoryPage,
+        async getStaticPaths() {
+          if (!import.meta.env.SSR) return [];
+          return (await import("./data/build-data.js")).categoryPaths();
+        },
+        async loader({ params }) {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).categoryLoader(params.categorySlug);
+        },
+      },
+      {
+        path: "county/:countySlug/:categorySlug",
+        Component: ComboPage,
+        async getStaticPaths() {
+          if (!import.meta.env.SSR) return [];
+          return (await import("./data/build-data.js")).comboPaths();
+        },
+        async loader({ params }) {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).comboLoader(
+            params.countySlug,
+            params.categorySlug
+          );
+        },
+      },
+      {
+        path: "listing/:slug",
+        Component: ListingPage,
+        async getStaticPaths() {
+          if (!import.meta.env.SSR) return [];
+          return (await import("./data/build-data.js")).listingPaths();
+        },
+        async loader({ params }) {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).listingLoader(params.slug);
+        },
+      },
+      // Legacy /listings/:slug alias: kept working for users (canonical points at
+      // the singular /listing/:slug), but not prerendered — it renders client-side
+      // and falls back to a live Supabase fetch like any non-prerendered slug.
+      { path: "listings/:slug", Component: ListingPage },
+      { path: "*", Component: NotFoundPage },
+    ],
+  },
+];
 
 const sharedStyles = `
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -306,7 +344,64 @@ const sharedStyles = `
   .ft-details summary:hover { color: #C4862D; }
   .ft-details p { font-family: 'Lora', serif; font-size: 14px; line-height: 1.65; color: #1A2B3C; margin-top: 10px; }
   @media (max-width: 600px) { .ft-grid { grid-template-columns: 1fr; } .ft-masthead { padding: 24px 20px; } .ft-article { padding: 16px 16px 64px; } }
+  .landing-wrap { font-family: 'Lora', Georgia, serif; background: #EFF0E8; min-height: 100vh; color: #1A2B3C; }
+  .landing-article { max-width: 1140px; margin: 0 auto; padding: 24px 24px 80px; }
+  .landing-masthead { background: #1C3A5E; padding: 32px 32px 28px; border: 2px solid #1C3A5E; margin-bottom: 28px; }
+  .landing-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 38px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin: 8px 0; }
+  .landing-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.7); letter-spacing: 0.06em; line-height: 1.6; }
+  .landing-crosslinks { margin-bottom: 28px; }
+  .landing-crosslinks-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  a.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; text-decoration: none; transition: background 0.15s, color 0.15s; }
+  a.chip:hover { background: #1C3A5E; color: #EFF0E8; }
+  a.chip .chip-count { color: #8AA0AE; }
+  a.chip:hover .chip-count { color: rgba(239,240,232,0.7); }
 `;
+
+// Per-page document head (render-time, via vite-react-ssg's <Head> = react-helmet).
+// This lands in the static HTML so crawlers and social scrapers — which don't run
+// JS — read page-specific title/description/canonical/OG instead of the generic
+// site-level fallback in index.html.
+const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+function PageMeta({ title, description, canonical, ogType = "website" }) {
+  const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 300);
+  return (
+    <Head>
+      <title>{title}</title>
+      {desc ? <meta name="description" content={desc} /> : null}
+      {canonical ? <link rel="canonical" href={canonical} /> : null}
+      <meta property="og:title" content={title} />
+      {desc ? <meta property="og:description" content={desc} /> : null}
+      <meta property="og:type" content={ogType} />
+      {canonical ? <meta property="og:url" content={canonical} /> : null}
+      <meta property="og:image" content={OG_IMAGE} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      {desc ? <meta name="twitter:description" content={desc} /> : null}
+      <meta name="twitter:image" content={OG_IMAGE} />
+    </Head>
+  );
+}
+
+// A single listing result card, linking to its /listing/:slug page. Shared by the
+// homepage and the county/category/combo landing pages so they render identical
+// markup from the same shape of data.
+function ResultCard({ d }) {
+  const cat = getCategory(d.category);
+  return (
+    <Link to={`/listing/${d.slug}`} className="listing-card">
+      <div className="listing-card-top">
+        <div>
+          <div className="listing-name">{d.name}</div>
+          <div className="listing-meta">{cat ? cat.icon : ""} {cat ? cat.label : ""} - {d.town}, {d.county} Co.{d.established ? " - Est. " + d.established : ""}</div>
+        </div>
+      </div>
+      <p className="listing-desc">{linkifyDescription(d.description)}</p>
+      <div className="tag-row">{(d.tags || []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
+      <div className="hours-line">{d.hours}</div>
+    </Link>
+  );
+}
 
 function HomePage() {
   const [listings, setListings] = useState([]);
@@ -407,8 +502,26 @@ function HomePage() {
     return () => document.removeEventListener("keydown", onKey);
   }, [showMobileCats]);
 
+  // Canonicalize single-filter homepage states to their clean landing-page URL,
+  // so ?county=Delaware / ?category=markets don't compete as duplicate content
+  // with /county/delaware and /category/markets. Multi-filter, search, and
+  // town-only states keep the homepage canonical.
+  const hasCounty = countyFilter !== "All" && !NON_GEOGRAPHIC_COUNTIES.has(countyFilter);
+  const hasMappedCategory = activeCategory !== "all" && !!getCategory(activeCategory);
+  let homeCanonical = `${SITE_ORIGIN}/`;
+  if (hasCounty && activeCategory === "all") {
+    homeCanonical = `${SITE_ORIGIN}/county/${countySlug(countyFilter)}`;
+  } else if (hasMappedCategory && countyFilter === "All") {
+    homeCanonical = `${SITE_ORIGIN}/category/${activeCategory}`;
+  }
+
   return (
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
+      <PageMeta
+        title="Hudson Valley Almanac — a directory of working farms and makers."
+        description="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,200 listings across 24 categories, with a focus on farm-licensed producers who grow what they sell."
+        canonical={homeCanonical}
+      />
       <div className="topbar">{TOPBAR_TEXT}</div>
 
       <div className="hero">
@@ -496,22 +609,7 @@ function HomePage() {
           ) : filtered.length === 0 ? (
             <div className="no-results">Nothing found. Try a different search or category.</div>
           ) : (
-            filtered.map((d) => {
-              const cat = categories.find((c) => c.id === d.category);
-              return (
-                <Link key={d.id} to={`/listing/${d.slug}`} className="listing-card">
-                  <div className="listing-card-top">
-                    <div>
-                      <div className="listing-name">{d.name}</div>
-                      <div className="listing-meta">{cat ? cat.icon : ""} {cat ? cat.label : ""} - {d.town}, {d.county} Co.{d.established ? " - Est. " + d.established : ""}</div>
-                    </div>
-                  </div>
-                  <p className="listing-desc">{linkifyDescription(d.description)}</p>
-                  <div className="tag-row">{(d.tags || []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
-                  <div className="hours-line">{d.hours}</div>
-                </Link>
-              );
-            })
+            filtered.map((d) => <ResultCard key={d.id} d={d} />)
           )}
         </div>
       </div>
@@ -692,11 +790,6 @@ function FireTowersPage() {
     }
   }
 
-  useEffect(() => {
-    document.title = "Hudson Valley Fire Towers - Hudson Valley Almanac";
-    return () => { document.title = "Hudson Valley Almanac"; };
-  }, []);
-
   const challenge = towers.filter((t) => t.on_challenge);
   const bonus = towers.filter((t) => !t.on_challenge);
 
@@ -714,6 +807,11 @@ function FireTowersPage() {
 
   return (
     <div className="listing-page-wrap">
+      <PageMeta
+        title="Hudson Valley Fire Towers — Hudson Valley Almanac"
+        description="Standing, climbable fire towers across the Hudson Valley and the Catskill highlands, including the Catskills Fire Tower Challenge."
+        canonical={`${SITE_ORIGIN}/fire-towers`}
+      />
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
         <Link to="/" className="back-link">← Back to all resources</Link>
@@ -769,6 +867,10 @@ function FireTowersPage() {
 function NotFoundPage() {
   return (
     <div className="listing-page-wrap">
+      <Head>
+        <title>Page not found — Hudson Valley Almanac</title>
+        <meta name="robots" content="noindex" />
+      </Head>
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
         <Link to="/" className="back-link">← Back to all resources</Link>
@@ -786,13 +888,156 @@ function NotFoundPage() {
   );
 }
 
+// Shared shell for the county / category / combo landing pages: render-time
+// meta + JSON-LD, masthead, optional cross-link chips, and the listing cards
+// rendered as real HTML text (so they're in the static source, not JS-only).
+function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd }) {
+  return (
+    <div className="landing-wrap">
+      <PageMeta title={metaTitle} description={metaDescription} canonical={canonical} />
+      {jsonLd ? (
+        <Head>
+          <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        </Head>
+      ) : null}
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="landing-article">
+        <header className="landing-masthead">
+          {eyebrow ? <div className="listing-page-eyebrow">{eyebrow}</div> : null}
+          <h1 className="landing-title">{pageTitle}</h1>
+          {sub ? <p className="landing-sub">{sub}</p> : null}
+        </header>
+        {crosslinks}
+        <div className="listings-header">
+          <div className="listings-title">{listings.length} {listings.length === 1 ? "resource" : "resources"}</div>
+        </div>
+        {listings.length === 0 ? (
+          <div className="no-results">Nothing listed here yet.</div>
+        ) : (
+          listings.map((d) => <ResultCard key={d.id} d={d} />)
+        )}
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+function CountyPage() {
+  const data = useLoaderData();
+  if (!data) return <NotFoundPage />;
+  const canonical = `${SITE_ORIGIN}/county/${data.slug}`;
+  const metaTitle = `Farms, Makers & Markets in ${data.county} County — Hudson Valley Almanac`;
+  const metaDescription = `Browse ${data.total} local farms, makers, markets, and producers across ${data.county} County in the Hudson Valley.`;
+  const crosslinks = data.categories.length ? (
+    <div className="landing-crosslinks">
+      <div className="landing-crosslinks-label">Browse {data.county} County by category</div>
+      <div className="chip-row">
+        {data.categories.map((c) => (
+          <Link key={c.id} className="chip" to={`/county/${data.slug}/${c.id}`}>
+            <span>{c.icon} {c.label}</span> <span className="chip-count">{c.count}</span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  ) : null;
+  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: canonical };
+  return (
+    <ListingCollection
+      canonical={canonical}
+      pageTitle={`${data.county} County`}
+      metaTitle={metaTitle}
+      metaDescription={metaDescription}
+      eyebrow="Hudson Valley Almanac · County Directory"
+      sub={`${data.total} working farms, makers, markets, and producers in ${data.county} County, New York.`}
+      crosslinks={crosslinks}
+      listings={data.listings}
+      jsonLd={jsonLd}
+    />
+  );
+}
+
+function CategoryPage() {
+  const data = useLoaderData();
+  if (!data) return <NotFoundPage />;
+  const canonical = `${SITE_ORIGIN}/category/${data.slug}`;
+  const metaTitle = `${data.label} in the Hudson Valley — Hudson Valley Almanac`;
+  const metaDescription = `Browse ${data.total} ${data.label.toLowerCase()} listings across the Hudson Valley and the adjacent Catskill highlands.`;
+  const crosslinks = data.counties.length ? (
+    <div className="landing-crosslinks">
+      <div className="landing-crosslinks-label">Browse {data.label} by county</div>
+      <div className="chip-row">
+        {data.counties.map((c) => (
+          <Link key={c.slug} className="chip" to={`/county/${c.slug}/${data.slug}`}>
+            <span>{c.name} County</span> <span className="chip-count">{c.count}</span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  ) : null;
+  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: canonical };
+  return (
+    <ListingCollection
+      canonical={canonical}
+      pageTitle={`${data.icon} ${data.label}`}
+      metaTitle={metaTitle}
+      metaDescription={metaDescription}
+      eyebrow="Hudson Valley Almanac · Category Directory"
+      sub={`${data.total} ${data.label.toLowerCase()} across the Hudson Valley.`}
+      crosslinks={crosslinks}
+      listings={data.listings}
+      jsonLd={jsonLd}
+    />
+  );
+}
+
+function ComboPage() {
+  const data = useLoaderData();
+  if (!data) return <NotFoundPage />;
+  const canonical = `${SITE_ORIGIN}/county/${data.countySlug}/${data.categorySlug}`;
+  const metaTitle = `${data.label} in ${data.county} County — Hudson Valley Almanac`;
+  const metaDescription = `Browse ${data.total} ${data.label.toLowerCase()} in ${data.county} County, in the Hudson Valley.`;
+  const crosslinks = (
+    <div className="landing-crosslinks">
+      <div className="landing-crosslinks-label">Also browse</div>
+      <div className="chip-row">
+        <Link className="chip" to={`/county/${data.countySlug}`}>All resources in {data.county} County</Link>
+        <Link className="chip" to={`/category/${data.categorySlug}`}>All {data.label} in the Hudson Valley</Link>
+      </div>
+    </div>
+  );
+  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: canonical };
+  return (
+    <ListingCollection
+      canonical={canonical}
+      pageTitle={`${data.icon} ${data.label} in ${data.county} County`}
+      metaTitle={metaTitle}
+      metaDescription={metaDescription}
+      eyebrow="Hudson Valley Almanac · County & Category"
+      sub={`${data.total} ${data.label.toLowerCase()} in ${data.county} County, New York.`}
+      crosslinks={crosslinks}
+      listings={data.listings}
+      jsonLd={jsonLd}
+    />
+  );
+}
+
 function ListingPage() {
   const { slug } = useParams();
-  const [listing, setListing] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // Prerendered listing pages arrive with their data in loader data (already in
+  // the static HTML — no fetch, no spinner, no hydration mismatch). Any slug NOT
+  // prerendered (the legacy /listings/:slug alias, or a listing added since the
+  // last build) gets null loader data and falls back to a live Supabase fetch,
+  // preserving the original behaviour exactly.
+  const loaderListing = useLoaderData();
+  const [fetched, setFetched] = useState(null);
+  const [loading, setLoading] = useState(!loaderListing);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    if (loaderListing) return;
     let cancelled = false;
     async function fetchListing() {
       setLoading(true);
@@ -806,61 +1051,46 @@ function ListingPage() {
       if (cancelled) return;
       if (error || !data) {
         setNotFound(true);
-        setListing(null);
+        setFetched(null);
       } else {
-        setListing(data);
+        setFetched(data);
       }
       setLoading(false);
     }
     fetchListing();
     return () => { cancelled = true; };
-  }, [slug]);
+  }, [slug, loaderListing]);
 
-  useEffect(() => {
-    if (listing) {
-      document.title = `${listing.name} - Hudson Valley Almanac`;
-      const meta = document.querySelector('meta[name="description"]');
-      if (meta && listing.description) {
-        meta.setAttribute("content", listing.description.slice(0, 160));
-      }
-    }
-    return () => { document.title = "Hudson Valley Almanac"; };
-  }, [listing]);
+  const listing = loaderListing || fetched;
 
   // GA4: rich listing_view, separate from the automatic page_view
   useEffect(() => {
     if (listing) trackListingView(listing);
   }, [listing?.id]);
 
-  // SEO: per-listing canonical URL + LocalBusiness JSON-LD. These are injected
-  // into <head> when a listing loads and removed (canonical reset to the site
-  // root) on unmount, so crawlers that execute JS see structured data.
-  useEffect(() => {
-    if (!listing) return;
-    const canonicalHref = `${SITE_ORIGIN}/listing/${listing.slug || slug}`;
+  const cat = listing ? getCategory(listing.category) : null;
 
-    let canonical = document.querySelector('link[rel="canonical"]');
-    const hadCanonical = !!canonical;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute("href", canonicalHref);
-
-    const catLabel = (categories.find((c) => c.id === listing.category) || {}).label;
-    const ld = {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      name: listing.name,
-      url: canonicalHref,
-    };
-    if (listing.description) ld.description = listing.description;
-    if (listing.website) ld.sameAs = listing.website.startsWith("http") ? listing.website : "https://" + listing.website;
-    if (listing.phone) ld.telephone = listing.phone;
-    if (catLabel) ld.additionalType = catLabel;
+  // SEO meta + LocalBusiness JSON-LD, computed at render time so they land in the
+  // static HTML for prerendered pages (via <Head> = react-helmet), and apply on
+  // the client for fallback-fetched ones.
+  const canonicalHref = listing
+    ? `${SITE_ORIGIN}/listing/${listing.slug || slug}`
+    : `${SITE_ORIGIN}/`;
+  const metaTitle = listing
+    ? `${listing.name} — Hudson Valley Almanac`
+    : notFound
+    ? "Listing not found — Hudson Valley Almanac"
+    : "Hudson Valley Almanac";
+  let jsonLd = null;
+  if (listing) {
+    const ldUrl = `${SITE_ORIGIN}/listing/${listing.slug || slug}`;
+    jsonLd = { "@context": "https://schema.org", "@type": "LocalBusiness", name: listing.name, url: ldUrl };
+    if (listing.description) jsonLd.description = listing.description;
+    if (listing.website) jsonLd.sameAs = listing.website.startsWith("http") ? listing.website : "https://" + listing.website;
+    if (listing.phone) jsonLd.telephone = listing.phone;
+    if (cat) jsonLd.additionalType = cat.label;
     if (listing.address || listing.town || listing.county) {
-      ld.address = {
+      jsonLd.address = {
         "@type": "PostalAddress",
         ...(listing.address ? { streetAddress: listing.address } : {}),
         ...(listing.town ? { addressLocality: listing.town } : {}),
@@ -869,24 +1099,9 @@ function ListingPage() {
       };
     }
     if (listing.latitude != null && listing.longitude != null) {
-      ld.geo = { "@type": "GeoCoordinates", latitude: listing.latitude, longitude: listing.longitude };
+      jsonLd.geo = { "@type": "GeoCoordinates", latitude: listing.latitude, longitude: listing.longitude };
     }
-
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.setAttribute("data-listing-jsonld", "");
-    script.textContent = JSON.stringify(ld);
-    document.head.appendChild(script);
-
-    return () => {
-      script.remove();
-      // Restore the site-root canonical that index.html ships with.
-      if (hadCanonical) canonical.setAttribute("href", `${SITE_ORIGIN}/`);
-      else canonical.remove();
-    };
-  }, [listing, slug]);
-
-  const cat = listing ? categories.find((c) => c.id === listing.category) : null;
+  }
 
   async function handleShare() {
     if (!listing) return;
@@ -905,6 +1120,12 @@ function ListingPage() {
 
   return (
     <div className="listing-page-wrap">
+      <PageMeta title={metaTitle} description={listing?.description} canonical={canonicalHref} ogType="article" />
+      {jsonLd ? (
+        <Head>
+          <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        </Head>
+      ) : null}
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
         <Link to="/" className="back-link">← Back to all resources</Link>
@@ -1185,6 +1406,10 @@ function AdminPage() {
 
   const cardWrap = (children) => (
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <Head>
+        <title>Admin — Hudson Valley Almanac</title>
+        <meta name="robots" content="noindex" />
+      </Head>
       <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 380, width: "100%", textAlign: "center" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8, color: "#1A2B3C" }}>Admin Access</div>
         <div style={{ fontSize: 13, color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
@@ -1236,6 +1461,10 @@ function AdminPage() {
 
   return (
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh" }}>
+      <Head>
+        <title>Admin — Hudson Valley Almanac</title>
+        <meta name="robots" content="noindex" />
+      </Head>
       <style>{`* { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
       <div style={{ background: "#1C3A5E", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#EFF0E8", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac - Admin</div>
