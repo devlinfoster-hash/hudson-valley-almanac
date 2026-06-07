@@ -1406,6 +1406,10 @@ function AdminPage() {
 
   const cardWrap = (children) => (
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <Head>
+        <title>Admin — Hudson Valley Almanac</title>
+        <meta name="robots" content="noindex" />
+      </Head>
       <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 380, width: "100%", textAlign: "center" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8, color: "#1A2B3C" }}>Admin Access</div>
         <div style={{ fontSize: 13, color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
@@ -1457,6 +1461,10 @@ function AdminPage() {
 
   return (
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh" }}>
+      <Head>
+        <title>Admin — Hudson Valley Almanac</title>
+        <meta name="robots" content="noindex" />
+      </Head>
       <style>{`* { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
       <div style={{ background: "#1C3A5E", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", color: "#EFF0E8", fontSize: 18, fontWeight: 700 }}>Hudson Valley Almanac - Admin</div>
