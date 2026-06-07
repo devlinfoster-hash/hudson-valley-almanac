@@ -43,6 +43,39 @@ function trackSearch(term, resultCount) {
   trackEvent("search", { search_term: q, result_count: resultCount });
 }
 
+// Key conversion events. These fire on the actual click handler BEFORE the
+// browser navigates so they're not lost to page unload — gtag.js ships them via
+// navigator.sendBeacon, and the outbound website link opens in a new tab anyway.
+// Mark outbound_listing_click, directory_contact_click, and newsletter_signup as
+// key events in the GA4 Admin UI (Claude can't set that flag — see report).
+
+// The core "directory did its job" event: a real visit sent to a producer's site.
+function trackOutboundListingClick(listing) {
+  if (!listing) return;
+  trackEvent("outbound_listing_click", {
+    listing_slug: listing.slug,
+    county: listing.county,
+    category: listing.category,
+  });
+}
+
+// Phone (tel:) or claim/update (mailto:) click on a listing page. type: phone|email
+function trackContactClick(listing, type) {
+  if (!listing) return;
+  trackEvent("directory_contact_click", { listing_slug: listing.slug, type });
+}
+
+// Successful newsletter insert (fired from <NewsletterSignup>, on success only).
+function trackNewsletterSignup(source) {
+  trackEvent("newsletter_signup", { source });
+}
+
+// Cross-funnel click toward the MeanderNY ecosystem (e.g. the free 1863 book
+// card). placement is where the link lives, e.g. "1863-book".
+function trackMeanderNYClick(placement) {
+  trackEvent("outbound_meanderny_click", { placement });
+}
+
 // Lets a clickable non-button element (role="button" + tabIndex) be activated
 // by keyboard the way a real <button> is — Enter and Space.
 function handleKeyActivate(e, fn) {
@@ -356,12 +389,53 @@ const sharedStyles = `
   a.chip:hover { background: #1C3A5E; color: #EFF0E8; }
   a.chip .chip-count { color: #8AA0AE; }
   a.chip:hover .chip-count { color: rgba(239,240,232,0.7); }
+  .newsletter-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; color: #1A2B3C; margin-bottom: 8px; }
+  .newsletter-sub { font-family: 'Lora', serif; font-size: 0.95rem; color: #5C7A8A; line-height: 1.6; max-width: 520px; margin: 0 auto 18px; }
+  .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .newsletter-input { flex: 1; min-width: 200px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
+  .newsletter-input:focus { border-color: #C4862D; }
+  .newsletter-input::placeholder { color: #8AA0AE; font-style: italic; }
+  .newsletter-btn { background: #1C3A5E; color: #EFF0E8; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .newsletter-btn:hover { background: #14304F; }
+  .newsletter-btn:disabled { opacity: 0.6; cursor: default; }
+  .newsletter-success { font-family: 'Lora', serif; font-style: italic; color: #C4862D; font-size: 16px; }
+  .newsletter-error { font-family: 'DM Mono', monospace; font-size: 12px; color: #9B2C2C; margin-top: 10px; }
+  /* Honeypot: kept in the layout but off-screen and out of the tab order. Bots
+     fill it; real users never see it. A filled value short-circuits the insert. */
+  .newsletter-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .newsletter-inline { background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 32px 24px; margin: 36px 0; text-align: center; }
+  .newsletter-footer { max-width: 600px; margin: 0 auto 28px; padding-bottom: 28px; border-bottom: 1px solid #1C3A5E; text-align: center; }
+  .newsletter-footer .newsletter-title { color: #EFF0E8; font-size: 1.3rem; }
+  .newsletter-footer .newsletter-sub { color: #7A92A4; }
+  .newsletter-footer .newsletter-input { background: #EFF0E8; }
+  .newsletter-footer .newsletter-btn { background: #C4862D; color: #0F2640; }
+  .newsletter-footer .newsletter-btn:hover { background: #B0762A; }
+  .rambles-card { background: #1C3A5E; border: 2px solid #1C3A5E; padding: 24px 28px; margin: 0 0 28px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .rambles-card-body { flex: 1; min-width: 240px; }
+  .rambles-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C4862D; margin-bottom: 8px; }
+  .rambles-title { font-family: 'Libre Baskerville', serif; font-size: 1.25rem; font-weight: 700; color: #EFF0E8; line-height: 1.25; margin-bottom: 8px; }
+  .rambles-desc { font-family: 'Lora', serif; font-size: 0.95rem; color: rgba(239,240,232,0.82); line-height: 1.6; }
+  .rambles-cta { display: inline-block; background: #C4862D; color: #0F2640; padding: 12px 24px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
+  .rambles-cta:hover { background: #B0762A; }
 `;
 
 // Per-page document head (render-time, via vite-react-ssg's <Head> = react-helmet).
 // This lands in the static HTML so crawlers and social scrapers — which don't run
 // JS — read page-specific title/description/canonical/OG instead of the generic
 // site-level fallback in index.html.
+// Clamp a description for the meta/OG/Twitter tags: collapse whitespace and cut
+// at a word boundary near `max` chars (with an ellipsis if truncated). Listing
+// descriptions can run long; search snippets render ~155 chars, so trimming here
+// keeps the plain <meta name="description"> snippet-sized and identical across the
+// plain/OG/Twitter tags for a page.
+function clampDescription(text, max = 160) {
+  const s = (text || "").replace(/\s+/g, " ").trim();
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?-]+$/, "") + "…";
+}
+
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 function PageMeta({ title, description, canonical, ogType = "website" }) {
   const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 300);
@@ -640,6 +714,10 @@ function HomePage() {
         </div>
       )}
 
+      <div style={{maxWidth:"760px",margin:"0 auto",padding:"0 24px"}}>
+        <NewsletterSignup variant="inline" source="home" />
+      </div>
+
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
           <h2 style={{fontSize:"1.8rem",color:"#1A2B3C",marginBottom:"12px",fontFamily:"'Libre Baskerville',serif"}}>Get Listed on Hudson Valley Almanac</h2>
@@ -654,10 +732,113 @@ function HomePage() {
   );
 }
 
+// Email capture for the owned audience. Rendered statically (so it lands in the
+// prerendered HTML and adds to page content) with the submit handler hydrated on
+// the client — the form markup is identical on server and client, so there's no
+// hydration mismatch. Inserts into the existing public.hva_signups table
+// (anon INSERT-only RLS; no service key, no client read). `source` records where
+// it rendered (home, county:<slug>, footer); `county` is optional context.
+function NewsletterSignup({ source = "footer", county = null, variant = "inline" }) {
+  const [email, setEmail] = useState("");
+  const [hp, setHp] = useState(""); // honeypot — see .newsletter-hp
+  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (status === "submitting" || status === "success") return;
+    // Honeypot tripped: silently show success and skip the insert.
+    if (hp.trim()) { setStatus("success"); return; }
+    const addr = email.trim();
+    // Mirror the table's CHECK (len 3–320, '@' not first char) for a friendly
+    // client-side message before the round trip; RLS enforces it server-side too.
+    if (addr.length < 3 || addr.length > 320 || addr.indexOf("@") < 1) {
+      setStatus("error");
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+    setStatus("submitting");
+    setErrorMsg("");
+    try {
+      const row = { email: addr, source };
+      if (county) row.county = county;
+      const { error } = await supabase.from("hva_signups").insert([row]);
+      if (error) throw error;
+      setStatus("success");
+      trackNewsletterSignup(source);
+    } catch (err) {
+      console.error("Newsletter signup failed:", err);
+      setStatus("error");
+      setErrorMsg("Something went wrong. Please try again.");
+    }
+  }
+
+  const wrapClass = variant === "footer" ? "newsletter-footer" : "newsletter-inline";
+  return (
+    <section className={wrapClass} aria-label="Newsletter signup">
+      <h2 className="newsletter-title">The Almanac, in your inbox.</h2>
+      <p className="newsletter-sub">Occasional notes on new farms, seasonal finds, and farm trails across the valley. No spam.</p>
+      {status === "success" ? (
+        <p className="newsletter-success" role="status">Thank you — you're on the list.</p>
+      ) : (
+        <form className="newsletter-form" onSubmit={handleSubmit} noValidate>
+          <label className="newsletter-hp" aria-hidden="true">
+            Leave this field empty
+            <input tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} />
+          </label>
+          <input
+            className="newsletter-input"
+            type="email"
+            required
+            aria-label="Email address"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button className="newsletter-btn" type="submit" disabled={status === "submitting"}>
+            {status === "submitting" ? "Joining…" : "Subscribe"}
+          </button>
+        </form>
+      )}
+      {status === "error" ? <p className="newsletter-error" role="alert">{errorMsg}</p> : null}
+    </section>
+  );
+}
+
+// The free 1863 "Rambles from the Catskill Mountain House" guidebook, hosted on
+// Gumroad. Featured on the fire-towers page and the Catskills county pages below.
+// (Points at Gumroad, not meanderny.com — no dependency on the MeanderNY work.)
+const RAMBLES_BOOK_URL =
+  "https://devlinfoster.gumroad.com/l/rambles-1863?utm_source=hva&utm_medium=cross&utm_campaign=1863-book";
+// County slugs where the book is surfaced. Edit this set to add/remove counties.
+const RAMBLES_BOOK_COUNTIES = new Set(["greene", "ulster"]);
+
+function RamblesBookCard() {
+  return (
+    <aside className="rambles-card" aria-label="Free 1863 Catskills guidebook">
+      <div className="rambles-card-body">
+        <div className="rambles-eyebrow">Free · Restored Local History</div>
+        <div className="rambles-title">A Guide to Rambles from the Catskill Mountain House (1863)</div>
+        <p className="rambles-desc">A restored 1863 guidebook to the walks, waterfalls, and lookouts around the old Catskill Mountain House — a free piece of Hudson Valley history, yours to read.</p>
+      </div>
+      <a
+        className="rambles-cta"
+        href={RAMBLES_BOOK_URL}
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => trackMeanderNYClick("1863-book")}
+      >
+        Get the free book ↗
+      </a>
+    </aside>
+  );
+}
+
 function Footer() {
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
       <div style={{maxWidth:"800px",margin:"0 auto"}}>
+        <NewsletterSignup variant="footer" source="footer" />
         <h3 style={{color:"#EFF0E8",fontSize:"1.4rem",marginBottom:"6px",fontFamily:"'Libre Baskerville',serif"}}>Hudson Valley Almanac</h3>
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
@@ -765,6 +946,10 @@ function FireTowersPage() {
 
   useEffect(() => { fetchTowers(); }, []);
 
+  // Editorial page marker, separable from the generic page_view so the fire-tower
+  // guide's pull can be measured on its own.
+  useEffect(() => { trackEvent("fire_towers_view"); }, []);
+
   async function fetchTowers() {
     setLoading(true);
     setLoadError(false);
@@ -822,6 +1007,8 @@ function FireTowersPage() {
           <h1 className="ft-title">Hudson Valley Fire Towers</h1>
           <p className="ft-sub">Standing, climbable fire towers across the Hudson Valley and the Catskill highlands.</p>
         </header>
+
+        <RamblesBookCard />
 
         {loading ? (
           <div className="loading"><div className="spinner" /><div className="loading-text">Loading fire towers</div></div>
@@ -891,7 +1078,7 @@ function NotFoundPage() {
 // Shared shell for the county / category / combo landing pages: render-time
 // meta + JSON-LD, masthead, optional cross-link chips, and the listing cards
 // rendered as real HTML text (so they're in the static source, not JS-only).
-function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd }) {
+function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd, inlineNewsletter, featureModule }) {
   return (
     <div className="landing-wrap">
       <PageMeta title={metaTitle} description={metaDescription} canonical={canonical} />
@@ -911,6 +1098,7 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
           {sub ? <p className="landing-sub">{sub}</p> : null}
         </header>
         {crosslinks}
+        {featureModule}
         <div className="listings-header">
           <div className="listings-title">{listings.length} {listings.length === 1 ? "resource" : "resources"}</div>
         </div>
@@ -919,6 +1107,7 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
         ) : (
           listings.map((d) => <ResultCard key={d.id} d={d} />)
         )}
+        {inlineNewsletter}
       </div>
       <Footer />
     </div>
@@ -955,6 +1144,8 @@ function CountyPage() {
       crosslinks={crosslinks}
       listings={data.listings}
       jsonLd={jsonLd}
+      featureModule={RAMBLES_BOOK_COUNTIES.has(data.slug) ? <RamblesBookCard /> : null}
+      inlineNewsletter={<NewsletterSignup variant="inline" source={`county:${data.slug}`} county={data.county} />}
     />
   );
 }
@@ -1081,6 +1272,9 @@ function ListingPage() {
     : notFound
     ? "Listing not found — Hudson Valley Almanac"
     : "Hudson Valley Almanac";
+  // Page-specific <meta name="description"> (+ matching OG/Twitter): the listing's
+  // own description, trimmed to a search-snippet length.
+  const metaDescription = listing ? clampDescription(listing.description, 155) : undefined;
   let jsonLd = null;
   if (listing) {
     const ldUrl = `${SITE_ORIGIN}/listing/${listing.slug || slug}`;
@@ -1120,7 +1314,7 @@ function ListingPage() {
 
   return (
     <div className="listing-page-wrap">
-      <PageMeta title={metaTitle} description={listing?.description} canonical={canonicalHref} ogType="article" />
+      <PageMeta title={metaTitle} description={metaDescription} canonical={canonicalHref} ogType="article" />
       {jsonLd ? (
         <Head>
           <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
@@ -1165,7 +1359,7 @@ function ListingPage() {
                   <div className="modal-field">
                     <label>Phone</label>
                     <span>
-                      <a href={`tel:${listing.phone.replace(/[^\d+]/g, '')}`} style={{color: "#C4862D", textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: 11}}>
+                      <a href={`tel:${listing.phone.replace(/[^\d+]/g, '')}`} onClick={() => trackContactClick(listing, "phone")} style={{color: "#C4862D", textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: 11}}>
                         {listing.phone}
                       </a>
                     </span>
@@ -1176,7 +1370,7 @@ function ListingPage() {
                 {listing.website && (
                   <div className="modal-field" style={{ gridColumn: "1 / -1" }}>
                     <label>Website</label>
-                    <a href={listing.website.startsWith("http") ? listing.website : "https://" + listing.website} target="_blank" rel="noreferrer">
+                    <a href={listing.website.startsWith("http") ? listing.website : "https://" + listing.website} onClick={() => trackOutboundListingClick(listing)} target="_blank" rel="noreferrer">
                       {listing.website}
                     </a>
                   </div>
@@ -1184,7 +1378,7 @@ function ListingPage() {
               </div>
               <div className="claim-box">
                 <p>Own or manage <strong>{listing.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
-                <a href={`mailto:${CONTACT_EMAIL}?subject=Update My Listing - ${listing.name}`} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
+                <a href={`mailto:${CONTACT_EMAIL}?subject=Update My Listing - ${listing.name}`} onClick={() => trackContactClick(listing, "email")} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
               </div>
             </div>
           </>
