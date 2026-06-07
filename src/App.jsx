@@ -410,6 +410,13 @@ const sharedStyles = `
   .newsletter-footer .newsletter-input { background: #EFF0E8; }
   .newsletter-footer .newsletter-btn { background: #C4862D; color: #0F2640; }
   .newsletter-footer .newsletter-btn:hover { background: #B0762A; }
+  .rambles-card { background: #1C3A5E; border: 2px solid #1C3A5E; padding: 24px 28px; margin: 0 0 28px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .rambles-card-body { flex: 1; min-width: 240px; }
+  .rambles-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C4862D; margin-bottom: 8px; }
+  .rambles-title { font-family: 'Libre Baskerville', serif; font-size: 1.25rem; font-weight: 700; color: #EFF0E8; line-height: 1.25; margin-bottom: 8px; }
+  .rambles-desc { font-family: 'Lora', serif; font-size: 0.95rem; color: rgba(239,240,232,0.82); line-height: 1.6; }
+  .rambles-cta { display: inline-block; background: #C4862D; color: #0F2640; padding: 12px 24px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
+  .rambles-cta:hover { background: #B0762A; }
 `;
 
 // Per-page document head (render-time, via vite-react-ssg's <Head> = react-helmet).
@@ -798,6 +805,35 @@ function NewsletterSignup({ source = "footer", county = null, variant = "inline"
   );
 }
 
+// The free 1863 "Rambles from the Catskill Mountain House" guidebook, hosted on
+// Gumroad. Featured on the fire-towers page and the Catskills county pages below.
+// (Points at Gumroad, not meanderny.com — no dependency on the MeanderNY work.)
+const RAMBLES_BOOK_URL =
+  "https://devlinfoster.gumroad.com/l/rambles-1863?utm_source=hva&utm_medium=cross&utm_campaign=1863-book";
+// County slugs where the book is surfaced. Edit this set to add/remove counties.
+const RAMBLES_BOOK_COUNTIES = new Set(["greene", "ulster"]);
+
+function RamblesBookCard() {
+  return (
+    <aside className="rambles-card" aria-label="Free 1863 Catskills guidebook">
+      <div className="rambles-card-body">
+        <div className="rambles-eyebrow">Free · Restored Local History</div>
+        <div className="rambles-title">A Guide to Rambles from the Catskill Mountain House (1863)</div>
+        <p className="rambles-desc">A restored 1863 guidebook to the walks, waterfalls, and lookouts around the old Catskill Mountain House — a free piece of Hudson Valley history, yours to read.</p>
+      </div>
+      <a
+        className="rambles-cta"
+        href={RAMBLES_BOOK_URL}
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => trackMeanderNYClick("1863-book")}
+      >
+        Get the free book ↗
+      </a>
+    </aside>
+  );
+}
+
 function Footer() {
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
@@ -972,6 +1008,8 @@ function FireTowersPage() {
           <p className="ft-sub">Standing, climbable fire towers across the Hudson Valley and the Catskill highlands.</p>
         </header>
 
+        <RamblesBookCard />
+
         {loading ? (
           <div className="loading"><div className="spinner" /><div className="loading-text">Loading fire towers</div></div>
         ) : loadError ? (
@@ -1040,7 +1078,7 @@ function NotFoundPage() {
 // Shared shell for the county / category / combo landing pages: render-time
 // meta + JSON-LD, masthead, optional cross-link chips, and the listing cards
 // rendered as real HTML text (so they're in the static source, not JS-only).
-function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd, inlineNewsletter }) {
+function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd, inlineNewsletter, featureModule }) {
   return (
     <div className="landing-wrap">
       <PageMeta title={metaTitle} description={metaDescription} canonical={canonical} />
@@ -1060,6 +1098,7 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
           {sub ? <p className="landing-sub">{sub}</p> : null}
         </header>
         {crosslinks}
+        {featureModule}
         <div className="listings-header">
           <div className="listings-title">{listings.length} {listings.length === 1 ? "resource" : "resources"}</div>
         </div>
@@ -1105,6 +1144,7 @@ function CountyPage() {
       crosslinks={crosslinks}
       listings={data.listings}
       jsonLd={jsonLd}
+      featureModule={RAMBLES_BOOK_COUNTIES.has(data.slug) ? <RamblesBookCard /> : null}
       inlineNewsletter={<NewsletterSignup variant="inline" source={`county:${data.slug}`} county={data.county} />}
     />
   );
