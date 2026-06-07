@@ -13,14 +13,15 @@
       // React Router location change (including the initial load) in App.jsx.
       gtag('config', 'G-CC4ZRHVJDQ', { send_page_view: false });
     </script>
-    <!-- Neutral, site-level fallback only. Per-page title, description,
-         canonical, and Open Graph / Twitter tags are rendered at build time by
-         react-helmet (vite-react-ssg Head) into each prerendered page, and on
-         the client for any non-prerendered route. Do NOT add a hardcoded
-         canonical or per-page OG block here — it would ship on every URL and
-         reintroduce the duplicate-content problem this setup fixes. -->
-    <meta name="description" content="A directory of working farms, makers, and producers across the Hudson Valley.">
-    <meta property="og:image" content="https://www.hudsonvalleyalmanac.com/og-image.png">
+    <!-- Per-page title, description, canonical, and Open Graph / Twitter tags are
+         rendered at build time by react-helmet (vite-react-ssg Head) into each
+         prerendered page, and on the client for any non-prerendered route. Do NOT
+         hardcode a title, description, canonical, or per-page OG tag here:
+         react-helmet does not de-duplicate against static template tags, so a
+         hardcoded one ships ALONGSIDE the per-page one on every URL — which is
+         exactly how the generic description leaked into search snippets. Only the
+         og:image dimensions below (a constant hint for the constant image, which
+         Helmet also emits with the same URL) are kept here. -->
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

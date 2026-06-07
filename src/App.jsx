@@ -416,6 +416,19 @@ const sharedStyles = `
 // This lands in the static HTML so crawlers and social scrapers — which don't run
 // JS — read page-specific title/description/canonical/OG instead of the generic
 // site-level fallback in index.html.
+// Clamp a description for the meta/OG/Twitter tags: collapse whitespace and cut
+// at a word boundary near `max` chars (with an ellipsis if truncated). Listing
+// descriptions can run long; search snippets render ~155 chars, so trimming here
+// keeps the plain <meta name="description"> snippet-sized and identical across the
+// plain/OG/Twitter tags for a page.
+function clampDescription(text, max = 160) {
+  const s = (text || "").replace(/\s+/g, " ").trim();
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?-]+$/, "") + "…";
+}
+
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 function PageMeta({ title, description, canonical, ogType = "website" }) {
   const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 300);
@@ -1219,6 +1232,9 @@ function ListingPage() {
     : notFound
     ? "Listing not found — Hudson Valley Almanac"
     : "Hudson Valley Almanac";
+  // Page-specific <meta name="description"> (+ matching OG/Twitter): the listing's
+  // own description, trimmed to a search-snippet length.
+  const metaDescription = listing ? clampDescription(listing.description, 155) : undefined;
   let jsonLd = null;
   if (listing) {
     const ldUrl = `${SITE_ORIGIN}/listing/${listing.slug || slug}`;
@@ -1258,7 +1274,7 @@ function ListingPage() {
 
   return (
     <div className="listing-page-wrap">
-      <PageMeta title={metaTitle} description={listing?.description} canonical={canonicalHref} ogType="article" />
+      <PageMeta title={metaTitle} description={metaDescription} canonical={canonicalHref} ogType="article" />
       {jsonLd ? (
         <Head>
           <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
