@@ -389,6 +389,27 @@ const sharedStyles = `
   a.chip:hover { background: #1C3A5E; color: #EFF0E8; }
   a.chip .chip-count { color: #8AA0AE; }
   a.chip:hover .chip-count { color: rgba(239,240,232,0.7); }
+  .newsletter-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; color: #1A2B3C; margin-bottom: 8px; }
+  .newsletter-sub { font-family: 'Lora', serif; font-size: 0.95rem; color: #5C7A8A; line-height: 1.6; max-width: 520px; margin: 0 auto 18px; }
+  .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .newsletter-input { flex: 1; min-width: 200px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
+  .newsletter-input:focus { border-color: #C4862D; }
+  .newsletter-input::placeholder { color: #8AA0AE; font-style: italic; }
+  .newsletter-btn { background: #1C3A5E; color: #EFF0E8; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .newsletter-btn:hover { background: #14304F; }
+  .newsletter-btn:disabled { opacity: 0.6; cursor: default; }
+  .newsletter-success { font-family: 'Lora', serif; font-style: italic; color: #C4862D; font-size: 16px; }
+  .newsletter-error { font-family: 'DM Mono', monospace; font-size: 12px; color: #9B2C2C; margin-top: 10px; }
+  /* Honeypot: kept in the layout but off-screen and out of the tab order. Bots
+     fill it; real users never see it. A filled value short-circuits the insert. */
+  .newsletter-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .newsletter-inline { background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 32px 24px; margin: 36px 0; text-align: center; }
+  .newsletter-footer { max-width: 600px; margin: 0 auto 28px; padding-bottom: 28px; border-bottom: 1px solid #1C3A5E; text-align: center; }
+  .newsletter-footer .newsletter-title { color: #EFF0E8; font-size: 1.3rem; }
+  .newsletter-footer .newsletter-sub { color: #7A92A4; }
+  .newsletter-footer .newsletter-input { background: #EFF0E8; }
+  .newsletter-footer .newsletter-btn { background: #C4862D; color: #0F2640; }
+  .newsletter-footer .newsletter-btn:hover { background: #B0762A; }
 `;
 
 // Per-page document head (render-time, via vite-react-ssg's <Head> = react-helmet).
@@ -673,6 +694,10 @@ function HomePage() {
         </div>
       )}
 
+      <div style={{maxWidth:"760px",margin:"0 auto",padding:"0 24px"}}>
+        <NewsletterSignup variant="inline" source="home" />
+      </div>
+
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
           <h2 style={{fontSize:"1.8rem",color:"#1A2B3C",marginBottom:"12px",fontFamily:"'Libre Baskerville',serif"}}>Get Listed on Hudson Valley Almanac</h2>
@@ -687,10 +712,84 @@ function HomePage() {
   );
 }
 
+// Email capture for the owned audience. Rendered statically (so it lands in the
+// prerendered HTML and adds to page content) with the submit handler hydrated on
+// the client — the form markup is identical on server and client, so there's no
+// hydration mismatch. Inserts into the existing public.hva_signups table
+// (anon INSERT-only RLS; no service key, no client read). `source` records where
+// it rendered (home, county:<slug>, footer); `county` is optional context.
+function NewsletterSignup({ source = "footer", county = null, variant = "inline" }) {
+  const [email, setEmail] = useState("");
+  const [hp, setHp] = useState(""); // honeypot — see .newsletter-hp
+  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (status === "submitting" || status === "success") return;
+    // Honeypot tripped: silently show success and skip the insert.
+    if (hp.trim()) { setStatus("success"); return; }
+    const addr = email.trim();
+    // Mirror the table's CHECK (len 3–320, '@' not first char) for a friendly
+    // client-side message before the round trip; RLS enforces it server-side too.
+    if (addr.length < 3 || addr.length > 320 || addr.indexOf("@") < 1) {
+      setStatus("error");
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+    setStatus("submitting");
+    setErrorMsg("");
+    try {
+      const row = { email: addr, source };
+      if (county) row.county = county;
+      const { error } = await supabase.from("hva_signups").insert([row]);
+      if (error) throw error;
+      setStatus("success");
+      trackNewsletterSignup(source);
+    } catch (err) {
+      console.error("Newsletter signup failed:", err);
+      setStatus("error");
+      setErrorMsg("Something went wrong. Please try again.");
+    }
+  }
+
+  const wrapClass = variant === "footer" ? "newsletter-footer" : "newsletter-inline";
+  return (
+    <section className={wrapClass} aria-label="Newsletter signup">
+      <h2 className="newsletter-title">The Almanac, in your inbox.</h2>
+      <p className="newsletter-sub">Occasional notes on new farms, seasonal finds, and farm trails across the valley. No spam.</p>
+      {status === "success" ? (
+        <p className="newsletter-success" role="status">Thank you — you're on the list.</p>
+      ) : (
+        <form className="newsletter-form" onSubmit={handleSubmit} noValidate>
+          <label className="newsletter-hp" aria-hidden="true">
+            Leave this field empty
+            <input tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} />
+          </label>
+          <input
+            className="newsletter-input"
+            type="email"
+            required
+            aria-label="Email address"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button className="newsletter-btn" type="submit" disabled={status === "submitting"}>
+            {status === "submitting" ? "Joining…" : "Subscribe"}
+          </button>
+        </form>
+      )}
+      {status === "error" ? <p className="newsletter-error" role="alert">{errorMsg}</p> : null}
+    </section>
+  );
+}
+
 function Footer() {
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
       <div style={{maxWidth:"800px",margin:"0 auto"}}>
+        <NewsletterSignup variant="footer" source="footer" />
         <h3 style={{color:"#EFF0E8",fontSize:"1.4rem",marginBottom:"6px",fontFamily:"'Libre Baskerville',serif"}}>Hudson Valley Almanac</h3>
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
@@ -928,7 +1027,7 @@ function NotFoundPage() {
 // Shared shell for the county / category / combo landing pages: render-time
 // meta + JSON-LD, masthead, optional cross-link chips, and the listing cards
 // rendered as real HTML text (so they're in the static source, not JS-only).
-function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd }) {
+function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd, inlineNewsletter }) {
   return (
     <div className="landing-wrap">
       <PageMeta title={metaTitle} description={metaDescription} canonical={canonical} />
@@ -956,6 +1055,7 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
         ) : (
           listings.map((d) => <ResultCard key={d.id} d={d} />)
         )}
+        {inlineNewsletter}
       </div>
       <Footer />
     </div>
@@ -992,6 +1092,7 @@ function CountyPage() {
       crosslinks={crosslinks}
       listings={data.listings}
       jsonLd={jsonLd}
+      inlineNewsletter={<NewsletterSignup variant="inline" source={`county:${data.slug}`} county={data.county} />}
     />
   );
 }
