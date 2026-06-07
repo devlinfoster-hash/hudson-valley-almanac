@@ -17,9 +17,10 @@ export const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
 // an empty "0" tile (the bug this config previously had: "makers" and "legal"
 // were not DB values; the real values are "artisanfood" and "agency"/"professional").
 //
-// DB categories intentionally left untiled: `facebook` (17) and `buysell` (15)
-// — low-signal/marketplace buckets pending a product call. Their listings still
-// get their own /listing/:slug page; they have no category hub until tiled.
+// Every DB category is now tiled, so every published listing is browsable via a
+// tile. Two former "untiled" marketplace buckets — buysell (per-county "Buy,
+// Sell, Trade" classifieds) and facebook (regional buy/sell/trade groups, mostly
+// county=Online) — share the "Buy, Sell & Trade" multi-key tile below.
 export const categories = [
   { id: "feed", label: "Feed & Supply", icon: "🌾" },
   { id: "animals", label: "Animals & Livestock", icon: "🐓" },
@@ -45,6 +46,7 @@ export const categories = [
   { id: "artisan", label: "Artisan & Craft", icon: "🏺" },
   { id: "mutualaid", label: "Mutual Aid & Food Sharing", icon: "🤝" },
   { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
+  { id: "buy-sell-trade", label: "Buy, Sell & Trade", icon: "🏷️", keys: ["buysell", "facebook"] },
 ];
 
 // The DB `category` value(s) a tile surfaces. Defaults to [id] for normal tiles.
