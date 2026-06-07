@@ -8,17 +8,23 @@
 // Canonical production origin used for <link rel="canonical">, OG urls, JSON-LD.
 export const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
 
-// The 24 mapped categories. The category id is also the URL slug for
-// /category/:slug and the third segment of /county/:county/:slug, because the
-// DB category values are already slug-like (e.g. "markets", "craftbeverages").
-// The DB also contains a handful of unmapped category values (artisanfood,
-// facebook, buysell, agency, professional) — those listings still get their own
-// /listing/:slug page and still appear on their county page, but get no
-// dedicated category hub until a label is added here.
+// The mapped categories. A tile's `id` is its URL slug for /category/:slug and
+// the third segment of /county/:county/:slug. By default `id` is also the DB
+// `category` value the tile filters on; a tile may instead declare `keys` to
+// surface one or more real DB category values under a single tile (used where a
+// label spans several DB values). Every `id`/`keys` entry below must correspond
+// to a real DB category value — a tile pointing at a non-existent value renders
+// an empty "0" tile (the bug this config previously had: "makers" and "legal"
+// were not DB values; the real values are "artisanfood" and "agency"/"professional").
+//
+// Every DB category is now tiled, so every published listing is browsable via a
+// tile. Two former "untiled" marketplace buckets — buysell (per-county "Buy,
+// Sell, Trade" classifieds) and facebook (regional buy/sell/trade groups, mostly
+// county=Online) — share the "Buy, Sell & Trade" multi-key tile below.
 export const categories = [
   { id: "feed", label: "Feed & Supply", icon: "🌾" },
   { id: "animals", label: "Animals & Livestock", icon: "🐓" },
-  { id: "makers", label: "Food & Drink Makers", icon: "🧀" },
+  { id: "artisanfood", label: "Food & Drink Makers", icon: "🧀" },
   { id: "land", label: "Land & Property Services", icon: "🪵" },
   { id: "food", label: "Food & Preservation", icon: "🫙" },
   { id: "water", label: "Water & Utilities", icon: "💧" },
@@ -33,18 +39,36 @@ export const categories = [
   { id: "craftbeverages", label: "Craft Beverages", icon: "🍻" },
   { id: "trades", label: "Building & Trades", icon: "🪚" },
   { id: "markets", label: "Markets & Events", icon: "📅" },
-  { id: "legal", label: "Land & Legal", icon: "📋" },
+  { id: "professional-services", label: "Agencies & Professional Services", icon: "📋", keys: ["agency", "professional"] },
   { id: "outdoor", label: "Outdoor & Recreation", icon: "🏕️" },
   { id: "apothecary", label: "Soap, Candles & Apothecary", icon: "🕯️" },
   { id: "forage", label: "Mushroom & Forage", icon: "🍄" },
   { id: "artisan", label: "Artisan & Craft", icon: "🏺" },
   { id: "mutualaid", label: "Mutual Aid & Food Sharing", icon: "🤝" },
   { id: "cannabis", label: "Craft Cannabis", icon: "🍃" },
+  { id: "buy-sell-trade", label: "Buy, Sell & Trade", icon: "🏷️", keys: ["buysell", "facebook"] },
 ];
+
+// The DB `category` value(s) a tile surfaces. Defaults to [id] for normal tiles.
+export function categoryKeys(cat) {
+  if (!cat) return [];
+  return cat.keys && cat.keys.length ? cat.keys : [cat.id];
+}
 
 const categoryById = new Map(categories.map((c) => [c.id, c]));
 export function getCategory(id) {
   return categoryById.get(id) || null;
+}
+
+// Reverse lookup: a real DB `category` value -> the tile that surfaces it, or
+// null if that value is untiled (e.g. facebook, buysell). Used to bucket a
+// listing's raw category into its hub for county cross-links, combos, sitemap.
+const categoryByDbKey = new Map();
+for (const c of categories) {
+  for (const k of categoryKeys(c)) categoryByDbKey.set(k, c);
+}
+export function getCategoryForKey(dbKey) {
+  return categoryByDbKey.get(dbKey) || null;
 }
 
 // "Online" and "Statewide" are not real geographic counties, so they get no

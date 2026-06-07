@@ -14,7 +14,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   categories,
-  getCategory,
+  categoryKeys,
+  getCategoryForKey,
   countySlug,
   NON_GEOGRAPHIC_COUNTIES,
   SITE_ORIGIN,
@@ -79,15 +80,18 @@ async function main() {
     const isGeoCounty = l.county && !NON_GEOGRAPHIC_COUNTIES.has(l.county);
     if (isGeoCounty) counties.add(l.county);
 
-    // Only mapped categories get a hub; only non-empty combos get a page.
-    if (isGeoCounty && getCategory(l.category)) {
-      combos.add(`${countySlug(l.county)}/${l.category}`);
+    // Only tiled categories get a hub; only non-empty combos get a page. Bucket
+    // the raw DB category into its tile so the combo slug matches the tile id
+    // (and multi-key tiles collapse their values into one combo page).
+    const cat = isGeoCounty ? getCategoryForKey(l.category) : null;
+    if (cat) {
+      combos.add(`${countySlug(l.county)}/${cat.id}`);
     }
   }
 
   for (const county of counties) add(`/county/${countySlug(county)}`, today);
   for (const c of categories) {
-    if (presentCategoryIds.has(c.id)) add(`/category/${c.id}`, today);
+    if (categoryKeys(c).some((k) => presentCategoryIds.has(k))) add(`/category/${c.id}`, today);
   }
   for (const combo of combos) add(`/county/${combo}`, today);
 
@@ -103,7 +107,7 @@ async function main() {
   await writeFile(OUT_PATH, xml, "utf8");
   console.log(
     `[sitemap] Wrote ${OUT_PATH} (${entries.length} urls: ${listings.length} listings, ` +
-    `${counties.size} counties, ${[...presentCategoryIds].filter((id) => getCategory(id)).length} categories, ${combos.size} combos).`
+    `${counties.size} counties, ${categories.filter((c) => categoryKeys(c).some((k) => presentCategoryIds.has(k))).length} categories, ${combos.size} combos).`
   );
 }
 

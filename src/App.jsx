@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, Component } from "react";
 import { Link, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
-import { categories, getCategory, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
+import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -461,7 +461,9 @@ function PageMeta({ title, description, canonical, ogType = "website" }) {
 // homepage and the county/category/combo landing pages so they render identical
 // markup from the same shape of data.
 function ResultCard({ d }) {
-  const cat = getCategory(d.category);
+  // d.category is a raw DB value; resolve it to its tile (handles multi-key
+  // tiles like agency/professional -> "Agencies & Professional Services").
+  const cat = getCategoryForKey(d.category);
   return (
     <Link to={`/listing/${d.slug}`} className="listing-card">
       <div className="listing-card-top">
@@ -536,8 +538,13 @@ function HomePage() {
 
   const allCounties = [...new Set(listings.map((d) => d.county))].filter(Boolean).sort();
   const allTowns = [...new Set(listings.filter((d) => countyFilter === "All" || d.county === countyFilter).map((d) => d.town))].filter(Boolean).sort();
+  // A tile may surface several real DB category values (e.g. "Agencies &
+  // Professional Services" -> agency + professional), so match on the active
+  // tile's key set rather than assuming the slug equals the DB category value.
+  const activeCat = getCategory(activeCategory);
+  const activeKeys = activeCat ? categoryKeys(activeCat) : null;
   const filtered = listings.filter((d) => {
-    const matchCat = activeCategory === "all" || d.category === activeCategory;
+    const matchCat = activeCategory === "all" || (activeKeys ? activeKeys.includes(d.category) : d.category === activeCategory);
     const q = search.toLowerCase();
     const matchSearch = search === "" || d.name?.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q) || (d.tags || []).some((t) => t.toLowerCase().includes(q)) || d.town?.toLowerCase().includes(q) || d.county?.toLowerCase().includes(q);
     const matchTown = townFilter === "All" || d.town === townFilter;
@@ -636,7 +643,7 @@ function HomePage() {
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
-                const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
+                const count = listings.filter((d) => categoryKeys(c).includes(d.category) && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
                   <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")} onKeyDown={(e) => handleKeyActivate(e, () => setParam("category", c.id, "all"))}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
@@ -702,7 +709,7 @@ function HomePage() {
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
               {categories.map((c) => {
-                const count = listings.filter((d) => d.category === c.id && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
+                const count = listings.filter((d) => categoryKeys(c).includes(d.category) && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
                   <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }} onKeyDown={(e) => handleKeyActivate(e, () => { setParam("category", c.id, "all"); setShowMobileCats(false); })}>
                     <span>{c.icon} {c.label}</span><span className="sidebar-count">{count}</span>
@@ -1259,7 +1266,7 @@ function ListingPage() {
     if (listing) trackListingView(listing);
   }, [listing?.id]);
 
-  const cat = listing ? getCategory(listing.category) : null;
+  const cat = listing ? getCategoryForKey(listing.category) : null;
 
   // SEO meta + LocalBusiness JSON-LD, computed at render time so they land in the
   // static HTML for prerendered pages (via <Head> = react-helmet), and apply on
@@ -1441,7 +1448,10 @@ function SubmitForm({ onClose }) {
               <label>Category</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
                 <option value="">Select a category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                {/* Submit the tile's primary DB category value (== id for normal
+                    tiles; the first real key for a multi-key tile) so a new
+                    pending listing lands on a real, tiled category. */}
+                {categories.map((c) => <option key={c.id} value={categoryKeys(c)[0]}>{c.label}</option>)}
               </select>
               <div className="form-row">
                 <div><label>Town</label><input value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} placeholder="e.g. Cooperstown" /></div>

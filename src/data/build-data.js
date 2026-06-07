@@ -12,6 +12,8 @@ import snapshot from "./listings.json";
 import {
   categories,
   getCategory,
+  categoryKeys,
+  getCategoryForKey,
   countySlug,
   NON_GEOGRAPHIC_COUNTIES,
 } from "../catalog.js";
@@ -52,10 +54,11 @@ export function resolveCounty(slug) {
   return countyNameBySlug.get(String(slug || "").toLowerCase()) || null;
 }
 
-// Mapped category ids that actually have at least one published listing.
+// Real DB category values that actually have at least one published listing.
 const presentCategoryIds = new Set(ALL.map((l) => l.category));
+// A tile is "present" when at least one of the DB values it surfaces exists.
 function mappedPresentCategories() {
-  return categories.filter((c) => presentCategoryIds.has(c.id));
+  return categories.filter((c) => categoryKeys(c).some((k) => presentCategoryIds.has(k)));
 }
 
 // --- Route path enumeration (for getStaticPaths) ----------------------------
@@ -78,8 +81,9 @@ export function comboPaths() {
   const paths = [];
   for (const l of ALL) {
     if (!l.county || NON_GEOGRAPHIC_COUNTIES.has(l.county)) continue;
-    if (!getCategory(l.category)) continue; // unmapped category -> no hub
-    const key = `${countySlug(l.county)}/${l.category}`;
+    const cat = getCategoryForKey(l.category);
+    if (!cat) continue; // untiled DB category -> no hub
+    const key = `${countySlug(l.county)}/${cat.id}`;
     if (seen.has(key)) continue;
     seen.add(key);
     paths.push(`county/${key}`);
@@ -97,9 +101,15 @@ export function countyLoader(slug) {
   const county = resolveCounty(slug);
   if (!county) return null;
   const listings = ALL.filter((l) => l.county === county).sort(byName);
-  // Categories present in this county, for internal cross-links to combos.
+  // Tiles present in this county, for internal cross-links to combos. Bucket each
+  // listing's raw DB category into its tile so multi-key tiles count correctly
+  // and untiled categories (facebook/buysell) are skipped.
   const counts = new Map();
-  for (const l of listings) counts.set(l.category, (counts.get(l.category) || 0) + 1);
+  for (const l of listings) {
+    const cat = getCategoryForKey(l.category);
+    if (!cat) continue;
+    counts.set(cat.id, (counts.get(cat.id) || 0) + 1);
+  }
   const cats = mappedPresentCategories()
     .filter((c) => counts.has(c.id))
     .map((c) => ({ id: c.id, label: c.label, icon: c.icon, count: counts.get(c.id) }));
@@ -115,7 +125,8 @@ export function countyLoader(slug) {
 export function categoryLoader(slug) {
   const cat = getCategory(slug);
   if (!cat) return null;
-  const listings = ALL.filter((l) => l.category === cat.id).sort(byName);
+  const keys = categoryKeys(cat);
+  const listings = ALL.filter((l) => keys.includes(l.category)).sort(byName);
   // Counties present in this category, for internal cross-links to combos.
   const counts = new Map();
   for (const l of listings) {
@@ -140,7 +151,8 @@ export function comboLoader(cSlug, catSlug) {
   const county = resolveCounty(cSlug);
   const cat = getCategory(catSlug);
   if (!county || !cat) return null;
-  const listings = ALL.filter((l) => l.county === county && l.category === cat.id).sort(byName);
+  const keys = categoryKeys(cat);
+  const listings = ALL.filter((l) => l.county === county && keys.includes(l.category)).sort(byName);
   if (listings.length === 0) return null;
   return {
     county,
