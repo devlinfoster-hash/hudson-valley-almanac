@@ -417,6 +417,21 @@ const sharedStyles = `
   .rambles-desc { font-family: 'Lora', serif; font-size: 0.95rem; color: rgba(239,240,232,0.82); line-height: 1.6; }
   .rambles-cta { display: inline-block; background: #C4862D; color: #0F2640; padding: 12px 24px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
   .rambles-cta:hover { background: #B0762A; }
+  /* Restored Antique Maps — reuses the fire-tower section/grid skeleton plus an
+     image band and the gold rambles-cta buy button, so the cards read as part of
+     the same family. */
+  .maps-section { max-width: 1140px; margin: 56px auto 0; padding: 0 24px; }
+  .maps-section-title { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: #1A2B3C; border-bottom: 2px solid #1C3A5E; padding-bottom: 10px; margin-bottom: 12px; }
+  .maps-section-intro { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #5C7A8A; line-height: 1.6; margin-bottom: 26px; max-width: 680px; }
+  .maps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .map-card { background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); display: flex; flex-direction: column; overflow: hidden; }
+  .map-card-image { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #EFF0E8; border-bottom: 1.5px solid rgba(28,58,94,0.2); }
+  .map-card-body { padding: 22px 24px; display: flex; flex-direction: column; flex: 1; }
+  .map-card-title { font-family: 'Libre Baskerville', serif; font-size: 19px; font-weight: 700; color: #1A2B3C; line-height: 1.2; margin-bottom: 8px; }
+  .map-card-blurb { font-family: 'Lora', serif; font-size: 14px; line-height: 1.65; color: #1A2B3C; margin-bottom: 18px; }
+  .map-card-buy { margin-top: auto; display: inline-block; background: #C4862D; color: #0F2640; padding: 12px 24px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; text-align: center; white-space: nowrap; transition: background 0.2s; }
+  .map-card-buy:hover { background: #B0762A; }
+  @media (max-width: 600px) { .maps-grid { grid-template-columns: 1fr; } }
 `;
 
 // Per-page document head (render-time, via vite-react-ssg's <Head> = react-helmet).
@@ -625,6 +640,7 @@ function HomePage() {
       <div className="cat-nav">
         <div className="cat-nav-inner">
           <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
+          <a href="#restored-maps" className="cat-btn">🗺️ Restored Maps</a>
           <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>All Resources</button>
           {categories.map((c) => (
             <button key={c.id} className={"cat-btn " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
@@ -720,6 +736,8 @@ function HomePage() {
           </div>
         </div>
       )}
+
+      <RestoredMapsSection />
 
       <div style={{maxWidth:"760px",margin:"0 auto",padding:"0 24px"}}>
         <NewsletterSignup variant="inline" source="home" />
@@ -841,6 +859,69 @@ function RamblesBookCard() {
   );
 }
 
+// Restored antique Catskill maps, sold on Gumroad. Each entry mirrors the shape
+// of a guide/product (id, title, blurb, price, href, image) and is rendered by
+// <MapCard> below. Images live in /public and are referenced by root path, the
+// same way og-image.png is.
+const RESTORED_MAPS = [
+  {
+    id: "catskill-1879",
+    title: "Catskill Mountain House, 1879",
+    blurb:
+      "Walton Van Loan's earliest survey — North & South Lake, Kaaterskill Falls, and the cliff-edge escarpment ledges. The original Mountain-House-only state, restored in three editions (color, green, black & white).",
+    price: "$8",
+    href: "https://devlinfoster.gumroad.com/l/catskill-1879",
+    image: "/thumb_1879_scene.png",
+  },
+  {
+    id: "catskill-1882",
+    title: "Catskill Mountain Resorts, 1882",
+    blurb:
+      "Van Loan's updated map, adding the new Hotel Kaaterskill and Laurel House. Vivid color, three restored editions, fully sourced from the Library of Congress.",
+    price: "$9",
+    href: "https://devlinfoster.gumroad.com/l/catskill-1882",
+    image: "/thumb_1882_scene.png",
+  },
+];
+
+// One restored-map product card: image band (object-fit: cover) over title,
+// blurb, and a gold "Buy on Gumroad — $X" button that opens the Gumroad listing
+// in a new tab. Mirrors the rambles-cta outbound pattern.
+function MapCard({ map }) {
+  return (
+    <article className="map-card">
+      <img className="map-card-image" src={map.image} alt={map.title} loading="lazy" width="800" height="600" />
+      <div className="map-card-body">
+        <h3 className="map-card-title">{map.title}</h3>
+        <p className="map-card-blurb">{map.blurb}</p>
+        <a
+          className="map-card-buy"
+          href={map.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackMeanderNYClick(`map:${map.id}`)}
+        >
+          Buy on Gumroad — {map.price}
+        </a>
+      </div>
+    </article>
+  );
+}
+
+// "Restored Antique Maps" section — same titled-section + responsive grid
+// skeleton as the fire-tower sections, rendered on the homepage.
+function RestoredMapsSection() {
+  return (
+    <section className="maps-section" id="restored-maps" aria-labelledby="restored-maps-heading">
+      <h2 id="restored-maps-heading" className="maps-section-title">Restored Antique Maps</h2>
+      <p className="maps-section-intro">Hand-restored Catskill maps from public-domain originals — print-ready, in three editions each.</p>
+      <div className="maps-grid">
+        {RESTORED_MAPS.map((m) => <MapCard key={m.id} map={m} />)}
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
@@ -850,6 +931,7 @@ function Footer() {
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
           <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
+          <a href="/#restored-maps" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Restored Maps</a>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
