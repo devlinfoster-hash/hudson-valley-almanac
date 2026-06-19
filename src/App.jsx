@@ -194,6 +194,7 @@ export const routes = [
     children: [
       { index: true, Component: HomePage },
       { path: "fire-towers", Component: FireTowersPage },
+      { path: "about", Component: AboutPage },
       { path: "admin", Component: AdminPage },
       {
         path: "county/:countySlug",
@@ -256,6 +257,16 @@ export const routes = [
 ];
 
 const sharedStyles = `
+  /* Support-button theme tokens, mapped to the site's existing palette so the
+     button matches the rest of the directory (navy fill = .btn-primary, the same
+     hover/tint/text-on-navy used throughout). The botanical-green values in the
+     SupportButton spec are only fallbacks; these are the site's real colors. */
+  :root {
+    --hva-accent: #1C3A5E;        /* deep navy — same as .btn-primary fill */
+    --hva-accent-hover: #14304F;  /* navy hover — same as .btn-primary:hover */
+    --hva-accent-tint: rgba(28,58,94,0.08); /* faint navy wash — same as .filter-pill:hover */
+    --hva-on-accent: #EFF0E8;     /* cream text that sits on the navy fill */
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   .topbar { background: #1C3A5E; color: rgba(239,240,232,0.75); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-align: center; padding: 8px; text-transform: uppercase; }
   .hero { background: #EFF0E8; border-bottom: 3px double #1C3A5E; padding: 48px 24px 40px; text-align: center; }
@@ -417,6 +428,23 @@ const sharedStyles = `
   .rambles-desc { font-family: 'Lora', serif; font-size: 0.95rem; color: rgba(239,240,232,0.82); line-height: 1.6; }
   .rambles-cta { display: inline-block; background: #C4862D; color: #0F2640; padding: 12px 24px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
   .rambles-cta:hover { background: #B0762A; }
+  /* Support the Almanac button (SPA-safe anchor to Buy Me a Coffee). Styled to
+     match the site's button typography (DM Mono, uppercase) and themed via the
+     :root tokens above. Hover is a CSS state, not React — consistent with every
+     other button here; focus-visible gives a keyboard ring; reduced-motion off. */
+  .hva-support { display: inline-flex; align-items: center; gap: 0.55rem; padding: 12px 26px; border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; text-decoration: none; cursor: pointer; border: 1.5px solid var(--hva-accent); transition: background 0.2s, color 0.2s, border-color 0.2s; }
+  .hva-support--solid { background: var(--hva-accent); color: var(--hva-on-accent); }
+  .hva-support--solid:hover { background: var(--hva-accent-hover); border-color: var(--hva-accent-hover); }
+  .hva-support--ghost { background: transparent; color: var(--hva-accent); }
+  .hva-support--ghost:hover { background: var(--hva-accent-tint); }
+  .hva-support:focus-visible { outline: 2px solid var(--hva-accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .hva-support { transition: none; } }
+  /* About page: shares the single-listing page shell; these tune the reading
+     column's type scale/spacing to match the site's serif body copy. */
+  .about-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.6; font-style: italic; color: #5C7A8A; margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .about-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
+  .about-support { margin-top: 8px; }
+  .about-support-lead { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #1A2B3C; margin-bottom: 16px; }
 `;
 
 // Per-page document head (render-time, via vite-react-ssg's <Head> = react-helmet).
@@ -625,6 +653,7 @@ function HomePage() {
       <div className="cat-nav">
         <div className="cat-nav-inner">
           <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
+          <Link to="/about" className="cat-btn">About</Link>
           <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>All Resources</button>
           {categories.map((c) => (
             <button key={c.id} className={"cat-btn " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
@@ -841,6 +870,45 @@ function RamblesBookCard() {
   );
 }
 
+// Reusable "Support the Almanac" button. SPA-safe by design: a plain anchor to
+// the Buy Me a Coffee hosted page — NOT the BMC floating-widget script, which
+// injects its own DOM and misbehaves on route changes in this SPA. Styling lives
+// in sharedStyles (.hva-support*) and inherits the site accent via the :root
+// tokens, so hover/focus/reduced-motion are pure CSS like every other button.
+function SupportButton({
+  href = "https://buymeacoffee.com/hudsonvalleyalmanac",
+  label = "Support the Almanac",
+  variant = "solid", // "solid" | "ghost"
+}) {
+  return (
+    <a
+      className={"hva-support hva-support--" + (variant === "ghost" ? "ghost" : "solid")}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+    >
+      {/* a sprig, not a coffee cup — keeps it in the Valley's world */}
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 21v-8" />
+        <path d="M12 13c0-6 4-10 9-11-1 6-4 11-9 11Z" />
+        <path d="M12 13C12 8 8 5 3 4c1 6 4 9 9 9Z" />
+      </svg>
+      <span>{label}</span>
+    </a>
+  );
+}
+
 function Footer() {
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
@@ -850,6 +918,7 @@ function Footer() {
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
           <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
+          <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
@@ -1075,6 +1144,52 @@ function NotFoundPage() {
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Page not found</div>
           <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We couldn't find the page you were looking for. It may have moved or never existed.</p>
           <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Browse all resources</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// Static About page. Built on the same single-page shell as the fire-towers /
+// listing pages (topbar, back-link, masthead, cream body panel, Footer) so it
+// sits inside the normal layout. Copy is intentionally verbatim from the spec.
+function AboutPage() {
+  return (
+    <div className="listing-page-wrap">
+      <PageMeta
+        title="About the Almanac — Hudson Valley Almanac"
+        description="Your nosy, enthusiastic friend who knows every farm stand, fire tower, and good cider in the Hudson Valley. About the Hudson Valley Almanac — a free, hand-researched directory with zero ads."
+        canonical={`${SITE_ORIGIN}/about`}
+      />
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="listing-page-article">
+        <header className="listing-page-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac · About</div>
+          <h1 className="listing-page-title">About the Almanac</h1>
+        </header>
+        <div className="listing-page-body">
+          <p className="about-lede">
+            Your nosy, enthusiastic friend who knows every farm stand, fire tower, and good cider in the Hudson Valley.
+          </p>
+          <div className="about-body">
+            <p>
+              Hudson Valley Almanac started as a simple problem: I kept wanting to know where the good stuff was — the farm with the honor-system egg fridge, the brewery down the dirt road, the fire tower worth the climb — and no single place had it all. So I started writing it down. Then I didn't stop. Now it's 1,400-and-counting listings across the Valley, each one researched and written by hand with zero ads.
+            </p>
+            <p>
+              It's free, and it'll stay free. But servers don't run on enthusiasm, and neither do I (well — mostly enthusiasm, plus coffee). If the Almanac has saved you from a bad afternoon or sent you somewhere great, you can buy me one. It keeps the lights on, keeps me independent, and funds the next dirt-road detour.
+            </p>
+            <p>
+              No pressure. But if you do — thanks. You're keeping a very specific obsession alive.
+            </p>
+          </div>
+          <div className="about-support">
+            <p className="about-support-lead">Like what you've found here?</p>
+            <SupportButton href="https://buymeacoffee.com/hudsonvalleyalmanac" />
+          </div>
         </div>
       </div>
       <Footer />
