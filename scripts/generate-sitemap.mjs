@@ -65,6 +65,7 @@ async function main() {
   // Static routes (excluding /admin).
   add("/", today);
   add("/fire-towers", today);
+  add("/about", today);
 
   const counties = new Set();
   const presentCategoryIds = new Set();
