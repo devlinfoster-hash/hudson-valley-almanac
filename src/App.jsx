@@ -3,6 +3,8 @@ import { Link, Outlet, useParams, useSearchParams, useLocation, useLoaderData } 
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
 import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
+import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
+import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -195,6 +197,16 @@ export const routes = [
       { index: true, Component: HomePage },
       { path: "fire-towers", Component: FireTowersPage },
       { path: "about", Component: AboutPage },
+      { path: "farm-trails", Component: FarmTrailsIndexPage },
+      {
+        path: "farm-trails/:slug",
+        Component: FarmTrailGuidePage,
+        // Local guide data (not the Supabase snapshot), so this can resolve the
+        // published slugs synchronously — vite-react-ssg prerenders each one.
+        getStaticPaths() {
+          return farmTrailSlugs().map((s) => `farm-trails/${s}`);
+        },
+      },
       { path: "admin", Component: AdminPage },
       {
         path: "county/:countySlug",
@@ -445,6 +457,34 @@ const sharedStyles = `
   .about-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
   .about-support { margin-top: 8px; }
   .about-support-lead { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #1A2B3C; margin-bottom: 16px; }
+  /* Farm Trails — guide reading column (reuses the single-listing page shell,
+     same as About) and the /farm-trails index cards. */
+  .trail-body .trail-lede, .landing-article > .trail-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.65; font-style: italic; color: #5C7A8A; margin-bottom: 26px; padding-bottom: 22px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .trail-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
+  .trail-body a { color: #C4862D; text-decoration: underline; }
+  .trail-body a:hover { color: #14304F; }
+  .trail-h2 { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1A2B3C; margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #1C3A5E; }
+  .trail-list { list-style: none; margin: 0 0 20px; padding: 0; }
+  .trail-list li { font-family: 'Lora', serif; font-size: 17px; line-height: 1.7; color: #1A2B3C; margin-bottom: 16px; padding-left: 16px; border-left: 3px solid rgba(196,134,45,0.5); }
+  .trail-list strong { color: #1C3A5E; }
+  .trail-crosslinks { font-family: 'Lora', serif; font-size: 16px; color: #1A2B3C; margin: 26px 0 8px; padding-top: 22px; border-top: 1px solid rgba(28,58,94,0.2); }
+  .trail-crosslinks a { color: #C4862D; text-decoration: underline; }
+  .trail-close { font-family: 'Lora', serif; font-size: 18px; font-style: italic; color: #1C3A5E; line-height: 1.6; margin-top: 22px; padding-top: 22px; border-top: 3px double #1C3A5E; }
+  .trail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; margin-bottom: 40px; }
+  .trail-card { display: flex; flex-direction: column; background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 24px; text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; }
+  .trail-card:hover { border-color: #1C3A5E; box-shadow: 3px 3px 0 #1C3A5E; transform: translate(-1px,-1px); }
+  .trail-card-area { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C4862D; margin-bottom: 8px; }
+  .trail-card-name { font-family: 'Libre Baskerville', serif; font-size: 21px; font-weight: 700; color: #1A2B3C; line-height: 1.2; margin-bottom: 10px; }
+  .trail-card-blurb { font-family: 'Lora', serif; font-size: 15px; line-height: 1.6; color: #1A2B3C; margin-bottom: 18px; }
+  .trail-card-cta { margin-top: auto; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #1C3A5E; }
+  .trail-card:hover .trail-card-cta { color: #C4862D; }
+  .trail-soon { border-top: 1px solid rgba(28,58,94,0.2); padding-top: 24px; }
+  .trail-soon-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 14px; }
+  .trail-soon-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 6px 24px; }
+  .trail-soon-list li { font-family: 'Lora', serif; font-size: 15px; line-height: 1.5; padding: 4px 0; }
+  .trail-soon-name { color: #1A2B3C; }
+  .trail-soon-area { color: #8AA0AE; font-size: 13px; }
+  @media (max-width: 600px) { .trail-grid { grid-template-columns: 1fr; } }
 `;
 
 // Per-page document head (render-time, via vite-react-ssg's <Head> = react-helmet).
@@ -652,6 +692,7 @@ function HomePage() {
 
       <div className="cat-nav">
         <div className="cat-nav-inner">
+          <Link to="/farm-trails" className="cat-btn">🌾 Farm Trails</Link>
           <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
           <Link to="/about" className="cat-btn">About</Link>
           <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>All Resources</button>
@@ -917,6 +958,7 @@ function Footer() {
         <h3 style={{color:"#EFF0E8",fontSize:"1.4rem",marginBottom:"6px",fontFamily:"'Libre Baskerville',serif"}}>Hudson Valley Almanac</h3>
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
+          <Link to="/farm-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Farm Trails</Link>
           <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
           <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
@@ -1190,6 +1232,121 @@ function AboutPage() {
             <p className="about-support-lead">Like what you've found here?</p>
             <SupportButton href="https://buymeacoffee.com/hudsonvalleyalmanac" />
           </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// Farm Trails index — the day-trip guide series landing. Published guides render
+// as cards; the rest appear as a "coming soon" list so the series scope is
+// visible. Built on the county/category landing shell (navy masthead + cream
+// article + Footer).
+function FarmTrailsIndexPage() {
+  const canonical = `${SITE_ORIGIN}/farm-trails`;
+  const upcoming = FARM_TRAILS.filter((g) => !g.published);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Farm Trails — Hudson Valley Almanac",
+    url: canonical,
+  };
+  return (
+    <div className="landing-wrap">
+      <PageMeta
+        title="Farm Trails — Day-Trip Guides — Hudson Valley Almanac"
+        description="Self-guided day trips through the Hudson Valley's best farm country — one good Saturday at a time. Farm stands, sugarhouses, makers, and the back roads that connect them."
+        canonical={canonical}
+      />
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="landing-article">
+        <header className="landing-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac</div>
+          <h1 className="landing-title">Farm Trails</h1>
+          <p className="landing-sub">Self-guided day trips through the Valley's best farm country — one good Saturday at a time.</p>
+        </header>
+        <p className="trail-lede">
+          Every Farm Trail is a real, drivable loop: a morning farm stand, a sugarhouse or a cidery, a maker or two, somewhere good for lunch, and the back roads that string them together. No ads, nothing to sign up for — just a day worth taking.
+        </p>
+
+        <div className="trail-grid">
+          {PUBLISHED_FARM_TRAILS.map((g) => (
+            <Link key={g.slug} to={`/farm-trails/${g.slug}`} className="trail-card">
+              <div className="trail-card-area">{g.area}</div>
+              <div className="trail-card-name">{g.title}</div>
+              <p className="trail-card-blurb">{g.blurb}</p>
+              <span className="trail-card-cta">Read the guide →</span>
+            </Link>
+          ))}
+        </div>
+
+        {upcoming.length > 0 && (
+          <div className="trail-soon">
+            <div className="trail-soon-label">More trails on the way</div>
+            <ul className="trail-soon-list">
+              {upcoming.map((g) => (
+                <li key={g.slug}>
+                  <span className="trail-soon-name">{g.title}</span>{" "}
+                  <span className="trail-soon-area">— {g.area}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// A single Farm Trails guide. Metadata comes from farm-trails-index.js; the prose
+// body (with inline listing links) from farm-trails-bodies.jsx. Reuses the
+// single-listing reading shell, same as the About page.
+function FarmTrailGuidePage() {
+  const { slug } = useParams();
+  const guide = farmTrailBySlug(slug);
+  const Body = FARM_TRAIL_BODIES[slug];
+  if (!guide || !guide.published || !Body) return <NotFoundPage />;
+  const canonical = `${SITE_ORIGIN}/farm-trails/${guide.slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.metaDescription,
+    url: canonical,
+    isPartOf: { "@type": "CreativeWorkSeries", name: "Farm Trails", url: `${SITE_ORIGIN}/farm-trails` },
+    publisher: { "@type": "Organization", name: "Hudson Valley Almanac", url: SITE_ORIGIN },
+  };
+  return (
+    <div className="listing-page-wrap">
+      <PageMeta
+        title={`${guide.title} — Farm Trails — Hudson Valley Almanac`}
+        description={guide.metaDescription}
+        canonical={canonical}
+        ogType="article"
+      />
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/farm-trails" className="back-link">← All Farm Trails</Link>
+      </div>
+      <div className="listing-page-article">
+        <header className="listing-page-masthead">
+          <div className="listing-page-eyebrow">Farm Trails · {guide.area}</div>
+          <h1 className="listing-page-title">{guide.title}</h1>
+          <p className="listing-page-sub">A Hudson Valley Almanac day-trip guide</p>
+        </header>
+        <div className="listing-page-body trail-body">
+          <Body />
         </div>
       </div>
       <Footer />

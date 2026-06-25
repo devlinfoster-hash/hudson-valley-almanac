@@ -20,6 +20,7 @@ import {
   NON_GEOGRAPHIC_COUNTIES,
   SITE_ORIGIN,
 } from "../src/catalog.js";
+import { PUBLISHED_FARM_TRAILS } from "../src/data/farm-trails-index.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SNAPSHOT_PATH = resolve(HERE, "..", "src", "data", "listings.json");
@@ -66,6 +67,8 @@ async function main() {
   add("/", today);
   add("/fire-towers", today);
   add("/about", today);
+  add("/farm-trails", today);
+  for (const g of PUBLISHED_FARM_TRAILS) add(`/farm-trails/${g.slug}`, today);
 
   const counties = new Set();
   const presentCategoryIds = new Set();
