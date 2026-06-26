@@ -178,6 +178,7 @@ function Layout() {
       {/* Injected once here so every page shares a single stylesheet instead of
           each component re-injecting the same <style>. */}
       <style>{sharedStyles}</style>
+      <TopNav />
       <Outlet />
     </ErrorBoundary>
   );
@@ -971,6 +972,25 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+// Top navigation bar mirroring the footer's link set (same routes, same mailto
+// targets) so the primary pages are reachable from the top of every page too.
+// Reuses the footer's navy background (#0F2640) and link styling (#A8B8C4, no
+// underline, 0.9rem) — the footer itself is unchanged.
+function TopNav() {
+  return (
+    <nav style={{backgroundColor:"#0F2640",padding:"14px 24px"}} aria-label="Primary">
+      <div style={{maxWidth:"800px",margin:"0 auto",display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap"}}>
+        <Link to="/farm-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Farm Trails</Link>
+        <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
+        <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
+        <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
+        <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
+        <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
+      </div>
+    </nav>
   );
 }
 
