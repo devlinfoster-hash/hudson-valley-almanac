@@ -304,6 +304,10 @@ const sharedStyles = `
   .topnav-link:hover { color: #EFF0E8; }
   .topnav-link.active { color: #EFF0E8; border-bottom-color: #C4862D; }
   .topnav-link:focus-visible { outline: 2px solid #C4862D; outline-offset: 3px; }
+  /* The one action among the links: gold ghost CTA, DM Mono like .topnav-link
+     (composed alongside it) but boxed in the site accent so it reads as a CTA. */
+  .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
+  .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
   .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
   @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
   .sidebar-box { border: 1.5px solid #1C3A5E; background: #F5F6F0; margin-bottom: 20px; overflow: hidden; }
@@ -918,13 +922,18 @@ function RamblesBookCard() {
   );
 }
 
+// Single source of truth for the Buy Me a Coffee hosted page. Used as the
+// SupportButton default href (About page) and the TopNav support CTA, so the
+// URL lives in exactly one place.
+const BMC_SUPPORT_URL = "https://buymeacoffee.com/hudsonvalleyalmanac";
+
 // Reusable "Support the Almanac" button. SPA-safe by design: a plain anchor to
 // the Buy Me a Coffee hosted page — NOT the BMC floating-widget script, which
 // injects its own DOM and misbehaves on route changes in this SPA. Styling lives
 // in sharedStyles (.hva-support*) and inherits the site accent via the :root
 // tokens, so hover/focus/reduced-motion are pure CSS like every other button.
 function SupportButton({
-  href = "https://buymeacoffee.com/hudsonvalleyalmanac",
+  href = BMC_SUPPORT_URL,
   label = "Support the Almanac",
   variant = "solid", // "solid" | "ghost"
 }) {
@@ -981,23 +990,30 @@ function Footer() {
   );
 }
 
-// Primary navigation bar mirroring the footer's link set (same routes, same
-// mailto targets) so the primary pages are reachable from the top of every
-// page too. Styled in the site's nav language (.topnav — navy bar + gold rule,
-// DM Mono uppercase links) to match .cat-nav/.topbar rather than the footer, so
-// it reads as distinct chrome. Styling lives in sharedStyles so hover/active/
-// focus states work; the three internal routes use NavLink for the active state.
-// The footer itself is unchanged.
+// Primary navigation bar. Styled in the site's nav language (.topnav — navy bar
+// + gold rule, DM Mono uppercase links) to match .cat-nav/.topbar rather than
+// the footer, so it reads as distinct chrome. Styling lives in sharedStyles so
+// hover/active/focus states work. Farm Trails and Fire Towers are intentionally
+// omitted — the .cat-nav directly below already carries them; About uses NavLink
+// for the active state. The support CTA reuses BMC_SUPPORT_URL (the same Buy Me
+// a Coffee page the About SupportButton points at). The footer is unchanged.
 function TopNav() {
   return (
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
-        <NavLink to="/farm-trails" className="topnav-link">Farm Trails</NavLink>
-        <NavLink to="/fire-towers" className="topnav-link">Fire Towers</NavLink>
         <NavLink to="/about" className="topnav-link">About</NavLink>
         <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link">Contact Us</a>
         <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="topnav-link">Submit a Listing</a>
         <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link">Report an Error</a>
+        <a
+          href={BMC_SUPPORT_URL}
+          className="topnav-link topnav-support"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Support the Almanac on Buy Me a Coffee"
+        >
+          Buy Me a Coffee
+        </a>
       </div>
     </nav>
   );
@@ -1259,7 +1275,7 @@ function AboutPage() {
           </div>
           <div className="about-support">
             <p className="about-support-lead">Like what you've found here?</p>
-            <SupportButton href="https://buymeacoffee.com/hudsonvalleyalmanac" />
+            <SupportButton href={BMC_SUPPORT_URL} />
           </div>
         </div>
       </div>
