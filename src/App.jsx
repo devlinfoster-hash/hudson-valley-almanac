@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, Component } from "react";
-import { Link, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
+import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
 import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
@@ -298,6 +298,12 @@ const sharedStyles = `
   .cat-btn { background: none; border: none; color: rgba(239,240,232,0.65); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; transition: color 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; text-decoration: none; }
   .cat-btn:hover { color: #EFF0E8; }
   .cat-btn.active { color: #EFF0E8; border-bottom-color: #C4862D; }
+  .topnav { background: #1C3A5E; border-bottom: 3px solid #C4862D; padding: 12px 24px; }
+  .topnav-inner { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 24px; max-width: 1140px; margin: 0 auto; }
+  .topnav-link { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(239,240,232,0.75); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.2s; }
+  .topnav-link:hover { color: #EFF0E8; }
+  .topnav-link.active { color: #EFF0E8; border-bottom-color: #C4862D; }
+  .topnav-link:focus-visible { outline: 2px solid #C4862D; outline-offset: 3px; }
   .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
   @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
   .sidebar-box { border: 1.5px solid #1C3A5E; background: #F5F6F0; margin-bottom: 20px; overflow: hidden; }
@@ -975,20 +981,23 @@ function Footer() {
   );
 }
 
-// Top navigation bar mirroring the footer's link set (same routes, same mailto
-// targets) so the primary pages are reachable from the top of every page too.
-// Reuses the footer's navy background (#0F2640) and link styling (#A8B8C4, no
-// underline, 0.9rem) — the footer itself is unchanged.
+// Primary navigation bar mirroring the footer's link set (same routes, same
+// mailto targets) so the primary pages are reachable from the top of every
+// page too. Styled in the site's nav language (.topnav — navy bar + gold rule,
+// DM Mono uppercase links) to match .cat-nav/.topbar rather than the footer, so
+// it reads as distinct chrome. Styling lives in sharedStyles so hover/active/
+// focus states work; the three internal routes use NavLink for the active state.
+// The footer itself is unchanged.
 function TopNav() {
   return (
-    <nav style={{backgroundColor:"#0F2640",padding:"14px 24px"}} aria-label="Primary">
-      <div style={{maxWidth:"800px",margin:"0 auto",display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap"}}>
-        <Link to="/farm-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Farm Trails</Link>
-        <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
-        <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
-        <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
-        <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
-        <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
+    <nav className="topnav" aria-label="Primary">
+      <div className="topnav-inner">
+        <NavLink to="/farm-trails" className="topnav-link">Farm Trails</NavLink>
+        <NavLink to="/fire-towers" className="topnav-link">Fire Towers</NavLink>
+        <NavLink to="/about" className="topnav-link">About</NavLink>
+        <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link">Contact Us</a>
+        <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="topnav-link">Submit a Listing</a>
+        <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link">Report an Error</a>
       </div>
     </nav>
   );
