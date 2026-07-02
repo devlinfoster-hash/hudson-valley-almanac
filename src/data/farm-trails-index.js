@@ -264,6 +264,83 @@ export const FARM_TRAILS = [
       "The Hudson Valley Almanac's guide to the region's craft-beverage scene — the history behind roughly 180 cideries, breweries, distilleries, and wineries, where they cluster by county, and the best beverage-trail day trips.",
     published: true,
   },
+  {
+    slug: "ulster-county-craft-beverage-trail",
+    title: "The Ulster County Craft-Beverage Trail",
+    area: "Ulster County · The Birthplace",
+    county: "Ulster",
+    blurb:
+      "The county where it all started — Tuthilltown, Whitecliff, and 23 more, from the Shawangunk Wine Trail to the Rondout Valley to the mountaintop.",
+    metaDescription:
+      "A guide to Ulster County's craft-beverage scene — 25 cideries, breweries, distilleries, wineries, and meaderies from Gardiner and New Paltz to Kingston, the Rondout Valley, and Woodstock.",
+    published: true,
+  },
+  {
+    slug: "orange-county-craft-beverage-trail",
+    title: "The Orange County Craft-Beverage Trail",
+    area: "Orange County · The Black Dirt Bench",
+    county: "Orange",
+    blurb:
+      "24 cideries, breweries, distilleries, and wineries — Brotherhood's cellars, the Warwick orchard cluster, and the black-dirt grain belt.",
+    metaDescription:
+      "A guide to Orange County's craft-beverage scene — 24 cideries, breweries, distilleries, and wineries from Warwick's orchards to Newburgh's waterfront and the black-dirt grain belt.",
+    published: true,
+  },
+  {
+    slug: "dutchess-county-craft-beverage-trail",
+    title: "The Dutchess County Craft-Beverage Trail",
+    area: "Dutchess County · The Beacon-Poughkeepsie Corridor",
+    county: "Dutchess",
+    blurb:
+      "19 cideries, breweries, distilleries, wineries, and even a sake brewery — Beacon's dense strip, Poughkeepsie's mills, and Millbrook's flagship vineyards.",
+    metaDescription:
+      "A guide to Dutchess County's craft-beverage scene — 19 cideries, breweries, distilleries, and wineries from Beacon's brewery row to Millbrook's vineyards and Hyde Park's new sake brewery.",
+    published: true,
+  },
+  {
+    slug: "catskills-field-to-glass-belt",
+    title: "The Catskills Field-to-Glass Belt",
+    area: "Greene · Delaware · Sullivan · Schoharie Counties",
+    county: null,
+    blurb:
+      "38 cideries, breweries, and distilleries across four mountain counties — firehouse distilleries, foraged wild-apple cider, and farms that grow what they pour.",
+    metaDescription:
+      "A guide to the Catskills' craft-beverage scene across Greene, Delaware, Sullivan, and Schoharie counties — firehouse distilleries, wild-apple cideries, and true farm-to-glass producers.",
+    published: true,
+  },
+  {
+    slug: "capital-saratoga-beverage-corridor",
+    title: "The Capital-Saratoga Beverage Corridor",
+    area: "Saratoga · Albany · Rensselaer · Schenectady · Columbia Counties",
+    county: null,
+    blurb:
+      "34 cideries, breweries, distilleries, and wineries — spa-town brewpubs, Troy's riverfront, and the field-to-glass estates of Columbia County.",
+    metaDescription:
+      "A guide to the Capital Region's craft-beverage scene across Saratoga, Albany, Rensselaer, Schenectady, and Columbia counties — spa-town brewpubs, Troy's riverfront, and field-to-glass estates.",
+    published: true,
+  },
+  {
+    slug: "lake-george-beverage-gateway",
+    title: "The Lake George Beverage Gateway",
+    area: "Warren · Washington Counties",
+    county: null,
+    blurb:
+      "16 cideries, breweries, distilleries, and wineries ringing the Queen of American Lakes — a lakeside crawl into the southern Adirondacks.",
+    metaDescription:
+      "A guide to the craft-beverage scene around Lake George in Warren and Washington counties — lakeside breweries, distilleries, and Slyboro Ciderhouse at New York's oldest U-pick orchard.",
+    published: true,
+  },
+  {
+    slug: "lower-hudson-beverage-trail",
+    title: "The Lower Hudson Beverage Trail",
+    area: "Westchester · Rockland Counties",
+    county: null,
+    blurb:
+      "19 cideries, breweries, distilleries, and wineries closest to the city — Captain Lawrence's pioneering brewery and the county's only cidery and winery.",
+    metaDescription:
+      "A guide to the craft-beverage scene in Westchester and Rockland counties — Captain Lawrence Brewing, Hardscrabble Cider, Torne Valley Vineyards, and the region's closest-to-NYC tasting rooms.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
