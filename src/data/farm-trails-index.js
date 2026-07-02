@@ -255,6 +255,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "hudson-valley-craft-beverage-trail",
+    series: "beverage",
     title: "The Hudson Valley Craft-Beverage Trail",
     area: "Region-Wide · All 19 Counties",
     county: null,
@@ -266,6 +267,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "ulster-county-craft-beverage-trail",
+    series: "beverage",
     title: "The Ulster County Craft-Beverage Trail",
     area: "Ulster County · The Birthplace",
     county: "Ulster",
@@ -277,6 +279,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "orange-county-craft-beverage-trail",
+    series: "beverage",
     title: "The Orange County Craft-Beverage Trail",
     area: "Orange County · The Black Dirt Bench",
     county: "Orange",
@@ -288,6 +291,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "dutchess-county-craft-beverage-trail",
+    series: "beverage",
     title: "The Dutchess County Craft-Beverage Trail",
     area: "Dutchess County · The Beacon-Poughkeepsie Corridor",
     county: "Dutchess",
@@ -299,6 +303,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "catskills-field-to-glass-belt",
+    series: "beverage",
     title: "The Catskills Field-to-Glass Belt",
     area: "Greene · Delaware · Sullivan · Schoharie Counties",
     county: null,
@@ -310,6 +315,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "capital-saratoga-beverage-corridor",
+    series: "beverage",
     title: "The Capital-Saratoga Beverage Corridor",
     area: "Saratoga · Albany · Rensselaer · Schenectady · Columbia Counties",
     county: null,
@@ -321,6 +327,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "lake-george-beverage-gateway",
+    series: "beverage",
     title: "The Lake George Beverage Gateway",
     area: "Warren · Washington Counties",
     county: null,
@@ -332,6 +339,7 @@ export const FARM_TRAILS = [
   },
   {
     slug: "lower-hudson-beverage-trail",
+    series: "beverage",
     title: "The Lower Hudson Beverage Trail",
     area: "Westchester · Rockland Counties",
     county: null,
@@ -344,6 +352,15 @@ export const FARM_TRAILS = [
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
+
+// The day-trip guides (Farm Trails proper) and the craft-beverage guides
+// share the same underlying schema, prose-body renderer, and /farm-trails/:slug
+// URL space (so none of the beverage guides' already-shared/indexed links
+// break), but they're two different guide series with two different index
+// pages: /farm-trails and /beverage-trails. Split here so each index shows
+// only its own set instead of both showing everything.
+export const PUBLISHED_DAY_TRIP_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series !== "beverage");
+export const PUBLISHED_BEVERAGE_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series === "beverage");
 
 export function farmTrailBySlug(slug) {
   return FARM_TRAILS.find((g) => g.slug === slug) || null;

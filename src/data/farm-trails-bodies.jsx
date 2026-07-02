@@ -615,7 +615,7 @@ export const FARM_TRAIL_BODIES = {
       </ul>
 
       <h2 className="trail-h2">Go deeper</h2>
-      <p>Each of the clusters above has enough behind it for its own guide. The Almanac has broken the region down into seven:</p>
+      <p>Each of the clusters above has enough behind it for its own guide. The Almanac has broken the region down into seven, all gathered on the <strong><Link to="/beverage-trails">Beverage Trails</Link></strong> page:</p>
       <ul className="trail-list">
         <li><strong><Link to="/farm-trails/ulster-county-craft-beverage-trail">The Ulster County Craft-Beverage Trail</Link></strong> — the birthplace, 25 producers deep.</li>
         <li><strong><Link to="/farm-trails/orange-county-craft-beverage-trail">The Orange County Craft-Beverage Trail</Link></strong> — Brotherhood's cellars and the Warwick orchard cluster.</li>

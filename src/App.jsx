@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoad
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
 import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
-import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
+import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 
 // ---------------------------------------------------------------------------
@@ -199,6 +199,7 @@ export const routes = [
       { path: "fire-towers", Component: FireTowersPage },
       { path: "about", Component: AboutPage },
       { path: "farm-trails", Component: FarmTrailsIndexPage },
+      { path: "beverage-trails", Component: BeverageTrailsIndexPage },
       {
         path: "farm-trails/:slug",
         Component: FarmTrailGuidePage,
@@ -764,6 +765,7 @@ function HomePage() {
       <div className="cat-nav">
         <div className="cat-nav-inner">
           <Link to="/farm-trails" className="cat-btn">🌾 Farm Trails</Link>
+          <Link to="/beverage-trails" className="cat-btn">🍻 Beverage Trails</Link>
           <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
           <Link to="/about" className="cat-btn">About</Link>
         </div>
@@ -1029,6 +1031,7 @@ function Footer() {
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
           <Link to="/farm-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Farm Trails</Link>
+          <Link to="/beverage-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Beverage Trails</Link>
           <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
           <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
@@ -1344,7 +1347,7 @@ function AboutPage() {
 // article + Footer).
 function FarmTrailsIndexPage() {
   const canonical = `${SITE_ORIGIN}/farm-trails`;
-  const upcoming = FARM_TRAILS.filter((g) => !g.published);
+  const upcoming = FARM_TRAILS.filter((g) => !g.published && g.series !== "beverage");
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -1376,7 +1379,7 @@ function FarmTrailsIndexPage() {
         </p>
 
         <div className="trail-grid">
-          {PUBLISHED_FARM_TRAILS.map((g) => (
+          {PUBLISHED_DAY_TRIP_TRAILS.map((g) => (
             <Link key={g.slug} to={`/farm-trails/${g.slug}`} className="trail-card">
               <div className="trail-card-area">{g.area}</div>
               <div className="trail-card-name">{g.title}</div>
@@ -1399,6 +1402,66 @@ function FarmTrailsIndexPage() {
             </ul>
           </div>
         )}
+
+        <p className="trail-crosslinks">
+          Looking for cideries, breweries, distilleries, and wineries instead? See <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>.
+        </p>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// Beverage Trails index — the craft-beverage guide series landing, sibling to
+// Farm Trails. Same shell and card grid; the guides themselves still live at
+// /farm-trails/:slug (unchanged URLs — several are already shared/linked), so
+// this page is purely a second front door into the same guide content.
+function BeverageTrailsIndexPage() {
+  const canonical = `${SITE_ORIGIN}/beverage-trails`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Beverage Trails — Hudson Valley Almanac",
+    url: canonical,
+  };
+  return (
+    <div className="landing-wrap">
+      <PageMeta
+        title="Beverage Trails — Cideries, Breweries, Distilleries & Wineries — Hudson Valley Almanac"
+        description="Guides to the Hudson Valley's craft-beverage scene — roughly 180 cideries, breweries, distilleries, and wineries, region-wide and county by county."
+        canonical={canonical}
+      />
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="landing-article">
+        <header className="landing-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac</div>
+          <h1 className="landing-title">Beverage Trails</h1>
+          <p className="landing-sub">Cideries, breweries, distilleries, and wineries across the Valley — one region-wide guide, and one for every corner of it.</p>
+        </header>
+        <p className="trail-lede">
+          Roughly 180 craft-beverage producers are in the directory — more than any other single thing the Almanac tracks besides the farms themselves. Start with the region-wide guide for the history and the big picture, or jump straight to your corner of the Valley.
+        </p>
+
+        <div className="trail-grid">
+          {PUBLISHED_BEVERAGE_TRAILS.map((g) => (
+            <Link key={g.slug} to={`/farm-trails/${g.slug}`} className="trail-card">
+              <div className="trail-card-area">{g.area}</div>
+              <div className="trail-card-name">{g.title}</div>
+              <p className="trail-card-blurb">{g.blurb}</p>
+              <span className="trail-card-cta">Read the guide →</span>
+            </Link>
+          ))}
+        </div>
+
+        <p className="trail-crosslinks">
+          Looking for farm stands, sugarhouses, and day-trip loops instead? See <strong><Link to="/farm-trails">Farm Trails</Link></strong>.
+        </p>
       </div>
       <Footer />
     </div>

@@ -68,6 +68,7 @@ async function main() {
   add("/fire-towers", today);
   add("/about", today);
   add("/farm-trails", today);
+  add("/beverage-trails", today);
   for (const g of PUBLISHED_FARM_TRAILS) add(`/farm-trails/${g.slug}`, today);
 
   const counties = new Set();
