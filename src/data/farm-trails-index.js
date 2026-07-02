@@ -253,6 +253,17 @@ export const FARM_TRAILS = [
       "A day-trip guide to Cooperstown and Otsego County — Fly Creek, Ommegang, and the Amish dairy country near Richfield Springs.",
     published: true,
   },
+  {
+    slug: "hudson-valley-craft-beverage-trail",
+    title: "The Hudson Valley Craft-Beverage Trail",
+    area: "Region-Wide · All 19 Counties",
+    county: null,
+    blurb:
+      "How the Valley became one of the great craft-beverage landscapes in America — roughly 180 cideries, breweries, distilleries, and wineries, where they cluster, and how to build a day around a glass.",
+    metaDescription:
+      "The Hudson Valley Almanac's guide to the region's craft-beverage scene — the history behind roughly 180 cideries, breweries, distilleries, and wineries, where they cluster by county, and the best beverage-trail day trips.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);

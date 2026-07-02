@@ -588,4 +588,47 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">One ridge, two roads, one very good Saturday.</p>
     </>
   ),
+  "hudson-valley-craft-beverage-trail": () => (
+    <>
+      <p className="trail-lede">Somewhere along the way, the Hudson Valley and the Catskills became one of the great craft-beverage landscapes in America — and it wasn't an accident. It grew out of orchards and grain fields and one quietly important law. Today the Almanac lists roughly 180 cideries, breweries, distilleries, and wineries across the region, more than any other single thing we track besides the farms themselves. This is the guide to the whole landscape: how it happened, what you'll find, where it clusters, and how to build a day around a glass.</p>
+
+      <h2 className="trail-h2">How a region became a craft-beverage capital</h2>
+      <p>The deep root goes back to 1839, when <strong><L to="brotherhood-winery">Brotherhood</L></strong> opened in Washingtonville — America's oldest continuously operating winery, with stone-walled underground cellars you can still tour. For a century and a half it was an outlier.</p>
+      <p>The thing that turned a handful of wineries into a whole movement happened in Gardiner in 2003, when <strong><L to="tuthilltown-spirits-distillery">Tuthilltown Spirits</L></strong> became the first legal whiskey distillery to open in New York since Prohibition. Its founder's advocacy is the reason New York's Farm Distillery Act exists — the law that let small producers distill, ferment, and pour on their own farms using their own crops. Almost every farm cidery and distillery in this guide owes its existence to that fight. The boom that followed is what you're driving through now.</p>
+
+      <h2 className="trail-h2">The four pours</h2>
+      <p>Roughly, here's what's out there (some places make more than one, so the lines blur):</p>
+      <p><strong>Breweries — about 88, the deepest bench.</strong> From city comeback stories to nano farm breweries growing the hops out back. <strong><L to="browns-brewing-troy">Brown's Brewing</L></strong> has brewed on the Troy riverfront since 1993; <strong><L to="mill-house-brewing-company">Mill House</L></strong> sits in a 19th-century mill in Poughkeepsie, <strong><L to="clemson-brothers-brewery">Clemson Brothers</L></strong> in an old Middletown hacksaw factory, and <strong><L to="frog-alley-brewing">Frog Alley</L></strong> anchors downtown Schenectady. The farm-brewery end is the soul of it: <strong><L to="plan-bee-farm-brewery">Plan Bee</L></strong> brews exclusively from its own land, <strong><L to="long-lot-farm-brewery">Long Lot</L></strong> grows the hops behind the brewhouse on a fifth-generation dairy farm, and <strong><L to="bovina-farm-fermentory">Bovina Farm &amp; Fermentory</L></strong> is a 20-acre farmstead brewery, restaurant, and inn deep in the Western Catskills.</p>
+      <p><strong>Distilleries — about 49.</strong> Whiskey, bourbon, vodka, and gin, much of it field-to-glass. <strong><L to="hillrock-estate-distillery">Hillrock Estate</L></strong> in Ancram grows and floor-malts its own grain on a working farm; <strong><L to="coppersea-distilling">Coppersea</L></strong> in West Park revives heritage grain-to-glass methods; <strong><L to="1857-spirits-barbers-farm-distillery">1857 Spirits</L></strong> distills estate potato vodka from potatoes grown on the same Schoharie Valley farm. Sullivan County turned two old firehouses into distilleries — <strong><L to="prohibition-distillery">Prohibition Distillery</L></strong> in a 1929 firehouse in Roscoe and <strong><L to="catskill-provisions-distillery">Catskill Provisions</L></strong> in a former Callicoon one.</p>
+      <p><strong>Cideries — about 31, the most "Hudson Valley" of all.</strong> Almost every one is rooted in an orchard. <strong><L to="slyboro-ciderhouse">Slyboro</L></strong> presses at Hicks Orchard, New York's oldest U-pick; <strong><L to="bad-seed-hard-cider">Bad Seed</L></strong> ferments at the sixth-generation Wilklow Orchards (1855); <strong><L to="rose-hill-ferments">Rose Hill Ferments</L></strong> works a Dutchess orchard founded in 1798; <strong><L to="sunken-city-cider">Sunken City</L></strong> pours over the Schoharie Creek; and <strong><L to="hardscrabble-cider">Hardscrabble</L></strong> at Harvest Moon Farm is Westchester's only cidery.</p>
+      <p><strong>Wineries &amp; meaderies — about 15.</strong> Beyond Brotherhood, <strong><L to="clinton-vineyards">Clinton Vineyards</L></strong> has made its signature Seyval Blanc since 1977, <strong><L to="hudson-chatham-winery">Hudson-Chatham</L></strong> was Columbia County's first, and <strong><L to="warwick-valley-winery-distillery">Warwick Valley Winery &amp; Distillery</L></strong> has been a pioneering three-in-one farm operation since 1994.</p>
+
+      <h2 className="trail-h2">Where it clusters</h2>
+      <p>The whole region is rich, but the density is real in the southern Hudson Valley. By county, where the listings concentrate:</p>
+      <ul className="trail-list">
+        <li><strong><Link to="/county/ulster/craftbeverages">Ulster</Link> (25)</strong> — the birthplace, around New Paltz, Gardiner, and Kingston.</li>
+        <li><strong><Link to="/county/orange/craftbeverages">Orange</Link> (23)</strong> — Warwick and the Black Dirt, plus the historic Brotherhood corner.</li>
+        <li><strong><Link to="/county/dutchess/craftbeverages">Dutchess</Link> (19)</strong> — Beacon, Poughkeepsie, and the Red Hook orchards.</li>
+        <li><strong><Link to="/county/westchester/craftbeverages">Westchester</Link> (14)</strong> and <strong><Link to="/county/sullivan/craftbeverages">Sullivan</Link> (13)</strong> — the river cities, and the Sullivan firehouse distilleries.</li>
+        <li><strong><Link to="/county/greene/craftbeverages">Greene</Link> (12)</strong>, <strong><Link to="/county/columbia/craftbeverages">Columbia</Link> (12)</strong>, and <strong><Link to="/county/saratoga/craftbeverages">Saratoga</Link> (10)</strong> — the home-county Catskills, the field-to-glass belt, and the spa-town brewery bench.</li>
+        <li><strong><Link to="/county/warren/craftbeverages">Warren</Link> (9)</strong> — a tight Lake George cluster of lakeside breweries and distilleries.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few good beverage-trail days</h2>
+      <p>Most of the Farm Trails guides already thread the tasting rooms through them. The ones that lean hardest into a glass:</p>
+      <ul className="trail-list">
+        <li><strong>Tuthilltown country.</strong> New Paltz, Gardiner, and the Rondout, built around the distillery that started it all. → <strong><Link to="/farm-trails/a-saturday-in-the-shawangunks">A Saturday in the Shawangunks</Link></strong></li>
+        <li><strong>Orchards into cider.</strong> Warwick's apples become Pennings, Apple Dave's, Orchard Hill, and the Black Dirt distilleries. → <strong><Link to="/farm-trails/a-saturday-in-the-warwick-valley">A Saturday in the Warwick Valley</Link></strong></li>
+        <li><strong>The firehouse distilleries.</strong> Roscoe and Callicoon, plus Bethel and the Delaware. → <strong><Link to="/farm-trails/a-saturday-in-the-sullivan-catskills">A Saturday in the Sullivan Catskills</Link></strong></li>
+        <li><strong>A lakeside crawl.</strong> Adirondack Pub &amp; Brewery, Bolton Landing, and two distilleries with Lake George as the backdrop. → <strong><Link to="/farm-trails/a-saturday-in-lake-george">A Saturday in Lake George</Link></strong></li>
+        <li><strong>Field to glass.</strong> Hillrock and Hudson-Chatham anchor a Columbia County day of estate distilleries and barrel-makers. → <strong><Link to="/farm-trails/a-saturday-in-columbia-county">A Saturday in Columbia County</Link></strong></li>
+        <li><strong>The spa-town bench.</strong> Saratoga's brewpubs on foot, then Dancing Grain — the county's only farm brewery — looking out over its own grain fields. → <strong><Link to="/farm-trails/a-saturday-in-saratoga">A Saturday in Saratoga</Link></strong></li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Tasting-room hours skew to the weekend — many farm cideries and distilleries run Thursday or Friday through Sunday, so weekend afternoons are the sweet spot; call ahead before a weekday drive. Because so many are licensed farm producers, they're often right on the orchard or grain field that supplies them, which makes them a natural pair with U-pick, a farm store, or a market in the same trip. And the one rule that matters most: with this many cideries, breweries, and distilleries clustered together, always bring a designated driver.</p>
+      <p className="trail-crosslinks">The full list, county by county, lives on the Almanac — start with <strong><Link to="/county/ulster/craftbeverages">Ulster</Link></strong>, <strong><Link to="/county/orange/craftbeverages">Orange</Link></strong>, or <strong><Link to="/county/dutchess/craftbeverages">Dutchess</Link></strong>, or browse the <strong><Link to="/farm-trails">Farm Trails guides</Link></strong> for a route that's already mapped.</p>
+      <p className="trail-close">A 19th-century cellar, a firehouse still, an orchard pressed into cider — one very good glass at a time.</p>
+    </>
+  ),
 };
