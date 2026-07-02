@@ -132,7 +132,7 @@ class ErrorBoundary extends Component {
         <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
           <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 480, textAlign: "center" }}>
             <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Something went wrong</div>
-            <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We hit an unexpected error loading this page. Please try reloading.</p>
+            <p style={{ color: "#4A6472", fontStyle: "italic", marginBottom: 24 }}>We hit an unexpected error loading this page. Please try reloading.</p>
             <a href="/" style={{ display: "inline-block", background: "#1C3A5E", color: "#EFF0E8", padding: "11px 28px", fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none" }}>Reload the directory</a>
           </div>
         </div>
@@ -285,7 +285,7 @@ const sharedStyles = `
   .hero { background: #EFF0E8; border-bottom: 3px double #1C3A5E; padding: 48px 24px 40px; text-align: center; }
   .masthead-title { font-family: 'Libre Baskerville', serif; font-size: clamp(32px, 6vw, 64px); font-weight: 700; line-height: 1.05; color: #1A2B3C; margin-bottom: 8px; }
   .masthead-title em { font-style: italic; color: #1C3A5E; }
-  .masthead-sub { font-family: 'Lora', serif; font-size: 17px; color: #5C7A8A; font-style: italic; margin: 10px 0 32px; }
+  .masthead-sub { font-family: 'Lora', serif; font-size: 17px; color: #4A6472; font-style: italic; margin: 10px 0 32px; }
   .ornament { color: #C4862D; font-size: 20px; letter-spacing: 8px; margin: 8px 0; display: block; }
   .search-row { display: flex; gap: 10px; max-width: 700px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
   .search-input { flex: 1; min-width: 220px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
@@ -308,6 +308,11 @@ const sharedStyles = `
      (composed alongside it) but boxed in the site accent so it reads as a CTA. */
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
   .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
+  /* On narrow screens the five TopNav links wrapped to two lines above the
+     hero, crowding the fold. Contact Us / Submit a Listing / Report an Error
+     collapse below 640px — they're one tap away in the footer — leaving About
+     and the Buy Me a Coffee CTA as the two links that stay visible. */
+  @media (max-width: 640px) { .topnav-secondary { display: none; } }
   .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
   @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
   .sidebar-box { border: 1.5px solid #1C3A5E; background: #F5F6F0; margin-bottom: 20px; overflow: hidden; }
@@ -324,7 +329,7 @@ const sharedStyles = `
   .filter-pill.active:hover { background: #14304F; }
   .listings-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #1C3A5E; padding-bottom: 12px; }
   .listings-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1A2B3C; }
-  .result-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.08em; }
+  .result-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.08em; }
   .listing-card { background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 22px 24px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; text-decoration: none; color: inherit; display: block; }
   /* Results grid — used by the homepage and county/category/combo landing pages
      so listing cards flow into responsive columns instead of stacking as a
@@ -336,18 +341,18 @@ const sharedStyles = `
   .results-grid .listing-desc { flex: 1; }
   .load-more-row { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 8px 0 40px; }
   .load-more-btn { min-width: 220px; }
-  .load-more-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.08em; }
+  .load-more-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.08em; }
   @media (max-width: 480px) { .results-grid { grid-template-columns: 1fr; } }
   .listing-card:hover { border-color: #1C3A5E; box-shadow: 3px 3px 0 #1C3A5E; transform: translate(-1px,-1px); }
   .listing-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
   .listing-name { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: #1A2B3C; margin-bottom: 3px; line-height: 1.2; }
-  .listing-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .listing-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.06em; margin-bottom: 10px; }
   .listing-desc { font-size: 15px; line-height: 1.65; color: #1A2B3C; margin-bottom: 12px; }
   .listing-desc a { color: #C4862D; text-decoration: underline; }
   .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
   .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 8px; background: rgba(28,58,94,0.1); color: #1C3A5E; text-transform: uppercase; border: 1px solid rgba(28,58,94,0.2); }
-  .hours-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; margin-top: 8px; }
-  .no-results { text-align: center; padding: 60px 0; font-style: italic; color: #5C7A8A; font-size: 18px; }
+  .hours-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; margin-top: 8px; }
+  .no-results { text-align: center; padding: 60px 0; font-style: italic; color: #4A6472; font-size: 18px; }
   .modal-overlay { position: fixed; inset: 0; background: rgba(26,43,60,0.8); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
   .modal { background: #F5F6F0; max-width: 660px; width: 100%; max-height: 88vh; overflow-y: auto; border: 2px solid #1C3A5E; box-shadow: 8px 8px 0 #1C3A5E; }
   .modal-header { background: #1C3A5E; padding: 28px 28px 24px; position: sticky; top: 0; }
@@ -355,7 +360,7 @@ const sharedStyles = `
   .modal-close:hover { color: #EFF0E8; }
   .modal-body { padding: 28px; }
   .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
-  .modal-field label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #5C7A8A; display: block; margin-bottom: 3px; }
+  .modal-field label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #4A6472; display: block; margin-bottom: 3px; }
   .modal-field span { font-size: 15px; color: #1A2B3C; }
   .modal-field a { font-size: 15px; color: #C4862D; text-decoration: underline; }
   .modal-field a:hover { text-decoration: underline; }
@@ -367,12 +372,12 @@ const sharedStyles = `
   .btn-primary:hover { background: #14304F; }
   .submit-form input, .submit-form select, .submit-form textarea { width: 100%; padding: 10px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid rgba(28,58,94,0.3); background: #F5F6F0; color: #1A2B3C; outline: none; margin-bottom: 14px; }
   .submit-form input:focus, .submit-form textarea:focus { border-color: #C4862D; }
-  .submit-form label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #5C7A8A; display: block; margin-bottom: 4px; }
+  .submit-form label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4A6472; display: block; margin-bottom: 4px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .modal-info-grid { grid-template-columns: 1fr; } }
   .loading { text-align: center; padding: 60px; }
   .spinner { width: 40px; height: 40px; border: 3px solid rgba(28,58,94,0.2); border-top-color: #1C3A5E; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
-  .loading-text { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #5C7A8A; }
+  .loading-text { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #4A6472; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .mobile-category-toggle { display: none; }
   @media (max-width: 760px) {
@@ -402,18 +407,18 @@ const sharedStyles = `
   .ft-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.6); letter-spacing: 0.06em; line-height: 1.5; }
   .ft-section { margin-bottom: 52px; }
   .ft-section-title { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: #1A2B3C; border-bottom: 2px solid #1C3A5E; padding-bottom: 10px; margin-bottom: 12px; }
-  .ft-section-intro { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #5C7A8A; line-height: 1.6; margin-bottom: 26px; max-width: 680px; }
+  .ft-section-intro { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #4A6472; line-height: 1.6; margin-bottom: 26px; max-width: 680px; }
   .ft-county-group { margin-bottom: 32px; }
   .ft-county { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #C4862D; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid rgba(196,134,45,0.4); }
   .ft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
   .ft-card { background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 22px 24px; display: flex; flex-direction: column; }
   .ft-card-name { font-family: 'Libre Baskerville', serif; font-size: 19px; font-weight: 700; color: #1A2B3C; line-height: 1.2; margin-bottom: 4px; }
-  .ft-card-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .ft-card-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.06em; margin-bottom: 14px; }
   .ft-stats { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 14px; }
-  .ft-stat-label { display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 2px; }
+  .ft-stat-label { display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 2px; }
   .ft-stat-value { font-family: 'Lora', serif; font-size: 16px; color: #1A2B3C; }
   .ft-field { margin-bottom: 14px; }
-  .ft-field-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 3px; }
+  .ft-field-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 3px; }
   .ft-field-text { font-family: 'Lora', serif; font-size: 14px; line-height: 1.6; color: #1A2B3C; }
   .ft-links { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 14px; }
   .ft-link { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #C4862D; text-decoration: none; border-bottom: 1px solid rgba(196,134,45,0.5); padding-bottom: 1px; }
@@ -429,14 +434,14 @@ const sharedStyles = `
   .landing-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 38px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin: 8px 0; }
   .landing-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.7); letter-spacing: 0.06em; line-height: 1.6; }
   .landing-crosslinks { margin-bottom: 28px; }
-  .landing-crosslinks-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 10px; }
+  .landing-crosslinks-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 10px; }
   .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
   a.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; text-decoration: none; transition: background 0.15s, color 0.15s; }
   a.chip:hover { background: #1C3A5E; color: #EFF0E8; }
   a.chip .chip-count { color: #8AA0AE; }
   a.chip:hover .chip-count { color: rgba(239,240,232,0.7); }
   .newsletter-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; color: #1A2B3C; margin-bottom: 8px; }
-  .newsletter-sub { font-family: 'Lora', serif; font-size: 0.95rem; color: #5C7A8A; line-height: 1.6; max-width: 520px; margin: 0 auto 18px; }
+  .newsletter-sub { font-family: 'Lora', serif; font-size: 0.95rem; color: #4A6472; line-height: 1.6; max-width: 520px; margin: 0 auto 18px; }
   .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
   .newsletter-input { flex: 1; min-width: 200px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
   .newsletter-input:focus { border-color: #C4862D; }
@@ -476,13 +481,13 @@ const sharedStyles = `
   @media (prefers-reduced-motion: reduce) { .hva-support { transition: none; } }
   /* About page: shares the single-listing page shell; these tune the reading
      column's type scale/spacing to match the site's serif body copy. */
-  .about-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.6; font-style: italic; color: #5C7A8A; margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .about-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.6; font-style: italic; color: #4A6472; margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
   .about-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
   .about-support { margin-top: 8px; }
   .about-support-lead { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #1A2B3C; margin-bottom: 16px; }
   /* Farm Trails — guide reading column (reuses the single-listing page shell,
      same as About) and the /farm-trails index cards. */
-  .trail-body .trail-lede, .landing-article > .trail-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.65; font-style: italic; color: #5C7A8A; margin-bottom: 26px; padding-bottom: 22px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .trail-body .trail-lede, .landing-article > .trail-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.65; font-style: italic; color: #4A6472; margin-bottom: 26px; padding-bottom: 22px; border-bottom: 1px solid rgba(28,58,94,0.2); }
   .trail-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
   .trail-body a { color: #C4862D; text-decoration: underline; }
   .trail-body a:hover { color: #14304F; }
@@ -502,7 +507,7 @@ const sharedStyles = `
   .trail-card-cta { margin-top: auto; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #1C3A5E; }
   .trail-card:hover .trail-card-cta { color: #C4862D; }
   .trail-soon { border-top: 1px solid rgba(28,58,94,0.2); padding-top: 24px; }
-  .trail-soon-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C7A8A; margin-bottom: 14px; }
+  .trail-soon-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 14px; }
   .trail-soon-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 6px 24px; }
   .trail-soon-list li { font-family: 'Lora', serif; font-size: 15px; line-height: 1.5; padding: 4px 0; }
   .trail-soon-name { color: #1A2B3C; }
@@ -761,12 +766,6 @@ function HomePage() {
           <Link to="/farm-trails" className="cat-btn">🌾 Farm Trails</Link>
           <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
           <Link to="/about" className="cat-btn">About</Link>
-          <button className={"cat-btn " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")}>All Resources</button>
-          {categories.map((c) => (
-            <button key={c.id} className={"cat-btn " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")}>
-              {c.icon} {c.label}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -864,7 +863,7 @@ function HomePage() {
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
           <h2 style={{fontSize:"1.8rem",color:"#1A2B3C",marginBottom:"12px",fontFamily:"'Libre Baskerville',serif"}}>Get Listed on Hudson Valley Almanac</h2>
-          <p style={{color:"#5C7A8A",fontSize:"1rem",marginBottom:"24px"}}>Are you a local farm, maker, or service provider in the Hudson Valley? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
+          <p style={{color:"#4A6472",fontSize:"1rem",marginBottom:"24px"}}>Are you a local farm, maker, or service provider in the Hudson Valley? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{display:"inline-block",backgroundColor:"#1C3A5E",color:"#EFF0E8",padding:"14px 32px",borderRadius:"8px",textDecoration:"none",fontWeight:"600",fontSize:"1rem",marginBottom:"12px"}}>Submit Your Business</a>
           <p style={{color:"#8AA0AE",fontSize:"0.85rem",marginTop:"8px"}}>Already listed? Email us to update your info or report an error.</p>
         </div>
@@ -1057,9 +1056,9 @@ function TopNav() {
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
         <NavLink to="/about" className="topnav-link">About</NavLink>
-        <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link">Contact Us</a>
-        <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="topnav-link">Submit a Listing</a>
-        <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link">Report an Error</a>
+        <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link topnav-secondary">Contact Us</a>
+        <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="topnav-link topnav-secondary">Submit a Listing</a>
+        <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link topnav-secondary">Report an Error</a>
         <a
           href={BMC_SUPPORT_URL}
           className="topnav-link topnav-support"
@@ -1284,7 +1283,7 @@ function NotFoundPage() {
         <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, textAlign: "center" }}>
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 48, fontWeight: 700, color: "#C4862D", marginBottom: 8 }}>404</div>
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Page not found</div>
-          <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We couldn't find the page you were looking for. It may have moved or never existed.</p>
+          <p style={{ color: "#4A6472", fontStyle: "italic", marginBottom: 24 }}>We couldn't find the page you were looking for. It may have moved or never existed.</p>
           <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Browse all resources</Link>
         </div>
       </div>
@@ -1710,7 +1709,7 @@ function ListingPage() {
         ) : notFound || !listing ? (
           <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, textAlign: "center" }}>
             <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Listing not found</div>
-            <p style={{ color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>We couldn't find a resource at this address.</p>
+            <p style={{ color: "#4A6472", fontStyle: "italic", marginBottom: 24 }}>We couldn't find a resource at this address.</p>
             <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Browse all resources</Link>
           </div>
         ) : (
@@ -1810,7 +1809,7 @@ function SubmitForm({ onClose }) {
             <div style={{ textAlign: "center", padding: "40px 0" }}>
               <div style={{ fontSize: 40, marginBottom: 16, color: "#C4862D" }}>✦</div>
               <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, marginBottom: 12 }}>Thank you</div>
-              <p style={{ color: "#5C7A8A", fontStyle: "italic" }}>Your listing has been submitted for review. We will be in touch within 48 hours.</p>
+              <p style={{ color: "#4A6472", fontStyle: "italic" }}>Your listing has been submitted for review. We will be in touch within 48 hours.</p>
               <button className="btn-primary" style={{ marginTop: 24 }} onClick={onClose}>Close</button>
             </div>
           ) : (
@@ -1988,9 +1987,9 @@ function AdminPage() {
       </Head>
       <div style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 40, maxWidth: 380, width: "100%", textAlign: "center" }}>
         <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8, color: "#1A2B3C" }}>Admin Access</div>
-        <div style={{ fontSize: 13, color: "#5C7A8A", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
+        <div style={{ fontSize: 13, color: "#4A6472", fontStyle: "italic", marginBottom: 24 }}>Hudson Valley Almanac</div>
         {children}
-        <Link to="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#5C7A8A" }}>Back to site</Link>
+        <Link to="/" style={{ display: "block", marginTop: 16, fontSize: 12, color: "#4A6472" }}>Back to site</Link>
       </div>
     </div>
   );
@@ -2000,13 +1999,13 @@ function AdminPage() {
   const errorLine = authError ? <div style={{ color: "#9B2C2C", fontSize: 13, marginBottom: 12 }}>{authError}</div> : null;
 
   // Still determining whether a session exists.
-  if (!authReady) return cardWrap(<div style={{ color: "#5C7A8A", fontStyle: "italic" }}>Loading…</div>);
+  if (!authReady) return cardWrap(<div style={{ color: "#4A6472", fontStyle: "italic" }}>Loading…</div>);
 
   // Not signed in — show the passwordless email-code flow.
   if (!session) {
     if (step === "email") return cardWrap(
       <>
-        <label htmlFor="admin-email" style={{ display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#5C7A8A", marginBottom: 6, textAlign: "left" }}>Admin email</label>
+        <label htmlFor="admin-email" style={{ display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#4A6472", marginBottom: 6, textAlign: "left" }}>Admin email</label>
         <input id="admin-email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendCode()} placeholder="you@example.com" style={inputStyle} />
         {errorLine}
         <button onClick={sendCode} disabled={sending} style={buttonStyle}>{sending ? "Sending…" : "Send code"}</button>
@@ -2015,11 +2014,11 @@ function AdminPage() {
     return cardWrap(
       <>
         <div style={{ fontSize: 13, color: "#1A2B3C", marginBottom: 14, fontStyle: "italic" }}>Enter the 6-digit code sent to {email}.</div>
-        <label htmlFor="admin-code" style={{ display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#5C7A8A", marginBottom: 6, textAlign: "left" }}>Verification code</label>
+        <label htmlFor="admin-code" style={{ display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#4A6472", marginBottom: 6, textAlign: "left" }}>Verification code</label>
         <input id="admin-code" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(e) => setCode(e.target.value)} onKeyDown={(e) => e.key === "Enter" && verifyCode()} placeholder="123456" style={inputStyle} />
         {errorLine}
         <button onClick={verifyCode} disabled={verifying} style={buttonStyle}>{verifying ? "Verifying…" : "Verify & sign in"}</button>
-        <button onClick={() => { setStep("email"); setCode(""); setAuthError(""); }} style={{ background: "none", border: "none", color: "#5C7A8A", fontSize: 12, marginTop: 12, cursor: "pointer", textDecoration: "underline" }}>Use a different email</button>
+        <button onClick={() => { setStep("email"); setCode(""); setAuthError(""); }} style={{ background: "none", border: "none", color: "#4A6472", fontSize: 12, marginTop: 12, cursor: "pointer", textDecoration: "underline" }}>Use a different email</button>
       </>
     );
   }
@@ -2033,7 +2032,7 @@ function AdminPage() {
   );
 
   // Signed in, admin check still running.
-  if (isAdmin === null) return cardWrap(<div style={{ color: "#5C7A8A", fontStyle: "italic" }}>Verifying access…</div>);
+  if (isAdmin === null) return cardWrap(<div style={{ color: "#4A6472", fontStyle: "italic" }}>Verifying access…</div>);
 
   return (
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh" }}>
@@ -2059,20 +2058,20 @@ function AdminPage() {
           ))}
         </div>
         {loading ? (
-          <div style={{ textAlign: "center", padding: 40, color: "#5C7A8A", fontStyle: "italic" }}>Loading</div>
+          <div style={{ textAlign: "center", padding: 40, color: "#4A6472", fontStyle: "italic" }}>Loading</div>
         ) : loadError ? (
           <div style={{ textAlign: "center", padding: 40, color: "#9B2C2C" }}>
             Couldn't load listings: {loadError}{" "}
             <button type="button" onClick={fetchAll} style={{ background: "none", border: "none", color: "#C4862D", textDecoration: "underline", cursor: "pointer", font: "inherit" }}>Retry</button>
           </div>
         ) : shown.length === 0 ? (
-          <div style={{ textAlign: "center", padding: 40, color: "#5C7A8A", fontStyle: "italic" }}>No {tab} listings.</div>
+          <div style={{ textAlign: "center", padding: 40, color: "#4A6472", fontStyle: "italic" }}>No {tab} listings.</div>
         ) : shown.map((l) => (
           <div key={l.id} style={{ background: "#F5F6F0", border: "1.5px solid rgba(28,58,94,0.2)", padding: "20px 24px", marginBottom: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
               <div>
                 <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 18, fontWeight: 700, marginBottom: 4, color: "#1A2B3C" }}>{l.name}</div>
-                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "#5C7A8A", marginBottom: 8 }}>
+                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: "#4A6472", marginBottom: 8 }}>
                   {l.category} - {l.town}, {l.county}
                   {l.phone && (
                     <> - <a href={`tel:${l.phone.replace(/[^\d+]/g, '')}`} style={{color: "#C4862D", textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: 11}}>{l.phone}</a></>
