@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoad
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
 import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
-import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
+import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 
 // ---------------------------------------------------------------------------
@@ -200,6 +200,7 @@ export const routes = [
       { path: "about", Component: AboutPage },
       { path: "farm-trails", Component: FarmTrailsIndexPage },
       { path: "beverage-trails", Component: BeverageTrailsIndexPage },
+      { path: "explore-by-theme", Component: ThemeTrailsIndexPage },
       {
         path: "farm-trails/:slug",
         Component: FarmTrailGuidePage,
@@ -766,6 +767,7 @@ function HomePage() {
         <div className="cat-nav-inner">
           <Link to="/farm-trails" className="cat-btn">🌾 Farm Trails</Link>
           <Link to="/beverage-trails" className="cat-btn">🍻 Beverage Trails</Link>
+          <Link to="/explore-by-theme" className="cat-btn">🗂️ Explore by Theme</Link>
           <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
           <Link to="/about" className="cat-btn">About</Link>
         </div>
@@ -1032,6 +1034,7 @@ function Footer() {
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
           <Link to="/farm-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Farm Trails</Link>
           <Link to="/beverage-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Beverage Trails</Link>
+          <Link to="/explore-by-theme" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Explore by Theme</Link>
           <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
           <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
@@ -1404,7 +1407,7 @@ function FarmTrailsIndexPage() {
         )}
 
         <p className="trail-crosslinks">
-          Looking for cideries, breweries, distilleries, and wineries instead? See <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>.
+          Looking for cideries, breweries, distilleries, and wineries instead? See <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>, or maple, makers, fairs, and more on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.
         </p>
       </div>
       <Footer />
@@ -1460,7 +1463,64 @@ function BeverageTrailsIndexPage() {
         </div>
 
         <p className="trail-crosslinks">
-          Looking for farm stands, sugarhouses, and day-trip loops instead? See <strong><Link to="/farm-trails">Farm Trails</Link></strong>.
+          Looking for farm stands, sugarhouses, and day-trip loops instead? See <strong><Link to="/farm-trails">Farm Trails</Link></strong>, or browse maple, makers, fairs, and more on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.
+        </p>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// Explore by Theme index — the third guide series, sibling to Farm Trails and
+// Beverage Trails, covering the grab-bag of everything else in the directory:
+// maple, farm stands, makers, heritage breeds, fairs, the outdoors, and
+// cannabis. Same shell and card grid; guides live at /farm-trails/:slug
+// (unchanged URLs, same as the beverage series).
+function ThemeTrailsIndexPage() {
+  const canonical = `${SITE_ORIGIN}/explore-by-theme`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Explore by Theme — Hudson Valley Almanac",
+    url: canonical,
+  };
+  return (
+    <div className="landing-wrap">
+      <PageMeta
+        title="Explore by Theme — Hudson Valley Almanac"
+        description="Guides to the rest of the Hudson Valley directory by theme — maple and sugarhouses, farm stands and U-pick, makers and fiber studios, heritage breeds, county fairs, the outdoors, and cannabis farms."
+        canonical={canonical}
+      />
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="landing-article">
+        <header className="landing-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac</div>
+          <h1 className="landing-title">Explore by Theme</h1>
+          <p className="landing-sub">The rest of the directory, sorted by theme instead of by county — maple, makers, heritage breeds, fairs, the outdoors, and more.</p>
+        </header>
+        <p className="trail-lede">
+          Farm Trails covers day-trip loops and Beverage Trails covers cideries, breweries, distilleries, and wineries. Everything else in the directory worth its own guide lives here.
+        </p>
+
+        <div className="trail-grid">
+          {PUBLISHED_THEME_TRAILS.map((g) => (
+            <Link key={g.slug} to={`/farm-trails/${g.slug}`} className="trail-card">
+              <div className="trail-card-area">{g.area}</div>
+              <div className="trail-card-name">{g.title}</div>
+              <p className="trail-card-blurb">{g.blurb}</p>
+              <span className="trail-card-cta">Read the guide →</span>
+            </Link>
+          ))}
+        </div>
+
+        <p className="trail-crosslinks">
+          Looking for day-trip loops or the craft-beverage scene instead? See <strong><Link to="/farm-trails">Farm Trails</Link></strong> or <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>.
         </p>
       </div>
       <Footer />

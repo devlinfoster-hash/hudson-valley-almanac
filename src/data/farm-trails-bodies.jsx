@@ -829,4 +829,198 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">The closest the Almanac gets to the city, and still every bit a working farm-and-craft scene.</p>
     </>
   ),
+  "maple-trail-and-sugarhouses": () => (
+    <>
+      <p className="trail-lede">Eighteen maple producers span 17 counties in the Almanac's directory — fifth- and sixth-generation sugarhouses still boiling over wood fire, apiaries tucked into the Helderberg hills, and a handful of towns where three or four operations sit close enough to visit in one afternoon. Maple Weekend each spring (the third and fourth weekends of March) is when most of these open their doors wide, but many run pancake breakfasts and tours well beyond it.</p>
+
+      <h2 className="trail-h2">The Greene County heart</h2>
+      <p><strong><L to="partridge-sugar-house">Partridge Sugar House</L></strong> in Ashland has made Catskill Mountain maple since 1898 — roughly 2,500 taps, wood-fired, no filter additives or chemical defoamers, now with a sixth generation coming up. Nearby, <strong><L to="maple-glen-farm">Maple Glen Farm</L></strong> in East Jewett and <strong><L to="maple-hill-farms">Maple Hill Farms</L></strong> in Prattsville both run honor-system and small farm-stand operations on the mountaintop, and <strong><L to="fox-farm-apiary">Fox Farm Apiary</L></strong>'s Cornell Master Beekeeper keeps hives at Olana and regional land trusts across five counties.</p>
+
+      <h2 className="trail-h2">Salem, Washington County — three in one town</h2>
+      <p>Salem alone carries three producers. <strong><L to="wild-hill-maple">Wild Hill Maple</L></strong> has made award-winning syrup since 2002, <strong><L to="mapleland-farms">Mapleland Farms</L></strong> is a five-generation operation tapping over 600 acres, and <strong><L to="dry-brook-sugar-house">Dry Brook Sugar House</L></strong> runs a pancake-and-sausage breakfast with horse-drawn wagon rides during Maple Weekend.</p>
+
+      <h2 className="trail-h2">Thurman, Warren County — the Adirondack sugarbush belt</h2>
+      <p><strong><L to="toad-hill-maple-farm">Toad Hill Maple Farm</L></strong> taps over 3,000 sugar maples across nearly 900 acres of timberland with a timber-frame sugarhouse, and <strong><L to="valley-road-maple-farm">Valley Road Maple Farm</L></strong> runs 3,400 vacuum-fed taps nearby — Thurman is one of the densest concentrations of sugarhouses in the Adirondacks.</p>
+
+      <h2 className="trail-h2">Elsewhere in the belt</h2>
+      <ul className="trail-list">
+        <li><strong><L to="catskill-mountain-maple">Catskill Mountain Maple</L> — DeLancey, Delaware County.</strong> 50-plus years in the business on a 140-acre farm; also a full-service CDL maple equipment dealer.</li>
+        <li><strong><L to="crown-maple-at-madava-farms">Crown Maple at Madava Farms</L></strong> and <strong><L to="soukup-farms">Soukup Farms</L> — Dover Plains, Dutchess County.</strong> Crown Maple is an 800-acre estate operation with tours and tastings; Soukup has run since the 1950s with over 2,000 taps.</li>
+        <li><strong><L to="mill-hollow-maple">Mill Hollow Maple</L> — Mount Vision, Otsego County.</strong> USDA Certified Organic, taps 6,000 trees, fires a timber-frame sugarhouse with wood felled on the property.</li>
+        <li><strong><L to="partridge-run-farm-and-apiary">Partridge Run Farm and Apiary</L> — Berne, Albany County.</strong> Raw wildflower honey and beeswax candles from bees foraging the unsprayed Helderberg hilltowns.</li>
+        <li><strong><L to="skinner-s-sugarbush">Skinner's Sugarbush</L> — Wynantskill, Rensselaer County.</strong> Family operation since 1990, open with sugarhouse tours during Maple Weekend.</li>
+        <li><strong><L to="maple-valley-farm-2">Maple Valley Farm</L> — Saratoga.</strong> Sixth-generation, 30-plus years welcoming the public with a full pancake breakfast, hayrides, and live music on Maple Weekend.</li>
+        <li><strong><L to="maple-hill-syrup-farms">Maple Hill Syrup Farms</L></strong> and <strong><L to="buck-hill-farm">Buck Hill Farm</L> — Schoharie County.</strong> Both six-generation operations with country stores, wood-fired evaporation, and year-round tours.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>NYS Maple Weekend runs the third and fourth weekends of March — check each farm's page for exact hours since many are honor-system or by-appointment outside that window. Sugaring season itself runs roughly February through early April depending on the year's freeze-thaw cycle. Several of these farms cluster tightly enough (Salem, Thurman, Greene County's mountaintop) to make a single-town visit worthwhile even outside Maple Weekend.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or pair a sugarhouse stop with <strong><Link to="/farm-trails/a-saturday-on-the-mountaintop">A Saturday on the Mountaintop</Link></strong> or <strong><Link to="/farm-trails/a-saturday-in-the-battenkill-valley">A Saturday in the Battenkill Valley</Link></strong>.</p>
+      <p className="trail-close">Wood smoke, a hot griddle, and a jar to bring home — the shortest, sweetest season in the Almanac.</p>
+    </>
+  ),
+  "farm-stands-orchards-and-pick-your-own": () => (
+    <>
+      <p className="trail-lede">Twenty-three farm stands, U-pick orchards, and CSAs across fifteen counties — this is the most core-to-the-brand guide in the whole series, closest to what the Almanac was built to catalog in the first place. Some of these farms have been in the same family for eleven generations; others are nonprofit projects donating a fifth of everything they grow.</p>
+
+      <h2 className="trail-h2">The Warwick orchard cluster, Orange County</h2>
+      <p><strong><L to="bellvale-farms-creamery">Bellvale Farms Creamery</L></strong> is a seven-generation dairy since 1819 atop Mount Peter, ranked the #2 ice cream parlor in the country on TripAdvisor. <strong><L to="masker-orchards">Masker Orchards</L></strong> has run a drive-right-to-the-tree picking experience since 1913, and <strong><L to="pennings-farm-market-orchard">Pennings Farm Market & Orchard</L></strong> anchors 100 acres with a garden center, grill, and beer garden. <strong><L to="lawrence-farms-orchards">Lawrence Farms Orchards</L></strong> in Newburgh offers Orange County's most diverse U-pick list, and <strong><L to="minkus-family-farms">Minkus Family Farms</L></strong> in New Hampton grows half of all the onions produced in New York State on Black Dirt land.</p>
+
+      <h2 className="trail-h2">Dutchess &amp; Putnam</h2>
+      <p><strong><L to="fishkill-farms">Fishkill Farms</L></strong> is a 270-acre organic orchard in the Morgenthau family for over 100 years, home to Treasury Cider. <strong><L to="migliorelli-farm-stand">Migliorelli Farm Stand</L></strong> traces back to 1933 broccoli rabe seeds carried from Italy, now growing 130-plus varieties on conservation-protected river-valley land. <strong><L to="poughkeepsie-farm-project">Poughkeepsie Farm Project</L></strong> is a mission-driven nonprofit farm donating a fifth of its harvest, and <strong><L to="ryder-farm">Ryder Farm</L></strong> in Brewster has been farmed by the same family since 1795.</p>
+
+      <h2 className="trail-h2">Rockland &amp; the river counties</h2>
+      <p><strong><L to="the-orchards-of-concklin">The Orchards of Concklin</L></strong> in Pomona is the oldest working farm in Rockland County — eleven generations of the same family since 1711. <strong><L to="boehm-farm">Boehm Farm</L></strong> in Climax has grown apples since 1903, and <strong><L to="catskill-mountain-country-store">Catskill Mountain Country Store</L></strong> in Windham has anchored Route 23 since 1994 with its own Happy Sappy Maple Museum out back.</p>
+
+      <h2 className="trail-h2">Columbia &amp; the CSA belt</h2>
+      <p><strong><L to="hawthorne-valley-farm-farm-store">Hawthorne Valley Farm &amp; Farm Store</L></strong> is a 900-acre Demeter-certified Biodynamic farm running since 1972, and <strong><L to="roxbury-farm-csa">Roxbury Farm CSA</L></strong> is one of the largest and longest-running CSAs in the Northeast, serving 930-plus members since 1990.</p>
+
+      <h2 className="trail-h2">Elsewhere in the belt</h2>
+      <ul className="trail-list">
+        <li><strong><L to="weaver-s-farm-market">Weaver's Farm Market</L> — Morris, Otsego County.</strong> A 4,000-square-foot Amish-run market carrying goods from 60-plus local farmers and bakers.</li>
+        <li><strong><L to="featherbed-lane-farm">Featherbed Lane Farm</L></strong> and <strong><L to="pitney-meadows-community-farm">Pitney Meadows Community Farm</L> — Saratoga County.</strong> Featherbed is the county's only draft-horse-powered CSA; Pitney Meadows runs a 24/7 honor-system farm stand feeding a Farm to Pantry program.</li>
+        <li><strong><L to="buhrmaster-farms">Buhrmaster Farms</L> — Scotia, Schenectady County.</strong> Family-run since 1946.</li>
+        <li><strong><L to="barber-s-farm">Barber's Farm</L> — Middleburgh, Schoharie County.</strong> Six generations since 1857, farming 150-plus acres with mobile satellite stands across the Capital District.</li>
+        <li><strong><L to="battenkill-valley-creamery">Battenkill Valley Creamery</L>, <L to="hicks-orchard-slyboro-ciderhouse">Hicks Orchard</L>, and <L to="sheldon-farms">Sheldon Farms</L> — Washington County.</strong> Hicks is New York's oldest U-pick orchard (since 1905); Sheldon has farmed the Battenkill since 1845.</li>
+        <li><strong><L to="honest-weight-food-co-op">Honest Weight Food Co-op</L> — Albany.</strong> Member-owned since 1976, the Capital District's largest local/organic grocery co-op.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>U-pick season peaks differently by crop — strawberries in June, peaches in midsummer, apples and pumpkins from Labor Day through October — so check each farm's current picking list before a special trip. Several of these (Poughkeepsie Farm Project, Pitney Meadows, Roxbury Farm) run sliding-scale or SNAP-friendly CSA options worth knowing about beyond the pick-your-own draw.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">Eleven generations on one farm, half the state's onions from another — the directory's original subject, twenty-three ways.</p>
+    </>
+  ),
+  "makers-forges-and-fiber-studios": () => (
+    <>
+      <p className="trail-lede">Thirty-one working craft studios across fifteen counties — blacksmiths still heating steel in a forge, hot-glass shops you can watch through the studio window, and the fiber mills and weaving studios turning raw wool into yarn on the spot. These are places built around watching the making happen, not just buying the finished piece.</p>
+
+      <h2 className="trail-h2">Blacksmiths &amp; forges</h2>
+      <p><strong><L to="canal-forge-blacksmith-shop">Canal Forge Blacksmith Shop</L></strong> overlooks the Rondout Creek beside the old D&amp;H Canal and teaches hands-on classes; <strong><L to="riff-s-workshop-blacksmithing-custom-metalwork">Riff's Workshop</L></strong> in Middletown runs a full blacksmithing school alongside custom commissions. <strong><L to="battle-hill-forge">Battle Hill Forge</L></strong> in Wassaic has had work displayed at the Met Cloisters and the Norman Rockwell Museum; <strong><L to="arrowsmith-forge">Arrowsmith Forge</L></strong> in Millbrook and <strong><L to="helderberg-blacksmith">Helderberg Blacksmith</L></strong> in Altamont both hand-forge custom furniture and architectural ironwork. Round out the smiths with <strong><L to="evolution-ironworks">Evolution Ironworks</L></strong> in Albany, <strong><L to="heathers-heart-forge">Heather's Heart Forge</L></strong> in Stephentown, and <strong><L to="aggressive-metalworks">Aggressive Metalworks</L></strong> in Central Bridge.</p>
+
+      <h2 className="trail-h2">Hot glass &amp; stained glass</h2>
+      <p><strong><L to="hudson-beach-glass">Hudson Beach Glass</L></strong> in Beacon and <strong><L to="prism-glassworks">Prism Glassworks</L></strong> in Troy (since 2001) both make handblown glass on-site with lessons available. Further north, <strong><L to="the-glassblowing-shop">The Glassblowing Shop</L></strong> in Lake Placid and <strong><L to="bobby-sharp-glassworks">Bobby Sharp Glassworks</L></strong> in Oneonta keep the tradition going in the Adirondack foothills, and <strong><L to="pablo-glass">Pablo Glass</L></strong> in West Hurley rounds out the Catskills. For stained glass, <strong><L to="captured-in-glass">Captured In Glass</L></strong> in Stony Point and <strong><L to="full-circle-glass-studio">Full Circle Glass Studio</L></strong> in Pearl River have both worked since the late 1970s, and <strong><L to="anne-t-maus-stained-glass-studio">Anne T. Maus Stained Glass Studio</L></strong> in Callicoon has practiced the craft for over 35 years.</p>
+
+      <h2 className="trail-h2">Fiber mills, farms &amp; weaving studios</h2>
+      <p><strong><L to="battenkill-fibers">Battenkill Fibers</L></strong> in Greenwich processes wool for farmers across the Northeast and always returns each farmer's own fiber rather than blending. <strong><L to="clean-fleece-ny-hudson-valley-textile-project">Clean Fleece NY</L></strong> in Mechanicville fills a real regional gap — mid-size-lot wool scouring — for the whole Hudson Valley fiber economy. <strong><L to="rosehaven-alpacas-fiber-mill">Rosehaven Alpacas &amp; Fiber Mill</L></strong> in the Catskill foothills and <strong><L to="nobletown-fiber-works">Nobletown Fiber Works</L></strong> in Hillsdale both mill their own and neighbors' raw fiber into yarn. <strong><L to="catskill-merino-sheep-farm">Catskill Merino Sheep Farm</L></strong> and <strong><L to="dashing-star-farm">Dashing Star Farm</L></strong> both raise sheep for hand-dyed and hand-crafted wool. For weaving, <strong><L to="crazy-as-a-loom-weaving-studio">Crazy As A Loom Weaving Studio</L></strong> works four looms in a historic 1790 Kingsbury building, and <strong><L to="the-stitchery">The Stitchery</L></strong> has served Rockland County fiber artists for over 40 years.</p>
+
+      <h2 className="trail-h2">Woodworkers, potters &amp; the rest</h2>
+      <ul className="trail-list">
+        <li><strong><L to="cooperstown-bat-company">Cooperstown Bat Company</L> — Fly Creek.</strong> Handcrafted wooden baseball bats from New York ash and maple since 1981; factory tours available.</li>
+        <li><strong><L to="catskill-craftsmen">Catskill Craftsmen</L> — Stamford.</strong> Hardwood kitchen islands and carts made in the Catskills since 1944, distributed nationally.</li>
+        <li><strong><L to="catskill-mountain-woodworking">Catskill Mountain Woodworking</L> — Catskill.</strong> Custom live-edge tables and charcuterie boards.</li>
+        <li><strong><L to="flotsam-mpyj8up2">Flotsam</L> — Napanoch.</strong> Furniture and small goods built entirely from salvaged street and scrap wood.</li>
+        <li><strong><L to="saratoga-clay-arts-center">Saratoga Clay Arts Center</L> — Schuylerville.</strong> A 13,000-square-foot ceramics facility with studio space for 30 clay artists.</li>
+        <li><strong><L to="jay-craft-center">Jay Craft Center</L></strong> and <strong><L to="youngs-studio-and-gallery">Young's Studio &amp; Gallery</L> — Jay, Essex County.</strong> Two family-run Adirondack pottery studios in the same small town.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Most of these are working studios first and retail shops second — hours can be irregular or by-appointment, especially the smaller blacksmith and glass shops, so call or check social media before a special trip. Several (Riff's Workshop, Canal Forge, Crazy As A Loom) run regular hands-on classes if you want to try the craft rather than just watch it.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">A forge, a furnace, a loom — thirty-one places where you can watch the raw material become the thing.</p>
+    </>
+  ),
+  "farms-to-visit-heritage-breeds-and-sanctuaries": () => (
+    <>
+      <p className="trail-lede">Sixteen destinations across thirteen counties, all built around a different kind of visit than a farm stand or a U-pick row — heritage-breed sanctuaries preserving animals that predate factory farming, licensed wildlife rehabilitators nursing injured raptors back to health, and one eighth-generation farm-stay where guests still milk the cows themselves.</p>
+
+      <h2 className="trail-h2">Farm-stays &amp; heritage-breed sanctuaries</h2>
+      <p><strong><L to="hull-o-farms">Hull-O Farms</L></strong> in Durham is an eighth-generation working farm and National Bicentennial Farm — guests milk cows, gather eggs, and stay in one of three guest houses. <strong><L to="june-farms">June Farms</L></strong> in West Sand Lake is a 120-acre heritage-breed sanctuary keeping Scottish Highland cows, giant Shire horses, and Gloucestershire Old Spot pigs, open for visits since 2017. <strong><L to="stony-kill-foundation">Stony Kill Foundation</L></strong> maintains Livestock Conservancy Watch List breeds — Tunis sheep, Milking Devon cattle, Dominique and Java chickens — at a historic Dutchess County farm, and <strong><L to="black-sheep-hill-farm">Black Sheep Hill Farm</L></strong> in Pine Plains raises heritage Black Welsh Mountain sheep with breeding stock available to other homesteaders.</p>
+
+      <h2 className="trail-h2">Wildlife rehabilitation</h2>
+      <p><strong><L to="ravensbeard-wildlife-center">Ravensbeard Wildlife Center</L></strong> near Woodstock earned national attention in 2020 for rescuing "Rockefeller," the saw-whet owl found in the Rockefeller Center Christmas tree, and continues caring for injured raptors and songbirds. <strong><L to="green-chimneys">Green Chimneys</L></strong> in Brewster pairs a DEC-licensed wildlife program with a therapeutic special-education school — students help care for the animals as part of the curriculum. <strong><L to="hudson-valley-animal-rescue-and-sanctuary">Hudson Valley Animal Rescue and Sanctuary</L></strong> in Poughkeepsie and <strong><L to="north-country-wild-care">North Country Wild Care</L></strong> in the Saratoga/Capital Region both run volunteer-driven intake networks for injured or orphaned wildlife.</p>
+
+      <h2 className="trail-h2">Working farms with real visiting programs</h2>
+      <ul className="trail-list">
+        <li><strong><L to="bison-island-ranch">Bison Island Ranch</L> — Sharon Springs.</strong> Grass-fed bison, agritourism programs, and overnight tipi stays on a spring-fed pond.</li>
+        <li><strong><L to="a-ooms-and-sons-dairy-farm">A. Ooms &amp; Sons Dairy Farm</L> — Valatie.</strong> Multi-generation dairy with farm tours and a petting area.</li>
+        <li><strong><L to="dutch-hollow-farm">Dutch Hollow Farm</L> — Schodack Landing.</strong> Jersey cattle dairy with farm tours.</li>
+        <li><strong><L to="gem-farms-buffalo">Gem Farms Buffalo</L> — Castleton-on-Hudson.</strong> Bison raised for meat alongside sweet corn and honey.</li>
+        <li><strong><L to="swartz-dairy-and-produce">Swartz Dairy and Produce</L> — Castleton-on-Hudson.</strong> Five generations, known for strawberries and pumpkins.</li>
+      </ul>
+
+      <h2 className="trail-h2">Beekeeping education &amp; supply</h2>
+      <p><strong><L to="betterbee">Betterbee</L></strong> in Greenwich is a nationally recognized beekeeping supply company and education center, and <strong><L to="hudson-valley-bee-supply-2">Hudson Valley Bee Supply</L></strong> in Kingston is one of the few dedicated beekeeping shops in the region. <strong><L to="catskill-mountain-beekeepers-club">Catskill Mountain Beekeepers Club</L></strong>, founded in 1996 with 130-plus member families, teaches beekeeping and sells honey across Greene County.</p>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Wildlife rehabilitators generally aren't set up for casual drop-in visits — they're licensed care facilities, not petting zoos, so check each one's specific visiting policy or intake-hotline process before showing up with an injured animal or expecting a tour. Farm-stays like Hull-O and June Farms typically require advance booking.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">A rescued owl, a Bicentennial Farm, a herd of Scottish Highlands — the Almanac's gentlest guide.</p>
+    </>
+  ),
+  "county-fairs-folk-schools-and-farm-learning": () => (
+    <>
+      <p className="trail-lede">Eleven county fairs, a folk school built around the fiddle tune it inspired, and the training programs turning newcomers into working farmers — thirty-two destinations across eighteen counties, most of them tied to a real calendar date rather than a year-round visit.</p>
+
+      <h2 className="trail-h2">The county fairs</h2>
+      <p>Eleven counties run their own fair, mostly clustered in August. <strong><L to="delaware-county-fair-2">Delaware County Fair</L></strong> in Walton is the region's largest, drawing 80,000-plus visitors over six days for its 137th run. <strong><L to="washington-county-fair">Washington County Fair</L></strong> in Greenwich draws 130,000-plus over seven days with draft-horse demonstrations and open fiber shows. <strong><L to="dutchess-county-fair-2">Dutchess County Fair</L></strong> in Rhinebeck and <strong><L to="orange-county-fair">Orange County Fair</L></strong> in Middletown are both well over a century old (179th and 187th runs respectively), and <strong><L to="schaghticoke-fair">Schaghticoke Fair</L></strong> is the third-oldest fair in New York State. Round out the calendar with <strong><L to="altamont-fair-2">Altamont Fair</L></strong> (Albany), <strong><L to="columbia-county-fair-2">Columbia County Fair</L></strong> (Chatham), <strong><L to="saratoga-county-fair">Saratoga County Fair</L></strong> (175-plus years running), <strong><L to="ulster-county-fair-2">Ulster County Fair</L></strong> (New Paltz), <strong><L to="schoharie-county-sunshine-fair-2">Schoharie County Sunshine Fair</L></strong> (Cobleskill), and <strong><L to="sullivan-county-fair">Sullivan County Fair</L></strong> (Ferndale).</p>
+
+      <h2 className="trail-h2">Folk schools &amp; craft workshops</h2>
+      <p><strong><L to="ashokan-center">Ashokan Center</L></strong> in Olivebridge is home to Jay Ungar and Molly Mason's Music &amp; Dance Camps — the gathering that inspired the fiddle tune "Ashokan Farewell" — alongside foraging walks and biannual Hoot festivals. <strong><L to="adirondack-folk-school">Adirondack Folk School</L></strong> in Lake Luzerne teaches blacksmithing, woodworking, and fiber arts, and <strong><L to="catskill-weaving-school">Catskill Weaving School</L></strong> in Catskill runs a serious weaving and natural-dye curriculum. For plant medicine, <strong><L to="wild-gather-hudson-valley-school-of-herbal-studies">Wild Gather</L></strong> and <strong><L to="foliage-botanics-wild-medicine-ways">Foliage Botanics</L></strong> both run multi-month herbalism intensives rooted in the Hudson Valley bioregion, and <strong><L to="farm-field-natural-dye-workshops">Farm &amp; Field</L></strong> in Chatham teaches fresh-leaf indigo dyeing on a working farm.</p>
+
+      <h2 className="trail-h2">Farm-training &amp; agricultural education</h2>
+      <p><strong><L to="glynwood-center-for-regional-food-and-farming-2">Glynwood Center</L></strong> in Cold Spring runs a structured Beginners' Farmer Training Program for people new to farming. <strong><L to="hudson-valley-farm-hub-agricultural-education">Hudson Valley Farm Hub</L></strong> in Hurley trains farmers and agricultural workers alongside its Milestone Mill grain operation. <strong><L to="unadilla-community-farm">Unadilla Community Farm</L></strong> is an off-grid permaculture education center with a 350-tree food forest, and <strong><L to="rensselaer-plateau-farm-school">Rensselaer Plateau Farm School</L></strong> teaches cheesemaking, butchery, and fermentation alongside farming fundamentals. <strong><L to="farmon-foundation">FarmOn! Foundation</L></strong> runs a Farm Academy incubator and seed bank at the historic Empire Farm.</p>
+
+      <h2 className="trail-h2">County institutions &amp; municipal farms</h2>
+      <ul className="trail-list">
+        <li><strong><L to="tilly-foster-farm-educational-institute">Tilly Foster Farm Educational Institute</L> — Brewster.</strong> Putnam County's 258-acre flagship ag-education farm.</li>
+        <li><strong><L to="hilltop-hanover-farm">Hilltop Hanover Farm</L> — Yorktown.</strong> Westchester County's 187-acre sustainable-agriculture demonstration farm.</li>
+        <li><strong><L to="muscoot-farm">Muscoot Farm</L> — Somers.</strong> Westchester County's free public working farm and market.</li>
+        <li><strong><L to="mabee-farm-historic-site">Mabee Farm Historic Site</L> — Rotterdam Junction.</strong> The oldest farm in the Mohawk Valley, with the region's oldest standing house (1705).</li>
+        <li><strong><L to="cornell-cooperative-extension-home-horticulture-master-gardener-program">Cornell Cooperative Extension</L> — every county.</strong> Free soil testing, pest diagnostics, and Master Gardener helplines — one of the most useful free resources any homesteader has access to.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>The fairs are almost all August affairs — check exact dates each year since they shift slightly. The folk schools and training programs generally require registration well in advance, especially the multi-month herbalism and farmer-training intensives.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">A fiddle tune, a 137th fair, a food forest with 350 trees — the Almanac's most crowded calendar page.</p>
+    </>
+  ),
+  "preserves-fire-towers-and-the-outdoors": () => (
+    <>
+      <p className="trail-lede">Fifteen public lands and outfitters across nine counties, anchored by the 700,000-acre Catskill Park — one of the largest parks in the Eastern United States — plus the rivers, rail trails, and wildlife management areas around it. The Almanac maps the region's sixteen fire towers on its own dedicated page; this guide covers everything else in the outdoors.</p>
+
+      <h2 className="trail-h2">The Catskill Park core</h2>
+      <p><strong><L to="catskill-park">Catskill Park</L></strong> spans Delaware, Greene, Sullivan, and Ulster counties with over 300 miles of marked trails, 35 DEC campgrounds, and Kaaterskill Falls — the highest two-stage waterfall in New York State. <strong><L to="north-south-lake-campground-beach">North-South Lake Campground &amp; Beach</L></strong> is the Park's most popular destination, at the historic site of the old Catskill Mountain House, with a swimming beach and the escarpment trail to Kaaterskill Falls and Artist Rock. <strong><L to="mountain-top-arboretum">Mountain Top Arboretum</L></strong> in Tannersville runs a full calendar of foraging, natural-dye, and forest-bathing workshops at 2,400 feet elevation.</p>
+
+      <h2 className="trail-h2">Rivers &amp; paddling</h2>
+      <p>The <strong><L to="upper-delaware-scenic-and-recreational-river">Upper Delaware Scenic and Recreational River</L></strong> is a National Wild and Scenic River with Class I–III rapids at Skinner's Falls; <strong><L to="lander-s-river-trips">Lander's River Trips</L></strong> has outfitted it since 1955. The <strong><L to="battenkill-river-corridor">Battenkill River Corridor</L></strong> is regarded as one of the finest wild trout streams in the eastern U.S., and <strong><L to="battenkill-valley-outdoors">Battenkill Valley Outdoors</L></strong> has run canoe and kayak trips there since 2003. For fly fishing specifically, the <strong><L to="catskill-fly-fishing-center-museum-2">Catskill Fly Fishing Center &amp; Museum</L></strong> in Livingston Manor sits at the birthplace of American dry fly fishing, and the <strong><L to="dec-catskill-hatchery">DEC Catskill Hatchery</L></strong> nearby rears brown trout between the legendary Beaverkill and Willowemoc.</p>
+
+      <h2 className="trail-h2">Rail trails &amp; wildlife management areas</h2>
+      <p><strong><L to="catskill-scenic-trail">Catskill Scenic Trail</L></strong> runs 26 miles on the old Ulster and Delaware Railroad bed, and <strong><L to="delaware-ulster-railroad">Delaware &amp; Ulster Railroad</L></strong> revived scenic excursion train service along the same corridor in 2025. <strong><L to="schoharie-valley-rail-trail">Schoharie Valley Rail Trail</L></strong> connects Middleburgh through farmland with Helderberg Escarpment views. For wildlife, <strong><L to="bashakill-wildlife-management-area">Bashakill Wildlife Management Area</L></strong> is New York's largest freshwater wetland south of the Adirondacks and a premier birding destination, <strong><L to="albany-pine-bush-preserve">Albany Pine Bush Preserve</L></strong> protects a rare 3,000-acre inland pine barrens ecosystem and the endangered Karner blue butterfly, and <strong><L to="partridge-run-wildlife-management-area">Partridge Run Wildlife Management Area</L></strong> covers 4,500 remote acres in the Albany County hilltowns.</p>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Most of these are free, DEC-managed, or nonprofit-run public lands — no admission beyond the Fly Fishing Center's $12 ticket. Partridge Run is genuinely remote and largely unmarked; bring a GPS. For the region's fire towers specifically, see the Almanac's dedicated <strong><Link to="/fire-towers">Fire Towers</Link></strong> page.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">Kaaterskill Falls, wild trout, a rescued rail line — the Catskills' outdoors beyond the summit.</p>
+    </>
+  ),
+  "cannabis-farms-of-the-hudson-valley": () => (
+    <>
+      <p className="trail-lede">When New York legalized adult-use cannabis, the first conditional cultivator licenses went overwhelmingly to people already farming — hemp growers and multi-generation vegetable farms adding a new crop to fields they'd worked for years. Eleven licensed cultivators are in the Almanac's directory across nine counties, almost all small-batch, sun-grown, and run by people who talk about soil health before they talk about strain names.</p>
+
+      <h2 className="trail-h2">The original farm families</h2>
+      <p><strong><L to="hepworth-farms-cannabis">Hepworth Farms</L></strong> in Milton has farmed the same Rondout Valley soil since 1818 and was among the first licensed cultivators in the state, holding cultivation, extraction, and distribution licenses as a true seed-to-sale operation. <strong><L to="back-home-farm-cannabis">Back Home Farm &amp; Cannabis</L></strong> in High Falls grows cannabis the same way it grows its other 140 crops, and was one of the first suppliers to New York's first recreational dispensary.</p>
+
+      <h2 className="trail-h2">Columbia County's creek-side plots</h2>
+      <p><strong><L to="claverack-creek-farm">Claverack Creek Farm</L></strong> outside Hudson was one of the original 52 hemp farms approved for adult-use cultivation in 2022, growing sun-grown flower prized for taste. <strong><L to="hudson-cannabis">Hudson Cannabis</L></strong> grows close to 2,000 plants nearby and once shipped CBD downriver on the sail-powered schooner Apollonia — its hash ranks as the top-selling SKU in the state.</p>
+
+      <h2 className="trail-h2">Small-batch &amp; regenerative operations</h2>
+      <ul className="trail-list">
+        <li><strong><L to="alchemy-pure">Alchemy Pure</L> — Millerton, Dutchess County.</strong> Organic cultivation from farmers with 25-plus years of sustainable ag experience, grown in living soil.</li>
+        <li><strong><L to="ravens-view-genetics">Ravens View Genetics</L> — Delhi, Delaware County.</strong> One of the state's most respected small operations, focused on genetics and flavor.</li>
+        <li><strong><L to="sunwalker-farms">Sunwalker Farms</L> — Orange County.</strong> Founded by a Marine veteran, mission-driven toward veteran support and horticulture therapy.</li>
+        <li><strong><L to="blackbird-gardens">Blackbird Gardens</L></strong> and <strong><L to="cornucopia-growers">Cornucopia Growers</L> — Schoharie County.</strong> Both small, family-run regenerative operations growing in living soil in the Catskill hills; Cornucopia is women- and minority-owned.</li>
+        <li><strong><L to="sticky-s-weed-farm">Sticky's Weed Farm</L> — Essex, Champlain Valley.</strong> A decade-plus of sungrown, living-soil cultivation at the edge of the Eastern Adirondacks.</li>
+      </ul>
+
+      <h2 className="trail-h2">Advocacy</h2>
+      <p><strong><L to="ny-small-farma">NY Small Farma</L></strong> in Albany is a statewide advocacy organization championing on-farm sales, craft co-ops, and regenerative practices — and opposing the large-warehouse model — on behalf of small cannabis farmers across the state.</p>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>These are licensed cultivators, not dispensaries — most sell through distributors and licensed retail rather than direct farm-gate sales, so check each farm's listing for how their products actually reach the public before planning a visit. New York's cannabis market is still young and licensing rules continue to evolve.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">The same farm families, one more crop in the ground.</p>
+    </>
+  ),
 };

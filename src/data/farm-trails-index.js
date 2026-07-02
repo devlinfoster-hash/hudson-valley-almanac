@@ -349,18 +349,102 @@ export const FARM_TRAILS = [
       "A guide to the craft-beverage scene in Westchester and Rockland counties — Captain Lawrence Brewing, Hardscrabble Cider, Torne Valley Vineyards, and the region's closest-to-NYC tasting rooms.",
     published: true,
   },
+  {
+    slug: "maple-trail-and-sugarhouses",
+    title: "The Maple Trail & Catskill Sugarhouses",
+    area: "Region-Wide · 17 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Fifth- and sixth-generation sugarhouses, wood-fired evaporators, and NYS Maple Weekend — 18 producers from Salem's cluster of three to the Thurman sugarbush belt.",
+    metaDescription:
+      "A guide to the Hudson Valley and Catskills' maple scene — sugarhouses, apiaries, and NYS Maple Weekend stops across 17 counties, from the Catskills to the Adirondack foothills.",
+    published: true,
+  },
+  {
+    slug: "farm-stands-orchards-and-pick-your-own",
+    title: "Farm Stands, Orchards & Pick-Your-Own",
+    area: "Region-Wide · 15 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "The most core-to-the-brand guide in the series — 23 farm stands, U-pick orchards, and CSAs, from an 11-generation Rockland farm to the Black Dirt's biggest onion grower.",
+    metaDescription:
+      "A guide to the Hudson Valley's farm stands, U-pick orchards, and CSAs — 23 destinations across 15 counties, from historic multi-generation farms to honor-system stands.",
+    published: true,
+  },
+  {
+    slug: "makers-forges-and-fiber-studios",
+    title: "Makers, Forges & Fiber Studios",
+    area: "Region-Wide · 15 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Blacksmiths, glassblowers, fiber mills, and weaving studios — 31 working craft shops where you can watch the making happen, not just buy the result.",
+    metaDescription:
+      "A guide to the Hudson Valley's working craft studios — blacksmiths, hot-glass shops, fiber mills, and weaving studios across 15 counties where visitors can watch the making happen.",
+    published: true,
+  },
+  {
+    slug: "farms-to-visit-heritage-breeds-and-sanctuaries",
+    title: "Farms to Visit, Heritage Breeds & Sanctuaries",
+    area: "Region-Wide · 13 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "An eighth-generation farm-stay, Scottish Highland cows on a heritage-breed sanctuary, and the wildlife rehabbers who nursed the Rockefeller Center owl back to health.",
+    metaDescription:
+      "A guide to Hudson Valley farms built for visiting — heritage breed sanctuaries, farm-stays, and licensed wildlife rehabilitation centers across 13 counties.",
+    published: true,
+  },
+  {
+    slug: "county-fairs-folk-schools-and-farm-learning",
+    title: "County Fairs, Folk Schools & Farm Learning",
+    area: "Region-Wide · 18 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Eleven county fairs, a folk school born from the fiddle tune it inspired, and the farm-training programs turning newcomers into the next generation of growers.",
+    metaDescription:
+      "A guide to Hudson Valley county fairs, folk schools, and farm-education programs — 27 destinations across 18 counties, from century-old fairs to hands-on farm training.",
+    published: true,
+  },
+  {
+    slug: "preserves-fire-towers-and-the-outdoors",
+    title: "Preserves, Fire Towers & the Outdoors",
+    area: "Region-Wide · 9 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "The 700,000-acre Catskill Park, the Battenkill's wild trout, and the rivers and rail trails around them — plus where to find the region's 16 fire towers.",
+    metaDescription:
+      "A guide to the Hudson Valley and Catskills' public lands — state parks, wildlife management areas, rivers, and rail trails, with a pointer to the region's 16 fire towers.",
+    published: true,
+  },
+  {
+    slug: "cannabis-farms-of-the-hudson-valley",
+    title: "Cannabis Farms of the Hudson Valley",
+    area: "Region-Wide · 9 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "New York's first licensed cultivators were existing farmers — 11 sun-grown, small-batch operations from Columbia County creek-side plots to the Adirondack foothills.",
+    metaDescription:
+      "A guide to New York's licensed cannabis cultivators in the Hudson Valley and Catskills — 11 sun-grown, small-batch farms, most run by existing multi-generation farm families.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
 
-// The day-trip guides (Farm Trails proper) and the craft-beverage guides
-// share the same underlying schema, prose-body renderer, and /farm-trails/:slug
-// URL space (so none of the beverage guides' already-shared/indexed links
-// break), but they're two different guide series with two different index
-// pages: /farm-trails and /beverage-trails. Split here so each index shows
-// only its own set instead of both showing everything.
-export const PUBLISHED_DAY_TRIP_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series !== "beverage");
+// Three guide series share the same underlying schema, prose-body renderer,
+// and /farm-trails/:slug URL space (so none of the already-shared/indexed
+// beverage or theme guide links break), but they have three separate index
+// pages: /farm-trails (day-trip guides), /beverage-trails, and
+// /explore-by-theme. Split here so each index shows only its own set.
+export const PUBLISHED_DAY_TRIP_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series !== "beverage" && g.series !== "theme");
 export const PUBLISHED_BEVERAGE_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series === "beverage");
+export const PUBLISHED_THEME_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series === "theme");
 
 export function farmTrailBySlug(slug) {
   return FARM_TRAILS.find((g) => g.slug === slug) || null;
