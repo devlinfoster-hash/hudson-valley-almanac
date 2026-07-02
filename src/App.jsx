@@ -326,6 +326,18 @@ const sharedStyles = `
   .listings-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1A2B3C; }
   .result-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.08em; }
   .listing-card { background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 22px 24px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; text-decoration: none; color: inherit; display: block; }
+  /* Results grid — used by the homepage and county/category/combo landing pages
+     so listing cards flow into responsive columns instead of stacking as a
+     single full-width column (which wasted horizontal space on wide screens
+     and made result sets look far longer than they needed to). Card margin is
+     zeroed out here since the grid gap handles spacing instead. */
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .results-grid .listing-card { margin-bottom: 0; display: flex; flex-direction: column; height: 100%; }
+  .results-grid .listing-desc { flex: 1; }
+  .load-more-row { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 8px 0 40px; }
+  .load-more-btn { min-width: 220px; }
+  .load-more-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #5C7A8A; letter-spacing: 0.08em; }
+  @media (max-width: 480px) { .results-grid { grid-template-columns: 1fr; } }
   .listing-card:hover { border-color: #1C3A5E; box-shadow: 3px 3px 0 #1C3A5E; transform: translate(-1px,-1px); }
   .listing-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
   .listing-name { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: #1A2B3C; margin-bottom: 3px; line-height: 1.2; }
@@ -558,6 +570,49 @@ function ResultCard({ d }) {
   );
 }
 
+// Plain responsive grid of ResultCards — no pagination. Used on the
+// statically-prerendered county/category/combo pages, where every listing is
+// intentionally present in the static HTML for SEO/crawlability. Those pages
+// are bounded (under ~180 listings even for the largest county), so a grid is
+// purely a layout improvement with no content tradeoff.
+function ResultsGrid({ listings }) {
+  return (
+    <div className="results-grid">
+      {listings.map((d) => <ResultCard key={d.id} d={d} />)}
+    </div>
+  );
+}
+
+// Homepage results page size. The homepage fetches and filters the *entire*
+// live directory client-side (1,400+ listings), unlike the prerendered
+// county/category pages, so — unlike ResultsGrid above — this one paginates:
+// rendering all 1,400+ cards into the DOM at once (regardless of filter) blew
+// the page out to 300,000+ px tall and tanked mobile load time. The homepage
+// isn't part of getStaticPaths (it's client-fetched), so there's no static
+// HTML / SEO content to preserve here — pagination is a pure win.
+const RESULTS_PAGE_SIZE = 30;
+function PaginatedResultsGrid({ listings, resetKey }) {
+  const [visibleCount, setVisibleCount] = useState(RESULTS_PAGE_SIZE);
+  useEffect(() => { setVisibleCount(RESULTS_PAGE_SIZE); }, [resetKey]);
+  const visible = listings.slice(0, visibleCount);
+  const remaining = listings.length - visible.length;
+  return (
+    <>
+      <div className="results-grid">
+        {visible.map((d) => <ResultCard key={d.id} d={d} />)}
+      </div>
+      {remaining > 0 && (
+        <div className="load-more-row">
+          <button type="button" className="btn-primary load-more-btn" onClick={() => setVisibleCount((v) => v + RESULTS_PAGE_SIZE)}>
+            Load {Math.min(RESULTS_PAGE_SIZE, remaining)} More
+          </button>
+          <span className="load-more-count">{remaining} more {remaining === 1 ? "result" : "results"}</span>
+        </div>
+      )}
+    </>
+  );
+}
+
 function HomePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -771,7 +826,7 @@ function HomePage() {
           ) : filtered.length === 0 ? (
             <div className="no-results">Nothing found. Try a different search or category.</div>
           ) : (
-            filtered.map((d) => <ResultCard key={d.id} d={d} />)
+            <PaginatedResultsGrid listings={filtered} resetKey={`${activeCategory}|${search}|${countyFilter}|${townFilter}|${agOnly}`} />
           )}
         </div>
       </div>
@@ -1429,7 +1484,7 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
         {listings.length === 0 ? (
           <div className="no-results">Nothing listed here yet.</div>
         ) : (
-          listings.map((d) => <ResultCard key={d.id} d={d} />)
+          <ResultsGrid listings={listings} />
         )}
         {inlineNewsletter}
       </div>
