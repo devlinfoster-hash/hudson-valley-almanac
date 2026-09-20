@@ -989,6 +989,42 @@ function RamblesBookCard() {
   );
 }
 
+// The paid Catskills Fire Tower Challenge completion guide, also on Gumroad.
+// Sits directly under the free 1863 book on /fire-towers (free offer first, paid
+// second) and reuses the same .rambles-* card styling so the two read as a pair.
+// Unlike the free book this is fire-towers-only — it is deliberately NOT added to
+// RAMBLES_BOOK_COUNTIES or any county page.
+//
+// ⚠️ UNVERIFIED SLUG: `catskills-fire-towers` was inferred from old listing notes
+// and could not be confirmed live from this environment — Gumroad is blocked by
+// the network egress policy (the known-good rambles-1863 URL above fails the same
+// way, so this is a policy block, not evidence the slug is wrong). Open the URL
+// once before/after merging; if the real slug differs, this constant is the only
+// place to change it.
+const FIRE_TOWER_GUIDE_URL =
+  "https://devlinfoster.gumroad.com/l/catskills-fire-towers?utm_source=hva&utm_medium=cross&utm_campaign=fire-tower-guide";
+
+function FireTowerGuideCard() {
+  return (
+    <aside className="rambles-card" aria-label="Paid Catskills Fire Tower Challenge completion guide">
+      <div className="rambles-card-body">
+        <div className="rambles-eyebrow">Paid · Completion Guide</div>
+        <div className="rambles-title">The Catskills Fire Tower Challenge — A Completion Guide</div>
+        <p className="rambles-desc">Everything you need to climb all eight towers and earn the patch: real round-trip times, a drive-and-cluster itinerary planner, honest trail beta, an offline map pack, and a printable log.</p>
+      </div>
+      <a
+        className="rambles-cta"
+        href={FIRE_TOWER_GUIDE_URL}
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => trackMeanderNYClick("fire-tower-guide")}
+      >
+        Get the guide ↗
+      </a>
+    </aside>
+  );
+}
+
 // Single source of truth for the Buy Me a Coffee hosted page. Used as the
 // SupportButton default href (About page) and the TopNav support CTA, so the
 // URL lives in exactly one place.
@@ -1171,6 +1207,17 @@ function TowerCard({ tower, nameTag = "h3" }) {
   );
 }
 
+// Spell a small count as a word so prose reads as prose ("eight"), not "8".
+// Falls back to the numeral above the range — the fire-tower counts are far
+// below it, and a bare numeral is a graceful degradation rather than a break.
+const NUMBER_WORDS = [
+  "zero", "one", "two", "three", "four", "five", "six",
+  "seven", "eight", "nine", "ten", "eleven", "twelve",
+];
+function numberWord(n) {
+  return NUMBER_WORDS[n] ?? String(n);
+}
+
 function FireTowersPage() {
   const [towers, setTowers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -1241,6 +1288,7 @@ function FireTowersPage() {
         </header>
 
         <RamblesBookCard />
+        <FireTowerGuideCard />
 
         {loading ? (
           <div className="loading"><div className="spinner" /><div className="loading-text">Loading fire towers</div></div>
@@ -1264,7 +1312,13 @@ function FireTowersPage() {
             {bonus.length > 0 && (
               <section className="ft-section" aria-labelledby="ft-bonus-heading">
                 <h2 id="ft-bonus-heading" className="ft-section-title">Off-Challenge Bonus Fire Towers</h2>
-                <p className="ft-section-intro">The Catskills Fire Tower Challenge has its famous five, but the Hudson Valley has other standing, climbable fire towers worth the trip.</p>
+                {/* The count is derived from the challenge towers actually
+                    rendered above, never hardcoded: this line read "famous
+                    five" long after DEC expanded the challenge to eight for
+                    2026, contradicting the grid directly above it. This section
+                    only renders once the fetch resolves, so challenge.length is
+                    always the real number by the time anyone reads this. */}
+                <p className="ft-section-intro">The Catskills Fire Tower Challenge has its famous {numberWord(challenge.length)}, but the Hudson Valley has other standing, climbable fire towers worth the trip.</p>
                 {bonusByCounty.map((g) => (
                   <div key={g.county} className="ft-county-group">
                     <h3 className="ft-county">{g.county} County</h3>
