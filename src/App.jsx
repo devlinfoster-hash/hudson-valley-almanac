@@ -539,13 +539,18 @@ function clampDescription(text, max = 160) {
 }
 
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-function PageMeta({ title, description, canonical, ogType = "website" }) {
+// `noindex` is for pages that resolve to no content (a listing slug that isn't
+// in the database). Those must not carry a canonical either: pointing one at the
+// homepage tells Google this URL is a duplicate of "/" rather than a dead end,
+// which is how empty URLs end up reported as redirects instead of 404s.
+function PageMeta({ title, description, canonical, ogType = "website", noindex = false }) {
   const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 300);
   return (
     <Head>
       <title>{title}</title>
+      {noindex ? <meta name="robots" content="noindex" /> : null}
       {desc ? <meta name="description" content={desc} /> : null}
-      {canonical ? <link rel="canonical" href={canonical} /> : null}
+      {canonical && !noindex ? <link rel="canonical" href={canonical} /> : null}
       <meta property="og:title" content={title} />
       {desc ? <meta property="og:description" content={desc} /> : null}
       <meta property="og:type" content={ogType} />
@@ -1769,9 +1774,11 @@ function ListingPage() {
   // SEO meta + LocalBusiness JSON-LD, computed at render time so they land in the
   // static HTML for prerendered pages (via <Head> = react-helmet), and apply on
   // the client for fallback-fetched ones.
+  // Only a real listing gets a canonical. A slug that resolves to nothing is a
+  // dead end, not a duplicate of the homepage — see `noindex` on PageMeta below.
   const canonicalHref = listing
     ? `${SITE_ORIGIN}/listing/${listing.slug || slug}`
-    : `${SITE_ORIGIN}/`;
+    : undefined;
   const metaTitle = listing
     ? `${listing.name} — Hudson Valley Almanac`
     : notFound
@@ -1819,7 +1826,7 @@ function ListingPage() {
 
   return (
     <div className="listing-page-wrap">
-      <PageMeta title={metaTitle} description={metaDescription} canonical={canonicalHref} ogType="article" />
+      <PageMeta title={metaTitle} description={metaDescription} canonical={canonicalHref} ogType="article" noindex={notFound} />
       {jsonLd ? (
         <Head>
           <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
