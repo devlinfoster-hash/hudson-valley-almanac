@@ -262,9 +262,13 @@ export const routes = [
           return (await import("./data/build-data.js")).listingLoader(params.slug);
         },
       },
-      // Legacy /listings/:slug alias: kept working for users (canonical points at
-      // the singular /listing/:slug), but not prerendered — it renders client-side
-      // and falls back to a live Supabase fetch like any non-prerendered slug.
+      // Legacy /listings/:slug alias. vercel.json now 301s it to the singular
+      // /listing/:slug at the edge, so crawlers and cold loads never see this
+      // route as a second 200 URL for the same listing. It stays in the table as
+      // a client-side safety net (an in-app <Link> to the plural path, or a
+      // deploy where the redirect is missing): not prerendered, so it renders
+      // client-side and falls back to a live Supabase fetch, with its canonical
+      // pointing at /listing/:slug either way.
       { path: "listings/:slug", Component: ListingPage },
       { path: "*", Component: NotFoundPage },
     ],
@@ -535,13 +539,18 @@ function clampDescription(text, max = 160) {
 }
 
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-function PageMeta({ title, description, canonical, ogType = "website" }) {
+// `noindex` is for pages that resolve to no content (a listing slug that isn't
+// in the database). Those must not carry a canonical either: pointing one at the
+// homepage tells Google this URL is a duplicate of "/" rather than a dead end,
+// which is how empty URLs end up reported as redirects instead of 404s.
+function PageMeta({ title, description, canonical, ogType = "website", noindex = false }) {
   const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 300);
   return (
     <Head>
       <title>{title}</title>
+      {noindex ? <meta name="robots" content="noindex" /> : null}
       {desc ? <meta name="description" content={desc} /> : null}
-      {canonical ? <link rel="canonical" href={canonical} /> : null}
+      {canonical && !noindex ? <link rel="canonical" href={canonical} /> : null}
       <meta property="og:title" content={title} />
       {desc ? <meta property="og:description" content={desc} /> : null}
       <meta property="og:type" content={ogType} />
@@ -1765,9 +1774,11 @@ function ListingPage() {
   // SEO meta + LocalBusiness JSON-LD, computed at render time so they land in the
   // static HTML for prerendered pages (via <Head> = react-helmet), and apply on
   // the client for fallback-fetched ones.
+  // Only a real listing gets a canonical. A slug that resolves to nothing is a
+  // dead end, not a duplicate of the homepage — see `noindex` on PageMeta below.
   const canonicalHref = listing
     ? `${SITE_ORIGIN}/listing/${listing.slug || slug}`
-    : `${SITE_ORIGIN}/`;
+    : undefined;
   const metaTitle = listing
     ? `${listing.name} — Hudson Valley Almanac`
     : notFound
@@ -1815,7 +1826,7 @@ function ListingPage() {
 
   return (
     <div className="listing-page-wrap">
-      <PageMeta title={metaTitle} description={metaDescription} canonical={canonicalHref} ogType="article" />
+      <PageMeta title={metaTitle} description={metaDescription} canonical={canonicalHref} ogType="article" noindex={notFound} />
       {jsonLd ? (
         <Head>
           <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>

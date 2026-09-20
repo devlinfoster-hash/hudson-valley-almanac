@@ -7,7 +7,18 @@
       "source": "/:path*",
       "has": [{ "type": "host", "value": "hudsonvalleyalmanac.com" }],
       "destination": "https://www.hudsonvalleyalmanac.com/:path*",
-      "permanent": true
+      "statusCode": 301
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "hudson-valley-almanac.vercel.app" }],
+      "destination": "https://www.hudsonvalleyalmanac.com/:path*",
+      "statusCode": 301
+    },
+    {
+      "source": "/listings/:slug",
+      "destination": "/listing/:slug",
+      "statusCode": 301
     }
   ],
   "rewrites": [
