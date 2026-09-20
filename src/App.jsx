@@ -262,9 +262,13 @@ export const routes = [
           return (await import("./data/build-data.js")).listingLoader(params.slug);
         },
       },
-      // Legacy /listings/:slug alias: kept working for users (canonical points at
-      // the singular /listing/:slug), but not prerendered — it renders client-side
-      // and falls back to a live Supabase fetch like any non-prerendered slug.
+      // Legacy /listings/:slug alias. vercel.json now 301s it to the singular
+      // /listing/:slug at the edge, so crawlers and cold loads never see this
+      // route as a second 200 URL for the same listing. It stays in the table as
+      // a client-side safety net (an in-app <Link> to the plural path, or a
+      // deploy where the redirect is missing): not prerendered, so it renders
+      // client-side and falls back to a live Supabase fetch, with its canonical
+      // pointing at /listing/:slug either way.
       { path: "listings/:slug", Component: ListingPage },
       { path: "*", Component: NotFoundPage },
     ],
