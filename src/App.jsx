@@ -1207,6 +1207,17 @@ function TowerCard({ tower, nameTag = "h3" }) {
   );
 }
 
+// Spell a small count as a word so prose reads as prose ("eight"), not "8".
+// Falls back to the numeral above the range — the fire-tower counts are far
+// below it, and a bare numeral is a graceful degradation rather than a break.
+const NUMBER_WORDS = [
+  "zero", "one", "two", "three", "four", "five", "six",
+  "seven", "eight", "nine", "ten", "eleven", "twelve",
+];
+function numberWord(n) {
+  return NUMBER_WORDS[n] ?? String(n);
+}
+
 function FireTowersPage() {
   const [towers, setTowers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -1301,7 +1312,13 @@ function FireTowersPage() {
             {bonus.length > 0 && (
               <section className="ft-section" aria-labelledby="ft-bonus-heading">
                 <h2 id="ft-bonus-heading" className="ft-section-title">Off-Challenge Bonus Fire Towers</h2>
-                <p className="ft-section-intro">The Catskills Fire Tower Challenge has its famous five, but the Hudson Valley has other standing, climbable fire towers worth the trip.</p>
+                {/* The count is derived from the challenge towers actually
+                    rendered above, never hardcoded: this line read "famous
+                    five" long after DEC expanded the challenge to eight for
+                    2026, contradicting the grid directly above it. This section
+                    only renders once the fetch resolves, so challenge.length is
+                    always the real number by the time anyone reads this. */}
+                <p className="ft-section-intro">The Catskills Fire Tower Challenge has its famous {numberWord(challenge.length)}, but the Hudson Valley has other standing, climbable fire towers worth the trip.</p>
                 {bonusByCounty.map((g) => (
                   <div key={g.county} className="ft-county-group">
                     <h3 className="ft-county">{g.county} County</h3>
