@@ -14,6 +14,7 @@ function formatDate(iso) {
 
 export const NEWS_POSTS = (raw || []).map((p) => ({
   slug: p.slug,
+  kind: p.kind,
   iso: p.publish_date,
   date: formatDate(p.publish_date),
   title: p.title,
