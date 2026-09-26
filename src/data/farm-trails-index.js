@@ -433,6 +433,18 @@ export const FARM_TRAILS = [
       "A guide to New York's licensed cannabis cultivators in the Hudson Valley and Catskills — 11 sun-grown, small-batch farms, most run by existing multi-generation farm families.",
     published: true,
   },
+  {
+    slug: "creameries-cheese-and-farm-dairies",
+    title: "Creameries, Cheese & Farm Dairies",
+    area: "Region-Wide · 12 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Farmstead cheesemakers aging wheels underground, tiny pasture-based goat dairies, and a seven-generation creamery scooping ice cream from its own herd — 29 stops for anyone who likes milk in all its forms.",
+    metaDescription:
+      "A guide to the Hudson Valley and Catskills' creameries, farmstead cheesemakers, goat dairies, and farms bottling their own milk — 29 stops across 12 counties.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
