@@ -457,6 +457,18 @@ export const FARM_TRAILS = [
       "A guide to honor-system and self-serve farm stands in the Hudson Valley, Catskills, and Capital Region — 19 stands and farm stores across 10 counties, many open 24/7.",
     published: true,
   },
+  {
+    slug: "buy-meat-direct-quarters-halves-and-shares",
+    title: "Buy Meat Direct: Quarters, Halves & Shares",
+    area: "Region-Wide · 11 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Fill the freezer straight from the farm — 30 farms selling quarter and half beef, half and whole hogs, and lamb shares, from Wagyu in Greenwich to heritage Mulefoot pork in Cambridge.",
+    metaDescription:
+      "A guide to buying meat in bulk directly from Hudson Valley, Catskills, and Capital Region farms — 30 farms selling quarter, half, and whole beef, pork, and lamb shares.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
