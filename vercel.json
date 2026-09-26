@@ -2,6 +2,9 @@
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "crons": [
+    { "path": "/api/nightly-rebuild", "schedule": "0 10 * * *" }
+  ],
   "redirects": [
     {
       "source": "/:path*",
