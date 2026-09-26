@@ -500,6 +500,10 @@ const sharedStyles = `
   .about-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
   .about-support { margin-top: 8px; }
   .news-subhead { font-family: 'Libre Baskerville', serif; font-size: 21px; color: #1C3A5E; margin: 32px 0 12px; }
+  .news-minihead { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #8A6D1F; margin: 22px 0 8px; }
+  .news-list { font-family: 'Lora', serif; font-size: 16px; line-height: 1.65; color: #1A2B3C; margin: 0 0 16px 20px; padding: 0; }
+  .news-list li { margin-bottom: 4px; }
+  .about-body a { color: #1C3A5E; }
   .news-card { padding: 8px 0 28px; margin-bottom: 28px; border-bottom: 1px solid rgba(28,58,94,0.2); }
   .news-date { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A6D1F; margin-bottom: 8px; }
   .news-card-title { font-family: 'Libre Baskerville', serif; font-size: 24px; line-height: 1.3; margin: 0 0 12px; }
@@ -1383,14 +1387,49 @@ function NotFoundPage() {
 // Static About page. Built on the same single-page shell as the fire-towers /
 // listing pages (topbar, back-link, masthead, cream body panel, Footer) so it
 // sits inside the normal layout. Copy is intentionally verbatim from the spec.
+function newsInline(text) {
+  const parts = [];
+  const re = /\[([^\]]+)\]\(([^)]+)\)|\*([^*]+)\*/g;
+  let last = 0, m, k = 0;
+  while ((m = re.exec(text))) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    if (m[1]) {
+      const href = m[2];
+      parts.push(href.startsWith("/")
+        ? <Link key={k++} to={href}>{m[1]}</Link>
+        : <a key={k++} href={href} target="_blank" rel="noopener noreferrer">{m[1]}</a>);
+    } else {
+      parts.push(<em key={k++}>{m[3]}</em>);
+    }
+    last = re.lastIndex;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
+
 function NewsBody({ post }) {
+  const blocks = [];
+  let list = null;
+  post.body.forEach((para, i) => {
+    if (para.startsWith("- ")) {
+      if (!list) { list = []; blocks.push({ type: "ul", items: list, key: i }); }
+      list.push(para.slice(2));
+      return;
+    }
+    list = null;
+    blocks.push({ type: para.startsWith("### ") ? "h3" : para.startsWith("## ") ? "h2" : "p", text: para.replace(/^#{2,3} /, ""), key: i });
+  });
   return (
     <div className="about-body">
-      {post.body.map((para, i) =>
-        para.startsWith("## ") ? (
-          <h2 key={i} className="news-subhead">{para.slice(3)}</h2>
+      {blocks.map((b) =>
+        b.type === "ul" ? (
+          <ul key={b.key} className="news-list">{b.items.map((it, j) => <li key={j}>{newsInline(it)}</li>)}</ul>
+        ) : b.type === "h2" ? (
+          <h2 key={b.key} className="news-subhead">{b.text}</h2>
+        ) : b.type === "h3" ? (
+          <h3 key={b.key} className="news-minihead">{b.text}</h3>
         ) : (
-          <p key={i}>{para}</p>
+          <p key={b.key}>{newsInline(b.text)}</p>
         )
       )}
     </div>

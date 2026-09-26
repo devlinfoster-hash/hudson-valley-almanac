@@ -6,3 +6,5 @@ src/data/listings.json
 .env.local
 *.log
 .DS_Store
+
+src/data/news.json

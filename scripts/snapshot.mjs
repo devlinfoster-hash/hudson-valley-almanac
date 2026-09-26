@@ -56,7 +56,40 @@ async function fetchPublishedListings() {
   return all;
 }
 
+// News posts (public.news_posts). Only published posts whose publish_date has
+// arrived (New York time) are written, so scheduled posts appear on the first
+// rebuild on or after their date.
+const NEWS_OUT_PATH = resolve(dirname(OUT_PATH), "news.json");
+
+function todayInNewYork() {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
+}
+
+async function fetchNews() {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data, error } = await supabase
+    .from("news_posts")
+    .select("slug, publish_date, title, summary, body")
+    .eq("status", "published")
+    .lte("publish_date", todayInNewYork())
+    .order("publish_date", { ascending: false });
+  if (error) throw error;
+  return data || [];
+}
+
 async function main() {
+  let news = [];
+  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+    try {
+      news = await fetchNews();
+      console.log(`[snapshot] ${news.length} news posts fetched.`);
+    } catch (err) {
+      console.warn(`[snapshot] Failed to load news (${err.message}); writing empty news.`);
+    }
+  }
+  await mkdir(dirname(NEWS_OUT_PATH), { recursive: true });
+  await writeFile(NEWS_OUT_PATH, JSON.stringify(news), "utf8");
+
   let listings = [];
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     try {
