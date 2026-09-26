@@ -5,6 +5,7 @@ import { supabase } from "./supabase";
 import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
 import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
+import { NEWS_POSTS } from "./data/news.js";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -198,6 +199,14 @@ export const routes = [
       { index: true, Component: HomePage },
       { path: "fire-towers", Component: FireTowersPage },
       { path: "about", Component: AboutPage },
+      { path: "news", Component: NewsIndexPage },
+      {
+        path: "news/:slug",
+        Component: NewsPostPage,
+        getStaticPaths() {
+          return NEWS_POSTS.map((p) => `news/${p.slug}`);
+        },
+      },
       { path: "farm-trails", Component: FarmTrailsIndexPage },
       { path: "beverage-trails", Component: BeverageTrailsIndexPage },
       { path: "explore-by-theme", Component: ThemeTrailsIndexPage },
@@ -490,6 +499,14 @@ const sharedStyles = `
   .about-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.6; font-style: italic; color: #4A6472; margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
   .about-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
   .about-support { margin-top: 8px; }
+  .news-subhead { font-family: 'Libre Baskerville', serif; font-size: 21px; color: #1C3A5E; margin: 32px 0 12px; }
+  .news-card { padding: 8px 0 28px; margin-bottom: 28px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .news-date { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A6D1F; margin-bottom: 8px; }
+  .news-card-title { font-family: 'Libre Baskerville', serif; font-size: 24px; line-height: 1.3; margin: 0 0 12px; }
+  .news-card-title a { color: #1C3A5E; text-decoration: none; }
+  .news-card-title a:hover { text-decoration: underline; }
+  .news-cta { display: inline-block; background: #1C3A5E; color: #EFF0E8; padding: 12px 22px; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; }
+  .news-cta:hover { background: #0F2640; }
   .about-support-lead { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #1A2B3C; margin-bottom: 16px; }
   /* Farm Trails — guide reading column (reuses the single-listing page shell,
      same as About) and the /farm-trails index cards. */
@@ -750,7 +767,7 @@ function HomePage() {
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
       <PageMeta
         title="Hudson Valley Almanac — a directory of working farms and makers."
-        description="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,400 listings across 25 categories, with a focus on farm-licensed producers who grow what they sell."
+        description="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,800 listings across 25 categories, with a focus on farm-licensed producers who grow what they sell."
         canonical={homeCanonical}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
@@ -1082,6 +1099,7 @@ function Footer() {
           <Link to="/explore-by-theme" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Explore by Theme</Link>
           <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
           <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
+          <Link to="/news" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>News</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
@@ -1107,6 +1125,7 @@ function TopNav() {
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
         <NavLink to="/about" className="topnav-link">About</NavLink>
+        <NavLink to="/news" className="topnav-link">News</NavLink>
         <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link topnav-secondary">Contact Us</a>
         <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="topnav-link topnav-secondary">Submit a Listing</a>
         <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link topnav-secondary">Report an Error</a>
@@ -1364,6 +1383,89 @@ function NotFoundPage() {
 // Static About page. Built on the same single-page shell as the fire-towers /
 // listing pages (topbar, back-link, masthead, cream body panel, Footer) so it
 // sits inside the normal layout. Copy is intentionally verbatim from the spec.
+function NewsBody({ post }) {
+  return (
+    <div className="about-body">
+      {post.body.map((para, i) =>
+        para.startsWith("## ") ? (
+          <h2 key={i} className="news-subhead">{para.slice(3)}</h2>
+        ) : (
+          <p key={i}>{para}</p>
+        )
+      )}
+    </div>
+  );
+}
+
+function NewsIndexPage() {
+  return (
+    <div className="listing-page-wrap">
+      <PageMeta
+        title="News — Hudson Valley Almanac"
+        description="Updates from the Hudson Valley Almanac: new listings, new guides, and what's changed in the directory."
+        canonical={`${SITE_ORIGIN}/news`}
+      />
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="listing-page-article">
+        <header className="listing-page-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac · News</div>
+          <h1 className="listing-page-title">News from the Almanac</h1>
+        </header>
+        <div className="listing-page-body">
+          {NEWS_POSTS.map((post) => (
+            <article key={post.slug} className="news-card">
+              <div className="news-date">{post.date}</div>
+              <h2 className="news-card-title">
+                <Link to={`/news/${post.slug}`}>{post.title}</Link>
+              </h2>
+              <p className="about-lede">{post.summary}</p>
+              <Link to={`/news/${post.slug}`} className="back-link">Read the full update →</Link>
+            </article>
+          ))}
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+function NewsPostPage() {
+  const { slug } = useParams();
+  const post = NEWS_POSTS.find((p) => p.slug === slug);
+  if (!post) return <NotFoundPage />;
+  return (
+    <div className="listing-page-wrap">
+      <PageMeta
+        title={`${post.title} — Hudson Valley Almanac`}
+        description={post.summary}
+        canonical={`${SITE_ORIGIN}/news/${post.slug}`}
+      />
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/news" className="back-link">← All news</Link>
+      </div>
+      <div className="listing-page-article">
+        <header className="listing-page-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac · {post.date}</div>
+          <h1 className="listing-page-title">{post.title}</h1>
+        </header>
+        <div className="listing-page-body">
+          <p className="about-lede">{post.summary}</p>
+          <NewsBody post={post} />
+          <div className="about-support">
+            <p className="about-support-lead">Want your business in the Almanac? It's free.</p>
+            <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="news-cta">Submit a Listing</a>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
 function AboutPage() {
   return (
     <div className="listing-page-wrap">
@@ -1387,7 +1489,7 @@ function AboutPage() {
           </p>
           <div className="about-body">
             <p>
-              Hudson Valley Almanac started as a simple problem: I kept wanting to know where the good stuff was — the farm with the honor-system egg fridge, the brewery down the dirt road, the fire tower worth the climb — and no single place had it all. So I started writing it down. Then I didn't stop. Now it's 1,400-and-counting listings across the Valley, each one researched and written by hand with zero ads.
+              Hudson Valley Almanac started as a simple problem: I kept wanting to know where the good stuff was — the farm with the honor-system egg fridge, the brewery down the dirt road, the fire tower worth the climb — and no single place had it all. So I started writing it down. Then I didn't stop. Now it's 1,800-and-counting listings across the Valley, each one researched and written by hand with zero ads.
             </p>
             <p>
               It's free, and it'll stay free. But servers don't run on enthusiasm, and neither do I (well — mostly enthusiasm, plus coffee). If the Almanac has saved you from a bad afternoon or sent you somewhere great, you can buy me one. It keeps the lights on, keeps me independent, and funds the next dirt-road detour.
