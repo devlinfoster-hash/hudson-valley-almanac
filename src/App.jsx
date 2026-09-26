@@ -1335,6 +1335,7 @@ function TopNav() {
   return (
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
+        <NavLink to="/" end className="topnav-link">Home</NavLink>
         <NavLink to="/about" className="topnav-link">About</NavLink>
         <NavLink to="/news" className="topnav-link">News</NavLink>
         <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link topnav-secondary">Contact Us</a>
@@ -1706,8 +1707,9 @@ function NewsPostPage() {
         canonical={`${SITE_ORIGIN}/news/${post.slug}`}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
-      <div className="listing-page-nav">
-        <Link to="/news" className="back-link">← All news</Link>
+      <div className="listing-page-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <Link to="/" className="back-link">← Back to all resources</Link>
+        <Link to="/news" className="back-link">All news →</Link>
       </div>
       <div className="listing-page-article">
         <header className="listing-page-masthead">
