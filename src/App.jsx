@@ -345,10 +345,10 @@ const sharedStyles = `
      (composed alongside it) but boxed in the site accent so it reads as a CTA. */
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
   .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
-  /* On narrow screens the five TopNav links wrapped to two lines above the
-     hero, crowding the fold. Contact Us / Submit a Listing / Report an Error
-     collapse below 640px — they're one tap away in the footer — leaving About
-     and the Buy Me a Coffee CTA as the two links that stay visible. */
+  /* On narrow screens the full TopNav wrapped to two lines above the hero,
+     crowding the fold. Contact Us and Report an Error collapse below 640px
+     (both are one tap away in the footer); About, News, Submit a Listing and
+     the Buy Me a Coffee CTA stay visible at every width. */
   @media (max-width: 640px) { .topnav-secondary { display: none; } }
   .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
   @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
@@ -920,8 +920,8 @@ function HomePage() {
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
           <h2 style={{fontSize:"1.8rem",color:"#1A2B3C",marginBottom:"12px",fontFamily:"'Libre Baskerville',serif"}}>Get Listed on Hudson Valley Almanac</h2>
-          <p style={{color:"#4A6472",fontSize:"1rem",marginBottom:"24px"}}>Are you a local farm, maker, or service provider in the Hudson Valley? Listings are completely free. Submit your business and we will add you within 48 hours.</p>
-          <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{display:"inline-block",backgroundColor:"#1C3A5E",color:"#EFF0E8",padding:"14px 32px",borderRadius:"8px",textDecoration:"none",fontWeight:"600",fontSize:"1rem",marginBottom:"12px"}}>Submit Your Business</a>
+          <p style={{color:"#4A6472",fontSize:"1rem",marginBottom:"24px"}}>Are you a local farm, maker, or service provider in the Hudson Valley? Listings are completely free. Submit your business, and most listings appear by the next morning.</p>
+          <button type="button" onClick={openSubmitForm} style={{display:"inline-block",backgroundColor:"#1C3A5E",color:"#EFF0E8",padding:"14px 32px",border:"none",borderRadius:"8px",cursor:"pointer",fontFamily:"inherit",fontWeight:"600",fontSize:"1rem",marginBottom:"12px"}}>Submit Your Business</button>
           <p style={{color:"#8AA0AE",fontSize:"0.85rem",marginTop:"8px"}}>Already listed? Email us to update your info or report an error.</p>
         </div>
       </div>
@@ -1157,7 +1157,7 @@ function TopNav() {
         <NavLink to="/about" className="topnav-link">About</NavLink>
         <NavLink to="/news" className="topnav-link">News</NavLink>
         <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link topnav-secondary">Contact Us</a>
-        <button type="button" className="link-button topnav-link topnav-secondary" onClick={openSubmitForm}>Submit a Listing</button>
+        <button type="button" className="link-button topnav-link" onClick={openSubmitForm}>Submit a Listing</button>
         <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link topnav-secondary">Report an Error</a>
         <a
           href={BMC_SUPPORT_URL}
