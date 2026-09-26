@@ -1319,4 +1319,189 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">Damp woods, a sharp eye, and someone beside you who knows which ones not to pick.</p>
     </>
   ),
+  "cut-flowers-lavender-and-flower-farms": () => (
+    <>
+      <p className="trail-lede">Nineteen flower farms across ten counties, growing cut flowers the old way: in the field, often without chemicals, and picked the morning they're sold. Many sell bouquets at farmers' markets, several offer flower CSAs so you get fresh blooms all season, and a few let you pick your own. It's one of the fastest-growing kinds of small farm in the region.</p>
+
+      <h2 className="trail-h2">Cut-flower farms</h2>
+      <p><strong><L to="doodlebug-flower-farm">Doodlebug Flower Farm</L></strong> in Athens is a micro boutique farm growing hundreds of flowers in raised beds without chemicals or pesticides, with a year-round flower CSA. Also in Greene County, <strong><L to="hanncroix-hill-farm">Hanncroix Hill Farm</L></strong> in Climax is a veteran-owned family farm growing specialty cut flowers, <strong><L to="vernon-street-farm">Vernon Street Farm</L></strong> grows flowers and vegetables right in the village of Athens, and <strong><L to="grace-rose-flowers">Grace Rose Flowers</L></strong> in Prattsville is a regenerative farm with a CSA. <strong><L to="misty-meadows-flower-farm">Misty Meadows Flower Farm</L></strong> in Cherry Valley grows unique and heirloom flowers without chemicals from May through October, with local delivery around Cooperstown and Oneonta.</p>
+      <ul className="trail-list">
+        <li><strong><L to="breezy-hill-blooms">Breezy Hill Blooms</L> — Hoosick Falls.</strong> A flower farm with CSA shares, plus trees and wreaths at the holidays.</li>
+        <li><strong><L to="balet-flowers-and-design">Balet Flowers and Design</L> — Malta</strong> and <strong><L to="native-farm-flowers">Native Farm Flowers</L> — Greenfield Center.</strong></li>
+        <li><strong><L to="monet-flower-farm-and-floral-design">Monet Flower Farm &amp; Floral Design</L> — Hobart.</strong> Certified organic.</li>
+        <li><strong><L to="haven-hill-farm">Haven Hill Farm</L> — Greenwich.</strong></li>
+        <li><strong><L to="six-dutchess-farm">Six Dutchess Farm</L> — Dutchess County.</strong> A flower and fiber farm with a seasonal flower CSA.</li>
+        <li><strong><L to="honey-dog-farm-llc">Honey Dog Farm</L> — Hillsdale.</strong> Certified organic flowers, vegetables, and honey.</li>
+        <li><strong><L to="homegrown-kitchen-gardens">Homegrown Kitchen Gardens</L> — Tarrytown.</strong> A certified organic nursery with cut flowers alongside heirloom transplants.</li>
+      </ul>
+
+      <h2 className="trail-h2">Pick your own</h2>
+      <p>Several farms let you cut your own. <strong><L to="gardenworks-farm">Gardenworks Farm</L></strong> in Salem, a fourth-generation, 300-acre farm, has u-pick cut flowers alongside blueberries and raspberries, with a marketplace in a renovated dairy barn. <strong><L to="east-durham-farms">East Durham Farms</L></strong> offers u-pick flowers in season along with apples and peaches, and <strong><L to="barton-orchards">Barton Orchards</L></strong> in Poughquag includes flowers among its long list of pick-your-own crops.</p>
+
+      <h2 className="trail-h2">Lavender</h2>
+      <p><strong><L to="lavenlair-farm">Lavenlair Farm</L></strong> in Whitehall is a lavender farm selling plants, herbs, and preserves. In Sharon Springs, <strong><L to="sharon-sprigs-fine-dried-florals">Sharon Sprigs Fine Dried Florals</L></strong> is the shop of Slate Hill Lavender Farm, where the growers dry their own flowers and lavender and handcraft wreaths and arrangements. <strong><L to="lavender-fields-at-maxwell-farm-llc">Lavender Fields at Maxwell Farm</L></strong> in Delhi has a farm store with flowers, herbs, honey, and baked goods.</p>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Flower season generally runs from late spring through the first hard frost, and what's blooming changes week to week. Flower CSAs often sell out in winter or early spring, so sign up early. For u-pick, bring clippers and a bucket of water if you can, and pick in the cool of the morning so stems last longer. Many small flower farms don't have a farm stand, so check each listing for where they sell.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or plan your garden with <strong><Link to="/farm-trails/nurseries-native-plants-and-garden-centers">Nurseries, Native Plants &amp; Garden Centers</Link></strong>.</p>
+      <p className="trail-close">A bucket of just-cut stems on the passenger seat, and the whole car smelling like summer.</p>
+    </>
+  ),
+  "nurseries-native-plants-and-garden-centers": () => (
+    <>
+      <p className="trail-lede">Thirty-nine nurseries, native plant growers, and garden centers across fourteen counties. A new wave of native-plant nurseries grows the wildflowers, shrubs, and trees that belong here, feeding local pollinators and birds, while old family garden centers, some in business for more than a century, still fill the spring with flats of vegetable starts and hanging baskets.</p>
+
+      <h2 className="trail-h2">Native plant nurseries</h2>
+      <p><strong><L to="catskill-native-nursery">Catskill Native Nursery</L></strong> in Kerhonkson has specialized in plants native to eastern North America since 1999. <strong><L to="barkaboom-native-plants-2">Barkaboom Native Plants</L></strong> in Margaretville grows local-ecotype natives of the Catskills, and <strong><L to="ulster-county-native-nursery">Ulster County Native Nursery</L></strong> in Ulster Park is pesticide-free, focusing on host plants for caterpillars and heavy nectar and pollen sources. In Dutchess County, <strong><L to="hudson-valley-native-plant-initiative">Hudson Valley Native Plant Initiative</L></strong> in Red Hook grows regionally appropriate plants for pollinators, <strong><L to="elderflower-native-nursery">Elderflower Native Nursery</L></strong> in Rhinebeck sells natives through spring preorders and seasonal events, and <strong><L to="one-nature-plant-nursery-2">One Nature Plant Nursery</L></strong> in Beacon grows native, edible, and medicinal plants.</p>
+      <ul className="trail-list">
+        <li><strong><L to="capital-native-plants">Capital Native Plants</L> — Troy.</strong> Native and pollinator plants with online ordering, free pickup, and local delivery.</li>
+        <li><strong><L to="wild-gardens-nursery">Wild Gardens Nursery</L> — Cortlandt Manor.</strong> Grows most plants from locally sourced seed.</li>
+        <li><strong><L to="the-herb-farm-at-midsummer-farm">The Herb Farm at Midsummer Farm</L> — Warwick.</strong> A certified organic medicinal and native plant nursery, open on specific dates.</li>
+        <li><strong><L to="pondside-nursery">Pondside Nursery</L> — Hudson.</strong> Native and ornamental plants for Hudson Valley landscapes.</li>
+        <li><strong><L to="out-of-the-ordinary-nursery">Out of the Ordinary Nursery</L> — Averill Park.</strong> Unusual and regionally appropriate plants.</li>
+      </ul>
+
+      <h2 className="trail-h2">Family garden centers</h2>
+      <p><strong><L to="becker-s-farm">Becker's Farm</L></strong> in East Greenbush has been in continuous operation since 1870, and <strong><L to="faddegon-s-nursery">Faddegon's Nursery</L></strong> in Latham, founded in 1920, is a year-round Capital Region institution. <strong><L to="story-s-nursery">Story's Nursery</L></strong> in Freehold has served Greene County since 1956 from 35 acres, and <strong><L to="kerns-landscape-nursery">Kerns Landscape &amp; Nursery</L></strong> in Jewett has been the mountaintop's garden center since 1987. <strong><L to="black-horse-farms">Black Horse Farms</L></strong> on Route 9W in Athens runs 42 greenhouses with a full garden center and farm market. Farther south, <strong><L to="phantom-gardener">Phantom Gardener</L></strong> in Rhinebeck, <strong><L to="down-to-earth-living-rockland-wholesale-nursery">Down to Earth Living</L></strong> in Pomona (Rockland County's largest), and <strong><L to="bedford-farms">Bedford Farms</L></strong> in Bedford Village carry the full range.</p>
+
+      <h2 className="trail-h2">More nurseries &amp; greenhouses</h2>
+      <ul className="trail-list">
+        <li><strong>Albany County:</strong> <L to="hillards-greenhouse-and-produce">Hillard's Greenhouse &amp; Produce</L> (Latham), <L to="lansing-farm-market-and-greenhouses">Lansing Farm Market &amp; Greenhouses</L> (Colonie), and <L to="roots-n-boots">Roots N Boots</L> (East Berne, tucked into the Helderberg escarpment).</li>
+        <li><strong>Rensselaer:</strong> <L to="elhannon-nursery">Elhannon Nursery</L> (Hoosick, several locations) and <L to="zemas-nursery">Zema's Nursery</L> (Stephentown).</li>
+        <li><strong>Saratoga &amp; Washington:</strong> <L to="milburt-farm-greenhouse">Milburt Farm &amp; Greenhouse</L> (Galway), <L to="soranos-greenhouses">Sorano's Greenhouses</L> (Gansevoort), <L to="sunnyside-gardens">Sunnyside Gardens</L> (Saratoga Springs), and <L to="toadflax-nursery">Toadflax Nursery</L> (Fort Edward).</li>
+        <li><strong>Greene &amp; Schoharie:</strong> <L to="greene-bee-greenhouse-2">Greene Bee Greenhouse</L> (Cornwallville) and <L to="schoharie-valley-farms">Schoharie Valley Farms</L> (Schoharie).</li>
+        <li><strong>Columbia &amp; Dutchess:</strong> <L to="maple-lane-nursery">Maple Lane Nursery</L> (Valatie) and <L to="twin-ponds-nursery">Twin Ponds Nursery</L> (Rhinebeck, organic).</li>
+        <li><strong>Orange &amp; Ulster:</strong> <L to="dogwood-acres-family-farm">Dogwood Acres Family Farm</L> (Middletown), <L to="scheuermann-farms-and-greenhouses">Scheuermann Farms &amp; Greenhouses</L> (Warwick), <L to="hickory-hollow-nursery">Hickory Hollow Nursery</L> (Tuxedo), and <L to="cedar-ridge-nursery">Cedar Ridge Nursery</L> (Saugerties).</li>
+        <li><strong>Sullivan &amp; Otsego:</strong> <L to="l-and-m-greenhouses">L &amp; M Greenhouses</L> (Bethel), <L to="maplehorst-farm-nursery">Maplehorst Farm Nursery</L> (Monticello), and <L to="fox-hollow-nursery">Fox Hollow Nursery</L> (West Oneonta).</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>The busiest weeks are mid-May through early June, after the last frost; go early in the season for the best selection, especially of natives, which small nurseries grow in limited numbers. Several native nurseries sell mainly through spring preorders or open only on set dates, so check before you go. When choosing natives, ask about the plant's local origin (its "ecotype"); plants grown from nearby seed are best adapted to your garden and your local wildlife.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or find bouquets on <strong><Link to="/farm-trails/cut-flowers-lavender-and-flower-farms">Cut Flowers, Lavender &amp; Flower Farms</Link></strong>.</p>
+      <p className="trail-close">A flat of seedlings, a native shrub for the bees, and dirt under your fingernails by Sunday night.</p>
+    </>
+  ),
+  "family-farm-days": () => (
+    <>
+      <p className="trail-lede">Twenty-one farms across twelve counties that are made for a family day out: petting zoos and barnyard animals, hayrides and corn mazes, pumpkin patches, and u-pick fields where kids can eat as much as they pick. Some are big fall destinations with dozens of attractions; others are small family farms where you can meet the animals up close.</p>
+
+      <h2 className="trail-h2">Meet the animals</h2>
+      <p><strong><L to="west-maple-farm">West Maple Farm</L></strong> in Monsey is a 15-acre farm built around hands-on visits, with a petting zoo of cows, sheep, donkeys, alpacas, goats, and peacocks, plus hayride tours, gem mining, and honeybee tours. <strong><L to="hull-o-farms">Hull-O Farms</L></strong> in Durham is an eighth-generation farm where guests on farm stays can milk cows and gather eggs, and <strong><L to="june-farms">June Farms</L></strong> in West Sand Lake is a heritage-breed sanctuary with Scottish Highland cows and giant Shire horses. <strong><L to="a-ooms-and-sons-dairy-farm">A. Ooms &amp; Sons Dairy Farm</L></strong> in Valatie offers farm tours and a petting area, and <strong><L to="kristy-s-barn">Kristy's Barn</L></strong> in Schodack, a century farm since 1910, has a petting paddock and weekend hayrides.</p>
+
+      <h2 className="trail-h2">Fall destination farms</h2>
+      <p><strong><L to="ellms-family-farm">Ellms Family Farm</L></strong> in Ballston Spa has more than 40 attractions, including a corn maze, pumpkin patch, and hayrides. <strong><L to="liberty-ridge-farm">Liberty Ridge Farm</L></strong> in Schaghticoke and <strong><L to="schuyler-farms">Schuyler Farms</L></strong> in Schuylerville both run corn mazes, pumpkin picking, and hayrides, and <strong><L to="engelke-farm">Engelke Farm</L></strong> near Troy has a pumpkin patch, hayrides, and pick-your-own in the fall. <strong><L to="hicks-orchard-slyboro-ciderhouse">Hicks Orchard</L></strong> in Granville, New York's oldest u-pick orchard, adds barnyard animals, wood-fired pizza, cider donuts, and live music on weekends.</p>
+
+      <h2 className="trail-h2">Pick-your-own days</h2>
+      <ul className="trail-list">
+        <li><strong><L to="barton-orchards">Barton Orchards</L> — Poughquag.</strong> One of the region's premier u-pick destinations, open mid-July through October, with a farm market.</li>
+        <li><strong><L to="masker-orchards">Masker Orchards</L> — Warwick.</strong> Drive right up to the tree on 200 acres, with no admission fee.</li>
+        <li><strong><L to="ochs-orchard">Ochs Orchard</L> — Warwick.</strong> U-pick from strawberries in June to apples in fall, with homemade ice cream and cider donuts on weekends.</li>
+        <li><strong><L to="greig-farm-2">Greig Farm</L> — Red Hook.</strong> Pick-your-own berries and fruit and family-friendly farm activities, open daily.</li>
+        <li><strong><L to="east-durham-farms">East Durham Farms</L> — East Durham.</strong> A family-friendly farm with u-pick apples, peaches, and flowers and a two-story barn store.</li>
+        <li><strong><L to="middlefield-orchard">Middlefield Orchard</L> — Cooperstown.</strong> U-pick berries and more than 20 apple varieties, with pumpkins and hayrides in fall.</li>
+        <li><strong><L to="harvest-moon-farm-orchard">Harvest Moon Farm &amp; Orchard</L> — North Salem.</strong> U-pick apples, pumpkins, and strawberries and a seasonal café.</li>
+        <li><strong><L to="boehm-farm">Boehm Farm</L> — Climax.</strong> A family apple farm since 1903 with u-pick apples, peaches, and cherries.</li>
+      </ul>
+
+      <h2 className="trail-h2">More family outings</h2>
+      <ul className="trail-list">
+        <li><strong><L to="dry-brook-sugar-house">Dry Brook Sugar House</L> — Salem.</strong> A pancake breakfast and horse-drawn wagon rides during NYS Maple Weekend in March.</li>
+        <li><strong><L to="warren-county-fish-hatchery">Warren County Fish Hatchery</L> — Warrensburg.</strong> A public hatchery with ten display ponds of trout and salmon.</li>
+        <li><strong><L to="delaware-ulster-railroad">Delaware &amp; Ulster Railroad</L> — Arkville.</strong> Scenic train rides through the Catskills.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>The big fall farms get very busy on October weekends; go on a weekday or right at opening if you can. Many charge admission for attractions while the farm market stays free, and some sell tickets online in advance. Wear shoes that can get muddy, bring hand sanitizer for after the petting zoo, and ask before feeding any animal. U-pick crops depend on the weather, so check the farm's picking report before you drive.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or see more u-pick farms on <strong><Link to="/farm-trails/farm-stands-orchards-and-pick-your-own">Farm Stands, Orchards &amp; Pick-Your-Own</Link></strong>.</p>
+      <p className="trail-close">Muddy boots, sticky fingers, and a kid asleep in the back seat before you're out of the driveway.</p>
+    </>
+  ),
+  "century-and-bicentennial-farms": () => (
+    <>
+      <p className="trail-lede">Twenty-six farms and farm businesses across fourteen counties that have been going for a century or more, many in the same family the whole time. They've outlasted wars, depressions, and the collapse of the small dairy, and they're still selling apples, milk, and maple syrup to anyone who stops by. Here they are in order of age, oldest first.</p>
+
+      <h2 className="trail-h2">The 1700s</h2>
+      <p><strong><L to="the-orchards-of-concklin">The Orchards of Concklin</L></strong> in Pomona is the oldest working farm in Rockland County, farmed by eleven generations of the Concklin family since 1711. <strong><L to="piersons-farm">Pierson's Farm</L></strong> in Middletown has been farming since 1790, <strong><L to="ryder-farm">Ryder Farm</L></strong> in Brewster has been in the Ryder family since 1795, and <strong><L to="rose-hill-ferments">Rose Hill Ferments</L></strong> makes cider and wine at Rose Hill Farm in Red Hook, an orchard founded in 1798. <strong><L to="general-bailey-homestead-farm">General Bailey Homestead Farm</L></strong> in Greenfield Center, established in 1798, is one of the oldest continuously operated farm properties in the area. <strong><L to="hull-o-farms">Hull-O Farms</L></strong> in Durham, an eighth-generation farm, is a designated National Bicentennial Farm, with more than 200 years of Hull family stewardship.</p>
+
+      <h2 className="trail-h2">The early and mid-1800s</h2>
+      <ul className="trail-list">
+        <li><strong><L to="bellvale-farms-creamery">Bellvale Farms Creamery</L> — Warwick, 1819.</strong> A seven-generation dairy atop Mount Peter, now making ice cream from its own herd.</li>
+        <li><strong><L to="brotherhood-winery">Brotherhood Winery</L> — Washingtonville, 1839.</strong> America's oldest continuously operating winery.</li>
+        <li><strong><L to="1841-farm">1841 Farm</L> — Rhinebeck, 1841.</strong> A small diversified farm using regenerative practices.</li>
+        <li><strong><L to="strickland-hollow-farm-distillery">Strickland Hollow Farm &amp; Distillery</L> — Meridale, 1841.</strong> A cider apple farm and distillery in 1800s buildings.</li>
+        <li><strong><L to="sheldon-farms">Sheldon Farms</L> — Salem, 1845.</strong> Six generations on the Battenkill, known for sweet corn and heirloom potatoes.</li>
+        <li><strong><L to="bad-seed-hard-cider">Bad Seed Hard Cider</L> — Highland, 1855.</strong> Cider made at Wilklow Orchards, a sixth-generation family farm.</li>
+        <li><strong><L to="fly-creek-cider-mill-orchard">Fly Creek Cider Mill &amp; Orchard</L> — Fly Creek, 1856.</strong> A water-powered cider mill near Cooperstown.</li>
+        <li><strong><L to="barber-s-farm">Barber's Farm</L> — Middleburgh, 1857.</strong> Six generations in the Schoharie Valley.</li>
+        <li><strong><L to="argyle-cheese-farmer">Argyle Cheese Farmer</L> — Argyle, 1860.</strong> A family farm turned award-winning cheesemaker.</li>
+        <li><strong><L to="becker-s-farm">Becker's Farm</L> — East Greenbush, 1870.</strong> A garden center and nursery in continuous operation for more than 150 years.</li>
+      </ul>
+
+      <h2 className="trail-h2">The late 1800s</h2>
+      <ul className="trail-list">
+        <li><strong><L to="dr-davies-farm">Dr. Davies Farm</L> — Congers, 1891.</strong> Founded by one of New York's first women physicians, now in its fifth generation.</li>
+        <li><strong><L to="lawrence-farms-orchards">Lawrence Farms Orchards</L> — Newburgh, 1892.</strong> Orange County's most diverse pick-your-own.</li>
+        <li><strong><L to="sunny-acres-farm">Sunny Acres Farm</L> — Athens, 1897.</strong> A six-generation NYS Century Farm selling pastured eggs and goat meat.</li>
+        <li><strong><L to="partridge-sugar-house">Partridge Sugar House</L> — Ashland, 1898.</strong> Five generations of Catskill Mountain maple.</li>
+      </ul>
+
+      <h2 className="trail-h2">Crossing the century mark</h2>
+      <ul className="trail-list">
+        <li><strong><L to="boehm-farm">Boehm Farm</L> — Climax, 1903.</strong> Apples, peaches, and cherries.</li>
+        <li><strong><L to="hicks-orchard-slyboro-ciderhouse">Hicks Orchard</L> — Granville, 1905.</strong> New York's oldest u-pick orchard.</li>
+        <li><strong><L to="kristy-s-barn">Kristy's Barn</L> — Schodack, 1910.</strong> Founded as Glenwood Fruit Farm and Dairy, now in its third generation.</li>
+        <li><strong><L to="masker-orchards">Masker Orchards</L> — Warwick, 1913.</strong> The original pick-it-yourself orchard in Orange County.</li>
+        <li><strong><L to="indian-ladder-farms">Indian Ladder Farms</L> — Altamont, 1916.</strong> Albany County's best-known century farm, at the foot of the Helderberg Escarpment.</li>
+        <li><strong><L to="tonjes-farm-dairy">Tonjes Farm Dairy</L> — Callicoon.</strong> An eighth-generation dairy farm.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>New York honors farms that have stayed in the same family for 100 years through its Century Farm program, and a few, like Hull-O, have been named Bicentennial Farms. Many of these farms are still working farms first, so respect posted hours and private areas. If you're curious about a farm's history, many share it on their websites or in their farm stores.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">Same land, same family name on the sign, and a few hundred harvests behind every apple.</p>
+    </>
+  ),
+  "farmers-markets-that-take-snap": () => (
+    <>
+      <p className="trail-lede">Thirty-six farmers' markets and farm stands across fourteen counties that accept SNAP/EBT and other nutrition benefits. Fresh local food shouldn't be only for people with money to spare, and many markets go further: they'll match your SNAP dollars so you get more fruits and vegetables for the same benefits.</p>
+
+      <h2 className="trail-h2">How the programs work</h2>
+      <ul className="trail-list">
+        <li><strong>SNAP/EBT.</strong> At most markets, you swipe your EBT card at the market's information booth and get tokens to spend with participating vendors.</li>
+        <li><strong>Double Up Food Bucks.</strong> At participating markets, SNAP purchases are matched with extra money for fruits and vegetables, up to a daily limit that varies by market.</li>
+        <li><strong>FMNP coupons.</strong> The Farmers' Market Nutrition Program gives coupons to WIC families and eligible seniors each summer, good for fresh produce from participating farmers.</li>
+        <li><strong>FreshConnect checks.</strong> New York's FreshConnect program provides checks for fresh produce at participating markets.</li>
+      </ul>
+      <p>Which programs a market takes can change from season to season, so ask at the market booth or check each listing.</p>
+
+      <h2 className="trail-h2">Capital Region</h2>
+      <p>Albany has several: the <strong><L to="empire-state-plaza-farmers-market">Empire State Plaza Farmers Market</L></strong> takes WIC, FMNP, FreshConnect, and SNAP, making it one of the most accessible midweek markets in the region, and the <strong><L to="empire-state-plaza-winter-farmers-market">winter market</L></strong> does too. The <strong><L to="community-farmers-market-albany">Community Farmers Market</L></strong>, the <strong><L to="delaware-area-neighborhood-farmers-market">Delaware Area Neighborhood Farmers Market</L></strong>, and the <strong><L to="south-end-night-market">South End Night Market</L></strong> all accept SNAP and coupons, as does the <strong><L to="delmar-farmers-market">Delmar Farmers Market</L></strong>. In Schenectady, the <strong><L to="schenectady-greenmarket-2">Schenectady Greenmarket</L></strong> and the <strong><L to="schenectady-county-farmers-market">Schenectady County Farmers Market</L></strong> both take SNAP/EBT, FMNP, and FreshConnect. Across the river, try the <strong><L to="troy-waterfront-farmers-market">Troy Waterfront Farmers Market</L></strong>, the <strong><L to="rensselaer-farmers-market-at-riverfront-park">Rensselaer Farmers Market</L></strong>, and the <strong><L to="east-greenbush-farmers-market">East Greenbush Farmers Market</L></strong>, plus the <strong><L to="halfmoon-farmers-market">Halfmoon Farmers' Market</L></strong> in Saratoga County.</p>
+      <p>Farm stands that take FMNP coupons and FreshConnect checks include <strong><L to="altamont-orchards">Altamont Orchards</L></strong>, <strong><L to="constantine-farm-stand">Constantine Farm Stand</L></strong> in Loudonville, and <strong><L to="lansing-s-farm-market">Lansing's Farm Market</L></strong> in Colonie, as does the <strong><L to="first-united-methodist-church-farmers-market">First United Methodist Church Farmers Market</L></strong> in Delmar.</p>
+
+      <h2 className="trail-h2">Hudson Valley</h2>
+      <ul className="trail-list">
+        <li><strong><L to="millerton-farmers-market">Millerton Farmers' Market</L>.</strong> SNAP with Double Up Food Bucks matching up to $50 a day.</li>
+        <li><strong><L to="rhinebeck-farmers-market">Rhinebeck Farmers' Market</L>.</strong> SNAP/EBT with its own SNAP doubling program.</li>
+        <li><strong><L to="hudson-thursday-market">Hudson Thursday Market</L>.</strong> Part of the Hudson Farmers Market's commitment to SNAP access.</li>
+        <li><strong><L to="hawthorne-valley-farm-farm-store">Hawthorne Valley Farm Store</L> — Ghent.</strong> Accepts SNAP/EBT and Double Up Food Bucks.</li>
+        <li><strong><L to="poughkeepsie-farm-project">Poughkeepsie Farm Project</L>.</strong> Sliding-scale and SNAP options for its CSA.</li>
+        <li><strong><L to="goshen-farmers-market">Goshen Farmers' Market</L></strong> and <strong><L to="newburgh-common-ground-farmers-market">Newburgh Common Ground Farmers' Market</L>.</strong> SNAP/EBT; Newburgh also takes FreshConnect checks.</li>
+        <li><strong>Rockland County:</strong> <L to="pearl-river-farmers-market">Pearl River</L> and <L to="piermont-farmers-market">Piermont</L> (SNAP/EBT and FreshConnect, at select vendors in Piermont) and <L to="haverstraw-farmers-market">Haverstraw</L> (FMNP and FreshConnect).</li>
+      </ul>
+
+      <h2 className="trail-h2">Catskills &amp; the north country</h2>
+      <ul className="trail-list">
+        <li><strong>Sullivan County:</strong> <L to="liberty-farmers-market">Liberty Farmers Market</L> (SNAP/EBT, WIC, FMNP, and Senior FMNP), <L to="narrowsburg-farmers-market">Narrowsburg</L>, and <L to="barryville-farmers-market">Barryville</L>.</li>
+        <li><strong>Delaware County:</strong> <L to="andes-farmers-market">Andes Farmers Market</L> and <L to="franklin-farmers-market">Franklin Farmers Market</L>.</li>
+        <li><strong>Otsego County:</strong> <L to="cooperstown-farmers-market">Cooperstown Farmers' Market</L> (SNAP with Double Up matching) and <L to="morris-farmers-market">Morris Farmers' Market</L> (FMNP).</li>
+        <li><strong>Greene County:</strong> <L to="coxsackie-farmers-market">Coxsackie Farmers' Market</L> (senior and WIC farmers' market coupons).</li>
+        <li><strong>Washington &amp; Warren:</strong> <L to="canal-street-marketplace">Canal Street Marketplace</L> in Fort Edward (SNAP and FMNP) and <L to="landon-hill-estate-farm">Landon Hill Estate Farm</L> in Chestertown (SNAP/EBT, WIC, FMNP, and FreshConnect).</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Go to the market's information or manager's booth first; that's usually where you swipe your EBT card or pick up matching dollars. Ask whether leftover tokens carry over to your next visit. Not every vendor at a market takes every program, so look for signs or ask. If a market you like isn't on this list, ask the manager; many markets have added SNAP in recent years.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">Good food from the farmer who grew it, for everyone who wants it.</p>
+    </>
+  ),
 };

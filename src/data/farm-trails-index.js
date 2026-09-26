@@ -541,6 +541,66 @@ export const FARM_TRAILS = [
       "A guide to mushroom farms, foraging guides, and mycological clubs in the Hudson Valley, Catskills, and Capital Region — 23 stops across 8 counties.",
     published: true,
   },
+  {
+    slug: "cut-flowers-lavender-and-flower-farms",
+    title: "Cut Flowers, Lavender & Flower Farms",
+    area: "Region-Wide · 10 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Chemical-free dahlias and heirloom blooms, lavender fields, flower CSAs, and u-pick rows — 19 flower farms for bouquets straight from the field.",
+    metaDescription:
+      "A guide to cut-flower farms, lavender farms, flower CSAs, and u-pick flowers in the Hudson Valley, Catskills, and Capital Region — 19 farms across 10 counties.",
+    published: true,
+  },
+  {
+    slug: "nurseries-native-plants-and-garden-centers",
+    title: "Nurseries, Native Plants & Garden Centers",
+    area: "Region-Wide · 14 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Native-plant nurseries growing local ecotypes for pollinators, century-old family garden centers, and greenhouse farms full of spring starts — 39 places to fill your garden.",
+    metaDescription:
+      "A guide to native plant nurseries, garden centers, and greenhouses in the Hudson Valley, Catskills, and Capital Region — 39 nurseries across 14 counties.",
+    published: true,
+  },
+  {
+    slug: "family-farm-days",
+    title: "Family Farm Days",
+    area: "Region-Wide · 12 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Petting zoos, hayrides, corn mazes, pumpkin patches, and farms where kids can milk a cow — 21 farms built for a day out with the family.",
+    metaDescription:
+      "A guide to family-friendly farms in the Hudson Valley, Catskills, and Capital Region — petting zoos, hayrides, corn mazes, and u-pick, 21 farms across 12 counties.",
+    published: true,
+  },
+  {
+    slug: "century-and-bicentennial-farms",
+    title: "Century & Bicentennial Farms",
+    area: "Region-Wide · 14 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "An orchard farmed by eleven generations since 1711, a Bicentennial Farm where guests still milk the cows, and family farms that have outlasted three centuries of change — 26 farms with deep roots.",
+    metaDescription:
+      "A guide to the oldest family farms in the Hudson Valley, Catskills, and Capital Region — century and bicentennial farms dating to the 1700s and 1800s, 26 farms across 14 counties.",
+    published: true,
+  },
+  {
+    slug: "farmers-markets-that-take-snap",
+    title: "Farmers' Markets That Take SNAP",
+    area: "Region-Wide · 14 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Markets and farm stands that accept SNAP/EBT, WIC and senior coupons, FreshConnect checks, and Double Up Food Bucks, which can stretch your benefits further — 36 places to buy fresh, local food on a budget.",
+    metaDescription:
+      "A guide to farmers' markets and farm stands in the Hudson Valley, Catskills, and Capital Region that accept SNAP/EBT, Double Up Food Bucks, WIC, FMNP coupons, and FreshConnect checks — 36 places across 14 counties.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
