@@ -481,6 +481,66 @@ export const FARM_TRAILS = [
       "A guide to Christmas tree farms and holiday farm stands in the Hudson Valley, Catskills, and Capital Region — 36 tree farms and wreath sellers across 13 counties.",
     published: true,
   },
+  {
+    slug: "bees-honey-and-apiaries",
+    title: "Bees, Honey & Apiaries",
+    area: "Region-Wide · 15 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Raw wildflower honey from Catskill hives, a 200-hive apiary in Salt Point, and the region's beekeeping clubs and supply shops — 46 stops for anyone who likes honey or wants to start keeping bees.",
+    metaDescription:
+      "A guide to honey producers, apiaries, beekeeping clubs, and bee supply shops in the Hudson Valley, Catskills, and Capital Region — 46 stops across 15 counties.",
+    published: true,
+  },
+  {
+    slug: "bakeries-grain-and-mills",
+    title: "Bakeries, Grain & Mills",
+    area: "Region-Wide · 7 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Stone-milled flour from local fields, naturally leavened sourdough, and small-town bakeries worth the detour — 16 stops from the grain farm to the bread basket.",
+    metaDescription:
+      "A guide to grain farms, stone mills, and artisan bakeries in the Hudson Valley, Catskills, and Capital Region — 16 stops across 7 counties.",
+    published: true,
+  },
+  {
+    slug: "wool-yarn-and-fiber-farms",
+    title: "Wool, Yarn & Fiber Farms",
+    area: "Region-Wide · 14 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Rare-breed sheep, alpaca herds, small mills spinning local fleece, and yarn shops that dye their own — 36 stops for knitters, spinners, and weavers.",
+    metaDescription:
+      "A guide to sheep and alpaca fiber farms, wool mills, yarn shops, and fiber festivals in the Hudson Valley, Catskills, and Capital Region — 36 stops across 14 counties.",
+    published: true,
+  },
+  {
+    slug: "wineries-and-distilleries",
+    title: "Wineries & Distilleries",
+    area: "Region-Wide · 16 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "America's oldest winery, the birthplace of New York craft distilling, and farm distilleries making brandy from their own apples — 64 wineries and distilleries, grouped by what they make.",
+    metaDescription:
+      "A guide to wineries, farm wineries, and craft distilleries in the Hudson Valley, Catskills, and Capital Region — 64 wineries and distilleries across 16 counties.",
+    published: true,
+  },
+  {
+    slug: "mushrooms-and-foraging",
+    title: "Mushrooms & Foraging",
+    area: "Region-Wide · 8 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "A third-generation mushroom farm on 700 acres, shiitake grown on logs in the Catskills, and licensed guides who'll teach you what's safe to pick — 23 stops for mushroom lovers.",
+    metaDescription:
+      "A guide to mushroom farms, foraging guides, and mycological clubs in the Hudson Valley, Catskills, and Capital Region — 23 stops across 8 counties.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
