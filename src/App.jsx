@@ -786,7 +786,7 @@ function PlanASaturday() {
   const trail = featuredTrailFor(SITE_STATS.builtOn || new Date().toISOString().slice(0, 10));
   const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
   const links = [
-    { to: "/farm-trails", name: "Farm Trails", sub: plural(PUBLISHED_FARM_TRAILS.length, "day trip") },
+    { to: "/farm-trails", name: "Farm Trails", sub: plural(PUBLISHED_DAY_TRIP_TRAILS.length, "day trip") },
     { to: "/beverage-trails", name: "Beverage Trails", sub: plural(PUBLISHED_BEVERAGE_TRAILS.length, "trail") },
     { to: "/fire-towers", name: "Fire Towers", sub: "Climb the region's fire towers" },
   ];
