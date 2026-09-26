@@ -1088,4 +1088,41 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">A cooler, a cash box, and a farmer who trusts you — the Almanac's favorite kind of stop.</p>
     </>
   ),
+  "buy-meat-direct-quarters-halves-and-shares": () => (
+    <>
+      <p className="trail-lede">Thirty farms across eleven counties that will sell you a quarter or half of beef, a half or whole hog, or a lamb share — meat raised down the road, cut the way you want it, and stacked in your own freezer. Buying in bulk is one of the best ways to eat well from local farms on a budget, and it keeps the money with the families doing the raising.</p>
+
+      <h2 className="trail-h2">Washington &amp; Rensselaer — the eastern border farms</h2>
+      <p>Washington County has more share sellers than anywhere else in the region. <strong><L to="estherland-wagyu">Estherland Wagyu</L></strong> in Greenwich sells Wagyu beef by the half and quarter, and <strong><L to="our-farm-csa-at-spring-hill-farm">Our Farm CSA at Spring Hill Farm</L></strong>, also in Greenwich, sells half and quarter hogs alongside grass-fed beef. <strong><L to="kandl-hollow-farm">K&amp;L Hollow Farm</L></strong> in Cambridge raises rare, forest-raised heritage pork, including American Mulefoot, and sells bulk shares. <strong><L to="frederick-family-farm">Frederick Family Farm</L></strong> in Argyle offers whole or half American Guinea Hogs, <strong><L to="du-trieux-farm">du Trieux Farm</L></strong> in Hartford sells half and whole lambs by pre-order, and <strong><L to="fuller-acres">Fuller Acres</L></strong> in Fort Ann sells quarter cows. Next door in Rensselaer County, <strong><L to="st-croix-farm">St. Croix Farm</L></strong> in Valley Falls offers quarter and eighth beef boxes, and <strong><L to="laughing-earth">Laughing Earth Farm</L></strong> in Cropseyville sells bulk beef and custom bulk pork.</p>
+
+      <h2 className="trail-h2">Columbia &amp; Greene</h2>
+      <p><strong><L to="kinderhook-farm">Kinderhook Farm</L></strong> in Valatie is a one-stop shop — quarter, half, and whole grass-fed beef, half pigs, and half-lamb boxes, with a year-round farm store. <strong><L to="grimaldi-farmstore">Grimaldi Farmstore</L></strong> in Ghent sells beef by the quarter, half, or whole, and <strong><L to="hudson-river-homesteaders">Hudson River Homesteaders</L></strong> in Germantown sells half and whole pastured pigs. Across the river, <strong><L to="hbt-family-farm">HBT Family Farm</L></strong> in Earlton sells USDA-inspected heritage-cross pork and beef by the whole or half carcass, <strong><L to="pathfinder-farms">Pathfinder Farms</L></strong> in Catskill sells grass-fed Hereford beef by the half, and <strong><L to="johnk-family-farm">Johnk Family Farm</L></strong> in Greenville takes orders for half hogs of its Berkshire pork and quarters of beef.</p>
+
+      <h2 className="trail-h2">Schoharie &amp; Otsego</h2>
+      <p><strong><L to="sap-bush-hollow-farm">Sap Bush Hollow Farm</L></strong> in West Fulton, grass-fed since 1979, sells wholes, halves, and quarters. <strong><L to="sweet-tree-farm">Sweet Tree Farm</L></strong> in Cobleskill sells quarter, half, or whole 100% grass-fed beef, and <strong><L to="locust-spring-farm">Locust-Spring Farm</L></strong> in Sloansville offers quarter or half Angus-Ayrshire beef and half or whole pork. For lamb, <strong><L to="acres-wild-farm">Acres Wild Farm</L></strong> in Warnerville sells butchered whole lambs, and <strong><L to="the-flockery">The Flockery</L></strong> in Cherry Valley raises 100% grass-fed whole lambs. <strong><L to="sunset-ridge-beef">Sunset Ridge Beef</L></strong> in Morris sells half and whole beef.</p>
+
+      <h2 className="trail-h2">Sullivan, Ulster &amp; Delaware</h2>
+      <ul className="trail-list">
+        <li><strong><L to="chaljeri-meats">Chaljeri Meats</L> — Callicoon.</strong> Grass-fed Angus and Hereford beef and pastured pork, sold whole, half, quarter, or by the cut.</li>
+        <li><strong><L to="thunder-view-farms">Thunder View Farms</L> — Grahamsville.</strong> Aged Angus beef in custom-cut halves and standard-cut quarters.</li>
+        <li><strong><L to="mountain-side-farm">Mountain Side Farm</L> — Bloomingburg.</strong> Whole, half, and quarter beef.</li>
+        <li><strong><L to="breys-egg-farm">Brey's Egg Farm</L> — Jeffersonville.</strong> A fourth-generation farm selling freezer beef.</li>
+        <li><strong><L to="all-family-farm">ALL Family Farm</L> — Mamakating.</strong> Whole and half Berkshire hogs.</li>
+        <li><strong><L to="four-winds-farm">Four Winds Farm</L> — Gardiner.</strong> Certified organic grass-fed beef in bulk.</li>
+        <li><strong><L to="terra-ride-farm">Terra Ride Farm</L> — New Paltz.</strong> Quarter, half, and whole beef.</li>
+        <li><strong><L to="kiraly-farm-enterprises">Kiraly Farm Enterprises</L> — Walton.</strong> Beef quarters, plus 25- and 50-pound boxes for smaller freezers.</li>
+      </ul>
+
+      <h2 className="trail-h2">Elsewhere</h2>
+      <ul className="trail-list">
+        <li><strong><L to="hemlock-hill-farm">Hemlock Hill Farm</L> — Cortlandt, Westchester County.</strong> Beef, pork, lamb, goat, poultry, and rabbit processed in the farm's own USDA-inspected facility, with a farm market and CSA.</li>
+        <li><strong><L to="shults-family-farm">Shults Family Farm</L> — Canajoharie, Montgomery County.</strong> A fifth-generation farm raising Black Angus beef, pork, poultry, and lamb, with its own butchery for bulk orders.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Before you order, ask how the price is figured — many farms charge by hanging weight (the carcass before cutting), which is more than the meat you take home — and whether butchering and processing are included or billed separately by the processor. Most shares come with a cut sheet where you choose steaks versus roasts, bacon versus fresh pork belly, and how thick to slice. Pickup often follows the butcher's schedule, which can be booked months ahead, so order early, especially in fall. And measure your freezer first: even a quarter of beef takes up real space. If a whole or half is too much, split it with friends or family, or start with a box.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or pair a farm pickup with <strong><Link to="/farm-trails/honor-system-and-self-serve-farm-stands">Honor-System &amp; Self-Serve Farm Stands</Link></strong>.</p>
+      <p className="trail-close">One farm, one animal, one full freezer — the most direct way there is to know where your dinner comes from.</p>
+    </>
+  ),
 };
