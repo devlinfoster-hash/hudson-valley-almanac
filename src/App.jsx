@@ -126,11 +126,18 @@ const HERO_TAGLINE = SITE_STATS.listingCount && SITE_STATS.countyCount
 // top of the default home page order (with the non-geographic counties).
 const NON_PLACE_TOWNS = new Set(["Regional", "Countywide", "Statewide", "Online"]);
 
-// Home page quick filters: a category tile where one fits, otherwise a search.
+// DB categories that lead the default home page order (see HomePage).
+const PRIORITY_CATEGORIES = new Set([
+  "animals", "artisanfood", "food", "seeds", "maple", "craftbeverages", "markets",
+  "fiber", "forage", "apothecary", "artisan", "feed", "outdoor",
+]);
+
+// Home page quick filters: a category tile, a search, or both (a search within
+// a category).
 // The search box treats " OR " (capitalized) as "match any of these terms".
 const QUICK_FILTERS = [
   { label: "Orchards & Pick-Your-Own", icon: "🍎", q: "orchard OR pick-your-own OR u-pick" },
-  { label: "Buy Meat Direct", icon: "🥩", q: "meat OR beef OR pork OR lamb" },
+  { label: "Buy Meat Direct", icon: "🥩", category: "animals", q: "beef OR pork OR lamb OR chicken OR poultry OR turkey OR goat OR meat OR shares" },
   { label: "Cideries & Breweries", icon: "🍺", category: "craftbeverages" },
   { label: "Farmers' Markets", icon: "🧺", category: "markets" },
   { label: "Maple & Honey", icon: "🍁", category: "maple" },
@@ -374,10 +381,12 @@ const sharedStyles = `
      (both are one tap away in the footer); About, News, Submit a Listing and
      the Buy Me a Coffee CTA stay visible at every width. */
   @media (max-width: 640px) { .topnav-secondary { display: none; } }
-  /* Phones: the county strip isn't clickable, so it goes; the theme menu drops
-     its duplicate About (it's in the top nav) and wraps instead of scrolling. */
+  /* The county strip isn't clickable and the home stats line covers it, so
+     it's hidden at every width (the markup stays in place). */
+  .topbar { display: none; }
+  /* Phones: the theme menu drops its duplicate About (it's in the top nav)
+     and wraps instead of scrolling. */
   @media (max-width: 640px) {
-    .topbar { display: none; }
     .cat-btn-about { display: none; }
     .cat-nav { overflow-x: visible; white-space: normal; }
     .cat-nav-inner { display: flex; flex-wrap: wrap; justify-content: center; padding: 0 8px; }
@@ -787,7 +796,7 @@ function HomePage() {
   useEffect(() => { fetchListings(); }, []);
 
   const resultsRef = useRef(null);
-  const isQuickActive = (f) => (f.category ? activeCategory === f.category && !search : search === f.q && activeCategory === "all");
+  const isQuickActive = (f) => activeCategory === (f.category || "all") && search === (f.q || "");
   function applyQuickFilter(f) {
     const next = new URLSearchParams(searchParams);
     const wasActive = isQuickActive(f);
@@ -848,12 +857,15 @@ function HomePage() {
     return matchCat && matchSearch && matchTown && matchCounty && matchAg;
   });
 
-  // Default "All Resources" order: most complete first, using description
-  // length as the stand-in, with listings that aren't tied to a place
-  // (Regional/Countywide towns, Statewide/Online counties) after the rest.
+  // Default "All Resources" order: the farm-and-food categories first, then
+  // everything else. Within each group, listings that aren't tied to a place
+  // (Regional/Countywide towns, Statewide/Online counties) go after the rest,
+  // then most complete first, using description length as the stand-in.
   if (activeCategory === "all") {
+    const later = (d) => (PRIORITY_CATEGORIES.has(d.category) ? 0 : 1);
     const placeless = (d) => (NON_PLACE_TOWNS.has(d.town) || NON_GEOGRAPHIC_COUNTIES.has(d.county) ? 1 : 0);
     filtered.sort((a, b) =>
+      later(a) - later(b) ||
       placeless(a) - placeless(b) ||
       (b.description || "").length - (a.description || "").length ||
       (a.name || "").localeCompare(b.name || "")
