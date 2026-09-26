@@ -1155,4 +1155,168 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">Cold air, a sharp saw, and the smell of balsam in the car all the way home.</p>
     </>
   ),
+  "bees-honey-and-apiaries": () => (
+    <>
+      <p className="trail-lede">Forty-six honey producers, apiaries, beekeeping clubs, and bee supply shops across fifteen counties. Honey here tastes like where it's from: apple blossom and clover on the mountaintop, wildflower in the Helderbergs, and whatever's blooming in the Rockland suburbs. Many producers sell right from the farm as well as at farmers' markets.</p>
+
+      <h2 className="trail-h2">Greene County — honey on the mountaintop</h2>
+      <p>Greene County has more beekeepers in the Almanac than anywhere else. <strong><L to="burt-s-mountain-honey">Burt's Mountain Honey</L></strong> keeps hives in Windham and on the north side of Ashland Pinnacle, making raw Catskill honey from apple blossom and white clover. <strong><L to="blue-moon-farm">Blue Moon Farm</L></strong> in Lexington sells raw wildflower honey, pollen, and beeswax candles, and <strong><L to="catskill-mtns-organic-honey-hut">Catskill Mtn's Organic Honey Hut</L></strong> in Cornwallville sells raw honey from a roadside hut, open daily. Coxsackie has two: <strong><L to="coxsackie-apiary">Coxsackie Apiary</L></strong>, with raw and creamed honey and beeswax candles, and <strong><L to="coxsackie-bee-goods">Coxsackie Bee Goods</L></strong> at the 50-year-old Twin Spruce Apiary gift shop. <strong><L to="fox-farm-apiary">Fox Farm Apiary</L></strong> in Hannacroix is run by a Cornell Master Beekeeper who keeps hives across five counties, including at Olana. Round it out with <strong><L to="the-hen-and-the-hive">The Hen and The Hive</L></strong> in Acra, <strong><L to="maple-hill-farms">Maple Hill Farms</L></strong> near Prattsville, and <strong><L to="the-bees-knees">The Bees Knees</L></strong> in Athens, a veteran-owned operation selling honey, bees, and supplies.</p>
+
+      <h2 className="trail-h2">Dutchess &amp; Ulster — the big producers</h2>
+      <p><strong><L to="moon-s-gold-apiary-2">Moon's Gold Apiary</L></strong> in Salt Point has grown from a small start in 2014 to more than 200 production hives, and <strong><L to="remsburger-honey-maple">Remsburger Honey &amp; Maple</L></strong> in Pleasant Valley manages about 300 hives across 20 bee yards, selling raw honey alongside maple syrup. <strong><L to="beacon-bee">Beacon Bee</L></strong> turns beeswax from its own hives into skin and hair care. In Ulster County, <strong><L to="3-hives-honey">3 Hives Honey</L></strong> in Highland rotates through seasonal raw varieties, <strong><L to="urban-apis">Urban Apis</L></strong> in Hurley focuses on raw honey and bee education, and <strong><L to="phoenicia-honey-co-2">Phoenicia Honey Co.</L></strong> and <strong><L to="damn-good-honey-farm-2">Damn Good Honey Farm</L></strong> make honey and beeswax soaps and body products.</p>
+
+      <h2 className="trail-h2">The Catskills &amp; Otsego</h2>
+      <ul className="trail-list">
+        <li><strong><L to="honeybee-herb-farm-and-apothecary">Honeybee Herb Farm &amp; Apothecary</L></strong> and <strong><L to="fox-meadow-honey">Fox Meadow Honey</L> — Margaretville.</strong> Honey alongside herbs and handmade goods.</li>
+        <li><strong><L to="anderson-s-hillbilly-honey">Anderson's Hillbilly Honey</L></strong> and <strong><L to="bee-thankful-raw-honey">Bee Thankful Raw Honey</L> — Delhi.</strong></li>
+        <li><strong><L to="hillside-honey-and-farm-products">Hillside Honey &amp; Farm Products</L> — Andes.</strong> Honey, mushrooms, and preserves.</li>
+        <li><strong><L to="lansingville-farm-and-apiary">Lansingville Farm &amp; Apiary</L> — Delancey.</strong> A honey house open sunrise to sunset.</li>
+        <li><strong><L to="straight-from-the-hive-2">Straight from the Hive</L> — Cherry Valley</strong> and <strong><L to="mccoy-s-pure-raw-honey">McCoy's Pure Raw Honey</L> — Oneonta.</strong></li>
+        <li><strong><L to="blackberry-ridge-farm">Blackberry Ridge Farm</L> — Callicoon.</strong> Highland cattle and a small apiary.</li>
+      </ul>
+
+      <h2 className="trail-h2">Capital Region, Hudson Valley &amp; south</h2>
+      <ul className="trail-list">
+        <li><strong><L to="partridge-run-farm-and-apiary">Partridge Run Farm &amp; Apiary</L> — Berne.</strong> Raw wildflower honey from bees foraging the unsprayed Helderberg hills.</li>
+        <li><strong><L to="good-day-honey">Good Day Honey</L> — Coeymans Hollow.</strong> Raw, creamed, and infused honey.</li>
+        <li><strong><L to="bee-hollow-farm-2">Bee Hollow Farm</L> — Schodack Landing.</strong> Organic practices with northern-acclimated Carniolan bees.</li>
+        <li><strong><L to="bee-bog-farm-2">Bee Bog Farm</L> — Schenectady</strong> and <strong><L to="bees-and-quackers">Bees &amp; Quackers</L> — Sloansville.</strong> Honey and eggs.</li>
+        <li><strong><L to="honey-dog-farm-llc">Honey Dog Farm</L> — Hillsdale.</strong> Certified organic honey, vegetables, and flowers.</li>
+        <li><strong><L to="pleasant-valley-apiary">Pleasant Valley Apiary</L> — Argyle.</strong></li>
+        <li><strong><L to="honeybrook-farms">Honeybrook Farms</L> — Pine Bush</strong> and <strong><L to="larry-s-backyard-bees">Larry's Backyard Bees</L> — Newburgh.</strong></li>
+        <li><strong><L to="rockland-honey-2">Rockland Honey</L> — Monsey.</strong> Hives spread across Monsey, Pomona, Suffern, and Wesley Hills.</li>
+        <li><strong><L to="out-of-the-hive">Out of the Hive</L> — Bedford Hills</strong> and <strong><L to="fly-honey-farms">Fly Honey Farms</L> — Westchester.</strong> Treatment-free and boutique raw honey.</li>
+      </ul>
+
+      <h2 className="trail-h2">Want to keep bees? Clubs &amp; supplies</h2>
+      <p><strong><L to="betterbee">Betterbee</L></strong> in Greenwich is a nationally known supply company and education center, and Kingston has two shops, <strong><L to="hudson-valley-bee-supply-2">Hudson Valley Bee Supply</L></strong> and <strong><L to="hudson-valley-beekeeping-supply">Hudson Valley Beekeeping Supply</L></strong>, both selling bees and equipment. Local clubs welcome beginners, including the <strong><L to="catskill-mountain-beekeepers-club">Catskill Mountain Beekeepers Club</L></strong> (130-plus member families), the <strong><L to="columbia-county-beekeepers-club">Columbia County Beekeepers Club</L></strong>, the <strong><L to="ulster-county-beekeepers-association">Ulster County Beekeepers' Association</L></strong>, the <strong><L to="valley-beekeepers-club-2">Valley Beekeepers Club</L></strong> in Schoharie, and the <strong><L to="leatherstocking-beekeepers-association">Leatherstocking Beekeepers Association</L></strong> in Cooperstown. Statewide, there's the <strong><L to="empire-state-honey-producers-association">Empire State Honey Producers Association</L></strong>.</p>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Raw honey crystallizes over time; that's a sign it hasn't been heated, not that it's gone bad. Set the jar in warm water to loosen it. Supply depends on the season and the weather, and many small producers sell out by winter, so buy when you see a honey you love. Most sell at farmers' markets as well as from the farm.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or pair honey with syrup on <strong><Link to="/farm-trails/maple-trail-and-sugarhouses">The Maple Trail &amp; Catskill Sugarhouses</Link></strong>.</p>
+      <p className="trail-close">A full hive, a warm afternoon, and a jar that tastes like the hillside it came from.</p>
+    </>
+  ),
+  "bakeries-grain-and-mills": () => (
+    <>
+      <p className="trail-lede">Sixteen grain farms, flour mills, and bakeries across seven counties. The Hudson Valley was once called the breadbasket of the colonies, and a small group of farmers and millers is bringing local grain back, from organic fields outside Hudson to stone mills turning it into flour. The bakers are right there with them, with naturally leavened sourdough and small-town bakeries worth a detour.</p>
+
+      <h2 className="trail-h2">From the field: grain farms &amp; mills</h2>
+      <p><strong><L to="wild-hive-farm">Wild Hive Farm</L></strong> in Clinton Corners is a pioneer: founded in 1982, it went from beekeeping to stone-milled local grain long before it was fashionable. <strong><L to="stone-house-grain">Stone House Grain</L></strong> outside Hudson is a certified organic grain farm with its own feed mill, and <strong><L to="hudson-valley-hops-and-grain">Hudson Valley Hops and Grain</L></strong> in Ancramdale grows certified organic grains and flour. In Ulster County, <strong><L to="milestone-mill">Milestone Mill</L></strong> in Kingston is a mission-driven mill turning organic grain grown at the Hudson Valley Farm Hub into flour, and the <strong><L to="ulster-county-grain-project">Ulster County Grain Project</L></strong> in Stone Ridge supplies stone-milled whole grain flours, cornmeal, and oats.</p>
+
+      <h2 className="trail-h2">Sourdough &amp; artisan bread</h2>
+      <p><strong><L to="rock-hill-bakehouse">Rock Hill Bakehouse</L></strong> in Glens Falls is a renowned artisan bakery making naturally leavened, hearth-baked bread. In Greene County, <strong><L to="see-and-be-kitchen">See and Be Kitchen</L></strong> in Cairo specializes in long-fermentation sourdough and croissants, <strong><L to="nocturne-bakehouse">Nocturne Bakehouse</L></strong> in Greenville sells naturally leavened loaves from a self-serve kiosk open until 10pm, and <strong><L to="nanas-sourdough-treats">Nana's Sourdough Treats</L></strong> in Climax takes pre-orders for breads, bagels, and cookies from a home bakery and farmstand.</p>
+
+      <h2 className="trail-h2">Small-town bakeries</h2>
+      <ul className="trail-list">
+        <li><strong><L to="catskill-mountain-bakery-and-market">Catskill Mountain Bakery &amp; Market</L> — Leeds.</strong> Pastries and bread in the historic former Mohican Trading Post.</li>
+        <li><strong><L to="red-star-cafe-and-bakery">Red Star Cafe &amp; Bakery</L> — Cairo.</strong> House-baked pastries and bread, voted best coffee in Greene County.</li>
+        <li><strong><L to="babblers-bakery">Babblers Bakery</L> — Windham.</strong> Croissants, pies, and breakfast on Main Street.</li>
+        <li><strong><L to="the-little-bake-shop">The Little Bake Shop</L> — Coxsackie.</strong> Pies, cream puffs, and cookies.</li>
+        <li><strong><L to="jeffersonville-bake-shop">Jeffersonville Bake Shop</L> — Jeffersonville.</strong> Baked goods plus local dairy, maple, and honey.</li>
+        <li><strong><L to="sow-good-bakery">Sow Good Bakery</L> — Saugerties.</strong> Baked goods alongside vegetables and herbs.</li>
+        <li><strong><L to="greyston-bakery">Greyston Bakery</L> — Yonkers.</strong> A pioneering social-enterprise bakery since 1982, known for its brownies.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Freshly milled whole grain flour behaves differently from supermarket flour; it absorbs more water and keeps best in the fridge or freezer. Small bakeries often sell out by midday, especially on weekends, and several take pre-orders, so check ahead if you're after a particular loaf.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">Local grain, a slow rise, and a warm loaf in the passenger seat.</p>
+    </>
+  ),
+  "wool-yarn-and-fiber-farms": () => (
+    <>
+      <p className="trail-lede">Thirty-six fiber farms, mills, yarn shops, guilds, and festivals across fourteen counties. The region raises rare-breed sheep and whole herds of alpacas, and a handful of small mills turn local fleece into yarn you can trace back to the animal. For knitters, spinners, and weavers, it's one of the best fiber regions in the Northeast, and it hosts one of the biggest fiber festivals in the country.</p>
+
+      <h2 className="trail-h2">Sheep farms &amp; rare breeds</h2>
+      <p><strong><L to="greene-county-wool">Greene County Wool</L></strong> in East Durham raises Romeldale CVM sheep, a rare American fine-wool breed. <strong><L to="black-sheep-hill-farm">Black Sheep Hill Farm</L></strong> in Pine Plains raises heritage Black Welsh Mountain sheep, <strong><L to="patchwork-pastures-farm">Patchwork Pastures Farm</L></strong> in Hyde Park raises Corriedales and sells raw fleece and yarn, and <strong><L to="six-dutchess-farm">Six Dutchess Farm</L></strong> raises Swedish Gotland sheep for single-source yarn spun at local mills. <strong><L to="dashing-star-farm">Dashing Star Farm</L></strong> in Millerton has made hand-crafted wool products since 1993, and <strong><L to="catskill-merino-sheep-farm">Catskill Merino Sheep Farm</L></strong> in Warwick, woman-owned since 1986, hand-dyes Saxon Merino yarn. Farther north, look for <strong><L to="tonjes-farm-sheep-fiber">Tonjes Farm Sheep &amp; Fiber</L></strong> in Callicoon, <strong><L to="sheep-in-wool-clothing">Sheep in Wool Clothing</L></strong> in Nassau, <strong><L to="wandering-feet-farm">Wandering Feet Farm</L></strong> in Troy, <strong><L to="evans-evans-farm">Evans &amp; Evans Farm</L></strong> in Andes, <strong><L to="crazy-legs-farm">Crazy Legs Farm</L></strong> in Fort Edward, and <strong><L to="mimiki-s-woolybears">Mimiki's Woolybears</L></strong> in Laurens, which makes hand-spun wool and soft toys.</p>
+
+      <h2 className="trail-h2">Alpaca farms</h2>
+      <p><strong><L to="gunhouse-hill-alpacas">Gunhouse Hill Alpacas</L></strong> in South Kortright keeps more than 30 Huacaya alpacas. <strong><L to="helderberg-alpacas">Helderberg Alpacas</L></strong> in East Berne is a small family farm about 15 miles west of Albany, <strong><L to="alpacatrax">Alpacatrax</L></strong> in Elizaville sells chemical-free fleece, roving, and yarn, and <strong><L to="river-breeze-alpacas">River Breeze Alpacas</L></strong> in Downsville pairs alpacas with a fiber arts studio. <strong><L to="cluckin-a-critter-farm">Cluckin A Critter Farm</L></strong> in Greenville sells alpaca yarn and roving, and <strong><L to="buck-brook-alpacas">Buck Brook Alpacas</L></strong> in Roscoe has a farm store.</p>
+
+      <h2 className="trail-h2">Mills: from fleece to yarn</h2>
+      <p><strong><L to="battenkill-fibers">Battenkill Fibers</L></strong> in Greenwich is a worsted spinning mill for wool and other natural fibers. <strong><L to="nobletown-fiber-works">Nobletown Fiber Works</L></strong> in Hillsdale spins local wool, mohair, and alpaca into yarn, with tours available, and <strong><L to="rosehaven-alpacas-fiber-mill">Rosehaven Alpacas &amp; Fiber Mill</L></strong> sits in the Catskill foothills between Callicoon and Jeffersonville. <strong><L to="clean-fleece-ny-hudson-valley-textile-project">Clean Fleece NY</L></strong> in Mechanicville washes (scours) fleece for the whole region's fiber farms.</p>
+
+      <h2 className="trail-h2">Yarn shops &amp; studios</h2>
+      <ul className="trail-list">
+        <li><strong><L to="ceces-wool-yarns-and-more">CeCe's Wool Yarns and More</L> — Guilderland.</strong> Hand-dyes its own yarn.</li>
+        <li><strong><L to="whole-knit-n-caboodle">Whole Knit n' Caboodle</L> — Delmar.</strong> An indie dyer with small-batch merino, mohair, and alpaca.</li>
+        <li><strong><L to="the-knitting-room-windham">The Knitting Room</L> — Windham.</strong> Yarn, classes, and a cozy sitting area.</li>
+        <li><strong><L to="yarn-farm-kingston">Yarn Farm Kingston</L> — Kingston.</strong> A fiber arts store in the Rondout neighborhood.</li>
+        <li><strong><L to="the-stitchery">The Stitchery</L> — Pearl River.</strong> A beloved yarn and needlework shop.</li>
+        <li><strong><L to="blank-slate-textiles">Blank Slate Textiles</L> — Cooperstown</strong> and <strong><L to="crazy-as-a-loom-weaving-studio">Crazy As A Loom Weaving Studio</L> — Kingsbury.</strong> Handwoven and hand-dyed textiles.</li>
+      </ul>
+
+      <h2 className="trail-h2">Festivals &amp; guilds</h2>
+      <p>The <strong><L to="nys-sheep-and-wool-festival">NYS Sheep and Wool Festival</L></strong> in Rhinebeck is one of the premier fiber festivals in the United States, with more than 300 vendors. The <strong><L to="adirondack-wool-and-arts-festival">Adirondack Wool and Arts Festival</L></strong> in Greenwich is a smaller two-day celebration at the Washington County Fairgrounds. To meet other fiber folks, look up the <strong><L to="hudson-mohawk-weavers-guild">Hudson-Mohawk Weavers' Guild</L></strong>, the <strong><L to="elmendorph-handspinners-guild">Elmendorph Handspinners Guild</L></strong>, the <strong><L to="ulster-county-handspinners-guild">Ulster County Handspinners Guild</L></strong>, the <strong><L to="golden-fleece-spinners-and-weavers">Golden Fleece Spinners and Weavers</L></strong>, or the <strong><L to="palisades-guild-of-spinners-and-weavers">Palisades Guild of Spinners &amp; Weavers</L></strong>.</p>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Many fiber farms are small and open by appointment, so call before you visit, and ask whether you can meet the animals. Shearing happens in spring, which is the best time to buy raw fleece. Farm yarn often comes in small lots, so buy enough for your whole project at once.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or see the mills and weavers on <strong><Link to="/farm-trails/makers-forges-and-fiber-studios">Makers, Forges &amp; Fiber Studios</Link></strong>.</p>
+      <p className="trail-close">From the sheep in the pasture to the sweater on your back, with every step close enough to visit.</p>
+    </>
+  ),
+  "wineries-and-distilleries": () => (
+    <>
+      <p className="trail-lede">Sixty-four wineries and distilleries across sixteen counties. The Hudson Valley has the oldest continuously operating winery in America and the distillery that started New York's craft spirits movement, and many of today's makers are farms growing their own grapes, apples, and grain. This guide groups them by what they make; for county-by-county day trips, see the <Link to="/beverage-trails">Beverage Trails</Link>.</p>
+
+      <h2 className="trail-h2">Historic wineries</h2>
+      <p><strong><L to="brotherhood-winery">Brotherhood Winery</L></strong> in Washingtonville, founded in 1839, is America's oldest continuously operating winery, with historic stone-walled cellars. <strong><L to="benmarl-winery">Benmarl Winery</L></strong> in Marlboro sits on 37 acres above the Hudson and is home to the country's oldest vineyard, and <strong><L to="clinton-vineyards">Clinton Vineyards</L></strong> in Clinton Corners has been family-run since 1977. <strong><L to="millbrook-vineyards-winery">Millbrook Vineyards &amp; Winery</L></strong>, a 130-acre estate, has been called the Hudson Valley's flagship winery.</p>
+
+      <h2 className="trail-h2">More wineries</h2>
+      <ul className="trail-list">
+        <li><strong>Ulster County:</strong> <L to="whitecliff-vineyard-winery">Whitecliff</L> (Gardiner), <L to="robibero-family-vineyards">Robibero Family Vineyards</L> (New Paltz), <L to="baldwin-vineyards">Baldwin Vineyards</L> (Pine Bush), <L to="weed-orchards-and-winery">Weed Orchards &amp; Winery</L> (Marlboro), and <L to="enlightenment-wines-farmstead-meadery">Enlightenment Wines</L>, a farmstead meadery that calls itself the smallest legal winery in New York.</li>
+        <li><strong>Orange County:</strong> <L to="applewood-winery">Applewood Winery</L> (Warwick), <L to="christopher-jacobs-winery-at-pennings-vineyards">Christopher Jacobs Winery at Pennings Vineyards</L> (Pine Bush), and <L to="city-winery-hudson-valley">City Winery Hudson Valley</L> (Montgomery).</li>
+        <li><strong>Columbia County:</strong> <L to="hudson-chatham-winery">Hudson-Chatham Winery</L> (Ghent, the county's first), <L to="tousey-winery">Tousey Winery</L> and <L to="clermont-vineyards-and-winery">Clermont Vineyards</L> (Germantown).</li>
+        <li><strong>Elsewhere:</strong> <L to="vineyard-at-windham">The Vineyard at Windham</L> at the base of Windham Mountain, <L to="galway-rock">Galway Rock</L> (Ballston Lake, cold-hardy grapes), <L to="torne-valley-vineyards">Torne Valley Vineyards</L> (Rockland's first winery), <L to="stable-gate-winery">Stable Gate Winery</L> (Castleton), <L to="victory-view-vineyard">Victory View Vineyard</L> (Schaghticoke), <L to="pail-shop-vineyards-winery-and-tasting-room">Pail Shop Vineyards</L> (Fly Creek), <L to="bashakill-vineyards-winery">Bashakill Vineyards</L> (Wurtsboro, organic), <L to="eminence-road-farm-winery">Eminence Road Farm Winery</L> (Long Eddy), <L to="autumns-harvest-vineyard">Autumn's Harvest Vineyard</L> (Cambridge), and <L to="adirondack-winery">Adirondack Winery</L> (Lake George).</li>
+      </ul>
+
+      <h2 className="trail-h2">Wineries that distill, too</h2>
+      <p><strong><L to="warwick-valley-winery-distillery">Warwick Valley Winery &amp; Distillery</L></strong> is a pioneering farm winery, cidery, and distillery on a Warwick orchard, with its sister <strong><L to="black-dirt-distillery">Black Dirt Distillery</L></strong> nearby. <strong><L to="stoutridge-vineyard-distillery">Stoutridge Vineyard &amp; Distillery</L></strong> in Marlboro makes wine and spirits on a limestone ridge, <strong><L to="magnanini-farm-winery-distillery">Magnanini Farm Winery</L></strong> in Wallkill adds an Italian restaurant, and <strong><L to="kymar-farm-winery-distillery">KyMar Farm Winery and Distillery</L></strong> in Charlotteville was the first licensed distillery in Schoharie County since Prohibition. <strong><L to="fly-creek-cider-mill-farm-winery">Fly Creek Cider Mill Farm Winery</L></strong> makes hard cider, apple wine, and spirits at the historic 1856 cider mill.</p>
+
+      <h2 className="trail-h2">Craft distilleries</h2>
+      <p><strong><L to="tuthilltown-spirits-distillery">Tuthilltown Spirits</L></strong> in Gardiner, founded in 2003, is the birthplace of New York's craft distilling movement. On working farms, try <strong><L to="hillrock-estate-distillery">Hillrock Estate Distillery</L></strong> in Ancram, <strong><L to="harvest-spirits-farm-distillery">Harvest Spirits</L></strong> in Valatie (apple vodkas and brandies), <strong><L to="coppersea-distilling">Coppersea Distilling</L></strong> in West Park, <strong><L to="taconic-distillery">Taconic Distillery</L></strong> in Stanfordville (bourbon and whiskey), <strong><L to="arrowood-farms">Arrowood Farms</L></strong> in Accord, which grows its own rye, and <strong><L to="strickland-hollow-farm-distillery">Strickland Hollow</L></strong> in Meridale, making apple brandy from its own cider apples.</p>
+      <ul className="trail-list">
+        <li><strong>Columbia County:</strong> <L to="hudson-valley-distillers">Hudson Valley Distillers</L> (Clermont), <L to="olde-york-farm-distillery-cooperage">Olde York Farm Distillery &amp; Cooperage</L> (Claverack, with its own barrel-making shop), and <L to="klocke-estate">Klocke Estate</L> (Hudson, brandy and vermouth).</li>
+        <li><strong>Dutchess County:</strong> <L to="dutchs-spirits">Dutch's Spirits</L> (Pine Plains, on a farm with Prohibition-era history), <L to="shady-knoll-orchards-distillery">Shady Knoll Orchards &amp; Distillery</L> (Millbrook), and <L to="dennings-point-distillery">Denning's Point Distillery</L> (Beacon).</li>
+        <li><strong>Orange County:</strong> <L to="apple-daves-distillery">Apple Dave's Distillery</L> (Warwick, Apple Jack from estate apples) and <L to="orange-county-distillery">Orange County Distillery</L> (New Hampton, farm-to-bottle).</li>
+        <li><strong>The Catskills:</strong> <L to="union-grove-distillery">Union Grove Distillery</L> (Arkville), <L to="delaware-phoenix-distillery">Delaware Phoenix Distillery</L> (Walton, absinthe), <L to="rock-valley-spirits">Rock Valley Spirits</L> (Long Eddy), <L to="catskill-distilling-company">Catskill Distilling Company</L> (Bethel, across from the original Woodstock festival site), <L to="catskill-provisions-distillery">Catskill Provisions</L> (Callicoon, honey-based spirits), <L to="prohibition-distillery">Prohibition Distillery</L> (Roscoe), and <L to="hudson-house-distillery">The Hudson House &amp; Distillery</L> (West Park).</li>
+        <li><strong>Capital Region &amp; north:</strong> <L to="albany-distilling-company">Albany Distilling Company</L> (the city's first since Prohibition), <L to="yankee-distillers">Yankee Distillers</L> (Clifton Park), <L to="saratoga-courage-distillery">Saratoga Courage Distillery</L> (Round Lake), <L to="1857-spirits-barbers-farm-distillery">1857 Spirits at Barber's Farm</L> (Middleburgh), <L to="revspirits">RevSpirits</L> (Jefferson), <L to="cooperstown-distillery">Cooperstown Distillery</L>, and, near Lake George, <L to="american-oak-distillery">American Oak</L>, <L to="high-peaks-distilling">High Peaks Distilling</L>, <L to="springbrook-hollow-farm-distillery">Springbrook Hollow Farm Distillery</L>, and <L to="lake-george-distilling">Lake George Distilling</L>.</li>
+        <li><strong>Westchester:</strong> <L to="current-spirits">Current Spirits</L> (Elmsford).</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Tasting room hours vary a lot by season, and many cut back in winter, so check before you go. Some require reservations on weekends. Bring a designated driver, since tastings add up fast when you visit several in one day. Farm wineries and distilleries often sell bottles you can't find in stores, which makes them great for gifts.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or plan a day around the <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>.</p>
+      <p className="trail-close">Grapes on a river slope, apples in a copper still, and a bottle to take home from the farm that made it.</p>
+    </>
+  ),
+  "mushrooms-and-foraging": () => (
+    <>
+      <p className="trail-lede">Twenty-three mushroom farms, foraging guides, and mushroom clubs across eight counties. The region's damp hardwood forests grow some of the best wild mushrooms in the Northeast, and a growing number of farms cultivate gourmet varieties like shiitake, oyster, and lion's mane. Whether you want to buy them, grow them, or learn to find them, there's someone here to help.</p>
+
+      <h2 className="trail-h2">Mushroom farms</h2>
+      <p><strong><L to="bulich-mushroom-farm">Bulich Mushroom Farm</L></strong> in Catskill is a third-generation family farm on 700 acres, growing mushrooms since the late 1940s, including portobello, crimini, and shiitake. Nearby, <strong><L to="bulich-creekside-farm">Bulich Creekside Farm</L></strong> in Leeds is a family farm stand with vegetables, fruit, and plants. <strong><L to="glenwild-farms">Glenwild Farms</L></strong> in Livingston Manor grows wood-grown shiitake and oyster mushrooms, and <strong><L to="flowering-sun-ecology-center-2">Flowering Sun Ecology Center</L></strong> in Ellenville specializes in gourmet mushrooms at the edge of Catskill Park. <strong><L to="fromer-market-gardens">Fromer Market Gardens</L></strong> on Tannersville's Main Street grows shiitake alongside its organic vegetables.</p>
+      <ul className="trail-list">
+        <li><strong><L to="tivoli-mushrooms">Tivoli Mushrooms</L> — Columbia County.</strong> Fresh and foraged edible and medicinal mushrooms.</li>
+        <li><strong><L to="go-mushrooms">GO Mushrooms</L> — Hudson</strong> and <strong><L to="c4-mushrooms-llc">C4 Mushrooms</L> — Hyde Park.</strong> Organic mushroom growers.</li>
+        <li><strong><L to="catskill-mountain-mushrooms">Catskill Mountain Mushrooms</L> — Delaware County.</strong> Gourmet and medicinal varieties for markets and restaurants.</li>
+        <li><strong><L to="hillside-honey-and-farm-products">Hillside Honey &amp; Farm Products</L> — Andes.</strong> Mushrooms alongside honey and preserves.</li>
+      </ul>
+
+      <h2 className="trail-h2">Forest farms &amp; growing your own</h2>
+      <p><strong><L to="wild-hudson-valley">Wild Hudson Valley</L></strong> in Cairo is a forest farm and educational organization with a mushroom laying yard, and <strong><L to="dough-haven-farm">Dough Haven Farm</L></strong> in Easton is a 52-acre agroforestry farm using forest-farming methods.</p>
+
+      <h2 className="trail-h2">Foraging guides &amp; teachers</h2>
+      <p><strong><L to="catskill-fungi">Catskill Fungi</L></strong> in Kerhonkson is a mushroom foraging guide, educator, and sustainable harvester. <strong><L to="food-forest-fungi">Food Forest Fungi</L></strong> in Greene County is a licensed NYS mushroom foraging and outdoor guide business. <strong><L to="deep-forest-wild-edible">Deep Forest Wild Edible</L></strong> in Beacon was founded by a chef and licensed mushroom forager. <strong><L to="sean-rowe-rent-a-forager">Sean Rowe, Rent-A-Forager</L></strong> leads guided walks and private classes in the Catskills. In Accord, <strong><L to="dina-falconi-foraging-feasting">Dina Falconi</L></strong>, a master herbalist and forager with more than 40 years of experience, teaches wild plants and mushrooms, and her <strong><L to="botanical-arts-press-foraging-feasting">Botanical Arts Press</L></strong> publishes the field guide <em>Foraging &amp; Feasting</em>. Near the city, <strong><L to="d-i-g-farm-wild-roots-project">D.I.G. Farm's Wild Roots Project</L></strong> in North Salem and <strong><L to="heather-flournoy-wild-nearby">Heather Flournoy of Wild Nearby</L></strong> teach foraging too.</p>
+
+      <h2 className="trail-h2">Mushroom clubs</h2>
+      <p>The best way to learn is with people who've done it for years. The <strong><L to="mid-hudson-mycological-association">Mid-Hudson Mycological Association</L></strong> hosts guided forays, as do the <strong><L to="delaware-highlands-mushroom-society">Delaware Highlands Mushroom Society</L></strong> in Sullivan County and the <strong><L to="connecticut-westchester-mycological-association-coma">Connecticut-Westchester Mycological Association</L></strong>.</p>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Never eat a wild mushroom unless someone with real expertise has identified it; several deadly species look like edible ones. A guided walk or club foray is the safest way to start. Get permission before foraging on private land, and follow the rules on public land, since some parks don't allow collecting. Wild mushroom season peaks from late summer into fall, while cultivated mushrooms are available year-round.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
+      <p className="trail-close">Damp woods, a sharp eye, and someone beside you who knows which ones not to pick.</p>
+    </>
+  ),
 };
