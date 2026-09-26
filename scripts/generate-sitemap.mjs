@@ -21,6 +21,7 @@ import {
   SITE_ORIGIN,
 } from "../src/catalog.js";
 import { PUBLISHED_FARM_TRAILS } from "../src/data/farm-trails-index.js";
+import { NEWS_POSTS } from "../src/data/news.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SNAPSHOT_PATH = resolve(HERE, "..", "src", "data", "listings.json");
@@ -67,6 +68,8 @@ async function main() {
   add("/", today);
   add("/fire-towers", today);
   add("/about", today);
+  add("/news", today);
+  for (const p of NEWS_POSTS) add(`/news/${p.slug}`, today);
   add("/farm-trails", today);
   add("/beverage-trails", today);
   add("/explore-by-theme", today);
