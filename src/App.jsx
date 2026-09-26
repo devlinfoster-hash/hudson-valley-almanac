@@ -1556,7 +1556,7 @@ function AboutPage() {
     <div className="listing-page-wrap">
       <PageMeta
         title="About the Almanac — Hudson Valley Almanac"
-        description="I'm Devlin Foster, and I made the Hudson Valley Almanac because I kept wanting to know where the good stuff was. The farm with the honor-system egg fridge, the brewery at the end of a dirt road, the fire tower worth the climb. No single place had it all, so I started writing it down. Then I didn't stop."
+        description="A free, hand-checked guide to 1,800+ farm stands, orchards, cideries, markets, and makers across the Hudson Valley, Catskills, and Capital Region."
         canonical={`${SITE_ORIGIN}/about`}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
