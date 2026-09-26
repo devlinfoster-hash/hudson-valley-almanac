@@ -1933,7 +1933,7 @@ function ThemeTrailsIndexPage() {
     <div className="landing-wrap">
       <PageMeta
         title="Explore by Theme — Hudson Valley Almanac"
-        description="Guides to the rest of the Hudson Valley directory by theme — maple and sugarhouses, farm stands and U-pick, makers and fiber studios, heritage breeds, county fairs, the outdoors, and cannabis farms."
+        description="21 free guides to local farms and makers across the Hudson Valley, Catskills, and Capital Region — Christmas tree farms, creameries, meat shares, honor-system farm stands, cut flowers, century farms, farmers' markets that take SNAP, and more."
         canonical={canonical}
       />
       <Head>
