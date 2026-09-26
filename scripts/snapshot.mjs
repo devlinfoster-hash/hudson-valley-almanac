@@ -73,7 +73,8 @@ async function fetchNews() {
     .select("slug, publish_date, title, summary, body")
     .eq("status", "published")
     .lte("publish_date", todayInNewYork())
-    .order("publish_date", { ascending: false });
+    .order("publish_date", { ascending: false })
+    .order("id", { ascending: false });
   if (error) throw error;
   return data || [];
 }

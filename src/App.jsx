@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, Component } from "react";
+import { useState, useEffect, useRef, Component, createContext, useContext } from "react";
 import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
-import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES } from "./catalog";
+import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
 import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
@@ -113,6 +113,7 @@ function linkifyDescription(text) {
 const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
 const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and the adjacent Catskill highlands";
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
+const FACEBOOK_URL = "https://www.facebook.com/1072963332575328";
 
 // Top-level error boundary so an unexpected render error (or a thrown failure
 // while building the page) shows a graceful message instead of a blank screen.
@@ -143,11 +144,17 @@ class ErrorBoundary extends Component {
   }
 }
 
-// Root layout: shared <style>, GA4 page_view tracking, and the <Outlet> every
-// route renders into. With vite-react-ssg this is the parent route element —
+// Opens the site-wide SubmitForm modal (owned by Layout). Every "Submit a
+// Listing" entry point (TopNav, Footer, News CTA, About, home sidebar) calls it.
+const SubmitFormContext = createContext(() => {});
+const useOpenSubmitForm = () => useContext(SubmitFormContext);
+
+// Root layout: shared <style>, GA4 page_view tracking, the SubmitForm modal,
+// and the <Outlet> every route renders into. With vite-react-ssg this is the parent route element —
 // the page_view effect below runs once per real navigation across all pages.
 function Layout() {
   const location = useLocation();
+  const [showSubmit, setShowSubmit] = useState(false);
 
   // SPA page_view tracking: gtag.js only auto-logs the first load, so we send
   // a GA4 page_view on every React Router location change (and the initial
@@ -179,8 +186,11 @@ function Layout() {
       {/* Injected once here so every page shares a single stylesheet instead of
           each component re-injecting the same <style>. */}
       <style>{sharedStyles}</style>
-      <TopNav />
-      <Outlet />
+      <SubmitFormContext.Provider value={() => setShowSubmit(true)}>
+        <TopNav />
+        <Outlet />
+        {showSubmit && <SubmitForm onClose={() => setShowSubmit(false)} />}
+      </SubmitFormContext.Provider>
     </ErrorBoundary>
   );
 }
@@ -200,6 +210,15 @@ export const routes = [
       { path: "fire-towers", Component: FireTowersPage },
       { path: "about", Component: AboutPage },
       { path: "news", Component: NewsIndexPage },
+      {
+        path: "news/page/:page",
+        Component: NewsIndexPage,
+        // Page 1 is /news itself; only pages 2..N get their own URL.
+        getStaticPaths() {
+          const pages = Math.ceil(NEWS_POSTS.length / NEWS_PAGE_SIZE);
+          return Array.from({ length: Math.max(pages - 1, 0) }, (_, i) => `news/page/${i + 2}`);
+        },
+      },
       {
         path: "news/:slug",
         Component: NewsPostPage,
@@ -315,6 +334,9 @@ const sharedStyles = `
   .cat-btn.active { color: #EFF0E8; border-bottom-color: #C4862D; }
   .topnav { background: #1C3A5E; border-bottom: 3px solid #C4862D; padding: 12px 24px; }
   .topnav-inner { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 24px; max-width: 1140px; margin: 0 auto; }
+  /* <button>s that open the SubmitForm but should look like the links beside
+     them. Declared before .topnav-link so the nav link styles win. */
+  .link-button { background: none; border: none; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
   .topnav-link { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(239,240,232,0.75); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.2s; }
   .topnav-link:hover { color: #EFF0E8; }
   .topnav-link.active { color: #EFF0E8; border-bottom-color: #C4862D; }
@@ -504,12 +526,15 @@ const sharedStyles = `
   .news-list { font-family: 'Lora', serif; font-size: 16px; line-height: 1.65; color: #1A2B3C; margin: 0 0 16px 20px; padding: 0; }
   .news-list li { margin-bottom: 4px; }
   .about-body a { color: #1C3A5E; }
+  .about-body .link-button { color: #1C3A5E; }
   .news-card { padding: 8px 0 28px; margin-bottom: 28px; border-bottom: 1px solid rgba(28,58,94,0.2); }
   .news-date { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A6D1F; margin-bottom: 8px; }
   .news-card-title { font-family: 'Libre Baskerville', serif; font-size: 24px; line-height: 1.3; margin: 0 0 12px; }
   .news-card-title a { color: #1C3A5E; text-decoration: none; }
   .news-card-title a:hover { text-decoration: underline; }
-  .news-cta { display: inline-block; background: #1C3A5E; color: #EFF0E8; padding: 12px 22px; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; }
+  .news-pager { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .news-pager-count { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8AA0AE; }
+  .news-cta { display: inline-block; background: #1C3A5E; color: #EFF0E8; padding: 12px 22px; border: none; border-radius: 4px; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; }
   .news-cta:hover { background: #0F2640; }
   .about-support-lead { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #1A2B3C; margin-bottom: 16px; }
   /* Farm Trails — guide reading column (reuses the single-listing page shell,
@@ -660,7 +685,7 @@ function HomePage() {
   const countyFilter = searchParams.get("county") || "All";
   const townFilter = searchParams.get("town") || "All";
   const agOnly = searchParams.get("ag") === "1";
-  const [showSubmit, setShowSubmit] = useState(false);
+  const openSubmitForm = useOpenSubmitForm();
   const [showMobileCats, setShowMobileCats] = useState(false);
 
   function setParam(key, value, defaultValue) {
@@ -825,7 +850,7 @@ function HomePage() {
             <div className="sidebar-box-header">Are You Listed?</div>
             <div className="sidebar-box-body">
               <p style={{ fontSize: 13, lineHeight: 1.6, color: "#1A2B3C", marginBottom: 14, fontStyle: "italic" }}>Local homestead-related businesses can request a free basic listing.</p>
-              <button className="btn-primary" style={{ width: "100%" }} onClick={() => setShowSubmit(true)}>Request a Listing</button>
+              <button className="btn-primary" style={{ width: "100%" }} onClick={openSubmitForm}>Request a Listing</button>
             </div>
           </div>
         </div>
@@ -863,8 +888,6 @@ function HomePage() {
           )}
         </div>
       </div>
-
-      {showSubmit && <SubmitForm onClose={() => setShowSubmit(false)} />}
 
       {showMobileCats && (
         <div className="mobile-drawer-overlay" onClick={() => setShowMobileCats(false)}>
@@ -1091,6 +1114,7 @@ function SupportButton({
 }
 
 function Footer() {
+  const openSubmitForm = useOpenSubmitForm();
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
       <div style={{maxWidth:"800px",margin:"0 auto"}}>
@@ -1105,7 +1129,8 @@ function Footer() {
           <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
           <Link to="/news" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>News</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
-          <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</a>
+          <a href={FACEBOOK_URL} target="_blank" rel="noopener" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Facebook</a>
+          <button type="button" className="link-button" onClick={openSubmitForm} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</button>
           <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
         </div>
         <p style={{fontSize:"0.78rem",color:"#5C7A8A",marginBottom:"24px",lineHeight:"1.6"}}>{FOOTER_COUNTIES}</p>
@@ -1125,13 +1150,14 @@ function Footer() {
 // for the active state. The support CTA reuses BMC_SUPPORT_URL (the same Buy Me
 // a Coffee page the About SupportButton points at). The footer is unchanged.
 function TopNav() {
+  const openSubmitForm = useOpenSubmitForm();
   return (
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
         <NavLink to="/about" className="topnav-link">About</NavLink>
         <NavLink to="/news" className="topnav-link">News</NavLink>
         <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link topnav-secondary">Contact Us</a>
-        <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="topnav-link topnav-secondary">Submit a Listing</a>
+        <button type="button" className="link-button topnav-link topnav-secondary" onClick={openSubmitForm}>Submit a Listing</button>
         <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link topnav-secondary">Report an Error</a>
         <a
           href={BMC_SUPPORT_URL}
@@ -1433,13 +1459,24 @@ function NewsBody({ post }) {
   );
 }
 
+// /news (page 1) and /news/page/:page. NEWS_POSTS is already newest-first
+// (scripts/snapshot.mjs orders by publish_date desc, id desc).
 function NewsIndexPage() {
+  const { page: pageParam } = useParams();
+  const totalPages = Math.max(Math.ceil(NEWS_POSTS.length / NEWS_PAGE_SIZE), 1);
+  const page = pageParam === undefined ? 1 : Number(pageParam);
+  // /news/page/1 and out-of-range or non-numeric pages don't exist.
+  if (pageParam !== undefined && (!/^\d+$/.test(pageParam) || page < 2 || page > totalPages)) {
+    return <NotFoundPage />;
+  }
+  const pagePath = (n) => (n === 1 ? "/news" : `/news/page/${n}`);
+  const posts = NEWS_POSTS.slice((page - 1) * NEWS_PAGE_SIZE, page * NEWS_PAGE_SIZE);
   return (
     <div className="listing-page-wrap">
       <PageMeta
-        title="News — Hudson Valley Almanac"
+        title={page === 1 ? "News — Hudson Valley Almanac" : `News, Page ${page} — Hudson Valley Almanac`}
         description="Updates from the Hudson Valley Almanac: new listings, new guides, and what's changed in the directory."
-        canonical={`${SITE_ORIGIN}/news`}
+        canonical={`${SITE_ORIGIN}${pagePath(page)}`}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
@@ -1447,11 +1484,11 @@ function NewsIndexPage() {
       </div>
       <div className="listing-page-article">
         <header className="listing-page-masthead">
-          <div className="listing-page-eyebrow">Hudson Valley Almanac · News</div>
+          <div className="listing-page-eyebrow">Hudson Valley Almanac · News{page > 1 ? ` · Page ${page}` : ""}</div>
           <h1 className="listing-page-title">News from the Almanac</h1>
         </header>
         <div className="listing-page-body">
-          {NEWS_POSTS.map((post) => (
+          {posts.map((post) => (
             <article key={post.slug} className="news-card">
               <div className="news-date">{post.date}</div>
               <h2 className="news-card-title">
@@ -1461,6 +1498,13 @@ function NewsIndexPage() {
               <Link to={`/news/${post.slug}`} className="back-link">Read the full update →</Link>
             </article>
           ))}
+          {totalPages > 1 && (
+            <nav className="news-pager" aria-label="News pages">
+              {page > 1 ? <Link to={pagePath(page - 1)} className="back-link" rel="prev">← Newer</Link> : <span />}
+              <span className="news-pager-count">Page {page} of {totalPages}</span>
+              {page < totalPages ? <Link to={pagePath(page + 1)} className="back-link" rel="next">Older →</Link> : <span />}
+            </nav>
+          )}
         </div>
       </div>
       <Footer />
@@ -1470,6 +1514,7 @@ function NewsIndexPage() {
 
 function NewsPostPage() {
   const { slug } = useParams();
+  const openSubmitForm = useOpenSubmitForm();
   const post = NEWS_POSTS.find((p) => p.slug === slug);
   if (!post) return <NotFoundPage />;
   return (
@@ -1493,7 +1538,7 @@ function NewsPostPage() {
           <NewsBody post={post} />
           <div className="about-support">
             <p className="about-support-lead">Want your business in the Almanac? It's free.</p>
-            <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} className="news-cta">Submit a Listing</a>
+            <button type="button" className="news-cta" onClick={openSubmitForm}>Submit a Listing</button>
           </div>
         </div>
       </div>
@@ -1506,11 +1551,12 @@ function NewsPostPage() {
 // listing pages (topbar, back-link, masthead, cream body panel, Footer) so it
 // sits inside the normal layout. Copy is intentionally verbatim from the spec.
 function AboutPage() {
+  const openSubmitForm = useOpenSubmitForm();
   return (
     <div className="listing-page-wrap">
       <PageMeta
         title="About the Almanac — Hudson Valley Almanac"
-        description="I'm Devlin Foster, and I made the Hudson Valley Almanac because I kept wanting to know where the good stuff was. The farm with the honor-system egg fridge, the brewery at the end of a dirt road, the fire tower worth the climb. No single place had it all, so I started writing it down. Then I didn't stop."
+        description="A free, hand-checked guide to 1,800+ farm stands, orchards, cideries, markets, and makers across the Hudson Valley, Catskills, and Capital Region."
         canonical={`${SITE_ORIGIN}/about`}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
@@ -1535,7 +1581,12 @@ function AboutPage() {
               <a href="https://www.mohawkvalleyalmanac.com" target="_blank" rel="noopener noreferrer">Mohawk Valley Almanac</a>.
             </p>
             <p>
-              <strong>Free to be listed, always.</strong> Listings are free and will stay free. Some businesses may someday pay for extra visibility, like a featured spot, but anything paid will always be clearly labeled, so you'll know the difference. If you run a farm or small business in the region, just click Submit a Listing to get listed. If you spot something out of date, click Report an Error and I'll fix it.
+              <strong>Free to be listed, always.</strong> Listings are free and will stay free. Some businesses may someday pay for extra visibility, like a featured spot, but anything paid will always be clearly labeled, so you'll know the difference.
+            </p>
+            <p>
+              Run a farm, farm stand, market, or small business in the region? Click{" "}
+              <button type="button" className="link-button" onClick={openSubmitForm}>Submit a Listing</button>{" "}
+              at the top of any page and fill out the short form: your business name, what you do, where you are, and how people can reach you. It only takes a few minutes. Every submission is checked before it goes live, and most appear by the next morning. And if you spot something out of date, click Report an Error and I'll fix it.
             </p>
             <p>
               It's free, and it'll stay free. But servers don't run on enthusiasm, and neither do I (well, mostly enthusiasm, plus coffee). If the Almanac has saved you from a bad afternoon or sent you somewhere great, you can buy me one. It keeps the lights on, keeps me independent, and funds the next dirt-road detour.
@@ -2104,7 +2155,7 @@ function ListingPage() {
 }
 
 function SubmitForm({ onClose }) {
-  const [form, setForm] = useState({ name: "", category: "", town: "", county: "", description: "", tags: "", phone: "", hours: "", address: "", website: "", established: "" });
+  const [form, setForm] = useState({ name: "", category: "", town: "", county: "", description: "", tags: "", phone: "", hours: "", address: "", website: "", established: "", submitter_name: "", submitter_email: "" });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const modalRef = useRef(null);
@@ -2124,7 +2175,7 @@ function SubmitForm({ onClose }) {
     try {
       const baseSlug = slugify(form.name);
       const slug = `${baseSlug}-${Date.now().toString(36)}`;
-      const { error } = await supabase.from("listings").insert([{ ...form, slug, tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean), established: parseInt(form.established) || null, status: "pending", featured: false }]);
+      const { error } = await supabase.from("listings").insert([{ ...form, slug, tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean), established: parseInt(form.established) || null, submitter_name: form.submitter_name.trim() || null, submitter_email: form.submitter_email.trim() || null, status: "pending", featured: false }]);
       if (error) throw error;
       setSubmitted(true);
     } catch (err) {
@@ -2138,14 +2189,13 @@ function SubmitForm({ onClose }) {
         <div className="modal-header">
           <button className="modal-close" aria-label="Close" onClick={onClose}>X</button>
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, fontWeight: 700, color: "#EFF0E8" }}>Request a Free Listing</div>
-          <div style={{ fontSize: 13, color: "rgba(239,240,232,0.6)", marginTop: 6 }}>Submissions are reviewed before publishing. Usually within 48 hours.</div>
+          <div style={{ fontSize: 13, color: "rgba(239,240,232,0.6)", marginTop: 6 }}>Listings are free. Every submission is checked before it goes live.</div>
         </div>
         <div className="modal-body">
           {submitted ? (
             <div style={{ textAlign: "center", padding: "40px 0" }}>
               <div style={{ fontSize: 40, marginBottom: 16, color: "#C4862D" }}>✦</div>
-              <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 22, marginBottom: 12 }}>Thank you</div>
-              <p style={{ color: "#4A6472", fontStyle: "italic" }}>Your listing has been submitted for review. We will be in touch within 48 hours.</p>
+              <p style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 18, lineHeight: 1.5, color: "#1A2B3C" }}>Thanks! Every listing is checked before it goes live, and most appear by the next morning.</p>
               <button className="btn-primary" style={{ marginTop: 24 }} onClick={onClose}>Close</button>
             </div>
           ) : (
@@ -2178,9 +2228,16 @@ function SubmitForm({ onClose }) {
               <input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://example.com" />
               <label>Hours</label>
               <input value={form.hours} onChange={(e) => setForm({ ...form, hours: e.target.value })} placeholder="e.g. Mon-Sat 8am-6pm" />
+              <div className="form-row">
+                <div><label>Your name</label><input value={form.submitter_name} onChange={(e) => setForm({ ...form, submitter_name: e.target.value })} autoComplete="name" /></div>
+                <div><label>Your email (not published)</label><input type="email" value={form.submitter_email} onChange={(e) => setForm({ ...form, submitter_email: e.target.value })} autoComplete="email" /></div>
+              </div>
               <button className="btn-primary" style={{ width: "100%", padding: "14px", fontSize: 13, marginTop: 8 }} onClick={handleSubmit} disabled={submitting}>
                 {submitting ? "Submitting" : "Submit Listing for Review"}
               </button>
+              <p style={{ fontSize: 13, color: "#4A6472", textAlign: "center", marginTop: 12 }}>
+                <a href={`mailto:${CONTACT_EMAIL}?subject=Add My Business to Hudson Valley Almanac`} style={{ color: "#1C3A5E" }}>or email us</a>
+              </p>
             </div>
           )}
         </div>

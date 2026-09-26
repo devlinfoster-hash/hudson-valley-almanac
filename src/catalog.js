@@ -8,6 +8,10 @@
 // Canonical production origin used for <link rel="canonical">, OG urls, JSON-LD.
 export const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
 
+// Posts per /news page. /news is page 1; /news/page/2, /news/page/3, ... follow.
+// Shared by the route table (src/App.jsx) and scripts/generate-sitemap.mjs.
+export const NEWS_PAGE_SIZE = 20;
+
 // The mapped categories. A tile's `id` is its URL slug for /category/:slug and
 // the third segment of /county/:county/:slug. By default `id` is also the DB
 // `category` value the tile filters on; a tile may instead declare `keys` to
