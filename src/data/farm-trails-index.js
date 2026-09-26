@@ -445,6 +445,18 @@ export const FARM_TRAILS = [
       "A guide to the Hudson Valley and Catskills' creameries, farmstead cheesemakers, goat dairies, and farms bottling their own milk — 29 stops across 12 counties.",
     published: true,
   },
+  {
+    slug: "honor-system-and-self-serve-farm-stands",
+    title: "Honor-System & Self-Serve Farm Stands",
+    area: "Region-Wide · 10 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "A cash box, a cooler, and a hand-lettered price list — 19 farm stands and stores that trust you to pay on your own, several of them open around the clock.",
+    metaDescription:
+      "A guide to honor-system and self-serve farm stands in the Hudson Valley, Catskills, and Capital Region — 19 stands and farm stores across 10 counties, many open 24/7.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
