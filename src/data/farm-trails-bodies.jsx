@@ -1023,4 +1023,36 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">The same farm families, one more crop in the ground.</p>
     </>
   ),
+  "creameries-cheese-and-farm-dairies": () => (
+    <>
+      <p className="trail-lede">Twenty-nine creameries, cheesemakers, and working dairies across twelve counties — from award-winning farmstead cheese made only from a farm's own herd to tiny pasture-based goat dairies and family farms still bottling their own milk. The Hudson Valley's dairy history runs deep, and a new generation of makers is turning it into some of the best cheese in the country.</p>
+
+      <h2 className="trail-h2">Columbia County — the cheese capital</h2>
+      <p><strong><L to="mcgrath-cheese-company-2">McGrath Cheese Company</L></strong> in Hudson is a nationally recognized small-batch cheesemaker working with milk from small local dairies, with two Good Food Awards among a dozen-plus national honors. Just up Route 9, <strong><L to="hudson-valley-creamery-2">Hudson Valley Creamery</L></strong> has made fresh goat cheese for more than 35 years. <strong><L to="churchtown-dairy-2">Churchtown Dairy</L></strong> is a 250-acre biodynamic farm outside Hudson making state award-winning cheeses alongside raw milk, beef, and pork, with a farm store and creamery on site, and <strong><L to="hawthorne-valley-farm-farm-store">Hawthorne Valley Farm</L></strong> in Ghent runs its own dairy herd as part of a 900-acre Biodynamic farm going since 1972. Round out the county with <strong><L to="ronnybrook-farm-dairy">Ronnybrook Farm Dairy</L></strong> in Ancramdale, <strong><L to="maple-hill-creamery">Maple Hill Creamery</L></strong> (certified organic), and <strong><L to="a-ooms-and-sons-dairy-farm">A. Ooms &amp; Sons Dairy Farm</L></strong> in Valatie, a multi-generation dairy with farm tours.</p>
+
+      <h2 className="trail-h2">Rensselaer &amp; Washington — award-winners on the Vermont line</h2>
+      <p><strong><L to="four-fat-fowl">Four Fat Fowl</L></strong> in Stephentown is a cult-favorite creamery founded in 2013 by three siblings, making its cheeses from the Jersey milk of <strong><L to="dutch-hollow-farm">Dutch Hollow Farm</L></strong> in Schodack Landing. <strong><L to="berle-farm">Berle Farm</L></strong> in Hoosick Falls has farmed organically since 1989, with a 15-cow dairy surrounded by orchards and gardens. Across the county line, <strong><L to="argyle-cheese-farmer">Argyle Cheese Farmer</L></strong> began in 2007 on a family farm dating to 1860 and now runs a retail store at its Hudson Falls facility, and <strong><L to="battenkill-valley-creamery">Battenkill Valley Creamery</L></strong> in Salem bottles its own milk on a fifth-generation farm — winner of Cornell's award for the highest-quality milk in New York State. <strong><L to="swartz-dairy-and-produce">Swartz Dairy and Produce</L></strong> in Castleton-on-Hudson rounds it out with five generations of dairy, strawberries, and pumpkins.</p>
+
+      <h2 className="trail-h2">Otsego &amp; the western Catskills — raw milk country</h2>
+      <p>Around Cooperstown, the cheese is often raw-milk and farmstead. <strong><L to="cooperstown-cheese-company">Cooperstown Cheese Company</L></strong> in Milford ages raw-milk cheeses from its own grass-fed herd. In Richfield Springs, <strong><L to="mountain-view-dairy">Mountain View Dairy</L></strong> is an Amish-run, certified organic, 100% grass-fed dairy of about 15 cows, and <strong><L to="byler-farm">Byler Farm</L></strong> makes raw-milk cheeses and cheese curds from its own herd. <strong><L to="painted-goat-farm">Painted Goat Farm</L></strong> in Garrattsville is a solar-powered goat dairy making cheeses, yogurt, and goat cheese truffles. Farther south, <strong><L to="harpersfield-cheese">Harpersfield Cheese</L></strong> in Delaware County ages its wheels in an underground space where temperature and humidity take care of themselves.</p>
+
+      <h2 className="trail-h2">Dutchess, Orange &amp; Ulster</h2>
+      <p><strong><L to="chaseholm-farm-creamery-2">Chaseholm Farm Creamery</L></strong> in Pine Plains is one of only a few farmstead operations in New York making cow's-milk cheese exclusively from its own herd, on a 350-acre certified organic farm. <strong><L to="dirty-girl-farm-2">Dirty Girl Farm</L></strong> in Millerton is a tiny pasture-based goat dairy making fresh cheese, yogurt, and bottled goat milk. In Orange County, <strong><L to="5-spoke-creamery">5 Spoke Creamery</L></strong> in Goshen hand-makes cheese from the raw milk of grass-fed cows, and <strong><L to="bellvale-farms-creamery">Bellvale Farms Creamery</L></strong> atop Mount Peter in Warwick — a dairy since 1819 — churns 50-plus flavors of ice cream from its own herd's cream, with a view of the Catskills to go with it. <strong><L to="acorn-hill-farm">Acorn Hill Farm</L></strong> in Kerhonkson is a woman-owned micro-creamery making goat cheese, goat milk fudge, and yogurt.</p>
+
+      <h2 className="trail-h2">Elsewhere in dairy country</h2>
+      <ul className="trail-list">
+        <li><strong><L to="tonjes-farm-dairy">Tonjes Farm Dairy</L> — Callicoon, Sullivan County.</strong> Raw-milk dairy making farmstead Gouda, yogurt sweetened with local maple, kefir, ricotta, fresh mozzarella, and butter.</li>
+        <li><strong><L to="cotton-hill-creamery-2">Cotton Hill Creamery</L> — Middleburgh, Schoharie County.</strong> Fresh goat cheese from pastured Alpine goats, sold at the Delmar, Kingston, and Hudson markets.</li>
+        <li><strong><L to="cowbella-creamery">Cowbella Creamery</L> — Jefferson, Schoharie County.</strong> Pasture-raised dairy and cheese.</li>
+        <li><strong><L to="nettle-meadow-farm-and-cheese-company">Nettle Meadow Farm &amp; Cheese Company</L> — Warrensburg, Warren County.</strong> Award-winning goat and mixed-milk cheeses from its own herd, with a seasonal farm store.</li>
+        <li><strong><L to="king-brothers-dairy">King Brothers Dairy</L> — Schuylerville, Saratoga County.</strong> Bottles its own milk and runs a farm store with beef, pork, eggs, and maple.</li>
+        <li><strong><L to="back-to-the-future-farm-ole-mother-hubbert-dairy">Back to the Future Farm / Ole' Mother Hubbert Dairy</L> — Westtown, Orange County.</strong> Pasture-raised dairy and cheese alongside beef, chicken, and eggs.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Many of these are working farms first, so farm stores keep limited or seasonal hours — check each listing before you drive. Several sell mostly through farmers' markets and specialty shops, which is often the easiest way to taste a lot of cheese in one stop. New York allows raw milk sales only directly from licensed farms, so if raw milk is what you're after, buy it at the farm itself. And bring a cooler: cheese, butter, and yogurt travel better on ice.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or pair a creamery stop with <strong><Link to="/farm-trails/farm-stands-orchards-and-pick-your-own">Farm Stands, Orchards &amp; Pick-Your-Own</Link></strong>.</p>
+      <p className="trail-close">Grass in the spring, milk in the pail, a wheel aging in the cellar — the long, slow craft of the dairy farm.</p>
+    </>
+  ),
 };
