@@ -8,3 +8,4 @@ src/data/listings.json
 .DS_Store
 
 src/data/news.json
+src/data/site-stats.json

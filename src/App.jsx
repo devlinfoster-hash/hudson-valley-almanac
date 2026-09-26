@@ -6,6 +6,7 @@ import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, coun
 import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
+import SITE_STATS from "./data/site-stats.json";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -111,7 +112,30 @@ function linkifyDescription(text) {
 }
 
 const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
-const FOOTER_COUNTIES = "Serving nineteen counties across the Hudson Valley and the adjacent Catskill highlands";
+// Counts come from the build-time snapshot (scripts/snapshot.mjs), so they
+// refresh on every build. Zero means no snapshot (e.g. a local build with no
+// Supabase env), so fall back to count-free copy rather than print "0".
+const FOOTER_COUNTIES = SITE_STATS.countyCount
+  ? `Serving ${SITE_STATS.countyCount} counties across the Hudson Valley and the adjacent Catskill highlands`
+  : "Serving the Hudson Valley and the adjacent Catskill highlands";
+const HERO_TAGLINE = SITE_STATS.listingCount && SITE_STATS.countyCount
+  ? `${SITE_STATS.listingCount.toLocaleString("en-US")} farm stands, orchards, cideries, markets, and makers across ${SITE_STATS.countyCount} counties. Free and hand\u2011checked.`
+  : "The Hudson Valley's directory of farms, makers, markets & stewards";
+
+// Towns that aren't a place. Left out of the Towns dropdown, and never at the
+// top of the default home page order (with the non-geographic counties).
+const NON_PLACE_TOWNS = new Set(["Regional", "Countywide", "Statewide", "Online"]);
+
+// Home page quick filters: a category tile where one fits, otherwise a search.
+// The search box treats " OR " (capitalized) as "match any of these terms".
+const QUICK_FILTERS = [
+  { label: "Orchards & Pick-Your-Own", icon: "🍎", q: "orchard OR pick-your-own OR u-pick" },
+  { label: "Buy Meat Direct", icon: "🥩", q: "meat OR beef OR pork OR lamb" },
+  { label: "Cideries & Breweries", icon: "🍺", category: "craftbeverages" },
+  { label: "Farmers' Markets", icon: "🧺", category: "markets" },
+  { label: "Maple & Honey", icon: "🍁", category: "maple" },
+  { label: "Farm Stands", icon: "🌾", q: "farm stand OR farmstand" },
+];
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 const FACEBOOK_URL = "https://www.facebook.com/1072963332575328";
 
@@ -350,6 +374,34 @@ const sharedStyles = `
      (both are one tap away in the footer); About, News, Submit a Listing and
      the Buy Me a Coffee CTA stay visible at every width. */
   @media (max-width: 640px) { .topnav-secondary { display: none; } }
+  /* Phones: the county strip isn't clickable, so it goes; the theme menu drops
+     its duplicate About (it's in the top nav) and wraps instead of scrolling. */
+  @media (max-width: 640px) {
+    .topbar { display: none; }
+    .cat-btn-about { display: none; }
+    .cat-nav { overflow-x: visible; white-space: normal; }
+    .cat-nav-inner { display: flex; flex-wrap: wrap; justify-content: center; padding: 0 8px; }
+    .cat-btn { padding: 11px 10px; }
+  }
+  .quick-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 1140px; margin: 22px auto 0; }
+  .quick-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 10px 14px; background: #F5F6F0; color: #1C3A5E; border: 1.5px solid #1C3A5E; border-radius: 8px; font-family: 'Lora', serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .quick-btn:hover { background: rgba(28,58,94,0.08); }
+  .quick-btn.active { background: #1C3A5E; color: #EFF0E8; }
+  .quick-btn:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
+  .quick-btn-icon { font-size: 20px; line-height: 1; }
+  @media (max-width: 760px) { .quick-row { display: grid; grid-template-columns: repeat(3, 1fr); } .quick-btn { justify-content: center; text-align: center; flex-direction: column; gap: 4px; padding: 10px 8px; font-size: 14px; } }
+  @media (max-width: 480px) { .quick-row { grid-template-columns: repeat(2, 1fr); } }
+  .latest-strip { max-width: 1140px; margin: 32px auto 0; text-align: left; }
+  .latest-strip-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .latest-strip-title { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: #1C3A5E; }
+  .latest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 640px) { .latest-grid { grid-template-columns: 1fr; } }
+  .latest-card { background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .latest-card .news-date { margin-bottom: 0; }
+  .latest-card-title { font-family: 'Libre Baskerville', serif; font-size: 18px; line-height: 1.3; }
+  .latest-card-title a { color: #1A2B3C; text-decoration: none; }
+  .latest-card-title a:hover { text-decoration: underline; }
+  .latest-card-summary { font-family: 'Lora', serif; font-size: 15px; line-height: 1.55; color: #4A6472; flex: 1; }
   .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
   @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
   .sidebar-box { border: 1.5px solid #1C3A5E; background: #F5F6F0; margin-bottom: 20px; overflow: hidden; }
@@ -675,6 +727,35 @@ function PaginatedResultsGrid({ listings, resetKey }) {
   );
 }
 
+// "Latest from the Almanac": the newest Pick of the Day (slug "pick-...") plus
+// the two newest other posts. Without a pick it shows the three newest posts;
+// with no posts it renders nothing. NEWS_POSTS is already newest-first.
+function LatestNewsStrip() {
+  const isPick = (p) => p.slug.startsWith("pick-");
+  const pick = NEWS_POSTS.find(isPick);
+  const others = NEWS_POSTS.filter((p) => !isPick(p)).slice(0, pick ? 2 : 3);
+  const cards = pick ? [pick, ...others] : others;
+  if (!cards.length) return null;
+  return (
+    <section className="latest-strip" aria-labelledby="latest-strip-title">
+      <div className="latest-strip-head">
+        <h2 id="latest-strip-title" className="latest-strip-title">Latest from the Almanac</h2>
+        <Link to="/news" className="back-link">See all news →</Link>
+      </div>
+      <div className="latest-grid">
+        {cards.map((p) => (
+          <article key={p.slug} className="latest-card">
+            <div className="news-date">{isPick(p) ? "Almanac Pick of the Day" : p.date}</div>
+            <h3 className="latest-card-title"><Link to={`/news/${p.slug}`}>{p.title}</Link></h3>
+            <p className="latest-card-summary">{p.summary}</p>
+            <Link to={`/news/${p.slug}`} className="back-link" aria-label={`Read more: ${p.title}`}>Read more →</Link>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function HomePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -705,6 +786,22 @@ function HomePage() {
 
   useEffect(() => { fetchListings(); }, []);
 
+  const resultsRef = useRef(null);
+  const isQuickActive = (f) => (f.category ? activeCategory === f.category && !search : search === f.q && activeCategory === "all");
+  function applyQuickFilter(f) {
+    const next = new URLSearchParams(searchParams);
+    const wasActive = isQuickActive(f);
+    next.delete("q");
+    next.delete("category");
+    next.delete("ag");
+    if (!wasActive) {
+      if (f.category) next.set("category", f.category);
+      if (f.q) next.set("q", f.q);
+    }
+    setSearchParams(next, { replace: true });
+    resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   async function fetchListings() {
     setLoading(true);
     setLoadError(false);
@@ -733,21 +830,35 @@ function HomePage() {
   }
 
   const allCounties = [...new Set(listings.map((d) => d.county))].filter(Boolean).sort();
-  const allTowns = [...new Set(listings.filter((d) => countyFilter === "All" || d.county === countyFilter).map((d) => d.town))].filter(Boolean).sort();
+  const geoCounties = allCounties.filter((c) => !NON_GEOGRAPHIC_COUNTIES.has(c));
+  const otherCounties = ["Statewide", "Online"].filter((c) => allCounties.includes(c));
+  const allTowns = [...new Set(listings.filter((d) => countyFilter === "All" || d.county === countyFilter).map((d) => d.town))].filter((t) => t && !NON_PLACE_TOWNS.has(t)).sort();
   // A tile may surface several real DB category values (e.g. "Agencies &
   // Professional Services" -> agency + professional), so match on the active
   // tile's key set rather than assuming the slug equals the DB category value.
   const activeCat = getCategory(activeCategory);
   const activeKeys = activeCat ? categoryKeys(activeCat) : null;
+  const searchTerms = search.split(/\s+OR\s+/).map((t) => t.trim().toLowerCase()).filter(Boolean);
   const filtered = listings.filter((d) => {
     const matchCat = activeCategory === "all" || (activeKeys ? activeKeys.includes(d.category) : d.category === activeCategory);
-    const q = search.toLowerCase();
-    const matchSearch = search === "" || d.name?.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q) || (d.tags || []).some((t) => t.toLowerCase().includes(q)) || d.town?.toLowerCase().includes(q) || d.county?.toLowerCase().includes(q);
+    const matchSearch = searchTerms.length === 0 || searchTerms.some((q) => d.name?.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q) || (d.tags || []).some((t) => t.toLowerCase().includes(q)) || d.town?.toLowerCase().includes(q) || d.county?.toLowerCase().includes(q));
     const matchTown = townFilter === "All" || d.town === townFilter;
     const matchCounty = countyFilter === "All" || d.county === countyFilter || (d.tags || []).includes(countyFilter);
     const matchAg = !agOnly || activeCategory !== "craftbeverages" || hasAgRegistry(d);
     return matchCat && matchSearch && matchTown && matchCounty && matchAg;
   });
+
+  // Default "All Resources" order: most complete first, using description
+  // length as the stand-in, with listings that aren't tied to a place
+  // (Regional/Countywide towns, Statewide/Online counties) after the rest.
+  if (activeCategory === "all") {
+    const placeless = (d) => (NON_PLACE_TOWNS.has(d.town) || NON_GEOGRAPHIC_COUNTIES.has(d.county) ? 1 : 0);
+    filtered.sort((a, b) =>
+      placeless(a) - placeless(b) ||
+      (b.description || "").length - (a.description || "").length ||
+      (a.name || "").localeCompare(b.name || "")
+    );
+  }
 
   if (activeCategory === "craftbeverages") {
     filtered.sort((a, b) => {
@@ -803,19 +914,29 @@ function HomePage() {
 
       <div className="hero">
         <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
-        <p className="masthead-sub">The Hudson Valley's directory of farms, makers, markets & stewards</p>
+        <p className="masthead-sub">{HERO_TAGLINE}</p>
         <div className="search-row">
           <input className="search-input" aria-label="Search resources by name, specialty, town, or county" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
           <select className="town-select" aria-label="Filter by county" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
             <option value="All">All Counties</option>
-            {allCounties.map((c) => <option key={c} value={c}>{c}</option>)}
+            {geoCounties.map((c) => <option key={c} value={c}>{c}</option>)}
+            {otherCounties.length > 0 && <option disabled>──────────</option>}
+            {otherCounties.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
           <select className="town-select" aria-label="Filter by town" value={townFilter} onChange={(e) => setParam("town", e.target.value, "All")}>
             <option value="All">All Towns</option>
             {allTowns.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
+        <div className="quick-row">
+          {QUICK_FILTERS.map((f) => (
+            <button key={f.label} type="button" className={"quick-btn" + (isQuickActive(f) ? " active" : "")} aria-pressed={isQuickActive(f)} onClick={() => applyQuickFilter(f)}>
+              <span className="quick-btn-icon" aria-hidden="true">{f.icon}</span>{f.label}
+            </button>
+          ))}
+        </div>
         <button className="mobile-category-toggle" onClick={() => setShowMobileCats(true)}>Browse Categories</button>
+        <LatestNewsStrip />
       </div>
 
       <div className="cat-nav">
@@ -824,7 +945,7 @@ function HomePage() {
           <Link to="/beverage-trails" className="cat-btn">🍻 Beverage Trails</Link>
           <Link to="/explore-by-theme" className="cat-btn">🗂️ Explore by Theme</Link>
           <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
-          <Link to="/about" className="cat-btn">About</Link>
+          <Link to="/about" className="cat-btn cat-btn-about">About</Link>
         </div>
       </div>
 
@@ -856,7 +977,7 @@ function HomePage() {
         </div>
 
         <div>
-          <div className="listings-header">
+          <div className="listings-header" ref={resultsRef}>
             <div className="listings-title">{activeCategory === "all" ? "All Resources" : (categories.find((c) => c.id === activeCategory) || {}).label}</div>
             <div className="result-count">{filtered.length} {filtered.length === 1 ? "resource" : "resources"}</div>
           </div>
@@ -912,10 +1033,6 @@ function HomePage() {
           </div>
         </div>
       )}
-
-      <div style={{maxWidth:"760px",margin:"0 auto",padding:"0 24px"}}>
-        <NewsletterSignup variant="inline" source="home" />
-      </div>
 
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>

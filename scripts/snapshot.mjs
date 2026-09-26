@@ -15,6 +15,7 @@ import { createClient } from "@supabase/supabase-js";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { NON_GEOGRAPHIC_COUNTIES } from "../src/catalog.js";
 
 const OUT_PATH = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -61,6 +62,7 @@ async function fetchPublishedListings() {
 // rebuild on or after their date. If the fetch fails while the env vars are set,
 // the build fails rather than publishing an empty /news.
 const NEWS_OUT_PATH = resolve(dirname(OUT_PATH), "news.json");
+const STATS_OUT_PATH = resolve(dirname(OUT_PATH), "site-stats.json");
 
 function todayInNewYork() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
@@ -70,7 +72,7 @@ async function fetchNews() {
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const { data, error } = await supabase
     .from("news_posts")
-    .select("slug, publish_date, title, summary, body")
+    .select("slug, kind, publish_date, title, summary, body")
     .eq("status", "published")
     .lte("publish_date", todayInNewYork())
     .order("publish_date", { ascending: false })
@@ -122,6 +124,19 @@ async function main() {
   await mkdir(dirname(OUT_PATH), { recursive: true });
   await writeFile(OUT_PATH, JSON.stringify(payload), "utf8");
   console.log(`[snapshot] Wrote ${OUT_PATH} (${listings.length} listings).`);
+
+  // Tiny stats file the client bundle imports (listings.json is build-only and
+  // far too big to ship): the home page stats line and the footer county count.
+  // Counties exclude the non-geographic buckets (Statewide, Online). Zeros mean
+  // no snapshot, and the UI falls back to count-free copy.
+  const stats = {
+    listingCount: listings.length,
+    countyCount: new Set(
+      listings.map((l) => l.county).filter((c) => c && !NON_GEOGRAPHIC_COUNTIES.has(c))
+    ).size,
+  };
+  await writeFile(STATS_OUT_PATH, JSON.stringify(stats), "utf8");
+  console.log(`[snapshot] Wrote ${STATS_OUT_PATH} (${stats.listingCount} listings, ${stats.countyCount} counties).`);
 }
 
 main().catch((err) => {
