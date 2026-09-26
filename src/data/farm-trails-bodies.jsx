@@ -1055,4 +1055,37 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">Grass in the spring, milk in the pail, a wheel aging in the cellar — the long, slow craft of the dairy farm.</p>
     </>
   ),
+  "honor-system-and-self-serve-farm-stands": () => (
+    <>
+      <p className="trail-lede">Nineteen farm stands, farm stores, and self-serve kiosks across ten counties that run on trust — a cooler of eggs, a freezer of the farm's own meat, a shelf of maple syrup, and a cash box or a card reader to pay on your own. No one's behind the counter, and at several of them you can stop in at any hour. It's one of the oldest traditions in rural New York, and one of the best reasons to take the back road home.</p>
+
+      <h2 className="trail-h2">Open around the clock</h2>
+      <p><strong><L to="pitney-meadows-community-farm">Pitney Meadows Community Farm</L></strong> in the middle of Saratoga Springs runs a 24/7 honor-system stand stocked with produce picked from its own 11 acres plus goods from 25-plus local producers — and the nonprofit farm donates 100,000 servings of fresh produce a year to hunger-relief groups. <strong><L to="sap-bush-hollow-farm">Sap Bush Hollow Farm</L></strong> in West Fulton, a grass-fed family farm since 1979, keeps its honor-system farm store open 24/7, with pastured meats, eggs, and wool blankets, plus a café on Saturdays. <strong><L to="flock-ewe-llc">Flock Ewe</L></strong> in Gilboa is a self-serve sheep farm open 24/7 with lamb in retail cuts, chicken, eggs, and sheep fiber. <strong><L to="full-moon-farm">Full Moon Farm</L></strong> in Gardiner runs a 24/7 self-serve store with grass-fed beef, heritage pork, lamb, and goat, and <strong><L to="glenanore-farm">Glenanore Farm</L></strong> in Bovina Center is open 24/7 with beef, chicken, eggs, and jams.</p>
+
+      <h2 className="trail-h2">Greene County's mountaintop and Greenville stands</h2>
+      <p>Greenville has two good ones within a few miles. <strong><L to="johnk-family-farm">Johnk Family Farm</L></strong> runs a year-round honor-system stand with its own Berkshire pork and beef, and takes orders for half hogs and beef quarters. <strong><L to="little-duck-farm">Little Duck Farm</L></strong> in Greenville Center is a four-acre homestead with a dawn-to-dusk stand selling pastured poultry, rabbit, chicken and duck eggs, garlic, and maple syrup. Up the mountain, <strong><L to="maple-hill-farms">Maple Hill Farms</L></strong> on County Route 2 near Prattsville sells its own maple cream, sugar, syrup, and honey from an honor-system stand, and <strong><L to="crystal-valley-farm">Crystal Valley Farm</L></strong> in Halcott Center is a family dairy with a self-serve store for cream-line milk, cheese, eggs, and meats. Stop at <strong><L to="nocturne-bakehouse">Nocturne Bakehouse</L></strong> in Greenville for naturally leavened sourdough from its self-serve kiosk, open 7am to 10pm.</p>
+
+      <h2 className="trail-h2">Schoharie, Delaware &amp; Otsego</h2>
+      <ul className="trail-list">
+        <li><strong><L to="boests-bounty-farm-stand">Boest's Bounty Farm Stand</L> — South Gilboa.</strong> A small open-air stand at South Gilboa Road and Cape Horn, open 24/7 with maple syrup, honey, produce, and handmade crafts.</li>
+        <li><strong><L to="north-star-farm">North Star Farm</L> — Franklin.</strong> Lamb and berries, open 24/7 from March through mid-November.</li>
+        <li><strong><L to="lansingville-farm-and-apiary">Lansingville Farm &amp; Apiary</L> — Delancey.</strong> A honey house open sunrise to sunset, seven days a week, with eggs, berries, and honey.</li>
+        <li><strong><L to="dream-weaver-farm-produce-and-protein">Dream Weaver Farm</L> — Richfield Springs.</strong> A farm store with self-checkout, open 8am to 8pm, selling beef, pork, lamb, poultry, eggs, and dairy.</li>
+      </ul>
+
+      <h2 className="trail-h2">Elsewhere</h2>
+      <ul className="trail-list">
+        <li><strong><L to="normanskill-meadows">Normanskill Meadows</L> — Slingerlands, Albany County.</strong> Open 24/7 from March through November with vegetables, flowers, herbs, firewood, rhubarb in spring, and pumpkins in fall.</li>
+        <li><strong><L to="ouderkirk-farms">Ouderkirk Farms</L> — Fort Plain, Montgomery County.</strong> A self-serve farm store open daily with the farm's own beef plus local milk, cheese, eggs, maple syrup, honey, and baked goods.</li>
+        <li><strong><L to="old-ford-farm">Old Ford Farm</L> — New Paltz, Ulster County.</strong> A self-serve farm store for pastured meats.</li>
+        <li><strong><L to="rock-pop-popcorn">Rock Pop Popcorn</L> — Buskirk, Rensselaer County.</strong> Homegrown popcorn, open daylight hours with a money drop box.</li>
+        <li><strong><L to="battenkill-valley-creamery">Battenkill Valley Creamery</L> — Salem, Washington County.</strong> The farm store is self-serve from 6am until the ice cream parlor opens at 11:30 — early birds get fresh-bottled milk.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Bring small bills and exact change — cash boxes rarely make change, though some stands now take Venmo or a card reader. Bring a cooler for meat, eggs, and dairy, and close freezer and fridge doors tightly behind you. Stock runs low late in the day and late in the week, so earlier is better. And the honor system only works if everyone honors it: pay for what you take, and if a stand is empty, come back another day.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or pair a stand with <strong><Link to="/farm-trails/farm-stands-orchards-and-pick-your-own">Farm Stands, Orchards &amp; Pick-Your-Own</Link></strong>.</p>
+      <p className="trail-close">A cooler, a cash box, and a farmer who trusts you — the Almanac's favorite kind of stop.</p>
+    </>
+  ),
 };
