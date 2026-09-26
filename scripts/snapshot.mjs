@@ -58,7 +58,8 @@ async function fetchPublishedListings() {
 
 // News posts (public.news_posts). Only published posts whose publish_date has
 // arrived (New York time) are written, so scheduled posts appear on the first
-// rebuild on or after their date.
+// rebuild on or after their date. If the fetch fails while the env vars are set,
+// the build fails rather than publishing an empty /news.
 const NEWS_OUT_PATH = resolve(dirname(OUT_PATH), "news.json");
 
 function todayInNewYork() {
@@ -84,8 +85,13 @@ async function main() {
       news = await fetchNews();
       console.log(`[snapshot] ${news.length} news posts fetched.`);
     } catch (err) {
-      console.warn(`[snapshot] Failed to load news (${err.message}); writing empty news.`);
+      console.error(`[snapshot] Failed to load news (${err.message}); failing the build.`);
+      process.exit(1);
     }
+  } else {
+    console.warn(
+      "[snapshot] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY not set; writing empty news."
+    );
   }
   await mkdir(dirname(NEWS_OUT_PATH), { recursive: true });
   await writeFile(NEWS_OUT_PATH, JSON.stringify(news), "utf8");

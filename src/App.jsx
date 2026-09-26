@@ -1384,9 +1384,6 @@ function NotFoundPage() {
   );
 }
 
-// Static About page. Built on the same single-page shell as the fire-towers /
-// listing pages (topbar, back-link, masthead, cream body panel, Footer) so it
-// sits inside the normal layout. Copy is intentionally verbatim from the spec.
 function newsInline(text) {
   const parts = [];
   const re = /\[([^\]]+)\]\(([^)]+)\)|\*([^*]+)\*/g;
@@ -1505,6 +1502,9 @@ function NewsPostPage() {
   );
 }
 
+// Static About page. Built on the same single-page shell as the fire-towers /
+// listing pages (topbar, back-link, masthead, cream body panel, Footer) so it
+// sits inside the normal layout. Copy is intentionally verbatim from the spec.
 function AboutPage() {
   return (
     <div className="listing-page-wrap">
