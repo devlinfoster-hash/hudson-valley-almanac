@@ -19,6 +19,7 @@ import {
   countySlug,
   NON_GEOGRAPHIC_COUNTIES,
   SITE_ORIGIN,
+  NEWS_PAGE_SIZE,
 } from "../src/catalog.js";
 import { PUBLISHED_FARM_TRAILS } from "../src/data/farm-trails-index.js";
 
@@ -70,6 +71,8 @@ async function main() {
   add("/news", today);
   const news = JSON.parse(await readFile(resolve(HERE, "..", "src", "data", "news.json"), "utf8").catch(() => "[]"));
   for (const p of news) add(`/news/${p.slug}`, p.publish_date);
+  const newsPages = Math.ceil(news.length / NEWS_PAGE_SIZE);
+  for (let n = 2; n <= newsPages; n++) add(`/news/page/${n}`, today);
   add("/farm-trails", today);
   add("/beverage-trails", today);
   add("/explore-by-theme", today);
