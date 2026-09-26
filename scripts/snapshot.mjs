@@ -130,6 +130,8 @@ async function main() {
   // Counties exclude the non-geographic buckets (Statewide, Online). Zeros mean
   // no snapshot, and the UI falls back to count-free copy.
   const stats = {
+    // Build date (New York), e.g. for the home page's weekly featured trail.
+    builtOn: todayInNewYork(),
     listingCount: listings.length,
     countyCount: new Set(
       listings.map((l) => l.county).filter((c) => c && !NON_GEOGRAPHIC_COUNTIES.has(c))
