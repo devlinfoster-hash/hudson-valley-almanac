@@ -1125,4 +1125,34 @@ export const FARM_TRAIL_BODIES = {
       <p className="trail-close">One farm, one animal, one full freezer — the most direct way there is to know where your dinner comes from.</p>
     </>
   ),
+  "christmas-tree-farms-and-holiday-farms": () => (
+    <>
+      <p className="trail-lede">Thirty-six Christmas tree farms and holiday stands across thirteen counties — sheared balsams and Fraser firs you can cut yourself, wreaths made in the barn, and a few farm stores that stay open right up to Christmas Eve. Most open the day after Thanksgiving, and the best trees go early.</p>
+
+      <h2 className="trail-h2">The choose-and-cut standouts</h2>
+      <p><strong><L to="veeder-s-tree-farm">Veeder's Tree Farm</L></strong> in Earlton started from seedlings in 1983 and now carries about 20,000 hand-sheared trees on 20 acres — Balsam, Fraser, and Canaan fir, Scotch pine, and spruce — open daily from November 1 through Christmas. <strong><L to="wilkens-fruit-fir-farm">Wilkens Fruit &amp; Fir Farm</L></strong> in Yorktown Heights, in the same family for over a century, adds choose-and-cut trees after Thanksgiving to its pick-your-own peaches, apples, and pumpkins. <strong><L to="marks-cut-and-carry-christmas-trees">Mark's Cut &amp; Carry Christmas Trees</L></strong> in Schaghticoke is open weekends from Black Friday, and at <strong><L to="castleton-christmas-trees">Castleton Christmas Trees</L></strong> you can pre-tag your tree and come back for it, open 9 to 5 daily starting Black Friday.</p>
+
+      <h2 className="trail-h2">Rensselaer County — seven in one county</h2>
+      <p>No county has more. Besides Mark's and Castleton, there's <strong><L to="morins-tree-farm">Morin's Tree Farm</L></strong> in Buskirk (open 9 to 4 every day after Thanksgiving), <strong><L to="mcdonoughs-farm">McDonough's Farm</L></strong> in East Greenbush, <strong><L to="krugs-brookside-farm">Krug's Brookside Farm</L></strong> in East Schodack, <strong><L to="zemas-nursery">Zema's Nursery</L></strong> in Stephentown, and <strong><L to="breezy-hill-blooms">Breezy Hill Blooms</L></strong>, a Hoosick Falls flower farm that turns to trees and wreaths for the holidays.</p>
+
+      <h2 className="trail-h2">Saratoga, Washington &amp; Warren</h2>
+      <p>Saratoga County has six: <strong><L to="buells-trees">Buell's Trees</L></strong> in Gansevoort (open daily from late November), <strong><L to="fogg-hollow-farm">Fogg Hollow Farm</L></strong> in Charlton and <strong><L to="goode-trees-and-wreaths">Goode Trees &amp; Wreaths</L></strong> in Ballston Spa (both weekends in season), <strong><L to="bobs-trees">Bob's Trees</L></strong> in Galway, <strong><L to="boulder-brook-farm">Boulder Brook Farm</L></strong> in Malta, which also sells maple and honey, and <strong><L to="sunnyside-gardens">Sunnyside Gardens</L></strong> in Saratoga Springs. North and east, <strong><L to="bailey-family-christmas-trees">Bailey Family Christmas Trees</L></strong> in Cambridge runs from the day after Thanksgiving to December 23, <strong><L to="kuzmich-christmas-tree-farm">Kuzmich Christmas Tree Farm</L></strong> in Greenwich asks you to call ahead, and <strong><L to="river-bend-christmas-tree-farm">River Bend Christmas Tree Farm</L></strong> in Lake Luzerne sells trees, wreaths, and maple syrup.</p>
+
+      <h2 className="trail-h2">The Catskills — Delaware, Sullivan &amp; Otsego</h2>
+      <p>Bovina Center alone has two: <strong><L to="robson-s-christmas-trees">Robson's Christmas Trees</L></strong> and <strong><L to="echo-hill-farm">Echo Hill Farm</L></strong>. Nearby are <strong><L to="maple-shade-1785">Maple Shade 1785</L></strong> in Delhi, with baked goods and preserves; <strong><L to="cody-s-sugar-shack-and-farming">Cody's Sugar Shack</L></strong> in Fleischmanns, with maple syrup and pasture-raised meats; and <strong><L to="sweet-meadows-country-home-and-garden">Sweet Meadows Country Home &amp; Garden</L></strong> in Davenport. In Sullivan County, try <strong><L to="trees-of-the-woods">Trees of the Woods</L></strong> in Callicoon Center, <strong><L to="elm-garden-and-floral-design">ELM Garden &amp; Floral Design</L></strong> in Livingston Manor, and <strong><L to="buck-brook-alpacas">Buck Brook Alpacas</L></strong> in Roscoe, where trees come with alpaca fiber and a farm store. <strong><L to="fox-hollow-nursery">Fox Hollow Nursery</L></strong> in West Oneonta rounds out the hills.</p>
+
+      <h2 className="trail-h2">The river counties</h2>
+      <ul className="trail-list">
+        <li><strong><L to="rockdale-tree-farm">Rockdale Tree Farm</L></strong> and <strong><L to="scarecrow-farm">Scarecrow Farm</L> — Hudson, Columbia County.</strong> Rockdale is open from the first weekend after Thanksgiving; Scarecrow sells trees and wreaths through December 24.</li>
+        <li><strong><L to="abels-trees">Abel's Trees</L> — Verbank</strong> and <strong><L to="solvang-tree-farm">Solvang Tree Farm</L> — Poughkeepsie, Dutchess County.</strong></li>
+        <li><strong><L to="emmerich-tree-farm">Emmerich Tree Farm</L> — Warwick, <L to="rocky-bar-tree-farm">Rocky Bar Tree Farm</L> — Westtown, <L to="stone-oak-farm">Stone Oak Farm</L> — Slate Hill,</strong> and <strong><L to="manza-family-farm">Manza Family Farm</L> — Montgomery, Orange County.</strong></li>
+        <li><strong><L to="bell-s-christmas-trees">Bell's Christmas Trees</L> — Accord, Ulster County.</strong> Trees, maple syrup, and firewood.</li>
+      </ul>
+
+      <h2 className="trail-h2">A few practical notes</h2>
+      <p>Most farms open the day after Thanksgiving and close when the best trees are gone, so the first two weekends are the time to go. Call ahead to ask whether they provide saws, shake and bale the tree, take cards, and sell pre-cut trees or wreaths. Dress for mud, bring gloves and a tape measure (trees look smaller in a field than in a living room), and bring rope or straps for the car roof. At home, make a fresh cut across the trunk and keep the stand full of water.</p>
+      <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>, or pick up holiday gifts on the <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>.</p>
+      <p className="trail-close">Cold air, a sharp saw, and the smell of balsam in the car all the way home.</p>
+    </>
+  ),
 };

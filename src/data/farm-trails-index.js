@@ -469,6 +469,18 @@ export const FARM_TRAILS = [
       "A guide to buying meat in bulk directly from Hudson Valley, Catskills, and Capital Region farms — 30 farms selling quarter, half, and whole beef, pork, and lamb shares.",
     published: true,
   },
+  {
+    slug: "christmas-tree-farms-and-holiday-farms",
+    title: "Christmas Tree Farms & Holiday Farms",
+    area: "Region-Wide · 13 Counties",
+    county: null,
+    series: "theme",
+    blurb:
+      "Choose-and-cut firs, wreaths off the farm, and a thermos of cocoa — 36 tree farms and holiday stands, from Rensselaer County's cluster of seven to a 109-year-old Westchester fruit and fir farm.",
+    metaDescription:
+      "A guide to Christmas tree farms and holiday farm stands in the Hudson Valley, Catskills, and Capital Region — 36 tree farms and wreath sellers across 13 counties.",
+    published: true,
+  },
 ];
 
 export const PUBLISHED_FARM_TRAILS = FARM_TRAILS.filter((g) => g.published);
