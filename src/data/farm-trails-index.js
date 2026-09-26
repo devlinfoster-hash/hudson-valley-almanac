@@ -446,6 +446,41 @@ export const PUBLISHED_DAY_TRIP_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.s
 export const PUBLISHED_BEVERAGE_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series === "beverage");
 export const PUBLISHED_THEME_TRAILS = PUBLISHED_FARM_TRAILS.filter((g) => g.series === "theme");
 
+// Home page "Plan a Saturday" featured trail. Seasonal pool by month, rotating
+// by ISO week number, so the pick changes weekly and is fixed for a given date
+// (the home page passes the build date, so prerender and hydration agree).
+//   Feb-Mar: maple/sugarhouse trails ("maple" or "sugar" in title or blurb),
+//            which includes the Maple Trail theme guide
+//   Apr-Oct and Jan: day-trip trails
+//   Nov-Dec: beverage trails
+// An empty pool falls back to the day-trip trails.
+const MAPLE_TRAIL_SLUG = "maple-trail-and-sugarhouses";
+
+function isoWeek(y, m, d) {
+  const t = new Date(Date.UTC(y, m - 1, d));
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+  const yearStart = Date.UTC(t.getUTCFullYear(), 0, 1);
+  return Math.ceil(((t - yearStart) / 86400000 + 1) / 7);
+}
+
+export function featuredTrailPool(month) {
+  if (month === 2 || month === 3) {
+    return PUBLISHED_FARM_TRAILS.filter(
+      (g) => g.slug === MAPLE_TRAIL_SLUG || /maple|sugar/i.test(`${g.title} ${g.blurb}`)
+    );
+  }
+  if (month >= 11) return PUBLISHED_BEVERAGE_TRAILS;
+  return PUBLISHED_DAY_TRIP_TRAILS;
+}
+
+// dateISO is "YYYY-MM-DD".
+export function featuredTrailFor(dateISO) {
+  const [y, m, d] = dateISO.split("-").map(Number);
+  const seasonal = featuredTrailPool(m);
+  const pool = seasonal.length ? seasonal : PUBLISHED_DAY_TRIP_TRAILS;
+  return pool.length ? pool[isoWeek(y, m, d) % pool.length] : null;
+}
+
 export function farmTrailBySlug(slug) {
   return FARM_TRAILS.find((g) => g.slug === slug) || null;
 }

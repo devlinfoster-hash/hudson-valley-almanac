@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoad
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
 import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
-import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs } from "./data/farm-trails-index.js";
+import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs, featuredTrailFor } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
 import SITE_STATS from "./data/site-stats.json";
@@ -410,6 +410,20 @@ const sharedStyles = `
   .latest-card-title { font-family: 'Libre Baskerville', serif; font-size: 18px; line-height: 1.3; }
   .latest-card-title a { color: #1A2B3C; text-decoration: none; }
   .latest-card-title a:hover { text-decoration: underline; }
+  .saturday { max-width: 1140px; margin: 36px auto 0; text-align: left; }
+  .saturday .latest-strip-title { margin-bottom: 14px; }
+  .saturday-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .saturday-grid { grid-template-columns: 1fr; } }
+  .saturday-feature { display: flex; flex-direction: column; background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 28px; }
+  .saturday-feature-title { font-family: 'Libre Baskerville', serif; font-size: 28px; line-height: 1.2; color: #1A2B3C; margin-bottom: 12px; }
+  .saturday-feature .trail-card-blurb { font-size: 16px; }
+  .saturday-feature-btn { align-self: flex-start; margin-top: auto; text-decoration: none; }
+  .saturday-feature-btn:hover { background: #14304F; }
+  .saturday-side { display: flex; flex-direction: column; gap: 12px; }
+  .saturday-link { padding: 16px 20px; gap: 4px; }
+  .saturday-link .trail-card-area { margin-bottom: 0; }
+  .saturday-link-name { font-family: 'Libre Baskerville', serif; font-size: 19px; font-weight: 700; color: #1A2B3C; }
+  .saturday-theme { align-self: center; margin-top: 4px; }
   .latest-card-summary { font-family: 'Lora', serif; font-size: 15px; line-height: 1.55; color: #4A6472; flex: 1; }
   .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
   @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
@@ -765,6 +779,43 @@ function LatestNewsStrip() {
   );
 }
 
+// "Plan a Saturday": one featured trail (seasonal pool, rotating weekly, picked
+// from the build date so the prerendered HTML and hydration match), plus the
+// three trail indexes and a link to the theme guides.
+function PlanASaturday() {
+  const trail = featuredTrailFor(SITE_STATS.builtOn || new Date().toISOString().slice(0, 10));
+  const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+  const links = [
+    { to: "/farm-trails", name: "Farm Trails", sub: plural(PUBLISHED_FARM_TRAILS.length, "day trip") },
+    { to: "/beverage-trails", name: "Beverage Trails", sub: plural(PUBLISHED_BEVERAGE_TRAILS.length, "trail") },
+    { to: "/fire-towers", name: "Fire Towers", sub: "Climb the region's fire towers" },
+  ];
+  return (
+    <section className="saturday" aria-labelledby="saturday-title">
+      <h2 id="saturday-title" className="latest-strip-title">Plan a Saturday</h2>
+      <div className="saturday-grid">
+        {trail && (
+          <article className="saturday-feature">
+            <div className="trail-card-area">{trail.area}</div>
+            <h3 className="saturday-feature-title">{trail.title}</h3>
+            <p className="trail-card-blurb">{trail.blurb}</p>
+            <Link to={`/farm-trails/${trail.slug}`} className="btn-primary saturday-feature-btn">See the trail</Link>
+          </article>
+        )}
+        <div className="saturday-side">
+          {links.map((l) => (
+            <Link key={l.to} to={l.to} className="trail-card saturday-link">
+              <span className="saturday-link-name">{l.name}</span>
+              <span className="trail-card-area">{l.sub}</span>
+            </Link>
+          ))}
+          <Link to="/explore-by-theme" className="back-link saturday-theme">or explore by theme →</Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -949,6 +1000,7 @@ function HomePage() {
         </div>
         <button className="mobile-category-toggle" onClick={() => setShowMobileCats(true)}>Browse Categories</button>
         <LatestNewsStrip />
+        <PlanASaturday />
       </div>
 
       <div className="cat-nav">
