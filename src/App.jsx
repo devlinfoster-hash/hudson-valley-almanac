@@ -1510,7 +1510,7 @@ function AboutPage() {
     <div className="listing-page-wrap">
       <PageMeta
         title="About the Almanac — Hudson Valley Almanac"
-        description="Your nosy, enthusiastic friend who knows every farm stand, fire tower, and good cider in the Hudson Valley. About the Hudson Valley Almanac — a free, hand-researched directory with zero ads."
+        description="I'm Devlin Foster, and I made the Hudson Valley Almanac because I kept wanting to know where the good stuff was. The farm with the honor-system egg fridge, the brewery at the end of a dirt road, the fire tower worth the climb. No single place had it all, so I started writing it down. Then I didn't stop."
         canonical={`${SITE_ORIGIN}/about`}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
@@ -1528,13 +1528,20 @@ function AboutPage() {
           </p>
           <div className="about-body">
             <p>
-              Hudson Valley Almanac started as a simple problem: I kept wanting to know where the good stuff was — the farm with the honor-system egg fridge, the brewery down the dirt road, the fire tower worth the climb — and no single place had it all. So I started writing it down. Then I didn't stop. Now it's 1,800-and-counting listings across the Valley, each one researched and written by hand with zero ads.
+              I'm Devlin Foster, and I made the Hudson Valley Almanac because I kept wanting to know where the good stuff was. The farm with the honor-system egg fridge, the brewery at the end of a dirt road, the fire tower worth the climb. No single place had it all, so I started writing it down. Then I didn't stop.
             </p>
             <p>
-              It's free, and it'll stay free. But servers don't run on enthusiasm, and neither do I (well — mostly enthusiasm, plus coffee). If the Almanac has saved you from a bad afternoon or sent you somewhere great, you can buy me one. It keeps the lights on, keeps me independent, and funds the next dirt-road detour.
+              Today the Almanac has more than 1,800 listings across the Hudson Valley, the Catskills, and the Capital Region: farm stands and orchards, meat farms and creameries, maple producers and cideries, markets, makers, feed stores, and the people who keep rural life running. Every listing is written in the Almanac's own words, and I check the links regularly and fix what's broken. Farther west, the Almanac has a sister site, the{" "}
+              <a href="https://www.mohawkvalleyalmanac.com" target="_blank" rel="noopener noreferrer">Mohawk Valley Almanac</a>.
             </p>
             <p>
-              No pressure. But if you do — thanks. You're keeping a very specific obsession alive.
+              <strong>Free to be listed, always.</strong> Listings are free and will stay free. Some businesses may someday pay for extra visibility, like a featured spot, but anything paid will always be clearly labeled, so you'll know the difference. If you run a farm or small business in the region, just click Submit a Listing to get listed. If you spot something out of date, click Report an Error and I'll fix it.
+            </p>
+            <p>
+              It's free, and it'll stay free. But servers don't run on enthusiasm, and neither do I (well, mostly enthusiasm, plus coffee). If the Almanac has saved you from a bad afternoon or sent you somewhere great, you can buy me one. It keeps the lights on, keeps me independent, and funds the next dirt-road detour.
+            </p>
+            <p>
+              No pressure. But if you do, thanks. You're keeping a very specific obsession alive.
             </p>
           </div>
           <div className="about-support">
