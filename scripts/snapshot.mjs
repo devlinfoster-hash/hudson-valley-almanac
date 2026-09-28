@@ -35,7 +35,7 @@ const SUPABASE_ANON_KEY =
 // written into the snapshot, which becomes publicly-served static files. Keeps
 // the snapshot (and the loader data inlined into each prerendered page) lean too.
 const COLUMNS =
-  "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, created_at";
+  "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, created_at, verified_at";
 
 async function fetchPublishedListings() {
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -63,6 +63,20 @@ async function fetchPublishedListings() {
 // the build fails rather than publishing an empty /news.
 const NEWS_OUT_PATH = resolve(dirname(OUT_PATH), "news.json");
 const STATS_OUT_PATH = resolve(dirname(OUT_PATH), "site-stats.json");
+// Books (public.books) for /books and the in-context book cards. Unlike news, a
+// failed fetch here writes an empty list instead of failing the build.
+const BOOKS_OUT_PATH = resolve(dirname(OUT_PATH), "books.json");
+
+async function fetchBooks() {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data, error } = await supabase
+    .from("books")
+    .select("slug, title, subtitle, blurb, section, group_label, status, cover, links, companion_url, counties, listing_tags, sort_order")
+    .eq("published", true)
+    .order("sort_order", { ascending: true });
+  if (error) throw error;
+  return data || [];
+}
 
 function todayInNewYork() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
@@ -98,6 +112,17 @@ async function main() {
   }
   await mkdir(dirname(NEWS_OUT_PATH), { recursive: true });
   await writeFile(NEWS_OUT_PATH, JSON.stringify(news), "utf8");
+
+  let books = [];
+  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+    try {
+      books = await fetchBooks();
+      console.log(`[snapshot] ${books.length} books fetched.`);
+    } catch (err) {
+      console.warn(`[snapshot] Failed to load books (${err.message}); writing an empty list.`);
+    }
+  }
+  await writeFile(BOOKS_OUT_PATH, JSON.stringify(books), "utf8");
 
   let listings = [];
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {

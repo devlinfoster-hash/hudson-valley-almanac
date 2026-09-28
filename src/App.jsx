@@ -7,6 +7,8 @@ import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHE
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
 import SITE_STATS from "./data/site-stats.json";
+import FreezerFullContent from "./FreezerFullPage.jsx";
+import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -239,7 +241,9 @@ export const routes = [
     children: [
       { index: true, Component: HomePage },
       { path: "fire-towers", Component: FireTowersPage },
+      { path: "freezer-full", Component: FreezerFullPage },
       { path: "about", Component: AboutPage },
+      { path: "books", Component: BooksPage },
       { path: "news", Component: NewsIndexPage },
       {
         path: "news/page/:page",
@@ -548,6 +552,32 @@ const sharedStyles = `
   .landing-crosslinks { margin-bottom: 28px; }
   .landing-crosslinks-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 10px; }
   .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  button.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; cursor: pointer; }
+  button.chip.chip-active { background: #1C3A5E; color: #F5F6F0; }
+  button.chip.chip-active .chip-count { color: #E8D9B8; }
+  .related-guide { font-size: 13px; color: #1A2B3C; margin: 0 0 16px; }
+  .books-wrap { max-width: 980px; margin: 0 auto; padding: 8px 20px 48px; }
+  .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; margin: 20px 0 40px; }
+  .book-card { background: #F5F6F0; border: 1.5px solid #D8DBCF; padding: 18px; display: flex; gap: 16px; scroll-margin-top: 80px; }
+  .book-card:target { border-color: #C4862D; box-shadow: 0 0 0 3px rgba(196,134,45,0.25); }
+  .book-cover { width: 96px; flex: 0 0 96px; height: 154px; align-self: flex-start; object-fit: contain; background: #E8E9E0; }
+  .book-cover-blank { width: 96px; flex: 0 0 96px; height: 154px; align-self: flex-start; background: #1C3A5E; color: #E8D9B8; font-family: 'Libre Baskerville', serif; font-size: 11px; line-height: 1.3; padding: 10px; box-sizing: border-box; display: flex; align-items: center; text-align: center; }
+  .book-title { font-family: 'Libre Baskerville', serif; font-size: 17px; color: #1C3A5E; margin: 0 0 4px; line-height: 1.3; }
+  .book-sub { font-size: 13px; color: #5C7A8A; font-style: italic; margin: 0 0 8px; line-height: 1.4; }
+  .book-blurb { font-size: 14px; line-height: 1.5; margin: 0 0 10px; color: #1A2B3C; }
+  .book-links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+  .book-links a { color: #1C3A5E; }
+  .book-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4862D; margin-bottom: 6px; }
+  .books-more { border-top: 1.5px solid #D8DBCF; padding-top: 24px; }
+  .books-more h3 { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #5C7A8A; margin: 20px 0 10px; }
+  .books-more-item { display: flex; gap: 12px; align-items: center; padding: 10px 0; scroll-margin-top: 80px; }
+  .books-more-item img { width: 44px; height: 70px; object-fit: contain; background: #E8E9E0; }
+  .books-more-item .t { font-weight: 700; color: #1C3A5E; }
+  .books-more-item .s { font-size: 13px; color: #5C7A8A; }
+  .verified-note { font-size: 12px; color: #5C7A8A; font-style: italic; margin: 8px 0 16px; }
+  .update-form { text-align: left; display: grid; gap: 10px; margin-top: 8px; }
+  .update-form input, .update-form textarea, .update-form select { width: 100%; padding: 10px; border: 1.5px solid #D8DBCF; font-size: 15px; font-family: inherit; box-sizing: border-box; }
+  .update-form textarea { min-height: 110px; }
   a.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; text-decoration: none; transition: background 0.15s, color 0.15s; }
   a.chip:hover { background: #1C3A5E; color: #EFF0E8; }
   a.chip .chip-count { color: #8AA0AE; }
@@ -1193,6 +1223,21 @@ const RAMBLES_BOOK_URL =
 // County slugs where the book is surfaced. Edit this set to add/remove counties.
 const RAMBLES_BOOK_COUNTIES = new Set(["greene", "ulster"]);
 
+// Counties covered by both this site and the Mohawk Valley Almanac.
+const MVA_SHARED_COUNTIES = new Set(["fulton", "montgomery", "schoharie", "otsego", "schenectady"]);
+
+function MohawkValleyCard({ county, slug }) {
+  return (
+    <div className="landing-crosslinks">
+      <div className="landing-crosslinks-label">Also covering {county} County</div>
+      <p style={{ margin: "4px 0 0", lineHeight: 1.5 }}>
+        Our sister site, the <a href={`https://www.mohawkvalleyalmanac.com/?county=${encodeURIComponent(county)}`} target="_blank" rel="noreferrer">Mohawk Valley Almanac</a>, lists more
+        farms and producers in {county} County and the rest of the Mohawk Valley.
+      </p>
+    </div>
+  );
+}
+
 function RamblesBookCard() {
   return (
     <aside className="rambles-card" aria-label="Free 1863 Catskills guidebook">
@@ -1308,6 +1353,7 @@ function Footer() {
           <Link to="/explore-by-theme" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Explore by Theme</Link>
           <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
           <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
+          <Link to="/books" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Books</Link>
           <Link to="/news" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>News</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
           <a href={FACEBOOK_URL} target="_blank" rel="noopener" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Facebook</a>
@@ -1568,6 +1614,157 @@ function FireTowersPage() {
   );
 }
 
+// Companion page for the book "Freezer Full" (Hudson Valley edition). The book
+// sends readers here for the current farm list; data lives in
+// src/data/freezer-full.js.
+function FreezerFullPage() {
+  return (
+    <div className="listing-page-wrap">
+      <PageMeta
+        title="Freezer Full: Farm List — Hudson Valley Almanac"
+        description="The up-to-date list of Hudson Valley, Catskills, and Capital Region farms that sell beef, pork, lamb, and poultry direct, from the book Freezer Full."
+        canonical={`${SITE_ORIGIN}/freezer-full`}
+      />
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <FreezerFullContent siteName="Hudson Valley Almanac" bookTitle="Freezer Full" />
+      <Footer />
+    </div>
+  );
+}
+
+// ── Books ──────────────────────────────────────────────────────────────────
+// Books by the Almanac's editor. Data comes from the books table (see
+// src/data/books.js). Kept deliberately low-key: no prices or carts, just a
+// quiet "where to get it" link, and the page is linked from the footer and the
+// About page rather than the top navigation.
+function bookHref(b, link) {
+  const url = link?.url || "";
+  if (!url || !/barnesandnoble\.com/.test(url)) return url;
+  return url + (url.includes("?") ? "&" : "?") + "utm_source=hva&utm_medium=books";
+}
+
+function BookCover({ book, className = "book-cover" }) {
+  if (book.cover) {
+    return <img className={className} src={`/book-covers/${book.cover}`} alt={`Cover of ${book.title}`} loading="lazy" width="96" height="154" />;
+  }
+  return <div className="book-cover-blank" aria-hidden="true">{book.title}</div>;
+}
+
+function BookLinks({ book }) {
+  const links = Array.isArray(book.links) ? book.links : [];
+  const companion = book.companion_url;
+  if (book.status === "coming_soon" && !companion) return null;
+  return (
+    <div className="book-links">
+      {book.status !== "coming_soon" && links.map((l) => (
+        <a key={l.url} href={bookHref(book, l)} target="_blank" rel="noreferrer" onClick={() => trackMeanderNYClick(`book:${book.slug}`)}>
+          {book.status === "free" ? l.label : `Where to get it: ${l.label}`} ↗
+        </a>
+      ))}
+      {companion ? (
+        companion.startsWith("http") ? (
+          <a href={companion} target="_blank" rel="noreferrer">Companion page ↗</a>
+        ) : (
+          <Link to={companion}>Companion page</Link>
+        )
+      ) : null}
+    </div>
+  );
+}
+
+function BooksPage() {
+  const regional = BOOKS.filter((b) => b.section === "regional");
+  const out = regional.filter((b) => b.status !== "coming_soon");
+  const soon = regional.filter((b) => b.status === "coming_soon");
+  const more = BOOKS.filter((b) => b.section === "more");
+  const groups = [...new Set(more.map((b) => b.group_label || "More"))];
+  const canonical = `${SITE_ORIGIN}/books`;
+  const card = (b) => (
+    <article key={b.slug} id={b.slug} className="book-card">
+      <BookCover book={b} />
+      <div>
+        {b.status === "free" ? <div className="book-badge">Free</div> : b.status === "coming_soon" ? <div className="book-badge">Coming soon</div> : null}
+        <h2 className="book-title">{b.title}</h2>
+        {b.subtitle ? <p className="book-sub">{b.subtitle}</p> : null}
+        {b.blurb ? <p className="book-blurb">{b.blurb}</p> : null}
+        <BookLinks book={b} />
+      </div>
+    </article>
+  );
+  return (
+    <div className="landing-wrap">
+      <PageMeta
+        title="Books by the Almanac's Editor — Hudson Valley Almanac"
+        description="Guidebooks to the Hudson Valley, Catskills, and Capital Region by Devlin Foster, the editor of the Hudson Valley Almanac."
+        canonical={canonical}
+      />
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="books-wrap">
+        <header className="landing-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac · About the editor</div>
+          <h1 className="landing-title">Books by the Almanac's Editor</h1>
+          <p className="landing-sub">
+            I'm Devlin Foster, and I put the Almanac together. Along the way I've written guidebooks to this part of New York, many built from
+            the same research. The Almanac itself is free and always will be; these are here for anyone who wants to go deeper.
+          </p>
+        </header>
+        <div className="books-grid">{out.map(card)}</div>
+        {soon.length ? (
+          <>
+            <h2 className="landing-crosslinks-label" style={{ marginTop: 8 }}>Coming soon</h2>
+            <div className="books-grid">{soon.map(card)}</div>
+          </>
+        ) : null}
+        {more.length ? (
+          <section className="books-more">
+            <div className="landing-crosslinks-label">Also by Devlin Foster</div>
+            {groups.map((g) => (
+              <div key={g}>
+                <h3>{g}</h3>
+                {more.filter((b) => (b.group_label || "More") === g).map((b) => (
+                  <div key={b.slug} id={b.slug} className="books-more-item">
+                    <BookCover book={b} className="" />
+                    <div>
+                      <div className="t">{b.title}</div>
+                      {b.subtitle ? <div className="s">{b.subtitle}</div> : null}
+                      <BookLinks book={b} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </section>
+        ) : null}
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// A regional book shown in context on a county page. Reuses the .rambles-card
+// styling so it matches the existing book cards on the site.
+function BookContextCard({ book }) {
+  const first = Array.isArray(book.links) ? book.links[0] : null;
+  return (
+    <aside className="rambles-card" aria-label={`Guidebook: ${book.title}`}>
+      <div className="rambles-card-body">
+        <div className="rambles-eyebrow">{book.status === "free" ? "Free · From the Almanac's editor" : "Guidebook · From the Almanac's editor"}</div>
+        <div className="rambles-title">{book.title}</div>
+        {book.blurb ? <p className="rambles-desc">{book.blurb}</p> : null}
+      </div>
+      <Link className="rambles-cta" to={`/books#${book.slug}`}>
+        {book.status === "free" ? "Get the free book" : "About this book"}
+      </Link>
+    </aside>
+  );
+}
+
 function NotFoundPage() {
   return (
     <div className="listing-page-wrap">
@@ -1776,6 +1973,9 @@ function AboutPage() {
             </p>
             <p>
               No pressure. But if you do, thanks. You're keeping a very specific obsession alive.
+            </p>
+            <p>
+              I also write guidebooks to this part of New York, many of them built from what I've learned putting the Almanac together. You'll find them on the <Link to="/books">Books</Link> page.
             </p>
           </div>
           <div className="about-support">
@@ -2024,7 +2224,24 @@ function FarmTrailGuidePage() {
 // Shared shell for the county / category / combo landing pages: render-time
 // meta + JSON-LD, masthead, optional cross-link chips, and the listing cards
 // rendered as real HTML text (so they're in the static source, not JS-only).
-function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings, jsonLd, inlineNewsletter, featureModule }) {
+// Quick filters shown on county/category/combo pages. Each maps to a canonical
+// tag in the listings table; a chip only appears when at least one listing on
+// the page carries that tag.
+const TAG_FILTERS = [
+  { id: "snap", tag: "SNAP", label: "Accepts SNAP" },
+  { id: "self", tag: "Self-Serve", label: "Self-serve farm stand" },
+  { id: "shares", tag: "Meat Shares", label: "Sells meat shares" },
+];
+
+function hasTag(l, tag) {
+  return Array.isArray(l.tags) && l.tags.includes(tag);
+}
+
+function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings: allListings, jsonLd, inlineNewsletter, featureModule }) {
+  const [active, setActive] = useState(null);
+  const available = TAG_FILTERS.filter((f) => allListings.some((l) => hasTag(l, f.tag)));
+  const current = available.find((f) => f.id === active) || null;
+  const listings = current ? allListings.filter((l) => hasTag(l, current.tag)) : allListings;
   return (
     <div className="landing-wrap">
       <PageMeta title={metaTitle} description={metaDescription} canonical={canonical} />
@@ -2045,6 +2262,24 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
         </header>
         {crosslinks}
         {featureModule}
+        {available.length > 0 ? (
+          <div className="landing-crosslinks quick-filters">
+            <div className="landing-crosslinks-label">Show only</div>
+            <div className="chip-row">
+              {available.map((f) => (
+                <button
+                  key={f.id}
+                  type="button"
+                  className={`chip${active === f.id ? " chip-active" : ""}`}
+                  aria-pressed={active === f.id}
+                  onClick={() => setActive(active === f.id ? null : f.id)}
+                >
+                  {f.label} <span className="chip-count">{allListings.filter((l) => hasTag(l, f.tag)).length}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
         <div className="listings-header">
           <div className="listings-title">{listings.length} {listings.length === 1 ? "resource" : "resources"}</div>
         </div>
@@ -2090,7 +2325,14 @@ function CountyPage() {
       crosslinks={crosslinks}
       listings={data.listings}
       jsonLd={jsonLd}
-      featureModule={RAMBLES_BOOK_COUNTIES.has(data.slug) ? <RamblesBookCard /> : null}
+      featureModule={
+        <>
+          {booksForCounty(data.slug).length ? (
+            booksForCounty(data.slug).map((b) => <BookContextCard key={b.slug} book={b} />)
+          ) : RAMBLES_BOOK_COUNTIES.has(data.slug) ? <RamblesBookCard /> : null}
+          {MVA_SHARED_COUNTIES.has(data.slug) ? <MohawkValleyCard county={data.county} slug={data.slug} /> : null}
+        </>
+      }
       inlineNewsletter={<NewsletterSignup variant="inline" source={`county:${data.slug}`} county={data.county} />}
     />
   );
@@ -2230,13 +2472,15 @@ function ListingPage() {
     if (listing.description) jsonLd.description = listing.description;
     if (listing.website) jsonLd.sameAs = listing.website.startsWith("http") ? listing.website : "https://" + listing.website;
     if (listing.phone) jsonLd.telephone = listing.phone;
+    if (listing.county) jsonLd.areaServed = `${listing.county} County, New York`;
     if (cat) jsonLd.additionalType = cat.label;
     if (listing.address || listing.town || listing.county) {
       jsonLd.address = {
         "@type": "PostalAddress",
         ...(listing.address ? { streetAddress: listing.address } : {}),
         ...(listing.town ? { addressLocality: listing.town } : {}),
-        ...(listing.county ? { addressRegion: `${listing.county} County, NY` } : {}),
+        addressRegion: "NY",
+        ...(zipFrom(listing.address) ? { postalCode: zipFrom(listing.address) } : {}),
         addressCountry: "US",
       };
     }
@@ -2301,6 +2545,14 @@ function ListingPage() {
             </div>
             <div className="listing-page-body">
               {listing.description && <p className="modal-desc">{linkifyDescription(listing.description)}</p>}
+              {listing.verified_at ? (
+                <p className="verified-note">Details last verified {formatVerified(listing.verified_at)}. Hours and offerings change, so call ahead.</p>
+              ) : null}
+              {booksForListing(listing).map((b) => (
+                <p key={b.slug} className="related-guide">
+                  Related guide: <Link to={`/books#${b.slug}`}><em>{b.title}</em></Link>{b.subtitle ? ` — ${b.subtitle}` : ""}
+                </p>
+              ))}
               <div className="modal-info-grid">
                 {listing.address && <div className="modal-field"><label>Address</label><span><a href={"https://maps.google.com/?q=" + encodeURIComponent(listing.address)} target="_blank" rel="noreferrer" style={{color:"inherit",textDecoration:"none"}}>{listing.address}</a></span></div>}
                 {listing.phone && (
@@ -2324,15 +2576,81 @@ function ListingPage() {
                   </div>
                 )}
               </div>
-              <div className="claim-box">
-                <p>Own or manage <strong>{listing.name}</strong>? Email us to update your hours, description, phone, or any other details. Updates are made within 24 hours.</p>
-                <a href={`mailto:${CONTACT_EMAIL}?subject=Update My Listing - ${listing.name}`} onClick={() => trackContactClick(listing, "email")} className="btn-primary" style={{display:"inline-block",textDecoration:"none"}}>Update My Listing</a>
-              </div>
+              <UpdateListingBox listing={listing} />
             </div>
           </>
         )}
       </div>
       <Footer />
+    </div>
+  );
+}
+
+// "Last verified" dates are stored as plain dates (YYYY-MM-DD); show month + year.
+function formatVerified(d) {
+  const [y, m] = String(d).split("-").map(Number);
+  if (!y || !m) return String(d);
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  return `${months[m - 1]} ${y}`;
+}
+
+function zipFrom(address) {
+  const m = String(address || "").match(/\bNY\s+(\d{5})\b/);
+  return m ? m[1] : null;
+}
+
+// Owner/claim box on each listing page. Sends an update or claim request to
+// public.listing_update_requests (insert-only for the public), with email as a
+// fallback.
+function UpdateListingBox({ listing }) {
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ requester_name: "", requester_email: "", relationship: "owner", message: "" });
+  const [state, setState] = useState("idle"); // idle | sending | sent | error
+  async function send() {
+    if (!form.message.trim() || !form.requester_email.trim()) return;
+    setState("sending");
+    try {
+      const { error } = await supabase.from("listing_update_requests").insert([{
+        listing_id: listing.id ?? null,
+        listing_name: listing.name,
+        requester_name: form.requester_name.trim() || null,
+        requester_email: form.requester_email.trim(),
+        relationship: form.relationship,
+        message: form.message.trim(),
+        status: "new",
+      }]);
+      if (error) throw error;
+      trackEvent("listing_update_request", { listing: listing.slug || listing.name, relationship: form.relationship });
+      setState("sent");
+    } catch (err) {
+      setState("error");
+    }
+  }
+  return (
+    <div className="claim-box">
+      <p>Own or manage <strong>{listing.name}</strong>? Claim this listing or send us corrections to your hours, description, phone, or anything else. Updates are usually made within a few days.</p>
+      {state === "sent" ? (
+        <p><strong>Thanks! We got it.</strong> We'll review your update and email you if we have questions.</p>
+      ) : open ? (
+        <div className="update-form">
+          <select value={form.relationship} onChange={(e) => setForm({ ...form, relationship: e.target.value })} aria-label="Your connection to this listing">
+            <option value="owner">I own or manage this business</option>
+            <option value="customer">I'm a customer with a correction</option>
+            <option value="closed">This business has closed</option>
+          </select>
+          <input placeholder="Your name" value={form.requester_name} onChange={(e) => setForm({ ...form, requester_name: e.target.value })} autoComplete="name" />
+          <input type="email" placeholder="Your email (not published)" value={form.requester_email} onChange={(e) => setForm({ ...form, requester_email: e.target.value })} autoComplete="email" />
+          <textarea placeholder="What should we change?" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+          <button className="btn-primary" onClick={send} disabled={state === "sending" || !form.message.trim() || !form.requester_email.trim()}>
+            {state === "sending" ? "Sending" : "Send update"}
+          </button>
+          {state === "error" ? (
+            <p>Something went wrong. Please email <a href={`mailto:${CONTACT_EMAIL}?subject=Update My Listing - ${listing.name}`}>{CONTACT_EMAIL}</a> instead.</p>
+          ) : null}
+        </div>
+      ) : (
+        <button className="btn-primary" onClick={() => { setOpen(true); trackContactClick(listing, "update_form"); }}>Claim or update this listing</button>
+      )}
     </div>
   );
 }

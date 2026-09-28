@@ -67,7 +67,9 @@ async function main() {
   // Static routes (excluding /admin).
   add("/", today);
   add("/fire-towers", today);
+  add("/freezer-full", today);
   add("/about", today);
+  add("/books", today);
   add("/news", today);
   const news = JSON.parse(await readFile(resolve(HERE, "..", "src", "data", "news.json"), "utf8").catch(() => "[]"));
   for (const p of news) add(`/news/${p.slug}`, p.publish_date);
