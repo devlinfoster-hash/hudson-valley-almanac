@@ -75,6 +75,15 @@ export function getCategoryForKey(dbKey) {
   return categoryByDbKey.get(dbKey) || null;
 }
 
+// The counties the Almanac serves — the single source for the header county
+// line and every "N counties" count, so the number always matches the list.
+// Kept in the header's historical display order (new counties appended).
+export const SERVED_COUNTIES = [
+  "Albany", "Columbia", "Greene", "Ulster", "Dutchess", "Schoharie", "Rensselaer",
+  "Saratoga", "Delaware", "Washington", "Orange", "Sullivan", "Otsego", "Westchester",
+  "Warren", "Putnam", "Rockland", "Montgomery", "Schenectady", "Fulton", "Hamilton",
+];
+
 // "Online" and "Statewide" are not real geographic counties, so they get no
 // county landing page. Their listings still appear via category pages and their
 // own /listing/:slug page.

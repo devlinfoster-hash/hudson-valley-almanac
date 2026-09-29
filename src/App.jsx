@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, Component, createContext, useContext } from "react";
+import { useState, useEffect, useRef, Component, Fragment, createContext, useContext } from "react";
 import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
-import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
+import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
 import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs, featuredTrailFor } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
@@ -113,15 +113,15 @@ function linkifyDescription(text) {
   return parts;
 }
 
-const TOPBAR_TEXT = "Albany · Columbia · Greene · Ulster · Dutchess · Schoharie · Rensselaer · Saratoga · Delaware · Washington · Orange · Sullivan · Otsego · Westchester · Warren · Putnam · Rockland · Montgomery · Schenectady Counties";
-// Counts come from the build-time snapshot (scripts/snapshot.mjs), so they
-// refresh on every build. Zero means no snapshot (e.g. a local build with no
-// Supabase env), so fall back to count-free copy rather than print "0".
-const FOOTER_COUNTIES = SITE_STATS.countyCount
-  ? `Serving ${SITE_STATS.countyCount} counties across the Hudson Valley and the adjacent Catskill highlands`
-  : "Serving the Hudson Valley and the adjacent Catskill highlands";
-const HERO_TAGLINE = SITE_STATS.listingCount && SITE_STATS.countyCount
-  ? `${SITE_STATS.listingCount.toLocaleString("en-US")} farm stands, orchards, cideries, markets, and makers across ${SITE_STATS.countyCount} counties. Free and hand\u2011checked.`
+// The county line and county counts are generated from SERVED_COUNTIES
+// (src/catalog.js), so the number always matches the list.
+const TOPBAR_TEXT = `${SERVED_COUNTIES.join(" · ")} Counties`;
+const FOOTER_COUNTIES = `Serving ${SERVED_COUNTIES.length} counties across the Hudson Valley and the adjacent Catskill highlands`;
+// The listing count comes from the build-time snapshot (scripts/snapshot.mjs),
+// so it refreshes on every build. Zero means no snapshot (e.g. a local build
+// with no Supabase env), so fall back to count-free copy rather than print "0".
+const HERO_TAGLINE = SITE_STATS.listingCount
+  ? `${SITE_STATS.listingCount.toLocaleString("en-US")} farm stands, orchards, cideries, markets, and makers across ${SERVED_COUNTIES.length} counties. Free and hand\u2011checked.`
   : "The Hudson Valley's directory of farms, makers, markets & stewards";
 
 // Towns that aren't a place. Left out of the Towns dropdown, and never at the
@@ -147,6 +147,22 @@ const QUICK_FILTERS = [
 ];
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 const FACEBOOK_URL = "https://www.facebook.com/1072963332575328";
+
+// The site's main navigation, shared by TopNav and Footer so the two can't
+// drift apart. Each entry is an internal route (`to`), an external/mailto link
+// (`href`), or the Submit a Listing button (`submit`). The footer adds its
+// footer-only Facebook link after Contact Us.
+const NAV_LINKS = [
+  { label: "Farm Trails", to: "/farm-trails" },
+  { label: "Beverage Trails", to: "/beverage-trails" },
+  { label: "Explore by Theme", to: "/explore-by-theme" },
+  { label: "Fire Towers", to: "/fire-towers" },
+  { label: "About", to: "/about" },
+  { label: "Books", to: "/books" },
+  { label: "News", to: "/news" },
+  { label: "Contact Us", href: `mailto:${CONTACT_EMAIL}` },
+  { label: "Submit a Listing", submit: true },
+];
 
 // Top-level error boundary so an unexpected render error (or a thrown failure
 // while building the page) shows a graceful message instead of a blank screen.
@@ -368,7 +384,14 @@ const sharedStyles = `
   .cat-btn:hover { color: #EFF0E8; }
   .cat-btn.active { color: #EFF0E8; border-bottom-color: #C4862D; }
   .topnav { background: #1C3A5E; border-bottom: 3px solid #C4862D; padding: 12px 24px; }
-  .topnav-inner { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 24px; max-width: 1140px; margin: 0 auto; }
+  .topnav-inner { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 20px; max-width: 1340px; margin: 0 auto; }
+  /* Ten links plus the two buttons: a compact size keeps them on one row on
+     desktop. Below 1280px the links fold behind the Menu toggle (a full-width
+     wrapped panel when open) and only the toggle and buttons show. */
+  .topnav-links { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+  .topnav-links .topnav-link { font-size: 11px; letter-spacing: 0.08em; white-space: nowrap; }
+  .topnav-actions { display: flex; align-items: center; gap: 8px 20px; }
+  .topnav-toggle { display: none; }
   /* <button>s that open the SubmitForm but should look like the links beside
      them. Declared before .topnav-link so the nav link styles win. */
   .link-button { background: none; border: none; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
@@ -380,11 +403,17 @@ const sharedStyles = `
      (composed alongside it) but boxed in the site accent so it reads as a CTA. */
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
   .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
-  /* On narrow screens the full TopNav wrapped to two lines above the hero,
-     crowding the fold. Contact Us and Report an Error collapse below 640px
-     (both are one tap away in the footer); About, News, Submit a Listing and
-     the Buy Me a Coffee CTA stay visible at every width. */
+  /* Report an Error collapses below 640px (it's one tap away in the footer);
+     the Menu toggle and the Buy Me a Coffee CTA stay visible at every width. */
   @media (max-width: 640px) { .topnav-secondary { display: none; } }
+  .topnav-toggle { background: none; border: none; cursor: pointer; }
+  @media (max-width: 1279px) {
+    .topnav-inner { justify-content: space-between; }
+    .topnav-toggle { display: inline-block; }
+    .topnav-links { display: none; order: 3; flex-basis: 100%; padding: 6px 0 2px; gap: 10px 20px; }
+    .topnav-links.open { display: flex; }
+    .topnav-links .topnav-link { font-size: 12px; letter-spacing: 0.12em; }
+  }
   /* The county strip isn't clickable and the home stats line covers it, so
      it's hidden at every width (the markup stays in place). */
   .topbar { display: none; }
@@ -1339,6 +1368,8 @@ function SupportButton({
   );
 }
 
+const footerLinkStyle = {color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"};
+
 function Footer() {
   const openSubmitForm = useOpenSubmitForm();
   return (
@@ -1348,17 +1379,21 @@ function Footer() {
         <h3 style={{color:"#EFF0E8",fontSize:"1.4rem",marginBottom:"6px",fontFamily:"'Libre Baskerville',serif"}}>Hudson Valley Almanac</h3>
         <p style={{fontSize:"0.85rem",color:"#7A92A4",marginBottom:"24px"}}>The Hudson Valley's directory of farms, makers, markets & stewards.</p>
         <div style={{display:"flex",justifyContent:"center",gap:"24px",flexWrap:"wrap",marginBottom:"24px"}}>
-          <Link to="/farm-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Farm Trails</Link>
-          <Link to="/beverage-trails" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Beverage Trails</Link>
-          <Link to="/explore-by-theme" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Explore by Theme</Link>
-          <Link to="/fire-towers" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Fire Towers</Link>
-          <Link to="/about" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>About</Link>
-          <Link to="/books" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Books</Link>
-          <Link to="/news" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>News</Link>
-          <a href={`mailto:${CONTACT_EMAIL}`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Contact Us</a>
-          <a href={FACEBOOK_URL} target="_blank" rel="noopener" style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Facebook</a>
-          <button type="button" className="link-button" onClick={openSubmitForm} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Submit a Listing</button>
-          <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={{color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"}}>Report an Error</a>
+          {NAV_LINKS.map((item) => (
+            <Fragment key={item.label}>
+              {item.submit ? (
+                <button type="button" className="link-button" onClick={openSubmitForm} style={footerLinkStyle}>{item.label}</button>
+              ) : item.href ? (
+                <a href={item.href} style={footerLinkStyle}>{item.label}</a>
+              ) : (
+                <Link to={item.to} style={footerLinkStyle}>{item.label}</Link>
+              )}
+              {item.label === "Contact Us" && (
+                <a href={FACEBOOK_URL} target="_blank" rel="noopener" style={footerLinkStyle}>Facebook</a>
+              )}
+            </Fragment>
+          ))}
+          <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={footerLinkStyle}>Report an Error</a>
         </div>
         <p style={{fontSize:"0.78rem",color:"#5C7A8A",marginBottom:"24px",lineHeight:"1.6"}}>{FOOTER_COUNTIES}</p>
         <div style={{borderTop:"1px solid #1C3A5E",paddingTop:"20px"}}>
@@ -1372,30 +1407,54 @@ function Footer() {
 // Primary navigation bar. Styled in the site's nav language (.topnav — navy bar
 // + gold rule, DM Mono uppercase links) to match .cat-nav/.topbar rather than
 // the footer, so it reads as distinct chrome. Styling lives in sharedStyles so
-// hover/active/focus states work. Farm Trails and Fire Towers are intentionally
-// omitted — the .cat-nav directly below already carries them; About uses NavLink
-// for the active state. The support CTA reuses BMC_SUPPORT_URL (the same Buy Me
-// a Coffee page the About SupportButton points at). The footer is unchanged.
+// hover/active/focus states work. The links come from NAV_LINKS (shared with
+// the footer), preceded by Home since the header has no logo linking home;
+// internal routes use NavLink for the active state. Report an Error and the
+// support CTA (BMC_SUPPORT_URL, the same Buy Me a Coffee page the About
+// SupportButton points at) sit after the links. Below the desktop breakpoint
+// the links fold behind a Menu toggle; the two buttons stay visible.
 function TopNav() {
   const openSubmitForm = useOpenSubmitForm();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Close the menu after navigating.
+  useEffect(() => { setMenuOpen(false); }, [location.pathname]);
   return (
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
-        <NavLink to="/" end className="topnav-link">Home</NavLink>
-        <NavLink to="/about" className="topnav-link">About</NavLink>
-        <NavLink to="/news" className="topnav-link">News</NavLink>
-        <a href={`mailto:${CONTACT_EMAIL}`} className="topnav-link topnav-secondary">Contact Us</a>
-        <button type="button" className="link-button topnav-link" onClick={openSubmitForm}>Submit a Listing</button>
-        <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link topnav-secondary">Report an Error</a>
-        <a
-          href={BMC_SUPPORT_URL}
-          className="topnav-link topnav-support"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Support the Almanac on Buy Me a Coffee"
+        <button
+          type="button"
+          className="topnav-link topnav-toggle"
+          aria-expanded={menuOpen}
+          aria-controls="topnav-links"
+          onClick={() => setMenuOpen((open) => !open)}
         >
-          Buy Me a Coffee
-        </a>
+          {menuOpen ? "Close ✕" : "Menu ☰"}
+        </button>
+        <div id="topnav-links" className={"topnav-links" + (menuOpen ? " open" : "")}>
+          <NavLink to="/" end className="topnav-link">Home</NavLink>
+          {NAV_LINKS.map((item) =>
+            item.submit ? (
+              <button key={item.label} type="button" className="link-button topnav-link" onClick={() => { setMenuOpen(false); openSubmitForm(); }}>{item.label}</button>
+            ) : item.href ? (
+              <a key={item.label} href={item.href} className="topnav-link">{item.label}</a>
+            ) : (
+              <NavLink key={item.label} to={item.to} className="topnav-link">{item.label}</NavLink>
+            )
+          )}
+        </div>
+        <div className="topnav-actions">
+          <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link topnav-secondary">Report an Error</a>
+          <a
+            href={BMC_SUPPORT_URL}
+            className="topnav-link topnav-support"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Support the Almanac on Buy Me a Coffee"
+          >
+            Buy Me a Coffee
+          </a>
+        </div>
       </div>
     </nav>
   );

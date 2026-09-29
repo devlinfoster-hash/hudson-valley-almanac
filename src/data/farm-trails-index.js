@@ -10,6 +10,8 @@
 // same slug, then flip `published: true` here. The route, the prerendered page,
 // the sitemap entry, and the index card all follow automatically.
 
+import { SERVED_COUNTIES } from "../catalog.js";
+
 export const FARM_TRAILS = [
   {
     slug: "a-saturday-around-oak-hill",
@@ -257,7 +259,7 @@ export const FARM_TRAILS = [
     slug: "hudson-valley-craft-beverage-trail",
     series: "beverage",
     title: "The Hudson Valley Craft-Beverage Trail",
-    area: "Region-Wide · All 19 Counties",
+    area: `Region-Wide · All ${SERVED_COUNTIES.length} Counties`,
     county: null,
     blurb:
       "How the Valley became one of the great craft-beverage landscapes in America — roughly 180 cideries, breweries, distilleries, and wineries, where they cluster, and how to build a day around a glass.",
