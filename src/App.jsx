@@ -9,6 +9,7 @@ import { NEWS_POSTS } from "./data/news.js";
 import SITE_STATS from "./data/site-stats.json";
 import FreezerFullContent from "./FreezerFullPage.jsx";
 import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
+import { BOOK_LINKS } from "./data/book-links.js";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -585,24 +586,54 @@ const sharedStyles = `
   button.chip.chip-active { background: #1C3A5E; color: #F5F6F0; }
   button.chip.chip-active .chip-count { color: #E8D9B8; }
   .related-guide { font-size: 13px; color: #1A2B3C; margin: 0 0 16px; }
-  .books-wrap { max-width: 980px; margin: 0 auto; padding: 8px 20px 48px; }
-  .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; margin: 20px 0 40px; }
-  .book-card { background: #F5F6F0; border: 1.5px solid #D8DBCF; padding: 18px; display: flex; gap: 16px; scroll-margin-top: 80px; }
+  .books-wrap { max-width: 980px; margin: 0 auto; padding: 0 20px 48px; }
+  .books-nav { padding: 14px 0; }
+  .books-nav .back-link { display: inline-block; padding: 8px 0; }
+  .books-intro { font-family: 'Lora', Georgia, serif; font-size: 17px; line-height: 1.7; letter-spacing: 0; color: #E4E6DC; max-width: 64ch; margin: 12px 0 0; }
+  .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 24px; margin: 20px 0 40px; }
+  .book-card { background: #F5F6F0; border: 1.5px solid #D8DBCF; padding: 18px; display: grid; grid-template-columns: 104px minmax(0, 1fr); grid-template-rows: 1fr auto; gap: 16px; scroll-margin-top: 80px; }
   .book-card:target { border-color: #C4862D; box-shadow: 0 0 0 3px rgba(196,134,45,0.25); }
-  .book-cover { width: 96px; flex: 0 0 96px; height: 154px; align-self: flex-start; object-fit: contain; background: #E8E9E0; }
-  .book-cover-blank { width: 96px; flex: 0 0 96px; height: 154px; align-self: flex-start; background: #1C3A5E; color: #E8D9B8; font-family: 'Libre Baskerville', serif; font-size: 11px; line-height: 1.3; padding: 10px; box-sizing: border-box; display: flex; align-items: center; text-align: center; }
+  .book-cover, .books-more-cover { position: relative; aspect-ratio: 5 / 8; overflow: hidden; background: #1C3A5E; align-self: start; }
+  .book-cover { width: 104px; }
+  .book-cover img, .books-more-cover img { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  .book-cover.is-wide::before, .books-more-cover.is-wide::before { content: ""; position: absolute; inset: -12px; background: var(--cover) center / cover; filter: blur(10px) brightness(0.75); }
+  .book-cover.is-wide img, .books-more-cover.is-wide img { object-fit: contain; }
+  .book-cover-blank { display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; box-sizing: border-box; color: #E8D9B8; font-family: 'Libre Baskerville', serif; font-size: 12px; line-height: 1.35; }
+  .books-more-cover.book-cover-blank { font-size: 9px; padding: 6px; }
+  .book-body { min-width: 0; }
   .book-title { font-family: 'Libre Baskerville', serif; font-size: 17px; color: #1C3A5E; margin: 0 0 4px; line-height: 1.3; }
-  .book-sub { font-size: 13px; color: #5C7A8A; font-style: italic; margin: 0 0 8px; line-height: 1.4; }
-  .book-blurb { font-size: 14px; line-height: 1.5; margin: 0 0 10px; color: #1A2B3C; }
-  .book-links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
-  .book-links a { color: #1C3A5E; }
-  .book-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4862D; margin-bottom: 6px; }
-  .books-more { border-top: 1.5px solid #D8DBCF; padding-top: 24px; }
-  .books-more h3 { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #5C7A8A; margin: 20px 0 10px; }
-  .books-more-item { display: flex; gap: 12px; align-items: center; padding: 10px 0; scroll-margin-top: 80px; }
-  .books-more-item img { width: 44px; height: 70px; object-fit: contain; background: #E8E9E0; }
-  .books-more-item .t { font-weight: 700; color: #1C3A5E; }
-  .books-more-item .s { font-size: 13px; color: #5C7A8A; }
+  .book-sub { font-size: 13px; color: #4A6472; font-style: italic; margin: 0 0 8px; line-height: 1.4; }
+  .book-blurb { font-size: 14px; line-height: 1.5; margin: 0; color: #1A2B3C; }
+  .book-links { grid-column: 1 / -1; align-self: end; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .book-links-secondary { display: flex; flex-wrap: wrap; gap: 0 18px; min-height: 32px; }
+  .books-more-item .book-links-secondary:empty { display: none; }
+  .book-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 18px; box-sizing: border-box; background: #1C3A5E; color: #EFF0E8; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; white-space: nowrap; border: 1.5px solid #1C3A5E; transition: background 0.2s, border-color 0.2s; }
+  .book-btn:hover { background: #14304F; border-color: #C4862D; }
+  .book-btn:focus-visible, .book-secondary:focus-visible { outline: 3px solid #C4862D; outline-offset: 2px; }
+  .book-secondary { display: inline-flex; align-items: center; min-height: 32px; font-size: 13px; color: #1C3A5E; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+  .book-secondary:hover { color: #9A6420; }
+  .book-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A5A17; margin-bottom: 6px; }
+  .books-section { border-top: 1.5px solid #D8DBCF; padding-top: 28px; }
+  .books-section-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1C3A5E; margin: 0; line-height: 1.25; }
+  .books-more h3 { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #4A6472; margin: 24px 0 12px; }
+  .books-more-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 16px 24px; }
+  .books-more-item { display: flex; gap: 16px; align-items: flex-start; padding: 4px 0; scroll-margin-top: 80px; }
+  .books-more-cover { width: 80px; flex: 0 0 80px; }
+  .books-more-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .books-more-item .t { font-family: 'Libre Baskerville', serif; font-size: 17px; font-weight: 700; color: #1C3A5E; line-height: 1.3; }
+  .books-more-item .s { font-size: 14px; color: #4A6472; line-height: 1.45; }
+  .books-more-item .book-links { align-self: flex-start; margin-top: 8px; }
+  @media (max-width: 640px) {
+    .books-nav .back-link { padding: 14px 0; }
+    .books-intro { font-size: 16px; }
+    .book-card { grid-template-columns: 96px minmax(0, 1fr); }
+    .book-cover { width: 96px; }
+    .book-secondary { min-height: 44px; }
+    .book-links-secondary { min-height: 44px; }
+    .books-more-cover { width: 68px; flex-basis: 68px; }
+    .book-btn { padding: 0 14px; }
+  }
+  @media (max-width: 360px) { .book-btn { width: 100%; } }
   .verified-note { font-size: 12px; color: #5C7A8A; font-style: italic; margin: 8px 0 16px; }
   .update-form { text-align: left; display: grid; gap: 10px; margin-top: 8px; }
   .update-form input, .update-form textarea, .update-form select { width: 100%; padding: 10px; border: 1.5px solid #D8DBCF; font-size: 15px; font-family: inherit; box-sizing: border-box; }
@@ -1696,42 +1727,81 @@ function FreezerFullPage() {
 
 // ── Books ──────────────────────────────────────────────────────────────────
 // Books by the Almanac's editor. Data comes from the books table (see
-// src/data/books.js). Kept deliberately low-key: no prices or carts, just a
-// quiet "where to get it" link, and the page is linked from the footer and the
-// About page rather than the top navigation.
-function bookHref(b, link) {
-  const url = link?.url || "";
-  if (!url || !/barnesandnoble\.com/.test(url)) return url;
-  return url + (url.includes("?") ? "&" : "?") + "utm_source=hva&utm_medium=books";
+// src/data/books.js); the store links come from src/data/book-links.js. Kept
+// deliberately low-key: no prices or carts, just one "where to get it" button,
+// and the page is linked from the footer and the About page rather than the top
+// navigation.
+function bookMainLink(book) {
+  const own = BOOK_LINKS[book.slug];
+  if (own) return own;
+  const first = Array.isArray(book.links) ? book.links[0] : null;
+  if (!first?.url) return null;
+  const isBN = /barnesandnoble\.com/.test(first.url);
+  const url = isBN && !/utm_source=/.test(first.url)
+    ? first.url + (first.url.includes("?") ? "&" : "?") + "utm_source=hva&utm_medium=books"
+    : first.url;
+  const label = isBN ? "Buy at Barnes & Noble" : /gumroad\.com/.test(first.url) ? (book.status === "free" ? "Read free on Gumroad" : "Buy on Gumroad") : first.label;
+  return { url, label };
 }
 
+// Every cover sits in the same portrait frame (5:8, the shape of the cover
+// files). A cover file that is wider than it is tall is shown whole over a
+// blurred copy of itself instead of being cropped to a sliver.
 function BookCover({ book, className = "book-cover" }) {
-  if (book.cover) {
-    return <img className={className} src={`/book-covers/${book.cover}`} alt={`Cover of ${book.title}`} loading="lazy" width="96" height="154" />;
+  const imgRef = useRef(null);
+  const [wide, setWide] = useState(false);
+  const check = () => {
+    const img = imgRef.current;
+    if (img && img.naturalWidth && img.naturalWidth > img.naturalHeight) setWide(true);
+  };
+  useEffect(() => { if (imgRef.current?.complete) check(); }, []);
+  if (!book.cover) {
+    return <div className={`${className} book-cover-blank`} aria-hidden="true"><span>{book.title}</span></div>;
   }
-  return <div className="book-cover-blank" aria-hidden="true">{book.title}</div>;
+  const src = `/book-covers/${book.cover}`;
+  return (
+    <div className={`${className}${wide ? " is-wide" : ""}`} style={wide ? { "--cover": `url("${src}")` } : undefined}>
+      <img ref={imgRef} src={src} alt={`Cover of ${book.title}`} loading="lazy" width="400" height="640" onLoad={check} />
+    </div>
+  );
 }
 
 function BookLinks({ book }) {
-  const links = Array.isArray(book.links) ? book.links : [];
+  const main = book.status === "coming_soon" ? null : bookMainLink(book);
   const companion = book.companion_url;
-  if (book.status === "coming_soon" && !companion) return null;
+  const notify = book.status === "coming_soon" && !companion;
+  if (!main && !companion && !notify) return null;
   return (
     <div className="book-links">
-      {book.status !== "coming_soon" && links.map((l) => (
-        <a key={l.url} href={bookHref(book, l)} target="_blank" rel="noreferrer" onClick={() => trackMeanderNYClick(`book:${book.slug}`)}>
-          {book.status === "free" ? l.label : `Where to get it: ${l.label}`} ↗
+      {main ? (
+        <a className="book-btn" href={main.url} target="_blank" rel="noreferrer" onClick={() => trackMeanderNYClick(`book:${book.slug}`)}>
+          {main.label} <span aria-hidden="true">↗</span>
         </a>
-      ))}
+      ) : null}
+      <div className="book-links-secondary">
       {companion ? (
         companion.startsWith("http") ? (
-          <a href={companion} target="_blank" rel="noreferrer">Companion page ↗</a>
+          <a className="book-secondary" href={companion} target="_blank" rel="noreferrer">Companion page ↗</a>
         ) : (
-          <Link to={companion}>Companion page</Link>
+          <Link className="book-secondary" to={companion}>Companion page</Link>
         )
       ) : null}
+      {notify ? (
+        <a className="book-secondary" href="#books-notify" onClick={scrollToBookSignup}>Get notified</a>
+      ) : null}
+      </div>
     </div>
   );
+}
+
+// "Get notified" goes to the email signup at the top of the footer, and puts
+// the cursor in its email field.
+function scrollToBookSignup(e) {
+  const input = document.querySelector("#books-notify + footer .newsletter-input");
+  if (!input) return;
+  e.preventDefault();
+  input.scrollIntoView({ behavior: "smooth", block: "center" });
+  input.focus({ preventScroll: true });
 }
 
 function BooksPage() {
@@ -1744,13 +1814,13 @@ function BooksPage() {
   const card = (b) => (
     <article key={b.slug} id={b.slug} className="book-card">
       <BookCover book={b} />
-      <div>
-        {b.status === "free" ? <div className="book-badge">Free</div> : b.status === "coming_soon" ? <div className="book-badge">Coming soon</div> : null}
+      <div className="book-body">
+        {b.status === "free" ? <div className="book-badge">Free</div> : null}
         <h2 className="book-title">{b.title}</h2>
         {b.subtitle ? <p className="book-sub">{b.subtitle}</p> : null}
         {b.blurb ? <p className="book-blurb">{b.blurb}</p> : null}
-        <BookLinks book={b} />
       </div>
+      <BookLinks book={b} />
     </article>
   );
   return (
@@ -1761,46 +1831,49 @@ function BooksPage() {
         canonical={canonical}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
-      <div className="listing-page-nav">
-        <Link to="/" className="back-link">← Back to all resources</Link>
-      </div>
       <div className="books-wrap">
+        <nav className="books-nav">
+          <Link to="/" className="back-link">← Back to all resources</Link>
+        </nav>
         <header className="landing-masthead">
           <div className="listing-page-eyebrow">Hudson Valley Almanac · About the editor</div>
           <h1 className="landing-title">Books by the Almanac's Editor</h1>
-          <p className="landing-sub">
+          <p className="books-intro">
             I'm Devlin Foster, and I put the Almanac together. Along the way I've written guidebooks to this part of New York, many built from
-            the same research. The Almanac itself is free and always will be; these are here for anyone who wants to go deeper.
+            the same research. Listings in the Almanac are free; these are here for anyone who wants to go deeper.
           </p>
         </header>
         <div className="books-grid">{out.map(card)}</div>
         {soon.length ? (
-          <>
-            <h2 className="landing-crosslinks-label" style={{ marginTop: 8 }}>Coming soon</h2>
+          <section className="books-section" aria-labelledby="books-soon">
+            <h2 id="books-soon" className="books-section-title">Coming soon</h2>
             <div className="books-grid">{soon.map(card)}</div>
-          </>
+          </section>
         ) : null}
         {more.length ? (
-          <section className="books-more">
-            <div className="landing-crosslinks-label">Also by Devlin Foster</div>
+          <section className="books-section books-more" aria-labelledby="books-more">
+            <h2 id="books-more" className="books-section-title">Also by Devlin Foster</h2>
             {groups.map((g) => (
               <div key={g}>
                 <h3>{g}</h3>
-                {more.filter((b) => (b.group_label || "More") === g).map((b) => (
-                  <div key={b.slug} id={b.slug} className="books-more-item">
-                    <BookCover book={b} className="" />
-                    <div>
-                      <div className="t">{b.title}</div>
-                      {b.subtitle ? <div className="s">{b.subtitle}</div> : null}
-                      <BookLinks book={b} />
+                <div className="books-more-list">
+                  {more.filter((b) => (b.group_label || "More") === g).map((b) => (
+                    <div key={b.slug} id={b.slug} className="books-more-item">
+                      <BookCover book={b} className="books-more-cover" />
+                      <div className="books-more-text">
+                        <div className="t">{b.title}</div>
+                        {b.subtitle ? <div className="s">{b.subtitle}</div> : null}
+                        <BookLinks book={b} />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             ))}
           </section>
         ) : null}
       </div>
+      <div id="books-notify" />
       <Footer />
     </div>
   );
