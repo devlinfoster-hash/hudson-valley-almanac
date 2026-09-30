@@ -149,10 +149,10 @@ const QUICK_FILTERS = [
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 const FACEBOOK_URL = "https://www.facebook.com/1072963332575328";
 
-// The site's main navigation, shared by TopNav and Footer so the two can't
-// drift apart. Each entry is an internal route (`to`), an external/mailto link
-// (`href`), or the Submit a Listing button (`submit`). The footer adds its
-// footer-only Facebook link after Contact Us.
+// The footer's navigation links. Each entry is an internal route (`to`), an
+// external/mailto link (`href`), or the Submit a Listing button (`submit`). The
+// footer adds its footer-only Facebook link after Contact Us. The header has
+// its own shorter list (HEADER_LINKS, next to TopNav).
 const NAV_LINKS = [
   { label: "Farm Trails", to: "/farm-trails" },
   { label: "Beverage Trails", to: "/beverage-trails" },
@@ -386,12 +386,10 @@ const sharedStyles = `
   .cat-btn.active { color: #EFF0E8; border-bottom-color: #C4862D; }
   .topnav { background: #1C3A5E; border-bottom: 3px solid #C4862D; padding: 12px 24px; }
   .topnav-inner { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 20px; max-width: 1340px; margin: 0 auto; }
-  /* Ten links plus the two buttons: a compact size keeps them on one row on
-     desktop. Below 1280px the links fold behind the Menu toggle (a full-width
-     wrapped panel when open) and only the toggle and buttons show. */
+  /* The header links (HEADER_LINKS) sit on one row on desktop. Below 1280px
+     they fold behind the Menu toggle (a full-width wrapped panel when open). */
   .topnav-links { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
   .topnav-links .topnav-link { font-size: 11px; letter-spacing: 0.08em; white-space: nowrap; }
-  .topnav-actions { display: flex; align-items: center; gap: 8px 20px; }
   .topnav-toggle { display: none; }
   /* <button>s that open the SubmitForm but should look like the links beside
      them. Declared before .topnav-link so the nav link styles win. */
@@ -404,8 +402,7 @@ const sharedStyles = `
      (composed alongside it) but boxed in the site accent so it reads as a CTA. */
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
   .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
-  /* Report an Error collapses below 640px (it's one tap away in the footer);
-     the Menu toggle and the Buy Me a Coffee CTA stay visible at every width. */
+  /* Report an Error collapses below 640px (it's one tap away in the footer). */
   @media (max-width: 640px) { .topnav-secondary { display: none; } }
   .topnav-toggle { background: none; border: none; cursor: pointer; }
   @media (max-width: 1279px) {
@@ -1435,15 +1432,29 @@ function Footer() {
   );
 }
 
+// The header's links, in display order; the desktop bar and the Menu panel
+// (below 1280px) both render this one list. Entries take the same shapes as
+// NAV_LINKS (`to` / `href` / `submit`) plus an optional extra `className`.
+// Report an Error is the same mailto as the footer's; Buy Me a Coffee is
+// BMC_SUPPORT_URL, the page the About SupportButton points at. The trail and
+// fire tower pages are linked from the footer and the home page, not here.
+const HEADER_LINKS = [
+  { label: "Home", to: "/", end: true },
+  { label: "About", to: "/about" },
+  { label: "Books", to: "/books" },
+  { label: "News", to: "/news" },
+  { label: "Contact Us", href: `mailto:${CONTACT_EMAIL}` },
+  { label: "Submit a Listing", submit: true },
+  { label: "Report an Error", href: `mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`, className: "topnav-secondary" },
+  { label: "Buy Me a Coffee", href: BMC_SUPPORT_URL, external: true, className: "topnav-support", ariaLabel: "Support the Almanac on Buy Me a Coffee" },
+];
+
 // Primary navigation bar. Styled in the site's nav language (.topnav — navy bar
 // + gold rule, DM Mono uppercase links) to match .cat-nav/.topbar rather than
 // the footer, so it reads as distinct chrome. Styling lives in sharedStyles so
-// hover/active/focus states work. The links come from NAV_LINKS (shared with
-// the footer), preceded by Home since the header has no logo linking home;
-// internal routes use NavLink for the active state. Report an Error and the
-// support CTA (BMC_SUPPORT_URL, the same Buy Me a Coffee page the About
-// SupportButton points at) sit after the links. Below the desktop breakpoint
-// the links fold behind a Menu toggle; the two buttons stay visible.
+// hover/active/focus states work. The links come from HEADER_LINKS; internal
+// routes use NavLink for the active state. Below the desktop breakpoint the
+// links fold behind a Menu toggle.
 function TopNav() {
   const openSubmitForm = useOpenSubmitForm();
   const location = useLocation();
@@ -1463,28 +1474,16 @@ function TopNav() {
           {menuOpen ? "Close ✕" : "Menu ☰"}
         </button>
         <div id="topnav-links" className={"topnav-links" + (menuOpen ? " open" : "")}>
-          <NavLink to="/" end className="topnav-link">Home</NavLink>
-          {NAV_LINKS.map((item) =>
-            item.submit ? (
-              <button key={item.label} type="button" className="link-button topnav-link" onClick={() => { setMenuOpen(false); openSubmitForm(); }}>{item.label}</button>
+          {HEADER_LINKS.map((item) => {
+            const className = "topnav-link" + (item.className ? " " + item.className : "");
+            return item.submit ? (
+              <button key={item.label} type="button" className={"link-button " + className} onClick={() => { setMenuOpen(false); openSubmitForm(); }}>{item.label}</button>
             ) : item.href ? (
-              <a key={item.label} href={item.href} className="topnav-link">{item.label}</a>
+              <a key={item.label} href={item.href} className={className} aria-label={item.ariaLabel} {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{item.label}</a>
             ) : (
-              <NavLink key={item.label} to={item.to} className="topnav-link">{item.label}</NavLink>
-            )
-          )}
-        </div>
-        <div className="topnav-actions">
-          <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} className="topnav-link topnav-secondary">Report an Error</a>
-          <a
-            href={BMC_SUPPORT_URL}
-            className="topnav-link topnav-support"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Support the Almanac on Buy Me a Coffee"
-          >
-            Buy Me a Coffee
-          </a>
+              <NavLink key={item.label} to={item.to} end={item.end} className={className}>{item.label}</NavLink>
+            );
+          })}
         </div>
       </div>
     </nav>
