@@ -121,7 +121,7 @@ const FOOTER_COUNTIES = `Serving ${SERVED_COUNTIES.length} counties across the H
 // so it refreshes on every build. Zero means no snapshot (e.g. a local build
 // with no Supabase env), so fall back to count-free copy rather than print "0".
 const HERO_TAGLINE = SITE_STATS.listingCount
-  ? `${SITE_STATS.listingCount.toLocaleString("en-US")} farm stands, orchards, cideries, markets, and makers across ${SERVED_COUNTIES.length} counties. Free and hand\u2011checked.`
+  ? `${SITE_STATS.listingCount.toLocaleString("en-US")} farm stands, orchards, cideries, markets, and makers across ${SERVED_COUNTIES.length} counties. Free, and checked against state records and each business's own site wherever possible.`
   : "The Hudson Valley's directory of farms, makers, markets & stewards";
 
 // Towns that aren't a place. Left out of the Towns dropdown, and never at the
@@ -1038,7 +1038,7 @@ function HomePage() {
         <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
         <p className="masthead-sub">{HERO_TAGLINE}</p>
         <div className="search-row">
-          <input className="search-input" aria-label="Search resources by name, specialty, town, or county" placeholder="Search by resource, specialty, town, or county" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
+          <input className="search-input" aria-label="Search resources by name, specialty, town, or county" placeholder="Search farms, towns, or products" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
           <select className="town-select" aria-label="Filter by county" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
             <option value="All">All Counties</option>
             {geoCounties.map((c) => <option key={c} value={c}>{c}</option>)}
