@@ -402,8 +402,6 @@ const sharedStyles = `
      (composed alongside it) but boxed in the site accent so it reads as a CTA. */
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
   .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
-  /* Report an Error collapses below 640px (it's one tap away in the footer). */
-  @media (max-width: 640px) { .topnav-secondary { display: none; } }
   .topnav-toggle { background: none; border: none; cursor: pointer; }
   @media (max-width: 1279px) {
     .topnav-inner { justify-content: space-between; }
