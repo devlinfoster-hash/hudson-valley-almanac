@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node scripts/snapshot.mjs && vite-react-ssg dev",
     "build": "node scripts/snapshot.mjs && vite-react-ssg build && node scripts/generate-sitemap.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test src/utils/email.test.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",

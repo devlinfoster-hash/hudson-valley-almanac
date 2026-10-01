@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Component, Fragment, createContext, useContext } from "react";
+import { useState, useEffect, useRef, useId, Component, Fragment, createContext, useContext } from "react";
 import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
@@ -9,6 +9,7 @@ import { NEWS_POSTS } from "./data/news.js";
 import SITE_STATS from "./data/site-stats.json";
 import FreezerFullContent from "./FreezerFullPage.jsx";
 import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
+import { validateEmail, suggestEmailFix } from "./utils/email.js";
 import { BOOK_LINKS } from "./data/book-links.js";
 
 // ---------------------------------------------------------------------------
@@ -639,8 +640,9 @@ const sharedStyles = `
   a.chip:hover .chip-count { color: rgba(239,240,232,0.7); }
   .newsletter-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; color: #1A2B3C; margin-bottom: 8px; }
   .newsletter-sub { font-family: 'Lora', serif; font-size: 0.95rem; color: #4A6472; line-height: 1.6; max-width: 520px; margin: 0 auto 18px; }
-  .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
-  .newsletter-input { flex: 1; min-width: 200px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
+  .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+  .newsletter-field { flex: 1; min-width: 200px; text-align: left; }
+  .newsletter-input { width: 100%; box-sizing: border-box; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
   .newsletter-input:focus { border-color: #C4862D; }
   .newsletter-input::placeholder { color: #8AA0AE; font-style: italic; }
   .newsletter-btn { background: #1C3A5E; color: #EFF0E8; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
@@ -650,6 +652,10 @@ const sharedStyles = `
   .newsletter-error { font-family: 'DM Mono', monospace; font-size: 12px; color: #9B2C2C; margin-top: 10px; }
   /* Honeypot: kept in the layout but off-screen and out of the tab order. Bots
      fill it; real users never see it. A filled value short-circuits the insert. */
+  .newsletter-field-error { font-family: 'Lora', serif; font-size: 0.85rem; line-height: 1.45; color: #9B2C2C; margin-top: 6px; }
+  .newsletter-suggest { font-family: 'Lora', serif; font-size: 0.85rem; line-height: 1.45; color: #4A6472; margin-top: 6px; }
+  .newsletter-suggest-btn { color: #1C3A5E; font-weight: 600; }
+  .newsletter-consent { font-family: 'Lora', serif; font-size: 0.78rem; line-height: 1.5; color: #4A6472; max-width: 460px; margin: 12px auto 0; }
   .newsletter-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .newsletter-inline { background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 32px 24px; margin: 36px 0; text-align: center; }
   .newsletter-footer { max-width: 600px; margin: 0 auto 28px; padding-bottom: 28px; border-bottom: 1px solid #1C3A5E; text-align: center; }
@@ -658,6 +664,12 @@ const sharedStyles = `
   .newsletter-footer .newsletter-input { background: #EFF0E8; }
   .newsletter-footer .newsletter-btn { background: #C4862D; color: #0F2640; }
   .newsletter-footer .newsletter-btn:hover { background: #B0762A; }
+  /* On the navy footer (#0F2640): consent uses the footer's muted #7A92A4
+     (4.7:1); the error and suggestion use lighter shades for AA contrast. */
+  .newsletter-footer .newsletter-consent { color: #7A92A4; }
+  .newsletter-footer .newsletter-field-error { color: #F2A7A0; }
+  .newsletter-footer .newsletter-suggest { color: #A8B8C4; }
+  .newsletter-footer .newsletter-suggest-btn { color: #EFF0E8; }
   .rambles-card { background: #1C3A5E; border: 2px solid #1C3A5E; padding: 24px 28px; margin: 0 0 28px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
   .rambles-card-body { flex: 1; min-width: 240px; }
   .rambles-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C4862D; margin-bottom: 8px; }
@@ -1208,20 +1220,42 @@ function NewsletterSignup({ source = "footer", county = null, variant = "inline"
   const [hp, setHp] = useState(""); // honeypot — see .newsletter-hp
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error
   const [errorMsg, setErrorMsg] = useState("");
+  // Inline message under the field when the address fails validateEmail, and
+  // an optional "Did you mean …?" fix (shown on blur; never blocks a submit).
+  const [fieldError, setFieldError] = useState(false);
+  const [suggestion, setSuggestion] = useState(null);
+  const inputRef = useRef(null);
+  const fieldId = useId();
+
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+    setFieldError(false);
+    setSuggestion(null);
+  }
+
+  function applySuggestion() {
+    setEmail(suggestion);
+    setSuggestion(null);
+    setFieldError(false);
+    inputRef.current?.focus();
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (status === "submitting" || status === "success") return;
     // Honeypot tripped: silently show success and skip the insert.
     if (hp.trim()) { setStatus("success"); return; }
-    const addr = email.trim();
-    // Mirror the table's CHECK (len 3–320, '@' not first char) for a friendly
-    // client-side message before the round trip; RLS enforces it server-side too.
-    if (addr.length < 3 || addr.length > 320 || addr.indexOf("@") < 1) {
-      setStatus("error");
-      setErrorMsg("Please enter a valid email address.");
+    // Trimmed + lowercased, and checked before anything goes to the database
+    // (the table's CHECK and RLS still enforce their own rules server-side).
+    const { valid, email: addr } = validateEmail(email);
+    if (!valid) {
+      setFieldError(true);
+      setSuggestion(null);
+      if (status === "error") setStatus("idle");
+      inputRef.current?.focus();
       return;
     }
+    setSuggestion(null);
     setStatus("submitting");
     setErrorMsg("");
     try {
@@ -1251,21 +1285,41 @@ function NewsletterSignup({ source = "footer", county = null, variant = "inline"
             Leave this field empty
             <input tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} />
           </label>
-          <input
-            className="newsletter-input"
-            type="email"
-            required
-            aria-label="Email address"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="newsletter-field">
+            <input
+              ref={inputRef}
+              className="newsletter-input"
+              type="email"
+              required
+              aria-label="Email address"
+              aria-invalid={fieldError || undefined}
+              aria-describedby={fieldError ? `${fieldId}-error` : undefined}
+              placeholder="you@example.com"
+              value={email}
+              onChange={handleEmailChange}
+              onBlur={() => setSuggestion(suggestEmailFix(email))}
+            />
+            {fieldError ? (
+              <p id={`${fieldId}-error`} className="newsletter-field-error" role="alert">
+                That email address doesn't look right. Please check it and try again.
+              </p>
+            ) : null}
+            {suggestion && !fieldError ? (
+              <p className="newsletter-suggest">
+                Did you mean{" "}
+                <button type="button" className="link-button newsletter-suggest-btn" onClick={applySuggestion}>{suggestion}</button>?
+              </p>
+            ) : null}
+          </div>
           <button className="newsletter-btn" type="submit" disabled={status === "submitting"}>
             {status === "submitting" ? "Joining…" : "Subscribe"}
           </button>
         </form>
       )}
       {status === "error" ? <p className="newsletter-error" role="alert">{errorMsg}</p> : null}
+      {status !== "success" ? (
+        <p className="newsletter-consent">By subscribing, you agree to get occasional emails from the Hudson Valley Almanac. You can unsubscribe at any time.</p>
+      ) : null}
     </section>
   );
 }
