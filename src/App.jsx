@@ -1420,6 +1420,7 @@ function Footer() {
             </Fragment>
           ))}
           <a href={`mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`} style={footerLinkStyle}>Report an Error</a>
+          <a href="https://www.meanderny.com/" target="_blank" rel="noopener noreferrer" style={footerLinkStyle}>Field guides: MeanderNY</a>
         </div>
         <p style={{fontSize:"0.78rem",color:"#5C7A8A",marginBottom:"24px",lineHeight:"1.6"}}>{FOOTER_COUNTIES}</p>
         <div style={{borderTop:"1px solid #1C3A5E",paddingTop:"20px"}}>
