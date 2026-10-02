@@ -1,0 +1,384 @@
+/* Site-wide stylesheet, imported once from src/App.jsx. Vite emits it as a
+   single hashed file (/assets/*.css) linked from every prerendered page, so
+   the CSS is cached once instead of being inlined into each page's HTML. */
+
+  /* Support-button theme tokens, mapped to the site's existing palette so the
+     button matches the rest of the directory (navy fill = .btn-primary, the same
+     hover/tint/text-on-navy used throughout). The botanical-green values in the
+     SupportButton spec are only fallbacks; these are the site's real colors. */
+  :root {
+    --hva-accent: #1C3A5E;        /* deep navy — same as .btn-primary fill */
+    --hva-accent-hover: #14304F;  /* navy hover — same as .btn-primary:hover */
+    --hva-accent-tint: rgba(28,58,94,0.08); /* faint navy wash — same as .filter-pill:hover */
+    --hva-on-accent: #EFF0E8;     /* cream text that sits on the navy fill */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .topbar { background: #1C3A5E; color: rgba(239,240,232,0.75); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-align: center; padding: 8px; text-transform: uppercase; }
+  .hero { background: #EFF0E8; border-bottom: 3px double #1C3A5E; padding: 48px 24px 40px; text-align: center; }
+  .masthead-title { font-family: 'Libre Baskerville', serif; font-size: clamp(32px, 6vw, 64px); font-weight: 700; line-height: 1.05; color: #1A2B3C; margin-bottom: 8px; }
+  .masthead-title em { font-style: italic; color: #1C3A5E; }
+  .masthead-sub { font-family: 'Lora', serif; font-size: 17px; color: #4A6472; font-style: italic; margin: 10px 0 32px; }
+  .ornament { color: #C4862D; font-size: 20px; letter-spacing: 8px; margin: 8px 0; display: block; }
+  .search-row { display: flex; gap: 10px; max-width: 700px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .search-input { flex: 1; min-width: 220px; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
+  .search-input:focus { border-color: #C4862D; }
+  .search-input::placeholder { color: #8AA0AE; font-style: italic; }
+  .town-select { padding: 11px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; cursor: pointer; min-width: 150px; }
+  .cat-nav { background: #1C3A5E; overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 3px solid #C4862D; }
+  .cat-nav::-webkit-scrollbar { display: none; }
+  .cat-nav-inner { display: inline-flex; padding: 0 16px; }
+  .cat-btn { background: none; border: none; color: rgba(239,240,232,0.65); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; transition: color 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; text-decoration: none; }
+  .cat-btn:hover { color: #EFF0E8; }
+  .cat-btn.active { color: #EFF0E8; border-bottom-color: #C4862D; }
+  .topnav { background: #1C3A5E; border-bottom: 3px solid #C4862D; padding: 12px 24px; }
+  .topnav-inner { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 20px; max-width: 1340px; margin: 0 auto; }
+  /* The header links (HEADER_LINKS) sit on one row on desktop. Below 1280px
+     they fold behind the Menu toggle (a full-width wrapped panel when open). */
+  .topnav-links { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+  .topnav-links .topnav-link { font-size: 11px; letter-spacing: 0.08em; white-space: nowrap; }
+  .topnav-toggle { display: none; }
+  /* <button>s that open the SubmitForm but should look like the links beside
+     them. Declared before .topnav-link so the nav link styles win. */
+  .link-button { background: none; border: none; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
+  .topnav-link { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(239,240,232,0.75); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.2s; }
+  .topnav-link:hover { color: #EFF0E8; }
+  .topnav-link.active { color: #EFF0E8; border-bottom-color: #C4862D; }
+  .topnav-link:focus-visible { outline: 2px solid #C4862D; outline-offset: 3px; }
+  /* The one action among the links: gold ghost CTA, DM Mono like .topnav-link
+     (composed alongside it) but boxed in the site accent so it reads as a CTA. */
+  .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
+  .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
+  .topnav-toggle { background: none; border: none; cursor: pointer; }
+  @media (max-width: 1279px) {
+    .topnav-inner { justify-content: space-between; }
+    .topnav-toggle { display: inline-block; }
+    .topnav-links { display: none; order: 3; flex-basis: 100%; padding: 6px 0 2px; gap: 10px 20px; }
+    .topnav-links.open { display: flex; }
+    .topnav-links .topnav-link { font-size: 12px; letter-spacing: 0.12em; }
+  }
+  /* The county strip isn't clickable and the home stats line covers it, so
+     it's hidden at every width (the markup stays in place). */
+  .topbar { display: none; }
+  /* Phones: the theme menu drops its duplicate About (it's in the top nav)
+     and wraps instead of scrolling. */
+  @media (max-width: 640px) {
+    .cat-btn-about { display: none; }
+    .cat-nav { overflow-x: visible; white-space: normal; }
+    .cat-nav-inner { display: flex; flex-wrap: wrap; justify-content: center; padding: 0 8px; }
+    .cat-btn { padding: 11px 10px; }
+  }
+  .quick-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 1140px; margin: 22px auto 0; }
+  .quick-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 10px 14px; background: #F5F6F0; color: #1C3A5E; border: 1.5px solid #1C3A5E; border-radius: 8px; font-family: 'Lora', serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .quick-btn:hover { background: rgba(28,58,94,0.08); }
+  .quick-btn.active { background: #1C3A5E; color: #EFF0E8; }
+  .quick-btn:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
+  .quick-btn-icon { font-size: 20px; line-height: 1; }
+  @media (max-width: 760px) { .quick-row { display: grid; grid-template-columns: repeat(3, 1fr); } .quick-btn { justify-content: center; text-align: center; flex-direction: column; gap: 4px; padding: 10px 8px; font-size: 14px; } }
+  @media (max-width: 480px) { .quick-row { grid-template-columns: repeat(2, 1fr); } }
+  .latest-strip { max-width: 1140px; margin: 32px auto 0; text-align: left; }
+  .latest-strip-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .latest-strip-title { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: #1C3A5E; }
+  .latest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 640px) { .latest-grid { grid-template-columns: 1fr; } }
+  .latest-card { background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .latest-card .news-date { margin-bottom: 0; }
+  .latest-card-title { font-family: 'Libre Baskerville', serif; font-size: 18px; line-height: 1.3; }
+  .latest-card-title a { color: #1A2B3C; text-decoration: none; }
+  .latest-card-title a:hover { text-decoration: underline; }
+  .saturday { max-width: 1140px; margin: 36px auto 0; text-align: left; }
+  .saturday .latest-strip-title { margin-bottom: 14px; }
+  .saturday-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .saturday-grid { grid-template-columns: 1fr; } }
+  .saturday-feature { display: flex; flex-direction: column; background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 28px; }
+  .saturday-feature-title { font-family: 'Libre Baskerville', serif; font-size: 28px; line-height: 1.2; color: #1A2B3C; margin-bottom: 12px; }
+  .saturday-feature .trail-card-blurb { font-size: 16px; }
+  .saturday-feature-btn { align-self: flex-start; margin-top: auto; text-decoration: none; }
+  .saturday-feature-btn:hover { background: #14304F; }
+  .saturday-side { display: flex; flex-direction: column; gap: 12px; }
+  .saturday-link { padding: 16px 20px; gap: 4px; }
+  .saturday-link .trail-card-area { margin-bottom: 0; }
+  .saturday-link-name { font-family: 'Libre Baskerville', serif; font-size: 19px; font-weight: 700; color: #1A2B3C; }
+  .saturday-theme { align-self: center; margin-top: 4px; }
+  .latest-card-summary { font-family: 'Lora', serif; font-size: 15px; line-height: 1.55; color: #4A6472; flex: 1; }
+  .main { max-width: 1140px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
+  @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  .sidebar-box { border: 1.5px solid #1C3A5E; background: #F5F6F0; margin-bottom: 20px; overflow: hidden; }
+  .sidebar-box-header { background: #1C3A5E; color: #EFF0E8; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 16px; }
+  .sidebar-box-body { padding: 16px; }
+  .sidebar-cat-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(28,58,94,0.1); cursor: pointer; font-size: 14px; color: #1A2B3C; transition: color 0.15s; }
+  .sidebar-cat-item:last-child { border-bottom: none; }
+  .sidebar-cat-item:hover, .sidebar-cat-item.active { color: #C4862D; font-weight: 600; }
+  .sidebar-count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: #8AA0AE; }
+  .filter-pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .filter-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .filter-pill:hover { background: rgba(28,58,94,0.08); }
+  .filter-pill.active { background: #1C3A5E; color: #EFF0E8; }
+  .filter-pill.active:hover { background: #14304F; }
+  .listings-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #1C3A5E; padding-bottom: 12px; }
+  .listings-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1A2B3C; }
+  .result-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.08em; }
+  .listing-card { background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 22px 24px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; text-decoration: none; color: inherit; display: block; }
+  /* Results grid — used by the homepage and county/category/combo landing pages
+     so listing cards flow into responsive columns instead of stacking as a
+     single full-width column (which wasted horizontal space on wide screens
+     and made result sets look far longer than they needed to). Card margin is
+     zeroed out here since the grid gap handles spacing instead. */
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .results-grid .listing-card { margin-bottom: 0; display: flex; flex-direction: column; height: 100%; }
+  .results-grid .listing-desc { flex: 1; }
+  .load-more-row { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 8px 0 40px; }
+  .load-more-btn { min-width: 220px; }
+  .load-more-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.08em; }
+  @media (max-width: 480px) { .results-grid { grid-template-columns: 1fr; } }
+  .listing-card:hover { border-color: #1C3A5E; box-shadow: 3px 3px 0 #1C3A5E; transform: translate(-1px,-1px); }
+  .listing-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .listing-name { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: #1A2B3C; margin-bottom: 3px; line-height: 1.2; }
+  .listing-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .listing-desc { font-size: 15px; line-height: 1.65; color: #1A2B3C; margin-bottom: 12px; }
+  .listing-desc a { color: #C4862D; text-decoration: underline; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 8px; background: rgba(28,58,94,0.1); color: #1C3A5E; text-transform: uppercase; border: 1px solid rgba(28,58,94,0.2); }
+  .hours-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; margin-top: 8px; }
+  .no-results { text-align: center; padding: 60px 0; font-style: italic; color: #4A6472; font-size: 18px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(26,43,60,0.8); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+  .modal { background: #F5F6F0; max-width: 660px; width: 100%; max-height: 88vh; overflow-y: auto; border: 2px solid #1C3A5E; box-shadow: 8px 8px 0 #1C3A5E; }
+  .modal-header { background: #1C3A5E; padding: 28px 28px 24px; position: sticky; top: 0; }
+  .modal-close { float: right; background: none; border: none; color: rgba(239,240,232,0.6); font-size: 20px; cursor: pointer; }
+  .modal-close:hover { color: #EFF0E8; }
+  .modal-body { padding: 28px; }
+  .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .modal-field label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #4A6472; display: block; margin-bottom: 3px; }
+  .modal-field span { font-size: 15px; color: #1A2B3C; }
+  .modal-field a { font-size: 15px; color: #C4862D; text-decoration: underline; }
+  .modal-field a:hover { text-decoration: underline; }
+  .modal-desc { font-size: 17px; line-height: 1.7; color: #1A2B3C; margin-bottom: 24px; font-style: italic; border-left: 3px solid #C4862D; padding-left: 16px; }
+  .modal-desc a { color: #C4862D; text-decoration: underline; font-style: normal; }
+  .claim-box { background: rgba(28,58,94,0.07); border: 1.5px solid #1C3A5E; padding: 20px; text-align: center; }
+  .claim-box p { font-size: 14px; color: #1A2B3C; margin-bottom: 12px; font-style: italic; }
+  .btn-primary { background: #1C3A5E; color: #EFF0E8; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: #14304F; }
+  .submit-form input, .submit-form select, .submit-form textarea { width: 100%; padding: 10px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid rgba(28,58,94,0.3); background: #F5F6F0; color: #1A2B3C; outline: none; margin-bottom: 14px; }
+  .submit-form input:focus, .submit-form textarea:focus { border-color: #C4862D; }
+  .submit-form label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4A6472; display: block; margin-bottom: 4px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .modal-info-grid { grid-template-columns: 1fr; } }
+  .loading { text-align: center; padding: 60px; }
+  .spinner { width: 40px; height: 40px; border: 3px solid rgba(28,58,94,0.2); border-top-color: #1C3A5E; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
+  .loading-text { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #4A6472; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .mobile-category-toggle { display: none; }
+  @media (max-width: 760px) {
+    .mobile-category-toggle { display: inline-block; margin: 18px auto 0; padding: 11px 24px; background: #1C3A5E; color: #EFF0E8; border: none; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+  }
+  .mobile-drawer-overlay { position: fixed; inset: 0; background: rgba(26,43,60,0.8); z-index: 300; display: flex; align-items: flex-start; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+  .mobile-drawer { background: #F5F6F0; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; border: 2px solid #1C3A5E; box-shadow: 6px 6px 0 #1C3A5E; }
+  .mobile-drawer-header { background: #1C3A5E; color: #EFF0E8; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; position: sticky; top: 0; }
+  .mobile-drawer-close { background: none; border: none; color: rgba(239,240,232,0.7); font-size: 18px; cursor: pointer; padding: 0 4px; }
+  .mobile-drawer-close:hover { color: #EFF0E8; }
+  .mobile-drawer-body { padding: 12px 18px 18px; }
+  .share-btn { background: transparent; color: #1C3A5E; border: 1.5px solid #1C3A5E; padding: 8px 18px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s; }
+  .share-btn:hover { background: #1C3A5E; color: #EFF0E8; }
+  .listing-page-wrap { font-family: 'Lora', Georgia, serif; background: #EFF0E8; min-height: 100vh; color: #1A2B3C; }
+  .listing-page-nav { max-width: 760px; margin: 0 auto; padding: 24px 24px 0; }
+  .back-link { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #1C3A5E; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+  .back-link:hover { border-bottom-color: #C4862D; color: #C4862D; }
+  .listing-page-article { max-width: 760px; margin: 0 auto; padding: 24px 24px 80px; }
+  .listing-page-masthead { background: #1C3A5E; padding: 32px 32px 28px; border: 2px solid #1C3A5E; }
+  .listing-page-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #C4862D; margin-bottom: 10px; }
+  .listing-page-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 36px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin-bottom: 8px; }
+  .listing-page-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.6); letter-spacing: 0.08em; }
+  .listing-page-body { background: #F5F6F0; border: 2px solid #1C3A5E; border-top: none; padding: 32px; }
+  .ft-article { max-width: 1140px; margin: 0 auto; padding: 24px 24px 80px; }
+  .ft-masthead { background: #1C3A5E; padding: 32px 32px 28px; border: 2px solid #1C3A5E; margin-bottom: 36px; }
+  .ft-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 38px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin: 8px 0; }
+  .ft-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.6); letter-spacing: 0.06em; line-height: 1.5; }
+  .ft-section { margin-bottom: 52px; }
+  .ft-section-title { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: #1A2B3C; border-bottom: 2px solid #1C3A5E; padding-bottom: 10px; margin-bottom: 12px; }
+  .ft-section-intro { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #4A6472; line-height: 1.6; margin-bottom: 26px; max-width: 680px; }
+  .ft-county-group { margin-bottom: 32px; }
+  .ft-county { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #C4862D; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid rgba(196,134,45,0.4); }
+  .ft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .ft-card { background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 22px 24px; display: flex; flex-direction: column; }
+  .ft-card-name { font-family: 'Libre Baskerville', serif; font-size: 19px; font-weight: 700; color: #1A2B3C; line-height: 1.2; margin-bottom: 4px; }
+  .ft-card-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .ft-stats { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 14px; }
+  .ft-stat-label { display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 2px; }
+  .ft-stat-value { font-family: 'Lora', serif; font-size: 16px; color: #1A2B3C; }
+  .ft-field { margin-bottom: 14px; }
+  .ft-field-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 3px; }
+  .ft-field-text { font-family: 'Lora', serif; font-size: 14px; line-height: 1.6; color: #1A2B3C; }
+  .ft-links { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 14px; }
+  .ft-link { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #C4862D; text-decoration: none; border-bottom: 1px solid rgba(196,134,45,0.5); padding-bottom: 1px; }
+  .ft-link:hover { border-bottom-color: #C4862D; color: #14304F; }
+  .ft-details { margin-top: auto; border-top: 1px solid rgba(28,58,94,0.12); padding-top: 12px; }
+  .ft-details summary { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #1C3A5E; cursor: pointer; }
+  .ft-details summary:hover { color: #C4862D; }
+  .ft-details p { font-family: 'Lora', serif; font-size: 14px; line-height: 1.65; color: #1A2B3C; margin-top: 10px; }
+  @media (max-width: 600px) { .ft-grid { grid-template-columns: 1fr; } .ft-masthead { padding: 24px 20px; } .ft-article { padding: 16px 16px 64px; } }
+  .landing-wrap { font-family: 'Lora', Georgia, serif; background: #EFF0E8; min-height: 100vh; color: #1A2B3C; }
+  .landing-article { max-width: 1140px; margin: 0 auto; padding: 24px 24px 80px; }
+  .landing-masthead { background: #1C3A5E; padding: 32px 32px 28px; border: 2px solid #1C3A5E; margin-bottom: 28px; }
+  .landing-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 38px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin: 8px 0; }
+  .landing-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.7); letter-spacing: 0.06em; line-height: 1.6; }
+  .landing-crosslinks { margin-bottom: 28px; }
+  .landing-crosslinks-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  button.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; cursor: pointer; }
+  button.chip.chip-active { background: #1C3A5E; color: #F5F6F0; }
+  button.chip.chip-active .chip-count { color: #E8D9B8; }
+  .related-guide { font-size: 13px; color: #1A2B3C; margin: 0 0 16px; }
+  .books-wrap { max-width: 980px; margin: 0 auto; padding: 0 20px 48px; }
+  .books-nav { padding: 14px 0; }
+  .books-nav .back-link { display: inline-block; padding: 8px 0; }
+  .books-intro { font-family: 'Lora', Georgia, serif; font-size: 17px; line-height: 1.7; letter-spacing: 0; color: #E4E6DC; max-width: 64ch; margin: 12px 0 0; }
+  .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 24px; margin: 20px 0 40px; }
+  .book-card { background: #F5F6F0; border: 1.5px solid #D8DBCF; padding: 18px; display: grid; grid-template-columns: 104px minmax(0, 1fr); grid-template-rows: 1fr auto; gap: 16px; scroll-margin-top: 80px; }
+  .book-card:target { border-color: #C4862D; box-shadow: 0 0 0 3px rgba(196,134,45,0.25); }
+  .book-cover, .books-more-cover { position: relative; aspect-ratio: 5 / 8; overflow: hidden; background: #1C3A5E; align-self: start; }
+  .book-cover { width: 104px; }
+  .book-cover img, .books-more-cover img { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  .book-cover.is-wide::before, .books-more-cover.is-wide::before { content: ""; position: absolute; inset: -12px; background: var(--cover) center / cover; filter: blur(10px) brightness(0.75); }
+  .book-cover.is-wide img, .books-more-cover.is-wide img { object-fit: contain; }
+  .book-cover-blank { display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; box-sizing: border-box; color: #E8D9B8; font-family: 'Libre Baskerville', serif; font-size: 12px; line-height: 1.35; }
+  .books-more-cover.book-cover-blank { font-size: 9px; padding: 6px; }
+  .book-body { min-width: 0; }
+  .book-title { font-family: 'Libre Baskerville', serif; font-size: 17px; color: #1C3A5E; margin: 0 0 4px; line-height: 1.3; }
+  .book-sub { font-size: 13px; color: #4A6472; font-style: italic; margin: 0 0 8px; line-height: 1.4; }
+  .book-blurb { font-size: 14px; line-height: 1.5; margin: 0; color: #1A2B3C; }
+  .book-links { grid-column: 1 / -1; align-self: end; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .book-links-secondary { display: flex; flex-wrap: wrap; gap: 0 18px; min-height: 32px; }
+  .books-more-item .book-links-secondary:empty { display: none; }
+  .book-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 18px; box-sizing: border-box; background: #1C3A5E; color: #EFF0E8; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; white-space: nowrap; border: 1.5px solid #1C3A5E; transition: background 0.2s, border-color 0.2s; }
+  .book-btn:hover { background: #14304F; border-color: #C4862D; }
+  .book-btn:focus-visible, .book-secondary:focus-visible { outline: 3px solid #C4862D; outline-offset: 2px; }
+  .book-secondary { display: inline-flex; align-items: center; min-height: 32px; font-size: 13px; color: #1C3A5E; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+  .book-secondary:hover { color: #9A6420; }
+  .book-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A5A17; margin-bottom: 6px; }
+  .books-section { border-top: 1.5px solid #D8DBCF; padding-top: 28px; }
+  .books-section-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1C3A5E; margin: 0; line-height: 1.25; }
+  .books-more h3 { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #4A6472; margin: 24px 0 12px; }
+  .books-more-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 16px 24px; }
+  .books-more-item { display: flex; gap: 16px; align-items: flex-start; padding: 4px 0; scroll-margin-top: 80px; }
+  .books-more-cover { width: 80px; flex: 0 0 80px; }
+  .books-more-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .books-more-item .t { font-family: 'Libre Baskerville', serif; font-size: 17px; font-weight: 700; color: #1C3A5E; line-height: 1.3; }
+  .books-more-item .s { font-size: 14px; color: #4A6472; line-height: 1.45; }
+  .books-more-item .book-links { align-self: flex-start; margin-top: 8px; }
+  @media (max-width: 640px) {
+    .books-nav .back-link { padding: 14px 0; }
+    .books-intro { font-size: 16px; }
+    .book-card { grid-template-columns: 96px minmax(0, 1fr); }
+    .book-cover { width: 96px; }
+    .book-secondary { min-height: 44px; }
+    .book-links-secondary { min-height: 44px; }
+    .books-more-cover { width: 68px; flex-basis: 68px; }
+    .book-btn { padding: 0 14px; }
+  }
+  @media (max-width: 360px) { .book-btn { width: 100%; } }
+  .verified-note { font-size: 12px; color: #5C7A8A; font-style: italic; margin: 8px 0 16px; }
+  .update-form { text-align: left; display: grid; gap: 10px; margin-top: 8px; }
+  .update-form input, .update-form textarea, .update-form select { width: 100%; padding: 10px; border: 1.5px solid #D8DBCF; font-size: 15px; font-family: inherit; box-sizing: border-box; }
+  .update-form textarea { min-height: 110px; }
+  a.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; text-decoration: none; transition: background 0.15s, color 0.15s; }
+  a.chip:hover { background: #1C3A5E; color: #EFF0E8; }
+  a.chip .chip-count { color: #8AA0AE; }
+  a.chip:hover .chip-count { color: rgba(239,240,232,0.7); }
+  .newsletter-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; color: #1A2B3C; margin-bottom: 8px; }
+  .newsletter-sub { font-family: 'Lora', serif; font-size: 0.95rem; color: #4A6472; line-height: 1.6; max-width: 520px; margin: 0 auto 18px; }
+  .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+  .newsletter-field { flex: 1; min-width: 200px; text-align: left; }
+  .newsletter-input { width: 100%; box-sizing: border-box; padding: 11px 16px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; transition: border-color 0.2s; }
+  .newsletter-input:focus { border-color: #C4862D; }
+  .newsletter-input::placeholder { color: #8AA0AE; font-style: italic; }
+  .newsletter-btn { background: #1C3A5E; color: #EFF0E8; border: none; padding: 11px 28px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .newsletter-btn:hover { background: #14304F; }
+  .newsletter-btn:disabled { opacity: 0.6; cursor: default; }
+  .newsletter-success { font-family: 'Lora', serif; font-style: italic; color: #C4862D; font-size: 16px; }
+  .newsletter-error { font-family: 'DM Mono', monospace; font-size: 12px; color: #9B2C2C; margin-top: 10px; }
+  /* Honeypot: kept in the layout but off-screen and out of the tab order. Bots
+     fill it; real users never see it. A filled value short-circuits the insert. */
+  .newsletter-field-error { font-family: 'Lora', serif; font-size: 0.85rem; line-height: 1.45; color: #9B2C2C; margin-top: 6px; }
+  .newsletter-suggest { font-family: 'Lora', serif; font-size: 0.85rem; line-height: 1.45; color: #4A6472; margin-top: 6px; }
+  .newsletter-suggest-btn { color: #1C3A5E; font-weight: 600; }
+  .newsletter-consent { font-family: 'Lora', serif; font-size: 0.78rem; line-height: 1.5; color: #4A6472; max-width: 460px; margin: 12px auto 0; }
+  .newsletter-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .newsletter-inline { background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 32px 24px; margin: 36px 0; text-align: center; }
+  .newsletter-footer { max-width: 600px; margin: 0 auto 28px; padding-bottom: 28px; border-bottom: 1px solid #1C3A5E; text-align: center; }
+  .newsletter-footer .newsletter-title { color: #EFF0E8; font-size: 1.3rem; }
+  .newsletter-footer .newsletter-sub { color: #7A92A4; }
+  .newsletter-footer .newsletter-input { background: #EFF0E8; }
+  .newsletter-footer .newsletter-btn { background: #C4862D; color: #0F2640; }
+  .newsletter-footer .newsletter-btn:hover { background: #B0762A; }
+  /* On the navy footer (#0F2640): consent uses the footer's muted #7A92A4
+     (4.7:1); the error and suggestion use lighter shades for AA contrast. */
+  .newsletter-footer .newsletter-consent { color: #7A92A4; }
+  .newsletter-footer .newsletter-field-error { color: #F2A7A0; }
+  .newsletter-footer .newsletter-suggest { color: #A8B8C4; }
+  .newsletter-footer .newsletter-suggest-btn { color: #EFF0E8; }
+  .rambles-card { background: #1C3A5E; border: 2px solid #1C3A5E; padding: 24px 28px; margin: 0 0 28px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .rambles-card-body { flex: 1; min-width: 240px; }
+  .rambles-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C4862D; margin-bottom: 8px; }
+  .rambles-title { font-family: 'Libre Baskerville', serif; font-size: 1.25rem; font-weight: 700; color: #EFF0E8; line-height: 1.25; margin-bottom: 8px; }
+  .rambles-desc { font-family: 'Lora', serif; font-size: 0.95rem; color: rgba(239,240,232,0.82); line-height: 1.6; }
+  .rambles-cta { display: inline-block; background: #C4862D; color: #0F2640; padding: 12px 24px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
+  .rambles-cta:hover { background: #B0762A; }
+  /* Support the Almanac button (SPA-safe anchor to Buy Me a Coffee). Styled to
+     match the site's button typography (DM Mono, uppercase) and themed via the
+     :root tokens above. Hover is a CSS state, not React — consistent with every
+     other button here; focus-visible gives a keyboard ring; reduced-motion off. */
+  .hva-support { display: inline-flex; align-items: center; gap: 0.55rem; padding: 12px 26px; border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; text-decoration: none; cursor: pointer; border: 1.5px solid var(--hva-accent); transition: background 0.2s, color 0.2s, border-color 0.2s; }
+  .hva-support--solid { background: var(--hva-accent); color: var(--hva-on-accent); }
+  .hva-support--solid:hover { background: var(--hva-accent-hover); border-color: var(--hva-accent-hover); }
+  .hva-support--ghost { background: transparent; color: var(--hva-accent); }
+  .hva-support--ghost:hover { background: var(--hva-accent-tint); }
+  .hva-support:focus-visible { outline: 2px solid var(--hva-accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .hva-support { transition: none; } }
+  /* About page: shares the single-listing page shell; these tune the reading
+     column's type scale/spacing to match the site's serif body copy. */
+  .about-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.6; font-style: italic; color: #4A6472; margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .about-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
+  .about-support { margin-top: 8px; }
+  .news-subhead { font-family: 'Libre Baskerville', serif; font-size: 21px; color: #1C3A5E; margin: 32px 0 12px; }
+  .news-minihead { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #8A6D1F; margin: 22px 0 8px; }
+  .news-list { font-family: 'Lora', serif; font-size: 16px; line-height: 1.65; color: #1A2B3C; margin: 0 0 16px 20px; padding: 0; }
+  .news-list li { margin-bottom: 4px; }
+  .about-body a { color: #1C3A5E; }
+  .about-body .link-button { color: #1C3A5E; }
+  .news-card { padding: 8px 0 28px; margin-bottom: 28px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .news-date { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A6D1F; margin-bottom: 8px; }
+  .news-card-title { font-family: 'Libre Baskerville', serif; font-size: 24px; line-height: 1.3; margin: 0 0 12px; }
+  .news-card-title a { color: #1C3A5E; text-decoration: none; }
+  .news-card-title a:hover { text-decoration: underline; }
+  .news-pager { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .news-pager-count { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8AA0AE; }
+  .news-cta { display: inline-block; background: #1C3A5E; color: #EFF0E8; padding: 12px 22px; border: none; border-radius: 4px; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; }
+  .news-cta:hover { background: #0F2640; }
+  .about-support-lead { font-family: 'Lora', serif; font-size: 16px; font-style: italic; color: #1A2B3C; margin-bottom: 16px; }
+  /* Farm Trails — guide reading column (reuses the single-listing page shell,
+     same as About) and the /farm-trails index cards. */
+  .trail-body .trail-lede, .landing-article > .trail-lede { font-family: 'Lora', serif; font-size: 19px; line-height: 1.65; font-style: italic; color: #4A6472; margin-bottom: 26px; padding-bottom: 22px; border-bottom: 1px solid rgba(28,58,94,0.2); }
+  .trail-body p { font-family: 'Lora', serif; font-size: 17px; line-height: 1.75; color: #1A2B3C; margin-bottom: 20px; }
+  .trail-body a { color: #C4862D; text-decoration: underline; }
+  .trail-body a:hover { color: #14304F; }
+  .trail-h2 { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #1A2B3C; margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #1C3A5E; }
+  .trail-list { list-style: none; margin: 0 0 20px; padding: 0; }
+  .trail-list li { font-family: 'Lora', serif; font-size: 17px; line-height: 1.7; color: #1A2B3C; margin-bottom: 16px; padding-left: 16px; border-left: 3px solid rgba(196,134,45,0.5); }
+  .trail-list strong { color: #1C3A5E; }
+  .trail-crosslinks { font-family: 'Lora', serif; font-size: 16px; color: #1A2B3C; margin: 26px 0 8px; padding-top: 22px; border-top: 1px solid rgba(28,58,94,0.2); }
+  .trail-crosslinks a { color: #C4862D; text-decoration: underline; }
+  .trail-close { font-family: 'Lora', serif; font-size: 18px; font-style: italic; color: #1C3A5E; line-height: 1.6; margin-top: 22px; padding-top: 22px; border-top: 3px double #1C3A5E; }
+  .trail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; margin-bottom: 40px; }
+  .trail-card { display: flex; flex-direction: column; background: #F5F6F0; border: 1.5px solid rgba(28,58,94,0.2); padding: 24px; text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; }
+  .trail-card:hover { border-color: #1C3A5E; box-shadow: 3px 3px 0 #1C3A5E; transform: translate(-1px,-1px); }
+  .trail-card-area { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C4862D; margin-bottom: 8px; }
+  .trail-card-name { font-family: 'Libre Baskerville', serif; font-size: 21px; font-weight: 700; color: #1A2B3C; line-height: 1.2; margin-bottom: 10px; }
+  .trail-card-blurb { font-family: 'Lora', serif; font-size: 15px; line-height: 1.6; color: #1A2B3C; margin-bottom: 18px; }
+  .trail-card-cta { margin-top: auto; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #1C3A5E; }
+  .trail-card:hover .trail-card-cta { color: #C4862D; }
+  .trail-soon { border-top: 1px solid rgba(28,58,94,0.2); padding-top: 24px; }
+  .trail-soon-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 14px; }
+  .trail-soon-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 6px 24px; }
+  .trail-soon-list li { font-family: 'Lora', serif; font-size: 15px; line-height: 1.5; padding: 4px 0; }
+  .trail-soon-name { color: #1A2B3C; }
+  .trail-soon-area { color: #8AA0AE; font-size: 13px; }
+  @media (max-width: 600px) { .trail-grid { grid-template-columns: 1fr; } }
