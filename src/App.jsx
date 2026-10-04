@@ -148,6 +148,17 @@ const QUICK_FILTERS = [
   { label: "Maple & Honey", icon: "🍁", category: "maple" },
   { label: "Farm Stands", icon: "🌾", q: "farm stand OR farmstand" },
 ];
+// Listing columns the public pages read from Supabase (homepage grid and the
+// listing-page live fallback). An explicit allowlist, never select("*"): the
+// anon key can read every column of a published row, and the table holds
+// private columns (email, submitter_*, first_contacted_*, review_note) that
+// must not be sent to visitors. Add a column here only when the UI renders it.
+const PUBLIC_LISTING_COLUMNS =
+  "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, verified_at";
+
+// The admin dashboard's columns: only what its cards show, sort, and filter on.
+const ADMIN_LISTING_COLUMNS = "id, name, category, town, county, phone, description, status, created_at";
+
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 const FACEBOOK_URL = "https://www.facebook.com/1072963332575328";
 
@@ -583,7 +594,7 @@ function HomePage() {
       const pageSize = 1000;
       const all = [];
       for (let from = 0; ; from += pageSize) {
-        const { data, error } = await supabase.from("listings").select("*").eq("status", "published").order("name", { ascending: true }).range(from, from + pageSize - 1);
+        const { data, error } = await supabase.from("listings").select(PUBLIC_LISTING_COLUMNS).eq("status", "published").order("name", { ascending: true }).range(from, from + pageSize - 1);
         if (error) throw error;
         if (!data || data.length === 0) break;
         all.push(...data);
@@ -2222,7 +2233,7 @@ function ListingPage() {
       setNotFound(false);
       const { data, error } = await supabase
         .from("listings")
-        .select("*")
+        .select(PUBLIC_LISTING_COLUMNS)
         .eq("slug", slug)
         .eq("status", "published")
         .maybeSingle();
@@ -2638,7 +2649,7 @@ function AdminPage() {
       for (let from = 0; ; from += pageSize) {
         const { data, error } = await supabase
           .from("listings")
-          .select("*")
+          .select(ADMIN_LISTING_COLUMNS)
           .order("id", { ascending: true })
           .range(from, from + pageSize - 1);
         if (error) throw error;
