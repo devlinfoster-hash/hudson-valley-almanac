@@ -1000,7 +1000,7 @@ export const FARM_TRAIL_BODIES = {
   ),
   "cannabis-farms-of-the-hudson-valley": () => (
     <>
-      <p className="trail-lede">When New York legalized adult-use cannabis, the first conditional cultivator licenses went overwhelmingly to people already farming — hemp growers and multi-generation vegetable farms adding a new crop to fields they'd worked for years. Ten licensed cultivators are in the Almanac's directory across nine counties, almost all small-batch, sun-grown, and run by people who talk about soil health before they talk about strain names.</p>
+      <p className="trail-lede">When New York legalized adult-use cannabis, the first conditional cultivator licenses went overwhelmingly to people already farming — hemp growers and multi-generation vegetable farms adding a new crop to fields they'd worked for years. Nine cultivators are in the Almanac's directory across six counties, along with one statewide advocacy group, almost all run by people who talk about soil health before they talk about strain names.</p>
 
       <h2 className="trail-h2">The original farm families</h2>
       <p><strong><L to="hepworth-farms-cannabis">Hepworth Farms</L></strong> in Milton has farmed the same Rondout Valley soil since 1818 and was among the first licensed cultivators in the state, holding cultivation, extraction, and distribution licenses as a true seed-to-sale operation. <strong><L to="back-home-farm-cannabis">Back Home Farm &amp; Cannabis</L></strong> in High Falls grows cannabis the same way it grows its other 140 crops, and was one of the first suppliers to New York's first recreational dispensary.</p>
@@ -1020,7 +1020,7 @@ export const FARM_TRAIL_BODIES = {
       <p><strong><L to="ny-small-farma">NY Small Farma</L></strong> in Albany is a statewide advocacy organization championing on-farm sales, craft co-ops, and regenerative practices — and opposing the large-warehouse model — on behalf of small cannabis farmers across the state.</p>
 
       <h2 className="trail-h2">A few practical notes</h2>
-      <p>These are licensed cultivators, not dispensaries — most sell through distributors and licensed retail rather than direct farm-gate sales, so check each farm's listing for how their products actually reach the public before planning a visit. New York's cannabis market is still young and licensing rules continue to evolve.</p>
+      <p>These are cultivators, not dispensaries — most sell through distributors and licensed retail rather than direct farm-gate sales, so check each farm's listing for how their products actually reach the public before planning a visit. New York's cannabis market is still young and licensing rules continue to evolve.</p>
       <p className="trail-crosslinks">Explore more of the region's theme guides on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.</p>
       <p className="trail-close">The same farm families, one more crop in the ground.</p>
     </>
