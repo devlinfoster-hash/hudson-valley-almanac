@@ -276,7 +276,7 @@ export const FARM_TRAILS = [
     blurb:
       "The county where it all started — Tuthilltown, Whitecliff, and 18 more, from the Shawangunk Wine Trail to the Rondout Valley to the mountaintop.",
     metaDescription:
-      "A guide to Ulster County's craft-beverage scene — 20 cideries, breweries, distilleries, wineries, and meaderies from Gardiner and New Paltz to Kingston, the Rondout Valley, and Woodstock.",
+      "A guide to Ulster County's craft-beverage scene — 20 cideries, breweries, distilleries, wineries, and meaderies from Gardiner and New Paltz to Kingston and the Rondout Valley.",
     published: true,
   },
   {
