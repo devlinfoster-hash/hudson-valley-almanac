@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { guideListingSlug } from "./guide-links.js";
 
 // Long-form Farm Trails guide bodies, keyed by slug. Imported only by the app
 // (src/App.jsx) — never by the Node sitemap script. Metadata (title, area,
@@ -8,9 +9,12 @@ import { Link } from "react-router-dom";
 // Generated deterministically from the source markdown guides; every business
 // links to its /listing/:slug page.
 
-// Inline link to a directory listing — keeps the prose readable.
+// Inline link to a directory listing — keeps the prose readable. A stop whose
+// listing isn't published renders as its name only (see guide-links.js).
 function L({ to, children }) {
-  return <Link to={`/listing/${to}`}>{children}</Link>;
+  const slug = guideListingSlug(to);
+  if (!slug) return <>{children}</>;
+  return <Link to={`/listing/${slug}`}>{children}</Link>;
 }
 
 export const FARM_TRAIL_BODIES = {
