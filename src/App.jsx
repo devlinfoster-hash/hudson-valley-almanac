@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useId, Component, Fragment, createContext,
 import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
-import { categories, getCategory, getCategoryForKey, categoryKeys, slugify, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
+import { categories, getCategory, getCategoryForKey, categoryKeys, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
 import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs, featuredTrailFor } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
@@ -11,6 +11,7 @@ import FreezerFullContent from "./FreezerFullPage.jsx";
 import "./styles.css";
 import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 import { validateEmail, suggestEmailFix } from "./utils/email.js";
+import { submitListing, FIELD_MAX_LENGTHS } from "./utils/submit-listing.js";
 import { BOOK_LINKS } from "./data/book-links.js";
 
 // ---------------------------------------------------------------------------
@@ -2469,6 +2470,11 @@ function SubmitForm({ onClose }) {
   const [form, setForm] = useState({ name: "", category: "", town: "", county: "", description: "", tags: "", phone: "", hours: "", address: "", website: "", established: "", submitter_name: "", submitter_email: "" });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  // Spam checks (see src/utils/submit-listing.js): a hidden honeypot field,
+  // the time the form rendered, and a guard against a second in-flight insert.
+  const [honeypot, setHoneypot] = useState("");
+  const renderedAt = useRef(Date.now());
+  const inFlight = useRef(false);
   const modalRef = useRef(null);
 
   // Modal a11y: close on Escape and move focus into the dialog on open so
@@ -2481,17 +2487,19 @@ function SubmitForm({ onClose }) {
   }, [onClose]);
 
   async function handleSubmit() {
-    if (!form.name || !form.category || !form.town) return alert("Please fill in name, category, and town.");
+    if (inFlight.current) return;
+    inFlight.current = true;
     setSubmitting(true);
     try {
-      const baseSlug = slugify(form.name);
-      const slug = `${baseSlug}-${Date.now().toString(36)}`;
-      const { error } = await supabase.from("listings").insert([{ ...form, slug, tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean), established: parseInt(form.established) || null, submitter_name: form.submitter_name.trim() || null, submitter_email: form.submitter_email.trim() || null, status: "pending", featured: false }]);
-      if (error) throw error;
-      setSubmitted(true);
+      const outcome = await submitListing(supabase, form, { honeypot, renderedAt: renderedAt.current });
+      if (outcome.result === "invalid") alert(outcome.message);
+      else if (outcome.result === "submitted") setSubmitted(true);
     } catch (err) {
       alert("Submission failed. Please try again.");
-    } finally { setSubmitting(false); }
+    } finally {
+      inFlight.current = false;
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -2512,7 +2520,7 @@ function SubmitForm({ onClose }) {
           ) : (
             <div className="submit-form">
               <label>Business Name</label>
-              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your business name" />
+              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} maxLength={FIELD_MAX_LENGTHS.name} placeholder="Your business name" />
               <label>Category</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
                 <option value="">Select a category</option>
@@ -2522,26 +2530,32 @@ function SubmitForm({ onClose }) {
                 {categories.map((c) => <option key={c.id} value={categoryKeys(c)[0]}>{c.label}</option>)}
               </select>
               <div className="form-row">
-                <div><label>Town</label><input value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} placeholder="e.g. Cooperstown" /></div>
-                <div><label>County</label><input value={form.county} onChange={(e) => setForm({ ...form, county: e.target.value })} placeholder="e.g. Otsego" /></div>
+                <div><label>Town</label><input value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} maxLength={FIELD_MAX_LENGTHS.town} placeholder="e.g. Cooperstown" /></div>
+                <div><label>County</label><input value={form.county} onChange={(e) => setForm({ ...form, county: e.target.value })} maxLength={FIELD_MAX_LENGTHS.county} placeholder="e.g. Otsego" /></div>
               </div>
               <label>Description</label>
-              <textarea rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Tell people what you offer" />
+              <textarea rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} maxLength={FIELD_MAX_LENGTHS.description} placeholder="Tell people what you offer" />
               <label>Tags (comma separated)</label>
-              <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="e.g. Bulk Grain, Chick Days, Fencing" />
+              <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} maxLength={FIELD_MAX_LENGTHS.tags} placeholder="e.g. Bulk Grain, Chick Days, Fencing" />
               <div className="form-row">
-                <div><label>Phone</label><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="(315) 555-0000" /></div>
-                <div><label>Year Established</label><input value={form.established} onChange={(e) => setForm({ ...form, established: e.target.value })} placeholder="e.g. 1987" /></div>
+                <div><label>Phone</label><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} maxLength={FIELD_MAX_LENGTHS.phone} placeholder="(315) 555-0000" /></div>
+                <div><label>Year Established</label><input value={form.established} onChange={(e) => setForm({ ...form, established: e.target.value })} maxLength={FIELD_MAX_LENGTHS.established} placeholder="e.g. 1987" /></div>
               </div>
               <label>Address</label>
-              <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Street address" />
+              <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} maxLength={FIELD_MAX_LENGTHS.address} placeholder="Street address" />
               <label>Website</label>
-              <input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://example.com" />
+              <input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} maxLength={FIELD_MAX_LENGTHS.website} placeholder="https://example.com" />
               <label>Hours</label>
-              <input value={form.hours} onChange={(e) => setForm({ ...form, hours: e.target.value })} placeholder="e.g. Mon-Sat 8am-6pm" />
+              <input value={form.hours} onChange={(e) => setForm({ ...form, hours: e.target.value })} maxLength={FIELD_MAX_LENGTHS.hours} placeholder="e.g. Mon-Sat 8am-6pm" />
+              {/* Honeypot: hidden from people and screen readers, so only bots
+                  fill it. A filled one shows the thank-you without inserting. */}
+              <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
+                <label htmlFor="submit-listing-reference">Leave this field empty</label>
+                <input id="submit-listing-reference" name="listing_reference" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+              </div>
               <div className="form-row">
-                <div><label>Your name</label><input value={form.submitter_name} onChange={(e) => setForm({ ...form, submitter_name: e.target.value })} autoComplete="name" /></div>
-                <div><label>Your email (not published)</label><input type="email" value={form.submitter_email} onChange={(e) => setForm({ ...form, submitter_email: e.target.value })} autoComplete="email" /></div>
+                <div><label>Your name</label><input value={form.submitter_name} onChange={(e) => setForm({ ...form, submitter_name: e.target.value })} maxLength={FIELD_MAX_LENGTHS.submitter_name} autoComplete="name" /></div>
+                <div><label>Your email (not published)</label><input type="email" value={form.submitter_email} onChange={(e) => setForm({ ...form, submitter_email: e.target.value })} maxLength={FIELD_MAX_LENGTHS.submitter_email} autoComplete="email" /></div>
               </div>
               <button className="btn-primary" style={{ width: "100%", padding: "14px", fontSize: 13, marginTop: 8 }} onClick={handleSubmit} disabled={submitting}>
                 {submitting ? "Submitting" : "Submit Listing for Review"}
