@@ -129,11 +129,11 @@ const HERO_TAGLINE = SITE_STATS.listingCount
 // The same snapshot count, formatted for the home and About page copy and meta
 // descriptions ("2,830"). Empty when there's no snapshot, so each use falls
 // back to count-free wording. The category count is the number of tiles in
-// src/catalog.js.
+// src/catalog.js and the county count is SERVED_COUNTIES, as in the footer.
 const LISTING_COUNT = SITE_STATS.listingCount ? SITE_STATS.listingCount.toLocaleString("en-US") : "";
 const HOME_DESCRIPTION = LISTING_COUNT
-  ? `A directory of working farms, makers, and producers across the Hudson Valley. ${LISTING_COUNT} listings across ${categories.length} categories, with a focus on farm-licensed producers who grow what they sell.`
-  : "A directory of working farms, makers, and producers across the Hudson Valley, with a focus on farm-licensed producers who grow what they sell.";
+  ? `A directory of working farms, makers, and producers across the Hudson Valley. ${LISTING_COUNT} listings across ${categories.length} categories in ${SERVED_COUNTIES.length} counties, with a focus on farm-licensed producers who grow what they sell.`
+  : `A directory of working farms, makers, and producers across ${SERVED_COUNTIES.length} Hudson Valley counties, with a focus on farm-licensed producers who grow what they sell.`;
 const ABOUT_DESCRIPTION = `A free, hand-checked guide to ${LISTING_COUNT ? LISTING_COUNT + " " : ""}farm stands, orchards, cideries, markets, and makers across the Hudson Valley, Catskills, and Capital Region.`;
 
 // Towns that aren't a place. Left out of the Towns dropdown, and never at the
