@@ -1484,7 +1484,7 @@ export const FARM_TRAIL_BODIES = {
       <ul className="trail-list">
         <li><strong><L to="millerton-farmers-market">Millerton Farmers' Market</L>.</strong> SNAP with Double Up Food Bucks matching up to $50 a day.</li>
         <li><strong><L to="rhinebeck-farmers-market">Rhinebeck Farmers' Market</L>.</strong> SNAP/EBT with its own SNAP doubling program.</li>
-        <li><strong><L to="hudson-thursday-market">Hudson Thursday Market</L>.</strong> Part of the Hudson Farmers Market's commitment to SNAP access.</li>
+        <li><strong><L to="hudson-farmers-market">Hudson Farmers Market</L>.</strong> Saturday market with SNAP access.</li>
         <li><strong><L to="hawthorne-valley-farm-farm-store">Hawthorne Valley Farm Store</L> — Ghent.</strong> Accepts SNAP/EBT and Double Up Food Bucks.</li>
         <li><strong><L to="poughkeepsie-farm-project">Poughkeepsie Farm Project</L>.</strong> Sliding-scale and SNAP options for its CSA.</li>
         <li><strong><L to="goshen-farmers-market">Goshen Farmers' Market</L></strong> and <strong><L to="newburgh-common-ground-farmers-market">Newburgh Common Ground Farmers' Market</L>.</strong> SNAP/EBT; Newburgh also takes FreshConnect checks.</li>
