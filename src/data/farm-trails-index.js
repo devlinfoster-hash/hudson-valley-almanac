@@ -426,13 +426,13 @@ export const FARM_TRAILS = [
   {
     slug: "cannabis-farms-of-the-hudson-valley",
     title: "Cannabis Farms of the Hudson Valley",
-    area: "Region-Wide · 9 Counties",
+    area: "Region-Wide · 6 Counties",
     county: null,
     series: "theme",
     blurb:
-      "New York's first licensed cultivators were existing farmers — 10 sun-grown, small-batch operations from Columbia County creek-side plots to the Adirondack foothills.",
+      "New York's first licensed cultivators were existing farmers — nine cannabis farms from Columbia County creek-side plots to the Adirondack foothills.",
     metaDescription:
-      "A guide to New York's licensed cannabis cultivators in the Hudson Valley and Catskills — 10 sun-grown, small-batch farms, most run by existing multi-generation farm families.",
+      "A guide to cannabis cultivators from the Hudson Valley and Catskills to the Champlain Valley — nine farms across six counties, plus a statewide advocacy group.",
     published: true,
   },
   {
