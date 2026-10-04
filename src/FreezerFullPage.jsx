@@ -5,6 +5,7 @@ import {
   FREEZER_FULL_UPDATED, FREEZER_FULL_CHANGES, FREEZER_FULL_GROUPS,
   FREEZER_FULL_FARMS, FREEZER_FULL_MORE, FREEZER_FULL_PROCESSORS, FREEZER_FULL_DEER,
 } from "./data/freezer-full.js";
+import { guideListingSlug } from "./data/guide-links.js";
 
 const P = { navy: "#1C3A5E", gold: "#C4862D", surface: "#F5F6F0", text: "#1A2B3C", muted: "#5C7A8A", border: "#D8DBCF" };
 const serif = "'Libre Baskerville', Georgia, serif";
@@ -16,11 +17,23 @@ function matches(f, q, sharesOnly) {
   return q.toLowerCase().split(/\s+/).every((w) => hay.includes(w));
 }
 
+// A url pointing at one of our own listing pages follows that listing's
+// status: renamed slugs link to the new page, and an unpublished listing gets
+// no link (see src/data/guide-links.js). Any other url is used as is.
+const LISTING_URL = /^(https:\/\/www\.hudsonvalleyalmanac\.com\/listing\/)([^/?#]+)$/;
+function farmUrl(url) {
+  const m = url ? url.match(LISTING_URL) : null;
+  if (!m) return url;
+  const slug = guideListingSlug(m[2]);
+  return slug ? m[1] + slug : null;
+}
+
 function FarmItem({ f }) {
+  const url = farmUrl(f.url);
   return (
     <li style={{ padding: "12px 0", borderBottom: `1px solid ${P.border}`, listStyle: "none" }}>
       <div style={{ fontWeight: 700, color: P.navy }}>
-        {f.url ? <a href={f.url} target="_blank" rel="noreferrer" style={{ color: P.navy }}>{f.name}</a> : f.name}
+        {url ? <a href={url} target="_blank" rel="noreferrer" style={{ color: P.navy }}>{f.name}</a> : f.name}
         {f.town ? <span style={{ fontWeight: 400, color: P.muted }}> · {f.town}</span> : null}
         {f.phone ? <span style={{ fontWeight: 400, color: P.muted }}> · <a href={`tel:${f.phone.replace(/[^0-9+]/g, "")}`} style={{ color: P.muted }}>{f.phone}</a></span> : null}
       </div>
