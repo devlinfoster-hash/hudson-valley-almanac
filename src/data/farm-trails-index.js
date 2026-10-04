@@ -274,9 +274,9 @@ export const FARM_TRAILS = [
     area: "Ulster County · The Birthplace",
     county: "Ulster",
     blurb:
-      "The county where it all started — Tuthilltown, Whitecliff, and 23 more, from the Shawangunk Wine Trail to the Rondout Valley to the mountaintop.",
+      "The county where it all started — Tuthilltown, Whitecliff, and 18 more, from the Shawangunk Wine Trail to the Rondout Valley to the mountaintop.",
     metaDescription:
-      "A guide to Ulster County's craft-beverage scene — 25 cideries, breweries, distilleries, wineries, and meaderies from Gardiner and New Paltz to Kingston, the Rondout Valley, and Woodstock.",
+      "A guide to Ulster County's craft-beverage scene — 20 cideries, breweries, distilleries, wineries, and meaderies from Gardiner and New Paltz to Kingston, the Rondout Valley, and Woodstock.",
     published: true,
   },
   {
@@ -286,9 +286,9 @@ export const FARM_TRAILS = [
     area: "Orange County · The Black Dirt Bench",
     county: "Orange",
     blurb:
-      "24 cideries, breweries, distilleries, and wineries — Brotherhood's cellars, the Warwick orchard cluster, and the black-dirt grain belt.",
+      "23 cideries, breweries, distilleries, and wineries — Brotherhood's cellars, the Warwick orchard cluster, and the black-dirt grain belt.",
     metaDescription:
-      "A guide to Orange County's craft-beverage scene — 24 cideries, breweries, distilleries, and wineries from Warwick's orchards to Newburgh's waterfront and the black-dirt grain belt.",
+      "A guide to Orange County's craft-beverage scene — 23 cideries, breweries, distilleries, and wineries from Warwick's orchards to Newburgh's waterfront and the black-dirt grain belt.",
     published: true,
   },
   {
@@ -298,9 +298,9 @@ export const FARM_TRAILS = [
     area: "Dutchess County · The Beacon-Poughkeepsie Corridor",
     county: "Dutchess",
     blurb:
-      "19 cideries, breweries, distilleries, wineries, and even a sake brewery — Beacon's dense strip, Poughkeepsie's mills, and Millbrook's flagship vineyards.",
+      "18 cideries, breweries, distilleries, wineries, and even a sake brewery — Beacon's dense strip, Poughkeepsie's mills, and Millbrook's flagship vineyards.",
     metaDescription:
-      "A guide to Dutchess County's craft-beverage scene — 19 cideries, breweries, distilleries, and wineries from Beacon's brewery row to Millbrook's vineyards and Hyde Park's new sake brewery.",
+      "A guide to Dutchess County's craft-beverage scene — 18 cideries, breweries, distilleries, and wineries from Beacon's brewery row to Millbrook's vineyards and Hyde Park's new sake brewery.",
     published: true,
   },
   {
@@ -310,7 +310,7 @@ export const FARM_TRAILS = [
     area: "Greene · Delaware · Sullivan · Schoharie Counties",
     county: null,
     blurb:
-      "38 cideries, breweries, and distilleries across four mountain counties — firehouse distilleries, foraged wild-apple cider, and farms that grow what they pour.",
+      "36 cideries, breweries, and distilleries across four mountain counties — firehouse distilleries, foraged wild-apple cider, and farms that grow what they pour.",
     metaDescription:
       "A guide to the Catskills' craft-beverage scene across Greene, Delaware, Sullivan, and Schoharie counties — firehouse distilleries, wild-apple cideries, and true farm-to-glass producers.",
     published: true,
@@ -346,7 +346,7 @@ export const FARM_TRAILS = [
     area: "Westchester · Rockland Counties",
     county: null,
     blurb:
-      "19 cideries, breweries, distilleries, and wineries closest to the city — Captain Lawrence's pioneering brewery and the county's only cidery and winery.",
+      "17 cideries, breweries, distilleries, and wineries closest to the city — Captain Lawrence's pioneering brewery and the county's only cidery and winery.",
     metaDescription:
       "A guide to the craft-beverage scene in Westchester and Rockland counties — Captain Lawrence Brewing, Hardscrabble Cider, Torne Valley Vineyards, and the region's closest-to-NYC tasting rooms.",
     published: true,
@@ -430,9 +430,9 @@ export const FARM_TRAILS = [
     county: null,
     series: "theme",
     blurb:
-      "New York's first licensed cultivators were existing farmers — 11 sun-grown, small-batch operations from Columbia County creek-side plots to the Adirondack foothills.",
+      "New York's first licensed cultivators were existing farmers — 10 sun-grown, small-batch operations from Columbia County creek-side plots to the Adirondack foothills.",
     metaDescription:
-      "A guide to New York's licensed cannabis cultivators in the Hudson Valley and Catskills — 11 sun-grown, small-batch farms, most run by existing multi-generation farm families.",
+      "A guide to New York's licensed cannabis cultivators in the Hudson Valley and Catskills — 10 sun-grown, small-batch farms, most run by existing multi-generation farm families.",
     published: true,
   },
   {
@@ -526,9 +526,9 @@ export const FARM_TRAILS = [
     county: null,
     series: "theme",
     blurb:
-      "America's oldest winery, the birthplace of New York craft distilling, and farm distilleries making brandy from their own apples — 64 wineries and distilleries, grouped by what they make.",
+      "America's oldest winery, the birthplace of New York craft distilling, and farm distilleries making brandy from their own apples — 61 wineries and distilleries, grouped by what they make.",
     metaDescription:
-      "A guide to wineries, farm wineries, and craft distilleries in the Hudson Valley, Catskills, and Capital Region — 64 wineries and distilleries across 16 counties.",
+      "A guide to wineries, farm wineries, and craft distilleries in the Hudson Valley, Catskills, and Capital Region — 61 wineries and distilleries across 16 counties.",
     published: true,
   },
   {
