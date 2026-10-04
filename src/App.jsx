@@ -126,6 +126,15 @@ const FOOTER_COUNTIES = `Serving ${SERVED_COUNTIES.length} counties across the H
 const HERO_TAGLINE = SITE_STATS.listingCount
   ? `${SITE_STATS.listingCount.toLocaleString("en-US")} farm stands, orchards, cideries, markets, and makers across ${SERVED_COUNTIES.length} counties. Free, and checked against state records and each business's own site wherever possible.`
   : "The Hudson Valley's directory of farms, makers, markets & stewards";
+// The same snapshot count, formatted for the home and About page copy and meta
+// descriptions ("2,830"). Empty when there's no snapshot, so each use falls
+// back to count-free wording. The category count is the number of tiles in
+// src/catalog.js.
+const LISTING_COUNT = SITE_STATS.listingCount ? SITE_STATS.listingCount.toLocaleString("en-US") : "";
+const HOME_DESCRIPTION = LISTING_COUNT
+  ? `A directory of working farms, makers, and producers across the Hudson Valley. ${LISTING_COUNT} listings across ${categories.length} categories, with a focus on farm-licensed producers who grow what they sell.`
+  : "A directory of working farms, makers, and producers across the Hudson Valley, with a focus on farm-licensed producers who grow what they sell.";
+const ABOUT_DESCRIPTION = `A free, hand-checked guide to ${LISTING_COUNT ? LISTING_COUNT + " " : ""}farm stands, orchards, cideries, markets, and makers across the Hudson Valley, Catskills, and Capital Region.`;
 
 // Towns that aren't a place. Left out of the Towns dropdown, and never at the
 // top of the default home page order (with the non-geographic counties).
@@ -693,7 +702,7 @@ function HomePage() {
     <div style={{ fontFamily: "'Lora', Georgia, serif", background: "#EFF0E8", minHeight: "100vh", color: "#1A2B3C" }}>
       <PageMeta
         title="Hudson Valley Almanac — a directory of working farms and makers."
-        description="A directory of working farms, makers, and producers across the Hudson Valley. Over 1,800 listings across 25 categories, with a focus on farm-licensed producers who grow what they sell."
+        description={HOME_DESCRIPTION}
         canonical={homeCanonical}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
@@ -1746,7 +1755,7 @@ function AboutPage() {
     <div className="listing-page-wrap">
       <PageMeta
         title="About the Almanac — Hudson Valley Almanac"
-        description="A free, hand-checked guide to 1,800+ farm stands, orchards, cideries, markets, and makers across the Hudson Valley, Catskills, and Capital Region."
+        description={ABOUT_DESCRIPTION}
         canonical={`${SITE_ORIGIN}/about`}
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
@@ -1767,7 +1776,7 @@ function AboutPage() {
               I'm Devlin Foster, and I made the Hudson Valley Almanac because I kept wanting to know where the good stuff was. The farm with the honor-system egg fridge, the brewery at the end of a dirt road, the fire tower worth the climb. No single place had it all, so I started writing it down. Then I didn't stop.
             </p>
             <p>
-              Today the Almanac has more than 1,800 listings across the Hudson Valley, the Catskills, and the Capital Region: farm stands and orchards, meat farms and creameries, maple producers and cideries, markets, makers, feed stores, and the people who keep rural life running. Every listing is written in the Almanac's own words, and I check the links regularly and fix what's broken. Farther west, the Almanac has a sister site, the{" "}
+              Today the Almanac has {LISTING_COUNT ? `${LISTING_COUNT} listings` : "listings"} across the Hudson Valley, the Catskills, and the Capital Region: farm stands and orchards, meat farms and creameries, maple producers and cideries, markets, makers, feed stores, and the people who keep rural life running. Every listing is written in the Almanac's own words, and I check the links regularly and fix what's broken. Farther west, the Almanac has a sister site, the{" "}
               <a href="https://www.mohawkvalleyalmanac.com" target="_blank" rel="noopener noreferrer">Mohawk Valley Almanac</a>.
             </p>
             <p>
