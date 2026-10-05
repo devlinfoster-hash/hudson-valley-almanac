@@ -20,6 +20,9 @@ import {
   parseFilters,
   filtersToParams,
   percentileBounds,
+  listingFocus,
+  isListingOnMap,
+  LISTING_FOCUS_ZOOM,
   APPROXIMATE_RADIUS_METERS,
   NOT_AVAILABLE,
 } from "./map-listings.js";
@@ -352,4 +355,47 @@ test("circles chained within 1.5 miles of each other all merge", () => {
   assert.equal(groups.length, 1);
   assert.equal(groups[0].listings.length, 3);
   assert.ok(Math.abs(groups[0].lat - (42 + step)) < 1e-9);
+});
+
+// --- ?listing=<slug> ----------------------------------------------------------
+
+const pinListing = { ...base, id: 21, slug: "rondout-bakery", latitude: 41.93, longitude: -74.0, location_precision: "street" };
+const townA = { ...base, id: 22, slug: "town-a", latitude: 42.0, longitude: -74.2, location_precision: "town" };
+const zipB = { ...base, id: 23, slug: "zip-b", latitude: 42.01, longitude: -74.2, location_precision: "postal_code" };
+const noCoords = { ...base, id: 24, slug: "no-coords", latitude: null, longitude: null, location_precision: "none" };
+const focusRows = filterListings([pinListing, townA, zipB, noCoords]);
+
+test("?listing= with a known street listing centers on its pin at zoom 15", () => {
+  assert.deepEqual(listingFocus(focusRows, "rondout-bakery"), { id: 21, kind: "point", lat: 41.93, lng: -74.0, zoom: LISTING_FOCUS_ZOOM });
+  assert.equal(LISTING_FOCUS_ZOOM, 15);
+});
+
+test("?listing= with an unknown slug is ignored", () => {
+  assert.equal(listingFocus(focusRows, "no-such-listing"), null);
+  assert.equal(listingFocus(focusRows, ""), null);
+  assert.equal(listingFocus(focusRows, null), null);
+  assert.equal(listingFocus(focusRows, "no-coords"), null, "a listing without coordinates isn't on the map");
+});
+
+test("?listing= with an approximate listing fits the circle it is drawn in", () => {
+  // town-a and zip-b are ~0.7 mi apart, so they share one merged circle.
+  const focus = listingFocus(focusRows, "zip-b");
+  const group = groupApproximate(focusRows).find((g) => g.listings.some((l) => l.id === 23));
+  assert.equal(group.listings.length, 2);
+  assert.deepEqual(focus, { id: 23, kind: "circle", lat: group.lat, lng: group.lng, radiusMeters: group.radiusMeters });
+  assert.ok(focus.radiusMeters >= APPROXIMATE_RADIUS_METERS);
+});
+
+test("?listing= only looks at listings in the current results", () => {
+  const greeneOnly = filterListings([pinListing, { ...townA, county: "Greene" }], { county: "Greene" });
+  assert.equal(listingFocus(greeneOnly, "rondout-bakery"), null);
+});
+
+test("listing pages link to the map only for listings it can show", () => {
+  const snapshot = [pinListing, townA, noCoords];
+  assert.equal(isListingOnMap(snapshot, "rondout-bakery"), true);
+  assert.equal(isListingOnMap(snapshot, "town-a"), true);
+  assert.equal(isListingOnMap(snapshot, "no-coords"), false);
+  assert.equal(isListingOnMap(snapshot, "missing"), false);
+  assert.equal(isListingOnMap([], "rondout-bakery"), false);
 });

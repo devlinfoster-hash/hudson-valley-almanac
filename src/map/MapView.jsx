@@ -195,7 +195,14 @@ function ResetViewControl({ initialBounds, coverRef }) {
 }
 
 // Fits the view when the filters change (not while the user pans around).
-function ViewController({ viewTarget, viewKey, drawnBounds, initialBounds, coverRef }) {
+// Opens a listing's popup once its pin has been clustered (markers are added in
+// chunks, so a pin may not be ready the moment the view is set).
+function openListingPopup(apiRef, id, tries = 20) {
+  if (apiRef.current?.openPopup(id) || tries <= 1) return;
+  setTimeout(() => openListingPopup(apiRef, id, tries - 1), 150);
+}
+
+function ViewController({ viewTarget, viewKey, drawnBounds, initialBounds, coverRef, apiRef }) {
   const map = useMap();
   const first = useRef(true);
   useEffect(() => {
@@ -204,7 +211,12 @@ function ViewController({ viewTarget, viewKey, drawnBounds, initialBounds, cover
     // An area filter is the user's own current view: only fit to it on load.
     if (viewTarget.type === "bounds" && !isFirst) return;
     const t = setTimeout(() => {
-      if (viewTarget.type === "initial") {
+      if (viewTarget.type === "listing") {
+        const f = viewTarget.focus;
+        if (f.kind === "point") map.setView([f.lat, f.lng], f.zoom, { animate: false });
+        else map.fitBounds(L.latLng(f.lat, f.lng).toBounds(f.radiusMeters * 2), { padding: [30, 30], animate: false });
+        openListingPopup(apiRef, f.id);
+      } else if (viewTarget.type === "initial") {
         fitInitial(map, initialBounds, coverRef?.current);
       } else if (viewTarget.type === "bounds") {
         const b = viewTarget.bounds;
@@ -350,6 +362,21 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
         map.once("moveend", () => circle.openPopup());
       }
     },
+    // Opens the popup for a listing on the map. False while its pin is still
+    // waiting to be clustered, so the caller can retry.
+    openPopup(id) {
+      const s = state.current;
+      const marker = s.markers.get(id);
+      if (marker && s.cluster.hasLayer(marker)) {
+        if (!marker.__parent) return false;
+        s.cluster.zoomToShowLayer(marker, () => marker.openPopup());
+        return true;
+      }
+      const circle = s.circleByListing.get(id);
+      if (!circle) return false;
+      circle.openPopup();
+      return true;
+    },
     invalidateSize() {
       map.invalidateSize();
     },
@@ -381,7 +408,7 @@ const MapView = forwardRef(function MapView({ rows, viewTarget, viewKey, initial
       <ResetViewControl initialBounds={initialBounds} coverRef={coverRef} />
       <Layers rows={rows} near={near} onSelect={onSelect} onNavigate={onNavigate} apiRef={apiRef} />
       {ready && (
-        <ViewController viewTarget={viewTarget} viewKey={viewKey} drawnBounds={drawnBounds} initialBounds={initialBounds} coverRef={coverRef} />
+        <ViewController viewTarget={viewTarget} viewKey={viewKey} drawnBounds={drawnBounds} initialBounds={initialBounds} coverRef={coverRef} apiRef={apiRef} />
       )}
     </MapContainer>
   );

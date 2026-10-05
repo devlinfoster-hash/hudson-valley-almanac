@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useId, Component, Fragment, createContext, useContext } from "react";
-import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData } from "react-router-dom";
+import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData, useNavigate } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
 import { categories, getCategory, getCategoryForKey, categoryKeys, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
@@ -552,6 +552,65 @@ function PlanASaturday() {
   );
 }
 
+// The homepage's way into /map: a search that opens the map with ?q=, an
+// "Explore the map" link, and "Near me", which asks for the location only when
+// tapped and opens /map?near=lat,lng (rounded to ~1 km, as /map itself does).
+// Nothing here touches window/navigator during render, so it prerenders.
+function MapEntry() {
+  const navigate = useNavigate();
+  const [text, setText] = useState("");
+  const [geo, setGeo] = useState({ status: "idle", message: "" });
+
+  function submit(e) {
+    e.preventDefault();
+    const q = text.trim();
+    navigate(q ? `/map?${new URLSearchParams({ q })}` : "/map");
+  }
+
+  function nearMe() {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeo({ status: "error", message: "Your browser can't share its location." });
+      return;
+    }
+    setGeo({ status: "locating", message: "" });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setGeo({ status: "idle", message: "" });
+        navigate(`/map?near=${pos.coords.latitude.toFixed(2)},${pos.coords.longitude.toFixed(2)}`);
+      },
+      (err) => {
+        const message =
+          err.code === 1 ? "Location permission was denied." : err.code === 3 ? "Finding your location timed out." : "Couldn't find your location.";
+        setGeo({ status: "error", message });
+      },
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+    );
+  }
+
+  return (
+    <div className="map-entry">
+      <form className="map-entry-search" role="search" onSubmit={submit}>
+        <input
+          type="search"
+          className="map-entry-input"
+          aria-label="Search the map"
+          placeholder="Search farms, markets, makers — name, town, county or ZIP"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button type="submit" className="map-entry-btn">Search</button>
+      </form>
+      <div className="map-entry-actions">
+        <Link to="/map" className="map-entry-btn map-entry-explore">🗺️ Explore the map</Link>
+        <button type="button" className="map-entry-btn map-entry-near" onClick={nearMe} disabled={geo.status === "locating"}>
+          {geo.status === "locating" ? "Locating…" : "📍 Near me"}
+        </button>
+      </div>
+      {geo.status === "error" && <p className="map-entry-error" role="alert">{geo.message}</p>}
+    </div>
+  );
+}
+
 function HomePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -714,6 +773,7 @@ function HomePage() {
       <div className="hero">
         <h1 className="masthead-title">Hudson Valley<br /><em>Almanac</em></h1>
         <p className="masthead-sub">{HERO_TAGLINE}</p>
+        <MapEntry />
         <div className="search-row">
           <input className="search-input" aria-label="Search resources by name, specialty, town, or county" placeholder="Search farms, towns, or products" value={search} onChange={(e) => setParam("q", e.target.value, "")} />
           <select className="town-select" aria-label="Filter by county" value={countyFilter} onChange={(e) => setCounty(e.target.value)}>
@@ -1157,15 +1217,19 @@ function TopNav() {
   return (
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
-        <button
-          type="button"
-          className="topnav-link topnav-toggle"
-          aria-expanded={menuOpen}
-          aria-controls="topnav-links"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          {menuOpen ? "Close ✕" : "Menu ☰"}
-        </button>
+        {/* Below 1280px: the Menu toggle, with Map kept visible beside it. */}
+        <div className="topnav-bar">
+          <button
+            type="button"
+            className="topnav-link topnav-toggle"
+            aria-expanded={menuOpen}
+            aria-controls="topnav-links"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? "Close ✕" : "Menu ☰"}
+          </button>
+          <NavLink to="/map" className="topnav-link topnav-map">Map</NavLink>
+        </div>
         <div id="topnav-links" className={"topnav-links" + (menuOpen ? " open" : "")}>
           {HEADER_LINKS.map((item) => {
             const className = "topnav-link" + (item.className ? " " + item.className : "");
@@ -2378,7 +2442,18 @@ function ListingPage() {
                 </p>
               ))}
               <div className="modal-info-grid">
-                {listing.address && <div className="modal-field"><label>Address</label><span><a href={"https://maps.google.com/?q=" + encodeURIComponent(listing.address)} target="_blank" rel="noreferrer" style={{color:"inherit",textDecoration:"none"}}>{listing.address}</a></span></div>}
+                {(listing.address || listing.on_map) && (
+                  <div className="modal-field">
+                    <label>{listing.address ? "Address" : "Location"}</label>
+                    {listing.address
+                      ? <span><a href={"https://maps.google.com/?q=" + encodeURIComponent(listing.address)} target="_blank" rel="noreferrer" style={{color:"inherit",textDecoration:"none"}}>{listing.address}</a></span>
+                      : <span>{[listing.town, listing.county ? `${listing.county} County` : null].filter(Boolean).join(", ")}</span>}
+                    {/* Only listings /map can show (coordinates in the map snapshot). */}
+                    {listing.on_map && (
+                      <Link className="see-on-map" to={`/map?listing=${encodeURIComponent(listing.slug)}`}>🗺️ See on map</Link>
+                    )}
+                  </div>
+                )}
                 {listing.phone && (
                   <div className="modal-field">
                     <label>Phone</label>
