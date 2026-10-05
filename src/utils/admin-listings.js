@@ -54,6 +54,13 @@ export async function setListingStatus(supabase, listing, status) {
   expectRow(data, error, `Setting status to ${status} failed`);
 }
 
+// Puts a closed or duplicate listing back on the public site.
+export const REOPENABLE_STATUSES = ["closed", "duplicate"];
+
+export async function reopenListing(supabase, listing) {
+  await setListingStatus(supabase, listing, "published");
+}
+
 export async function deleteListingPermanently(supabase, listing) {
   if (!canDeletePermanently(listing)) throw new Error("Published listings can't be deleted. Close the listing instead.");
   const { data, error } = await supabase
