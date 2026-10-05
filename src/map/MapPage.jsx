@@ -19,11 +19,15 @@ import {
   APPROXIMATE_LABEL,
   NEAR_ME_RADII,
   NOT_ON_MAP,
+  activeFilters,
   categoryStyle,
+  countyNamesOf,
   filterListings,
   filtersToParams,
   isVerified,
+  mostRestrictiveFilter,
   parseFilters,
+  resolveSearch,
   townCountyLine,
 } from "../utils/map-listings.js";
 import "./map.css";
@@ -87,12 +91,48 @@ function ResultItem({ row, selected, onFocus }) {
   );
 }
 
+// Shown when no listings match: the active filters as removable chips, a
+// one-click Clear all, and which single filter is holding the results back.
+function EmptyState({ chips, best, radius, onRemove, onClearAll }) {
+  let hint;
+  if (best && best.count > 0) {
+    hint = (
+      <>Removing <strong>“{best.filter.label}”</strong> would show {best.count.toLocaleString("en-US")} {best.count === 1 ? "listing" : "listings"}.</>
+    );
+  } else if (chips.length > 1) {
+    hint = "Removing any one of these filters still shows nothing. Try Clear all.";
+  }
+  return (
+    <div className="mp-empty" role="status">
+      <p className="mp-empty-title">No listings match these filters.</p>
+      {hint && <p className="mp-empty-hint">{hint}</p>}
+      <div className="mp-chips">
+        {chips.map((f) => (
+          <button
+            key={f.key}
+            type="button"
+            className={"mp-chip" + (best && best.filter.key === f.key && best.count > 0 ? " mp-chip-key" : "")}
+            onClick={() => onRemove(f.remove)}
+            aria-label={`Remove filter: ${f.key === "near" ? `within ${radius} miles of your location` : f.label}`}
+          >
+            {f.key === "near" ? `${f.label} · Stop using my location` : f.label} ✕
+          </button>
+        ))}
+        <button type="button" className="mp-chip mp-chip-clear" onClick={onClearAll}>Clear all</button>
+      </div>
+    </div>
+  );
+}
+
 export default function MapPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const filters = useMemo(() => parseFilters(searchParams), [searchParams]);
   const data = useMapData();
-  const rows = useMemo(() => filterListings(data.listings, filters), [data.listings, filters]);
+  const countyNames = useMemo(() => countyNamesOf(data.listings), [data.listings]);
+  // A query that is exactly a county name drives the county dropdown.
+  const search = useMemo(() => resolveSearch(filters, countyNames), [filters, countyNames]);
+  const rows = useMemo(() => filterListings(data.listings, filters, { countyNames }), [data.listings, filters, countyNames]);
   const onMapCount = useMemo(() => rows.filter((r) => r.placement.kind !== "none").length, [rows]);
 
   const [mounted, setMounted] = useState(false);
@@ -134,19 +174,26 @@ export default function MapPage() {
   );
 
   const counties = useMemo(() => {
-    const present = new Set(data.listings.map((l) => l.county).filter(Boolean));
-    if (filters.county) present.add(filters.county);
+    const present = new Set(countyNames);
+    if (search.county) present.add(search.county);
     const geo = [...present].filter((c) => !NON_GEOGRAPHIC_COUNTIES.has(c)).sort();
     const other = [...present].filter((c) => NON_GEOGRAPHIC_COUNTIES.has(c)).sort();
     return [...geo, ...other];
-  }, [data.listings, filters.county]);
+  }, [countyNames, search.county]);
 
   const viewTarget = filters.bounds
     ? { type: "bounds", bounds: filters.bounds }
     : filters.near
     ? { type: "near", center: filters.near, radiusMiles: filters.radius }
     : { type: "results" };
-  const viewKey = [data.status, filters.q.trim(), filters.category, filters.county, searchParams.get("bbox"), searchParams.get("near"), filters.radius].join("|");
+  // What makes the map refit. With no area or near-me filter, a change in the
+  // search (text, category, county) fits the map to the matching listings. With
+  // either active, search changes leave the view alone.
+  const viewKey = filters.bounds
+    ? `bounds|${data.status}|${searchParams.get("bbox")}`
+    : filters.near
+    ? `near|${data.status}|${searchParams.get("near")}|${filters.radius}`
+    : `results|${data.status}|${search.words.join(" ")}|${filters.category}|${search.county}`;
   const near = filters.near ? { center: filters.near, radiusMiles: filters.radius } : null;
 
   function searchThisArea() {
@@ -185,7 +232,14 @@ export default function MapPage() {
   // The map needs to re-measure when the mobile drawer or layout changes.
   useEffect(() => { mapApi.current?.invalidateSize(); }, [isMobile]);
 
-  const hasActiveFilters = filters.q.trim() || filters.category || filters.county || filters.bounds || filters.near;
+  const chips = useMemo(() => activeFilters(filters, countyNames), [filters, countyNames]);
+  const hasActiveFilters = chips.length > 0;
+  const isEmpty = data.status === "ready" && data.listings.length > 0 && rows.length === 0;
+  const best = useMemo(
+    () => (isEmpty ? mostRestrictiveFilter(data.listings, filters, { countyNames }) : null),
+    [isEmpty, data.listings, filters, countyNames]
+  );
+  const clearAll = () => setSearchParams(new URLSearchParams(), { replace: true });
   const shown = rows.slice(0, visible);
 
   let statusLine;
@@ -227,7 +281,7 @@ export default function MapPage() {
               id="mp-q"
               type="search"
               className="mp-input"
-              placeholder="Search name, town, county, or tag"
+              placeholder="Search name, town, county, tag, ZIP or street"
               value={filters.q}
               onChange={(e) => update({ q: e.target.value })}
             />
@@ -238,7 +292,13 @@ export default function MapPage() {
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.label}</option>)}
               </select>
               <label className="mp-sr" htmlFor="mp-county">County</label>
-              <select id="mp-county" className="mp-select" value={filters.county} onChange={(e) => update({ county: e.target.value })}>
+              <select
+                id="mp-county"
+                className="mp-select"
+                value={search.county}
+                // Picking a county (or All counties) replaces a county typed in the search box.
+                onChange={(e) => update({ county: e.target.value, ...(search.countyFromQuery ? { q: "" } : {}) })}
+              >
                 <option value="">All counties</option>
                 {counties.map((c) => <option key={c} value={c}>{NON_GEOGRAPHIC_COUNTIES.has(c) ? c : `${c} County`}</option>)}
               </select>
@@ -259,7 +319,9 @@ export default function MapPage() {
                   <button type="button" className="mp-chip" onClick={() => update({ bounds: null })}>Map area only ✕</button>
                 )}
                 {filters.near && (
-                  <button type="button" className="mp-chip" onClick={() => update({ near: null })}>Within {filters.radius} mi of you ✕</button>
+                  <button type="button" className="mp-chip mp-chip-location" onClick={() => update({ near: null })}>
+                    📍 Within {filters.radius} mi · Stop using my location ✕
+                  </button>
                 )}
               </div>
             )}
@@ -268,7 +330,7 @@ export default function MapPage() {
           <div className="mp-status" aria-live="polite">
             {statusLine}
             {hasActiveFilters && data.status === "ready" && (
-              <button type="button" className="mp-clear" onClick={() => setSearchParams(new URLSearchParams(), { replace: true })}>Clear all</button>
+              <button type="button" className="mp-clear" onClick={clearAll}>Clear all</button>
             )}
           </div>
 
@@ -287,8 +349,8 @@ export default function MapPage() {
               Show more ({(rows.length - visible).toLocaleString("en-US")} more)
             </button>
           )}
-          {data.status === "ready" && data.listings.length > 0 && rows.length === 0 && (
-            <p className="mp-empty">No listings match these filters.</p>
+          {isEmpty && (
+            <EmptyState chips={chips} best={best} radius={filters.radius} onRemove={update} onClearAll={clearAll} />
           )}
         </div>
       </aside>

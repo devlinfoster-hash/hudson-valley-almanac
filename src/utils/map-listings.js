@@ -148,14 +148,58 @@ function normalize(s) {
   return String(s || "").toLowerCase();
 }
 
-// Every word of the query must appear in the name, town, county or a tag.
+// Trim punctuation from both ends of a word ("st," -> "st", "(845)" -> "845").
+function trimWord(w) {
+  return w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
+}
+
+// The query as lowercase search words. "county" is dropped, so "columbia county"
+// and "columbia" search the same.
+export function queryWords(query) {
+  return normalize(query)
+    .split(/\s+/)
+    .map(trimWord)
+    .filter((w) => w && w !== "county");
+}
+
+// Canonical county name for `name` (any case, with or without "County"), or ""
+// when it isn't one of `countyNames`.
+export function canonicalCounty(name, countyNames) {
+  const key = queryWords(name).join(" ");
+  if (!key) return "";
+  for (const c of countyNames || []) {
+    if (queryWords(c).join(" ") === key) return c;
+  }
+  return "";
+}
+
+// Every word must appear in the name, town, county, a tag or the address (so a
+// ZIP code or street name matches). Takes a query string or a words array.
 export function matchesSearch(listing, query) {
-  const words = normalize(query).split(/\s+/).filter(Boolean);
+  const words = Array.isArray(query) ? query : queryWords(query);
   if (!words.length) return true;
-  const haystack = [listing.name, listing.town, listing.county, ...(listing.tags || [])]
+  const haystack = [listing.name, listing.town, listing.county, listing.address, ...(listing.tags || [])]
     .map(normalize)
     .join(" \u0000 ");
   return words.every((w) => haystack.includes(w));
+}
+
+export function countyNamesOf(listings) {
+  return [...new Set((listings || []).map((l) => l.county).filter(Boolean))];
+}
+
+// How the search box and county dropdown combine:
+//   - an explicit county (URL `county`, any case) is matched case-insensitively;
+//   - with no explicit county, a query that is exactly a county name (with or
+//     without "county") becomes the county filter instead of a text search.
+// Returns { county, countyFromQuery, words }.
+export function resolveSearch(filters, countyNames) {
+  const words = queryWords(filters.q);
+  const explicit = filters.county ? canonicalCounty(filters.county, countyNames) || filters.county : "";
+  if (explicit) return { county: explicit, countyFromQuery: false, words };
+  const fromQuery = words.length ? canonicalCounty(words.join(" "), countyNames) : "";
+  if (fromQuery) return { county: fromQuery, countyFromQuery: true, words: [] };
+  return { county: "", countyFromQuery: false, words };
 }
 
 export function inBounds(coords, bounds) {
@@ -171,7 +215,12 @@ export function inBounds(coords, bounds) {
 // map drop out while either is active. Returns rows of { listing, placement,
 // distance } — distance in miles when near-me is active, otherwise null —
 // sorted by distance under near-me and in input order otherwise.
-export function filterListings(listings, filters = {}) {
+// `countyNames` (default: the counties present in `listings`) is what a query
+// or a URL county is matched against.
+export function filterListings(listings, filters = {}, { countyNames } = {}) {
+  const names = countyNames || countyNamesOf(listings);
+  const { county, words } = resolveSearch({ q: filters.q || "", county: filters.county || "" }, names);
+  const countyKey = county.toLowerCase();
   const tile = filters.category ? getCategory(filters.category) : null;
   const keys = tile ? new Set(categoryKeys(tile)) : null;
   const near = filters.near || null;
@@ -179,8 +228,8 @@ export function filterListings(listings, filters = {}) {
   const rows = [];
   for (const listing of listings || []) {
     if (keys && !keys.has(listing.category)) continue;
-    if (filters.county && listing.county !== filters.county) continue;
-    if (!matchesSearch(listing, filters.q)) continue;
+    if (countyKey && normalize(listing.county) !== countyKey) continue;
+    if (!matchesSearch(listing, words)) continue;
     const placement = mapPlacement(listing);
     const coords = placement.kind === "none" ? null : { lat: placement.lat, lng: placement.lng };
     if (filters.bounds && !inBounds(coords, filters.bounds)) continue;
@@ -196,17 +245,96 @@ export function filterListings(listings, filters = {}) {
   return rows;
 }
 
-// Circles at the same spot (every listing geocoded to one town or ZIP centroid)
-// are merged into a single circle, so they don't stack into an opaque blob.
-export function groupApproximate(rows) {
-  const groups = new Map();
+// --- Active filters and the empty state -------------------------------------
+
+// The filters currently narrowing the results, in display order, each with a
+// label and the patch that removes it. A county taken from the query is removed
+// by clearing the query.
+export function activeFilters(filters, countyNames) {
+  const { county, countyFromQuery, words } = resolveSearch(filters, countyNames);
+  const out = [];
+  if (words.length) out.push({ key: "text", label: `Search: ${String(filters.q).trim()}`, remove: { q: "" } });
+  if (filters.category) {
+    const tile = getCategory(filters.category);
+    if (tile) out.push({ key: "category", label: tile.label, remove: { category: "" } });
+  }
+  if (county) {
+    const label = county === "Online" || county === "Statewide" ? county : `${county} County`;
+    out.push({ key: "county", label, remove: countyFromQuery ? { q: "" } : { county: "" } });
+  }
+  if (filters.near) out.push({ key: "near", label: `Within ${filters.radius || DEFAULT_NEAR_ME_RADIUS} mi`, remove: { near: null } });
+  if (filters.bounds) out.push({ key: "area", label: "Search area", remove: { bounds: null } });
+  return out;
+}
+
+// For each active filter, how many listings would show without it. The most
+// restrictive filter is the one whose removal shows the most (ties go to the
+// earlier filter). Returns { filter, count } or null with no active filters.
+export function mostRestrictiveFilter(listings, filters, { countyNames } = {}) {
+  const names = countyNames || countyNamesOf(listings);
+  let best = null;
+  for (const f of activeFilters(filters, names)) {
+    const count = filterListings(listings, { ...filters, ...f.remove }, { countyNames: names }).length;
+    if (!best || count > best.count) best = { filter: f, count };
+  }
+  return best;
+}
+
+// Approximate-area circles whose centers are within this distance merge.
+export const MERGE_DISTANCE_MILES = 1.5;
+
+// Merges approximate-area circles so overlapping town/ZIP centroids don't stack
+// into an opaque blob. Any two circles whose centers are within
+// MERGE_DISTANCE_MILES of each other end up in the same merged circle (directly
+// or through a chain of such neighbours), placed at the average of the distinct
+// centers it contains. The merged radius grows so it still covers every member's
+// ~2 mile area. Street-precision pins are never part of a group.
+// Returns [{ key, lat, lng, radiusMeters, listings }].
+export function groupApproximate(rows, mergeMiles = MERGE_DISTANCE_MILES) {
+  // 1. One node per distinct center (same-spot circles always share a node).
+  const byCenter = new Map();
   for (const row of rows) {
     if (row.placement.kind !== "circle") continue;
     const key = `${row.placement.lat.toFixed(5)},${row.placement.lng.toFixed(5)}`;
-    if (!groups.has(key)) groups.set(key, { key, lat: row.placement.lat, lng: row.placement.lng, radiusMeters: row.placement.radiusMeters, listings: [] });
-    groups.get(key).listings.push(row.listing);
+    if (!byCenter.has(key)) {
+      byCenter.set(key, { lat: row.placement.lat, lng: row.placement.lng, radiusMeters: row.placement.radiusMeters, listings: [] });
+    }
+    byCenter.get(key).listings.push(row.listing);
   }
-  return [...groups.values()];
+  // Deterministic order, so the same rows always give the same circles.
+  const nodes = [...byCenter.values()].sort((a, b) => a.lat - b.lat || a.lng - b.lng);
+
+  // 2. Union every pair within range (union-find). Nodes are sorted by
+  // latitude, so the inner loop stops once the latitude gap alone is too big.
+  const parent = nodes.map((_, i) => i);
+  const find = (i) => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+  const maxLatGap = mergeMiles / 68.7; // a degree of latitude is >= ~68.7 mi
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length && nodes[j].lat - nodes[i].lat <= maxLatGap; j++) {
+      if (distanceMiles(nodes[i], nodes[j]) <= mergeMiles) parent[find(j)] = find(i);
+    }
+  }
+
+  // 3. One circle per component, at the average of its distinct centers.
+  const components = new Map();
+  nodes.forEach((n, i) => {
+    const root = find(i);
+    if (!components.has(root)) components.set(root, []);
+    components.get(root).push(n);
+  });
+  return [...components.values()].map((members) => {
+    const lat = members.reduce((a, m) => a + m.lat, 0) / members.length;
+    const lng = members.reduce((a, m) => a + m.lng, 0) / members.length;
+    const center = { lat, lng };
+    const radiusMeters = Math.max(...members.map((m) => distanceMiles(center, m) * METERS_PER_MILE + m.radiusMeters));
+    return {
+      key: `${lat.toFixed(5)},${lng.toFixed(5)}`,
+      lat,
+      lng,
+      radiusMeters,
+      listings: members.flatMap((m) => m.listings),
+    };
+  });
 }
 
 // --- URL query string ------------------------------------------------------
