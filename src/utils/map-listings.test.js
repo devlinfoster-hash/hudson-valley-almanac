@@ -11,6 +11,12 @@ import {
   categoryStyle,
   filterListings,
   groupApproximate,
+  queryWords,
+  resolveSearch,
+  activeFilters,
+  mostRestrictiveFilter,
+  distanceMiles,
+  MERGE_DISTANCE_MILES,
   parseFilters,
   filtersToParams,
   APPROXIMATE_RADIUS_METERS,
@@ -122,7 +128,7 @@ test("approximate circles at the same spot are merged; points are not grouped", 
   ]);
   const groups = groupApproximate(rows);
   assert.equal(groups.length, 2);
-  assert.deepEqual(groups[0].listings.map((l) => l.id), [1, 2]);
+  assert.deepEqual(groups.map((g) => g.listings.map((l) => l.id).sort()).sort(), [[1, 2], [3]]);
 });
 
 // --- Display ---------------------------------------------------------------
@@ -185,4 +191,131 @@ test("invalid query-string values are ignored", () => {
   assert.equal(parsed.bounds, null);
   assert.equal(parsed.near, null);
   assert.equal(parsed.radius, 10);
+});
+
+// --- Search: address/ZIP, "county", AND matching -----------------------------
+
+const kingston = { ...base, id: 10, name: "Rondout Bakery", town: "Kingston", county: "Ulster", tags: ["bread"], address: "12 Broadway, Kingston, NY 12401" };
+const hudson = { ...base, id: 11, name: "Warren Street Cider", town: "Hudson", county: "Columbia", tags: ["cider"], address: "400 Warren St, Hudson, NY 12534" };
+const chatham = { ...base, id: 12, name: "Chatham Creamery", town: "Chatham", county: "Columbia", tags: ["cheese"], address: null };
+const sample = [kingston, hudson, chatham];
+const ids = (rows) => rows.map((r) => r.listing.id);
+
+test("a 5-digit ZIP code matches the address", () => {
+  assert.deepEqual(ids(filterListings(sample, { q: "12401" })), [10]);
+  assert.deepEqual(ids(filterListings(sample, { q: "12534" })), [11]);
+  assert.deepEqual(ids(filterListings(sample, { q: "99999" })), []);
+});
+
+test("a street name matches the address", () => {
+  assert.deepEqual(ids(filterListings(sample, { q: "broadway" })), [10]);
+  assert.deepEqual(ids(filterListings(sample, { q: "Warren St," })), [11], "punctuation around words is ignored");
+});
+
+test("the word 'county' is ignored and county names match in any case", () => {
+  assert.deepEqual(queryWords("Columbia County"), ["columbia"]);
+  const plain = ids(filterListings(sample, { q: "columbia" }));
+  assert.deepEqual(plain, [11, 12]);
+  for (const q of ["columbia county", "COLUMBIA", "Columbia COUNTY", "county columbia"]) {
+    assert.deepEqual(ids(filterListings(sample, { q })), plain, q);
+  }
+  assert.deepEqual(ids(filterListings(sample, { county: "columbia" })), [11, 12], "URL county is case-insensitive");
+});
+
+test("multi-word queries match only when every word matches somewhere", () => {
+  assert.deepEqual(ids(filterListings(sample, { q: "cider hudson" })), [11], "tag + town");
+  assert.deepEqual(ids(filterListings(sample, { q: "columbia cheese" })), [12], "county + tag");
+  assert.deepEqual(ids(filterListings(sample, { q: "warren 12534" })), [11], "name + ZIP");
+  assert.deepEqual(ids(filterListings(sample, { q: "cider kingston" })), [], "words split across listings don't match");
+});
+
+test("a query that is exactly a county name sets the county filter", () => {
+  const names = ["Columbia", "Ulster"];
+  assert.deepEqual(resolveSearch({ q: "columbia county", county: "" }, names), { county: "Columbia", countyFromQuery: true, words: [] });
+  assert.deepEqual(resolveSearch({ q: "Ulster", county: "" }, names), { county: "Ulster", countyFromQuery: true, words: [] });
+  // Not exactly a county: plain text search.
+  assert.deepEqual(resolveSearch({ q: "columbia cider", county: "" }, names), { county: "", countyFromQuery: false, words: ["columbia", "cider"] });
+  // An explicit county wins; the query stays a text search within it.
+  assert.deepEqual(resolveSearch({ q: "columbia", county: "ulster" }, names), { county: "Ulster", countyFromQuery: false, words: ["columbia"] });
+});
+
+// --- Most restrictive filter --------------------------------------------------
+
+test("the most restrictive filter is the one whose removal shows the most listings", () => {
+  const here = { lat: 41.93, lng: -74.0 };
+  const listings = [
+    // 3 Columbia listings far from `here`, one of them cider.
+    { ...base, id: 1, county: "Columbia", category: "craftbeverages", latitude: 42.25, longitude: -73.79, location_precision: "street" },
+    { ...base, id: 2, county: "Columbia", category: "food", latitude: 42.36, longitude: -73.6, location_precision: "street" },
+    { ...base, id: 3, county: "Columbia", category: "food", latitude: 42.3, longitude: -73.7, location_precision: "town" },
+    // 1 Ulster listing near `here`.
+    { ...base, id: 4, county: "Ulster", category: "food", latitude: 41.94, longitude: -74.0, location_precision: "street" },
+  ];
+  const filters = { q: "", category: "craftbeverages", county: "Columbia", near: here, radius: 5, bounds: null };
+  assert.equal(filterListings(listings, filters).length, 0);
+  const labels = activeFilters(filters, ["Columbia", "Ulster"]).map((f) => f.label);
+  assert.deepEqual(labels, ["Craft Beverages", "Columbia County", "Within 5 mi"]);
+  // Without category: 0 (still none near). Without county: 0. Without near: 1.
+  const best = mostRestrictiveFilter(listings, filters);
+  assert.equal(best.filter.key, "near");
+  assert.equal(best.count, 1);
+  assert.deepEqual(best.filter.remove, { near: null });
+});
+
+test("a county taken from the query is removed by clearing the query", () => {
+  const f = activeFilters({ q: "columbia county", category: "", county: "", near: null, bounds: null }, ["Columbia"]);
+  assert.deepEqual(f.map((x) => [x.key, x.label, x.remove]), [["county", "Columbia County", { q: "" }]]);
+});
+
+test("when no single removal helps, the best count is 0", () => {
+  const listings = [{ ...base, id: 1, county: "Ulster", category: "food" }];
+  const best = mostRestrictiveFilter(listings, { q: "zzz", category: "maple", county: "", near: null, bounds: null });
+  assert.equal(best.count, 0);
+});
+
+test("no active filters means nothing is most restrictive", () => {
+  assert.equal(mostRestrictiveFilter([base], { q: "", category: "", county: "", near: null, bounds: null }), null);
+});
+
+// --- Merging nearby approximate circles ----------------------------------------
+
+test("approximate circles within 1.5 miles merge at the average of their centers", () => {
+  // ~0.7 mi apart (0.01 deg latitude ~ 0.69 mi).
+  const a = { ...base, id: 1, latitude: 42.0, longitude: -74.0, location_precision: "town" };
+  const b = { ...base, id: 2, latitude: 42.01, longitude: -74.0, location_precision: "postal_code" };
+  const b2 = { ...base, id: 3, latitude: 42.01, longitude: -74.0, location_precision: "postal_code" };
+  // ~5.5 mi away: stays separate.
+  const far = { ...base, id: 4, latitude: 42.08, longitude: -74.0, location_precision: "town" };
+  // A street pin right on top of `a`: never merged into a circle.
+  const pin = { ...base, id: 5, latitude: 42.0, longitude: -74.0, location_precision: "street" };
+  const groups = groupApproximate(filterListings([a, b, b2, far, pin]));
+  assert.equal(groups.length, 2);
+  const merged = groups.find((g) => g.listings.length === 3);
+  assert.deepEqual(merged.listings.map((l) => l.id).sort(), [1, 2, 3]);
+  // Average of the two distinct centers (not weighted by listing count).
+  assert.ok(Math.abs(merged.lat - 42.005) < 1e-9);
+  assert.ok(Math.abs(merged.lng - -74.0) < 1e-9);
+  // Still covers each member's ~2 mile area.
+  assert.ok(merged.radiusMeters > APPROXIMATE_RADIUS_METERS);
+  assert.ok(groups.every((g) => !g.listings.some((l) => l.id === 5)), "the street pin is never in a circle");
+  assert.deepEqual(groups.find((g) => g !== merged).listings.map((l) => l.id), [4]);
+});
+
+test("circles just over 1.5 miles apart stay separate", () => {
+  // 0.0225 deg latitude ~ 1.55 mi.
+  const a = { ...base, id: 1, latitude: 42.0, longitude: -74.0, location_precision: "town" };
+  const b = { ...base, id: 2, latitude: 42.0225, longitude: -74.0, location_precision: "town" };
+  assert.ok(distanceMiles({ lat: 42, lng: -74 }, { lat: 42.0225, lng: -74 }) > MERGE_DISTANCE_MILES);
+  assert.equal(groupApproximate(filterListings([a, b])).length, 2);
+});
+
+test("circles chained within 1.5 miles of each other all merge", () => {
+  // Three circles 1 mi apart in a line: 1-2 and 2-3 are each within range, so
+  // all three share one circle at the average of their centers.
+  const step = 1 / 69.05; // ~1 mi of latitude
+  const ls = [0, 1, 2].map((i) => ({ ...base, id: i + 1, latitude: 42 + i * step, longitude: -74.0, location_precision: "town" }));
+  const groups = groupApproximate(filterListings(ls));
+  assert.equal(groups.length, 1);
+  assert.equal(groups[0].listings.length, 3);
+  assert.ok(Math.abs(groups[0].lat - (42 + step)) < 1e-9);
 });
