@@ -13,7 +13,7 @@ import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 import { validateEmail, suggestEmailFix } from "./utils/email.js";
 import { submitListing, FIELD_MAX_LENGTHS } from "./utils/submit-listing.js";
 import { BOOK_LINKS } from "./data/book-links.js";
-import { ADMIN_STATUSES, canDeletePermanently, fetchAdminListings, setListingStatus, reopenListing, REOPENABLE_STATUSES, deleteListingPermanently, editFormFor, saveListingEdits } from "./utils/admin-listings.js";
+import { ADMIN_STATUSES, canDeletePermanently, fetchAdminListings, setListingStatus, reopenListing, REOPENABLE_STATUSES, confirmDialogCopy, deleteListingPermanently, editFormFor, saveListingEdits } from "./utils/admin-listings.js";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -2897,17 +2897,22 @@ function AdminPage() {
           {[...SERVED_COUNTIES, ...NON_GEOGRAPHIC_COUNTIES].map((c) => <option key={c} value={c} />)}
         </datalist>
       </div>
-      {confirming && (
+      {confirming && (() => {
+        const copy = confirmDialogCopy(confirming.action, confirming.listing);
+        return (
         <div className="modal-overlay" onClick={() => setConfirming(null)}>
           <div role="alertdialog" aria-modal="true" aria-labelledby="admin-confirm-title" onClick={(e) => e.stopPropagation()} style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 28, maxWidth: 440, width: "100%", color: "#1A2B3C" }}>
             <div id="admin-confirm-title" style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 20, fontWeight: 700, marginBottom: 12 }}>
-              {ADMIN_CONFIRM_COPY[confirming.action].title}
+              {copy.title}
             </div>
             <div style={{ fontSize: 15, marginBottom: 4 }}><strong>{confirming.listing.name}</strong></div>
             <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, color: "#4A6472", marginBottom: 16 }}>Current status: {confirming.listing.status}</div>
             <p style={{ fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
-              {ADMIN_CONFIRM_COPY[confirming.action].body}
+              {copy.body}
             </p>
+            {copy.warning && (
+              <p style={{ fontSize: 14, lineHeight: 1.6, marginBottom: 16, color: "#9B2C2C" }}>{copy.warning}</p>
+            )}
             {confirming.action === "delete" && (
               <>
                 <label htmlFor="admin-confirm-delete" style={adminLabelStyle}>Type DELETE to confirm</label>
@@ -2916,13 +2921,14 @@ function AdminPage() {
             )}
             <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
               <button type="button" onClick={confirmAction} disabled={busy || (confirming.action === "delete" && confirmText !== "DELETE")} style={{ ...adminPrimaryButton, ...(confirming.action === "delete" ? { background: "#9B2C2C" } : null), ...(busy || (confirming.action === "delete" && confirmText !== "DELETE") ? { opacity: 0.5, cursor: "not-allowed" } : null) }}>
-                {ADMIN_CONFIRM_COPY[confirming.action].button}
+                {copy.button}
               </button>
               <button type="button" onClick={() => setConfirming(null)} style={adminSecondaryButton}>Cancel</button>
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
@@ -2931,13 +2937,6 @@ const adminPrimaryButton = { background: "#1C3A5E", color: "#EFF0E8", border: "n
 const adminSecondaryButton = { background: "#F5F6F0", color: "#C4862D", border: "1.5px solid #C4862D", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" };
 const adminLabelStyle = { display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#4A6472", margin: "8px 0 4px" };
 const adminInputStyle = { width: "100%", padding: "8px 10px", fontFamily: "'Lora',serif", fontSize: 14, border: "1.5px solid #1C3A5E", background: "#EFF0E8", color: "#1A2B3C" };
-// Confirmation dialog copy per admin action.
-const ADMIN_CONFIRM_COPY = {
-  close: { title: "Close this listing?", body: "Sets the status to closed. It leaves the public site on the next build and can be reopened later.", button: "Close listing" },
-  duplicate: { title: "Mark this listing as a duplicate?", body: "Sets the status to duplicate. It leaves the public site on the next build and can be restored later.", button: "Mark duplicate" },
-  reopen: { title: "Reopen and publish this listing?", body: "Sets the status to published. It returns to the public site on the next build.", button: "Reopen (publish)" },
-  delete: { title: "Delete this listing permanently?", body: "Removes the row from the database. This can't be undone.", button: "Delete permanently" },
-};
 const ADMIN_EDIT_FIELDS = [
   { key: "name", label: "Name" },
   { key: "category", label: "Category" },

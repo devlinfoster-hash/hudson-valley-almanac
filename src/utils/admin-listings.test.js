@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   ADMIN_LISTING_COLUMNS, EDITABLE_FIELDS, PRIVATE_COLUMNS, canDeletePermanently, fetchAdminListings,
-  setListingStatus, reopenListing, REOPENABLE_STATUSES, deleteListingPermanently, editFormFor, buildListingEdits, saveListingEdits,
+  setListingStatus, reopenListing, REOPENABLE_STATUSES, confirmDialogCopy, REOPEN_DUPLICATE_WARNING, deleteListingPermanently, editFormFor, buildListingEdits, saveListingEdits,
 } from "./admin-listings.js";
 
 const READABLE = ["id", "slug", "name", "description", "category", "county", "town", "established", "tags", "address", "phone", "website", "hours", "featured", "verified_at", "status", "created_at", "accepts_garden_produce"];
@@ -129,4 +129,21 @@ test("reopen surfaces an error when no row changed or the update fails", async (
   await assert.rejects(reopenListing(mockSupabase([{ data: [], error: null }]), closed), /no listing was changed/);
   await assert.rejects(reopenListing(mockSupabase([{ data: null, error: null }]), closed), /no listing was changed/);
   await assert.rejects(reopenListing(mockSupabase([{ data: null, error: new Error("permission denied") }]), closed), /permission denied/);
+});
+
+test("the reopen dialog warns on the Duplicate tab only", () => {
+  assert.equal(REOPEN_DUPLICATE_WARNING, "This listing was marked as a duplicate. Check that its original isn't already published before reopening, or the directory will show it twice.");
+  const dup = confirmDialogCopy("reopen", { ...PUBLISHED, status: "duplicate" });
+  assert.equal(dup.warning, REOPEN_DUPLICATE_WARNING);
+  assert.equal(dup.title, "Reopen and publish this listing?");
+  assert.equal(dup.body, "Sets the status to published. It returns to the public site on the next build.");
+  assert.equal(dup.button, "Reopen (publish)");
+
+  const closed = confirmDialogCopy("reopen", { ...PUBLISHED, status: "closed" });
+  assert.equal(closed.warning, null);
+  assert.deepEqual({ ...closed, warning: undefined }, { ...dup, warning: undefined });
+  assert.ok(!JSON.stringify(closed).includes("marked as a duplicate"));
+
+  // Other actions never carry the warning, even on a duplicate listing.
+  for (const action of ["close", "delete"]) assert.equal(confirmDialogCopy(action, { status: "duplicate" }).warning, null);
 });
