@@ -13,6 +13,7 @@ import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 import { validateEmail, suggestEmailFix } from "./utils/email.js";
 import { submitListing, FIELD_MAX_LENGTHS } from "./utils/submit-listing.js";
 import { BOOK_LINKS } from "./data/book-links.js";
+import { ADMIN_STATUSES, canDeletePermanently, fetchAdminListings, setListingStatus, deleteListingPermanently, editFormFor, saveListingEdits } from "./utils/admin-listings.js";
 
 // ---------------------------------------------------------------------------
 // GA4 event helpers (inlined — no external file needed).
@@ -166,8 +167,7 @@ const QUICK_FILTERS = [
 const PUBLIC_LISTING_COLUMNS =
   "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, verified_at";
 
-// The admin dashboard's columns: only what its cards show, sort, and filter on.
-const ADMIN_LISTING_COLUMNS = "id, name, category, town, county, phone, description, status, created_at";
+// The admin dashboard's columns live in src/utils/admin-listings.js.
 
 const CONTACT_EMAIL = "hello@hudsonvalleyalmanac.com";
 const FACEBOOK_URL = "https://www.facebook.com/1072963332575328";
@@ -2599,6 +2599,15 @@ function AdminPage() {
   const [tab, setTab] = useState("pending");
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState("");
+  // Result of the last action: { kind: "success" | "error", text }.
+  const [notice, setNotice] = useState(null);
+  // Destructive action awaiting confirmation: { listing, action }, where
+  // action is "close" | "duplicate" | "delete".
+  const [confirming, setConfirming] = useState(null);
+  const [confirmText, setConfirmText] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState(null);
+  const [busy, setBusy] = useState(false);
 
   // Restore any existing session and subscribe to auth changes.
   useEffect(() => {
@@ -2663,26 +2672,7 @@ function AdminPage() {
     setLoading(true);
     setLoadError("");
     try {
-      // PostgREST silently caps a single select at 1000 rows, so the admin
-      // dashboard previously missed every listing past the first 1000. Page
-      // through with .range() until a short page returns — same approach as the
-      // public homepage fetch. Order by id so ranged pages never overlap or skip.
-      const pageSize = 1000;
-      const all = [];
-      for (let from = 0; ; from += pageSize) {
-        const { data, error } = await supabase
-          .from("listings")
-          .select(ADMIN_LISTING_COLUMNS)
-          .order("id", { ascending: true })
-          .range(from, from + pageSize - 1);
-        if (error) throw error;
-        if (!data || data.length === 0) break;
-        all.push(...data);
-        if (data.length < pageSize) break;
-      }
-      // Preserve the dashboard's newest-first display order.
-      all.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
-      setListings(all);
+      setListings(await fetchAdminListings(supabase));
     } catch (err) {
       console.error("Admin fetch error:", err);
       setLoadError(err.message || "Failed to load listings.");
@@ -2691,20 +2681,66 @@ function AdminPage() {
     }
   }
 
-  async function approve(id) {
-    const { error } = await supabase.from("listings").update({ status: "published" }).eq("id", id);
-    if (error) { alert("Approve failed: " + error.message); return; }
-    fetchAll();
-  }
-  async function reject(id) {
-    const { error } = await supabase.from("listings").delete().eq("id", id);
-    if (error) { alert("Delete failed: " + error.message); return; }
-    fetchAll();
+  // Runs one write, reports the outcome, and reloads the list on success.
+  async function runAction(work, successText, failurePrefix) {
+    setBusy(true);
+    setNotice(null);
+    try {
+      const text = await work();
+      setNotice({ kind: "success", text: text || successText });
+      fetchAll();
+      return true;
+    } catch (err) {
+      setNotice({ kind: "error", text: `${failurePrefix}: ${err.message || "unknown error"}` });
+      return false;
+    } finally {
+      setBusy(false);
+    }
   }
 
-  const pending = listings.filter((l) => l.status === "pending");
-  const published = listings.filter((l) => l.status === "published");
-  const shown = tab === "pending" ? pending : published;
+  function approve(l) {
+    runAction(() => setListingStatus(supabase, l, "published"), `Approved "${l.name}". It is now published.`, `Couldn't approve "${l.name}"`);
+  }
+
+  // Escape cancels the confirmation dialog.
+  useEffect(() => {
+    if (!confirming) return;
+    const onKey = (e) => { if (e.key === "Escape") setConfirming(null); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [confirming]);
+
+  function askToConfirm(listing, action) {
+    setConfirmText("");
+    setConfirming({ listing, action });
+  }
+
+  async function confirmAction() {
+    const { listing: l, action } = confirming;
+    if (action === "delete" && confirmText !== "DELETE") return;
+    setConfirming(null);
+    if (action === "close") await runAction(() => setListingStatus(supabase, l, "closed"), `Closed "${l.name}".`, `Couldn't close "${l.name}"`);
+    else if (action === "duplicate") await runAction(() => setListingStatus(supabase, l, "duplicate"), `Marked "${l.name}" as a duplicate.`, `Couldn't mark "${l.name}" as a duplicate`);
+    else await runAction(() => deleteListingPermanently(supabase, l), `Permanently deleted "${l.name}".`, `Couldn't delete "${l.name}"`);
+  }
+
+  function startEdit(l) {
+    setEditingId(l.id);
+    setEditForm(editFormFor(l));
+    setNotice(null);
+  }
+
+  async function saveEdit(l) {
+    const ok = await runAction(async () => {
+      const edits = await saveListingEdits(supabase, l, editForm);
+      const changed = Object.keys(edits);
+      return changed.length ? `Saved "${editForm.name.trim() || l.name}" (${changed.join(", ")}).` : `No changes to save for "${l.name}".`;
+    }, "", `Couldn't save "${l.name}"`);
+    if (ok) { setEditingId(null); setEditForm(null); }
+  }
+
+  const byStatus = Object.fromEntries(ADMIN_STATUSES.map((st) => [st, listings.filter((l) => l.status === st)]));
+  const shown = byStatus[tab] || [];
 
   const cardWrap = (children) => (
     <div style={{ fontFamily: "'Lora',serif", background: "#EFF0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
@@ -2777,13 +2813,19 @@ function AdminPage() {
         </div>
       </div>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
-        <div style={{ display: "flex", gap: 2, marginBottom: 24 }}>
-          {["pending", "published"].map((t) => (
+        <div style={{ display: "flex", gap: 2, marginBottom: 24, flexWrap: "wrap" }}>
+          {ADMIN_STATUSES.map((t) => (
             <button key={t} onClick={() => setTab(t)} style={{ padding: "10px 20px", background: tab === t ? "#1C3A5E" : "#F5F6F0", color: tab === t ? "#EFF0E8" : "#1C3A5E", border: "1.5px solid #1C3A5E", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>
-              {t} ({t === "pending" ? pending.length : published.length})
+              {t} ({byStatus[t].length})
             </button>
           ))}
         </div>
+        {notice && (
+          <div role={notice.kind === "error" ? "alert" : "status"} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "12px 16px", marginBottom: 16, border: `1.5px solid ${notice.kind === "error" ? "#9B2C2C" : "#1C3A5E"}`, background: "#F5F6F0", color: notice.kind === "error" ? "#9B2C2C" : "#1A2B3C", fontSize: 14 }}>
+            <span>{notice.text}</span>
+            <button type="button" aria-label="Dismiss message" onClick={() => setNotice(null)} style={{ background: "none", border: "none", color: "inherit", cursor: "pointer", fontSize: 14 }}>X</button>
+          </div>
+        )}
         {loading ? (
           <div style={{ textAlign: "center", padding: 40, color: "#4A6472", fontStyle: "italic" }}>Loading</div>
         ) : loadError ? (
@@ -2807,15 +2849,102 @@ function AdminPage() {
                 <div style={{ fontSize: 14, color: "#1A2B3C", lineHeight: 1.6 }}>{l.description}</div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 140 }}>
-                {tab === "pending" && (
-                  <button onClick={() => approve(l.id)} style={{ background: "#1C3A5E", color: "#EFF0E8", border: "none", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>Approve</button>
+                {l.status === "pending" && (
+                  <button onClick={() => approve(l)} disabled={busy} style={adminPrimaryButton}>Approve</button>
                 )}
-                <button onClick={() => reject(l.id)} style={{ background: "#F5F6F0", color: "#C4862D", border: "1.5px solid #C4862D", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>{tab === "pending" ? "Reject" : "Delete"}</button>
-                </div>
+                <button onClick={() => (editingId === l.id ? setEditingId(null) : startEdit(l))} disabled={busy} style={adminSecondaryButton}>{editingId === l.id ? "Cancel edit" : "Edit"}</button>
+                {l.status !== "closed" && (
+                  <button onClick={() => askToConfirm(l, "close")} disabled={busy} style={adminSecondaryButton}>Close listing</button>
+                )}
+                {l.status !== "duplicate" && (
+                  <button onClick={() => askToConfirm(l, "duplicate")} disabled={busy} style={adminSecondaryButton}>Mark duplicate</button>
+                )}
+                {canDeletePermanently(l) && (
+                  <button onClick={() => askToConfirm(l, "delete")} disabled={busy} style={{ ...adminSecondaryButton, color: "#9B2C2C", borderColor: "#9B2C2C" }}>Delete permanently</button>
+                )}
+              </div>
             </div>
+            {editingId === l.id && editForm && (
+              <form onSubmit={(e) => { e.preventDefault(); saveEdit(l); }} style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(28,58,94,0.2)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "4px 16px" }}>
+                {ADMIN_EDIT_FIELDS.map(({ key, label, multiline }) => (
+                  <div key={key} style={multiline ? { gridColumn: "1 / -1" } : undefined}>
+                    <label htmlFor={`admin-edit-${l.id}-${key}`} style={adminLabelStyle}>{label}</label>
+                    {key === "category" ? (
+                      <select id={`admin-edit-${l.id}-${key}`} value={editForm.category} onChange={(e) => setEditForm({ ...editForm, category: e.target.value })} style={adminInputStyle}>
+                        {!ADMIN_CATEGORY_OPTIONS.some((o) => o.value === editForm.category) && <option value={editForm.category}>{editForm.category || "(none)"}</option>}
+                        {ADMIN_CATEGORY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                      </select>
+                    ) : multiline ? (
+                      <textarea id={`admin-edit-${l.id}-${key}`} rows={4} value={editForm[key]} onChange={(e) => setEditForm({ ...editForm, [key]: e.target.value })} style={adminInputStyle} />
+                    ) : (
+                      <input id={`admin-edit-${l.id}-${key}`} value={editForm[key]} onChange={(e) => setEditForm({ ...editForm, [key]: e.target.value })} list={key === "county" ? "admin-county-options" : undefined} style={adminInputStyle} />
+                    )}
+                  </div>
+                ))}
+                <div style={{ gridColumn: "1 / -1", display: "flex", gap: 8 }}>
+                  <button type="submit" disabled={busy} style={adminPrimaryButton}>{busy ? "Saving" : "Save changes"}</button>
+                  <button type="button" onClick={() => setEditingId(null)} disabled={busy} style={adminSecondaryButton}>Cancel</button>
+                </div>
+              </form>
+            )}
           </div>
         ))}
+        <datalist id="admin-county-options">
+          {[...SERVED_COUNTIES, ...NON_GEOGRAPHIC_COUNTIES].map((c) => <option key={c} value={c} />)}
+        </datalist>
       </div>
+      {confirming && (
+        <div className="modal-overlay" onClick={() => setConfirming(null)}>
+          <div role="alertdialog" aria-modal="true" aria-labelledby="admin-confirm-title" onClick={(e) => e.stopPropagation()} style={{ background: "#F5F6F0", border: "2px solid #1C3A5E", padding: 28, maxWidth: 440, width: "100%", color: "#1A2B3C" }}>
+            <div id="admin-confirm-title" style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 20, fontWeight: 700, marginBottom: 12 }}>
+              {confirming.action === "close" ? "Close this listing?" : confirming.action === "duplicate" ? "Mark this listing as a duplicate?" : "Delete this listing permanently?"}
+            </div>
+            <div style={{ fontSize: 15, marginBottom: 4 }}><strong>{confirming.listing.name}</strong></div>
+            <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, color: "#4A6472", marginBottom: 16 }}>Current status: {confirming.listing.status}</div>
+            <p style={{ fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+              {confirming.action === "close"
+                ? "Sets the status to closed. It leaves the public site on the next build and can be reopened later."
+                : confirming.action === "duplicate"
+                  ? "Sets the status to duplicate. It leaves the public site on the next build and can be restored later."
+                  : "Removes the row from the database. This can't be undone."}
+            </p>
+            {confirming.action === "delete" && (
+              <>
+                <label htmlFor="admin-confirm-delete" style={adminLabelStyle}>Type DELETE to confirm</label>
+                <input id="admin-confirm-delete" autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} style={adminInputStyle} />
+              </>
+            )}
+            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+              <button type="button" onClick={confirmAction} disabled={busy || (confirming.action === "delete" && confirmText !== "DELETE")} style={{ ...adminPrimaryButton, ...(confirming.action === "delete" ? { background: "#9B2C2C" } : null), ...(busy || (confirming.action === "delete" && confirmText !== "DELETE") ? { opacity: 0.5, cursor: "not-allowed" } : null) }}>
+                {confirming.action === "close" ? "Close listing" : confirming.action === "duplicate" ? "Mark duplicate" : "Delete permanently"}
+              </button>
+              <button type="button" onClick={() => setConfirming(null)} style={adminSecondaryButton}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+const adminPrimaryButton = { background: "#1C3A5E", color: "#EFF0E8", border: "none", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" };
+const adminSecondaryButton = { background: "#F5F6F0", color: "#C4862D", border: "1.5px solid #C4862D", padding: "8px 16px", fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" };
+const adminLabelStyle = { display: "block", fontFamily: "'DM Mono',monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#4A6472", margin: "8px 0 4px" };
+const adminInputStyle = { width: "100%", padding: "8px 10px", fontFamily: "'Lora',serif", fontSize: 14, border: "1.5px solid #1C3A5E", background: "#EFF0E8", color: "#1A2B3C" };
+const ADMIN_EDIT_FIELDS = [
+  { key: "name", label: "Name" },
+  { key: "category", label: "Category" },
+  { key: "town", label: "Town" },
+  { key: "county", label: "County" },
+  { key: "address", label: "Address" },
+  { key: "phone", label: "Phone" },
+  { key: "website", label: "Website" },
+  { key: "hours", label: "Hours" },
+  { key: "tags", label: "Tags (comma separated)", multiline: false },
+  { key: "description", label: "Description", multiline: true },
+];
+// Every real DB category value, labeled by its tile (multi-key tiles list each key).
+const ADMIN_CATEGORY_OPTIONS = categories.flatMap((c) => {
+  const keys = categoryKeys(c);
+  return keys.map((k) => ({ value: k, label: keys.length > 1 ? `${c.label} (${k})` : c.label }));
+});
