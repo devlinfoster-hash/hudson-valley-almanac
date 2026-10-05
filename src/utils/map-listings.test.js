@@ -313,7 +313,7 @@ test("no active filters means nothing is most restrictive", () => {
 
 // --- Merging nearby approximate circles ----------------------------------------
 
-test("approximate circles within 1.5 miles merge at the average of their centers", () => {
+test("approximate circles within 2 miles merge at the average of their centers", () => {
   // ~0.7 mi apart (0.01 deg latitude ~ 0.69 mi).
   const a = { ...base, id: 1, latitude: 42.0, longitude: -74.0, location_precision: "town" };
   const b = { ...base, id: 2, latitude: 42.01, longitude: -74.0, location_precision: "postal_code" };
@@ -335,18 +335,29 @@ test("approximate circles within 1.5 miles merge at the average of their centers
   assert.deepEqual(groups.find((g) => g !== merged).listings.map((l) => l.id), [4]);
 });
 
-test("circles just over 1.5 miles apart stay separate", () => {
+test("circles about 1.55 miles apart merge", () => {
   // 0.0225 deg latitude ~ 1.55 mi.
   const a = { ...base, id: 1, latitude: 42.0, longitude: -74.0, location_precision: "town" };
   const b = { ...base, id: 2, latitude: 42.0225, longitude: -74.0, location_precision: "town" };
-  assert.ok(distanceMiles({ lat: 42, lng: -74 }, { lat: 42.0225, lng: -74 }) > MERGE_DISTANCE_MILES);
+  assert.ok(distanceMiles({ lat: 42, lng: -74 }, { lat: 42.0225, lng: -74 }) < MERGE_DISTANCE_MILES);
+  const groups = groupApproximate(filterListings([a, b]));
+  assert.equal(groups.length, 1);
+  assert.deepEqual(groups[0].listings.map((l) => l.id).sort(), [1, 2]);
+});
+
+test("circles just over 2 miles apart stay separate", () => {
+  // 0.0297 deg latitude ~ 2.05 mi.
+  const a = { ...base, id: 1, latitude: 42.0, longitude: -74.0, location_precision: "town" };
+  const b = { ...base, id: 2, latitude: 42.0297, longitude: -74.0, location_precision: "town" };
+  assert.ok(distanceMiles({ lat: 42, lng: -74 }, { lat: 42.0297, lng: -74 }) > MERGE_DISTANCE_MILES);
   assert.equal(groupApproximate(filterListings([a, b])).length, 2);
 });
 
-test("circles chained within 1.5 miles of each other all merge", () => {
-  // Three circles 1 mi apart in a line: 1-2 and 2-3 are each within range, so
-  // all three share one circle at the average of their centers.
-  const step = 1 / 69.05; // ~1 mi of latitude
+test("circles chained within 2 miles of each other all merge", () => {
+  // Three circles 1.5 mi apart in a line: 1-2 and 2-3 are each within range
+  // (1-3, 3 mi apart, is not), so all three share one circle at the average of
+  // their centers.
+  const step = 1.5 / 69.05; // ~1.5 mi of latitude
   const ls = [0, 1, 2].map((i) => ({ ...base, id: i + 1, latitude: 42 + i * step, longitude: -74.0, location_precision: "town" }));
   const groups = groupApproximate(filterListings(ls));
   assert.equal(groups.length, 1);

@@ -307,7 +307,7 @@ export function mostRestrictiveFilter(listings, filters, { countyNames } = {}) {
 }
 
 // Approximate-area circles whose centers are within this distance merge.
-export const MERGE_DISTANCE_MILES = 1.5;
+export const MERGE_DISTANCE_MILES = 2.0;
 
 // Merges approximate-area circles so overlapping town/ZIP centroids don't stack
 // into an opaque blob. Any two circles whose centers are within
