@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/snapshot.mjs && node scripts/check-guide-links.mjs && vite-react-ssg dev",
-    "build": "node scripts/snapshot.mjs && node scripts/check-guide-links.mjs && vite-react-ssg build && node scripts/generate-sitemap.mjs",
+    "build": "node scripts/snapshot.mjs && node scripts/check-guide-links.mjs && vite-react-ssg build && node scripts/generate-sitemap.mjs && node scripts/check-service-worker.mjs",
     "preview": "vite preview",
     "test": "node --test \"src/utils/*.test.js\" \"src/pwa/*.test.js\"",
     "check-guide-links": "node scripts/check-guide-links.mjs",

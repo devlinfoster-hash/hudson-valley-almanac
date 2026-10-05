@@ -9,6 +9,7 @@
 // dynamically for the same reason.
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { isOurCache, isPwaKilled } from "./pwa-options.js";
 
 const DISMISS_KEY = "hva:install-dismissed:v1";
 
@@ -46,8 +47,18 @@ export default function PwaPrompts() {
   const updateSW = useRef(null);
 
   // Service worker: register on load; offer a refresh when an update waits.
+  // With the kill switch on (VITE_PWA_KILL=1 at build), register nothing and
+  // remove any worker and caches an earlier version left behind.
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
+    if (isPwaKilled(import.meta.env)) {
+      navigator.serviceWorker.getRegistrations()
+        .then((regs) => Promise.all(regs.map((r) => r.unregister())))
+        .then(() => (window.caches ? caches.keys() : []))
+        .then((names) => Promise.all(names.filter(isOurCache).map((n) => caches.delete(n))))
+        .catch(() => {});
+      return;
+    }
     let cancelled = false;
     import("virtual:pwa-register")
       .then(({ registerSW }) => {
