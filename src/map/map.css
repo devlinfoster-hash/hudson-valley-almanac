@@ -61,6 +61,10 @@
 .mp-map, .mp-map-loading { width: 100%; height: 100%; }
 .mp-map-loading { display: flex; align-items: center; justify-content: center; font-style: italic; color: #4A6472; background: #E4E6DC; }
 .mp-area-btn { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 500; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+.mp-reset-control.leaflet-bar { border-radius: 0; }
+.mp-reset-btn { display: block; background: #fff; color: #1C3A5E; border: none; padding: 7px 9px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
+.mp-reset-btn:hover { background: #F5F6F0; }
+.mp-reset-btn:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
 
 /* Pins, clusters, approximate-area labels */
 .mp-pin { background: none; border: none; }
