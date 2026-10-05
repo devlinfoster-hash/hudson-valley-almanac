@@ -19,3 +19,26 @@ export function assertMapSnapshot(rows, min = MIN_MAP_LISTINGS) {
     );
   }
 }
+
+// True when the build runs on Vercel or a CI runner (VERCEL or CI set). "0" and
+// "false" count as unset, since `CI=false` is a common way to opt out.
+function isSet(value) {
+  const v = String(value ?? "").trim().toLowerCase();
+  return v !== "" && v !== "0" && v !== "false";
+}
+export function isCiBuild(env) {
+  return isSet(env?.VERCEL) || isSet(env?.CI);
+}
+
+// On Vercel/CI, a missing Supabase URL or key is a misconfiguration: throw
+// rather than ship an empty map. Local builds and `npm run dev` may run without
+// them (the snapshot then writes an empty map file), so nothing is thrown there.
+export function assertSupabaseEnvForCi(env, { url, key }) {
+  if (!isCiBuild(env) || (url && key)) return;
+  const missing = [!url && "VITE_SUPABASE_URL (or SUPABASE_URL)", !key && "VITE_SUPABASE_ANON_KEY (or SUPABASE_ANON_KEY)"].filter(Boolean);
+  const plural = missing.length > 1;
+  throw new Error(
+    `${missing.join(" and ")} ${plural ? "are" : "is"} not set on this ${isSet(env.VERCEL) ? "Vercel" : "CI"} build, ` +
+      `so the map snapshot can't be fetched. Set ${plural ? "them" : "it"} in the project's environment variables.`
+  );
+}

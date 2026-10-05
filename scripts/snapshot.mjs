@@ -16,7 +16,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { NON_GEOGRAPHIC_COUNTIES } from "../src/catalog.js";
-import { assertMapSnapshot } from "../src/utils/map-snapshot.js";
+import { assertMapSnapshot, assertSupabaseEnvForCi } from "../src/utils/map-snapshot.js";
 
 const OUT_PATH = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -101,8 +101,9 @@ async function fetchNews() {
 // rest of the site never downloads it. Explicit column allowlist, never
 // select('*'): only the public columns the map page renders or filters on.
 // Unlike books, a failed fetch, or fewer than MIN_MAP_LISTINGS rows, fails the
-// build (exit 1) rather than shipping an empty map. With no Supabase env at all
-// (a local build), it writes an empty list like the other snapshots.
+// build (exit 1) rather than shipping an empty map. Missing Supabase env also
+// fails the build on Vercel/CI (VERCEL or CI set); only a local build or
+// `npm run dev` writes an empty list, like the other snapshots.
 const MAP_OUT_PATH = resolve(dirname(OUT_PATH), "listings-map.json");
 const MAP_COLUMNS =
   "id, slug, name, category, tags, town, county, address, phone, website, hours, verification_status, is_online_or_statewide, latitude, longitude, location_precision";
@@ -167,7 +168,14 @@ async function main() {
       process.exit(1);
     }
   } else {
-    console.warn("[snapshot] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY not set; writing empty map listings.");
+    // On Vercel/CI a missing URL or key is a misconfiguration, not a local build.
+    try {
+      assertSupabaseEnvForCi(process.env, { url: SUPABASE_URL, key: SUPABASE_ANON_KEY });
+    } catch (err) {
+      console.error(`[snapshot] ERROR: ${err.message} Failing the build.`);
+      process.exit(1);
+    }
+    console.warn("[snapshot] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY not set (local build); writing empty map listings.");
   }
   await writeFile(
     MAP_OUT_PATH,
