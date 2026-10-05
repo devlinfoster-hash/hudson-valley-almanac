@@ -437,3 +437,79 @@
   .pwa-toast-close { min-width: 44px; min-height: 44px; background: none; border: none; color: rgba(239,240,232,0.8); font-size: 16px; cursor: pointer; }
   .pwa-toast-btn:focus-visible, .pwa-toast-close:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
   @media (max-width: 860px) { .pwa-prompts-map { bottom: 68px; } }
+
+  /* Trips: "Add to trip" (TripButton and its popup twin), the picker, and the
+     /trip page. Buttons are 44px targets. */
+  .trip-btn-wrap { position: relative; display: inline-flex; flex-direction: column; align-items: flex-end; }
+  .trip-btn { min-height: 44px; padding: 0 12px; background: #F5F6F0; color: #1C3A5E; border: 1.5px solid #1C3A5E; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; cursor: pointer; }
+  .trip-btn:hover { background: rgba(28,58,94,0.08); }
+  .trip-btn.in-trip { background: #1C3A5E; color: #EFF0E8; }
+  .trip-btn:focus-visible, .trip-picker-item:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
+  .trip-picker { position: absolute; top: calc(100% + 4px); right: 0; z-index: 50; display: flex; flex-direction: column; min-width: 200px; max-width: 260px; background: #F5F6F0; border: 1.5px solid #1C3A5E; box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
+  .trip-picker-inline { position: static; margin-top: 4px; max-width: none; box-shadow: none; }
+  .trip-picker-inline[hidden] { display: none; }
+  .trip-picker-title { padding: 8px 12px 4px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #4A6472; }
+  .trip-picker-item { display: flex; justify-content: space-between; gap: 10px; min-height: 44px; padding: 0 12px; background: none; border: none; border-top: 1px solid rgba(28,58,94,0.12); font-family: 'Lora', serif; font-size: 14px; color: #1A2B3C; text-align: left; cursor: pointer; align-items: center; }
+  .trip-picker-item:hover { background: rgba(196,134,45,0.12); }
+  .trip-picker-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #4A6472; }
+  .trip-btn-msg { display: block; max-width: 240px; margin-top: 4px; font-size: 12px; font-style: italic; color: #A23B2A; text-align: right; }
+  .trip-btn-msg:empty { display: none; }
+  .listing-trip .trip-btn { border-radius: 0; }
+
+  .trip-page .trip-name-row { margin: 4px 0 6px; }
+  .trip-name-input { width: 100%; min-height: 48px; padding: 6px 10px; font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: #1A2B3C; background: transparent; border: 1.5px dashed rgba(28,58,94,0.35); }
+  .trip-name-input:focus { outline: none; border: 1.5px solid #C4862D; background: #F5F6F0; }
+  .trip-error { color: #A23B2A; font-size: 14px; font-style: italic; margin-top: 4px; }
+  .trip-manager { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 16px; }
+  .trip-manager-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #4A6472; }
+  .trip-manager .mp-select { min-height: 44px; flex: 1 1 180px; }
+  .trip-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .trip-btn-primary, .trip-btn-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer; border: 1.5px solid #1C3A5E; }
+  .trip-btn-primary { background: #1C3A5E; color: #EFF0E8; }
+  .trip-btn-primary:hover { background: #14304F; }
+  .trip-btn-secondary { background: transparent; color: #1C3A5E; }
+  .trip-btn-secondary:hover { background: rgba(28,58,94,0.08); }
+  .trip-btn-secondary:disabled { opacity: 0.5; cursor: default; }
+  .trip-btn-danger { color: #A23B2A; border-color: #A23B2A; }
+  .trip-btn-primary:focus-visible, .trip-btn-secondary:focus-visible, .trip-small-btn:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
+  .trip-reminder { margin: 6px 0 4px; padding: 8px 12px; background: rgba(196,134,45,0.12); border-left: 3px solid #C4862D; font-style: italic; color: #7A4B12; }
+  .trip-hint { font-size: 13px; font-style: italic; color: #4A6472; }
+  .trip-notice { margin: 8px 0; font-size: 14px; color: #1C3A5E; }
+  .trip-share-url { width: 100%; min-height: 44px; padding: 8px 10px; font-family: 'DM Mono', monospace; font-size: 12px; border: 1.5px solid #1C3A5E; background: #F5F6F0; }
+  .trip-map { height: 340px; margin: 12px 0 16px; border: 1.5px solid #1C3A5E; position: relative; isolation: isolate; }
+  .trip-shared-banner { padding: 16px; margin-bottom: 12px; background: #F5F6F0; border: 1.5px solid #1C3A5E; border-top: 4px solid #C4862D; }
+  .trip-shared-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #C4862D; }
+  .trip-stop-details { margin-top: 6px; }
+  .trip-approx { display: inline-block; margin-bottom: 4px; padding: 1px 6px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #7A4B12; background: rgba(196,134,45,0.15); }
+  .trip-stop-fields { display: grid; grid-template-columns: 74px 1fr; gap: 2px 8px; margin: 2px 0 6px; font-size: 13px; }
+  .trip-stop-fields dt { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #4A6472; padding-top: 2px; }
+  .trip-stop-fields dd { margin: 0; overflow-wrap: anywhere; }
+  .trip-stop-fields a { color: #1C3A5E; }
+  .trip-stop-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+  .trip-small-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; background: #F5F6F0; color: #1C3A5E; border: 1px solid rgba(28,58,94,0.4); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.04em; text-decoration: none; cursor: pointer; }
+  .trip-small-btn:disabled { opacity: 0.4; cursor: default; }
+  .trip-stops .mp-result { padding: 12px 4px; }
+
+  /* Printing /trip: just the numbered stops with address, phone and website. */
+  @media print {
+    body:has(.trip-page) .topnav,
+    body:has(.trip-page) .pwa-prompts,
+    body:has(.trip-page) footer,
+    .trip-page button,
+    .trip-page .trip-actions,
+    .trip-page .trip-manager,
+    .trip-page .trip-map,
+    .trip-page .trip-hint,
+    .trip-page .trip-notice,
+    .trip-page .trip-share-url,
+    .trip-page .trip-stop-buttons,
+    .trip-page .mp-result-actions,
+    .trip-page .mp-result-loc,
+    .trip-page .mp-result-dot { display: none !important; }
+    .saved-page-wrap { background: #fff; min-height: 0; }
+    .trip-page { max-width: none; padding: 0; }
+    .trip-name-input { border: none; padding: 0; font-size: 20px; }
+    .trip-page .saved-results { border: none; background: none; padding: 0; }
+    .trip-page .mp-result { break-inside: avoid; }
+    .trip-page a { color: #000; text-decoration: none; }
+  }

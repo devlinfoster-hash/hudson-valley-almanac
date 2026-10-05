@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import mapDataUrl from "../data/listings-map.json?url";
 import { SavedButton } from "../SavedButton.jsx";
+import { TripButton } from "../TripButton.jsx";
 import {
   APPROXIMATE_LABEL,
   NOT_ON_MAP,
@@ -37,9 +38,10 @@ export function useMapData() {
 }
 
 // `onFocus(row)` shows the listing on the map beside the list (/map); without
-// it, "See on map" links to /map?listing=<slug> (/saved). `onRemove` adds a
-// Remove button.
-export function ResultItem({ row, selected, onFocus, onRemove }) {
+// it, "See on map" links to /map?listing=<slug> (/saved, /trip). `onRemove`
+// adds a Remove button. /trip passes `number` (the stop's place in the trip),
+// `showTripButton={false}` and extra rows as `children`.
+export function ResultItem({ row, selected, onFocus, onRemove, number, showTripButton = true, readOnly = false, children }) {
   const { listing, placement, distance } = row;
   const style = categoryStyle(listing.category);
   const approximate = placement.kind === "circle";
@@ -47,6 +49,7 @@ export function ResultItem({ row, selected, onFocus, onRemove }) {
   return (
     <li className={"mp-result" + (selected ? " selected" : "")}>
       <div className="mp-result-main">
+        {number !== undefined && <span className="mp-result-number" aria-label={`Stop ${number}`}>{number}</span>}
         <span className="mp-result-dot" style={{ background: style.color }} aria-hidden="true">{style.icon}</span>
         <div className="mp-result-text">
           {listing.slug ? (
@@ -73,8 +76,14 @@ export function ResultItem({ row, selected, onFocus, onRemove }) {
               <button type="button" className="mp-remove" onClick={() => onRemove(row)}>Remove</button>
             )}
           </div>
+          {children}
         </div>
-        <SavedButton id={listing.id} name={listing.name} className="mp-result-save" />
+        {!readOnly && (
+          <div className="mp-result-actions">
+            {showTripButton && <TripButton id={listing.id} name={listing.name} className="mp-result-trip" />}
+            <SavedButton id={listing.id} name={listing.name} className="mp-result-save" />
+          </div>
+        )}
       </div>
     </li>
   );

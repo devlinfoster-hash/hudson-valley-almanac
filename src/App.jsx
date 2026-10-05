@@ -10,6 +10,8 @@ import SITE_STATS from "./data/site-stats.json";
 import FreezerFullContent from "./FreezerFullPage.jsx";
 import "./styles.css";
 import { SavedButton, useSavedIds } from "./SavedButton.jsx";
+import { TripButton, useTrips } from "./TripButton.jsx";
+import { currentTrip } from "./utils/trips.js";
 import PwaPrompts from "./pwa/PwaPrompts.jsx";
 import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 import { validateEmail, suggestEmailFix } from "./utils/email.js";
@@ -318,6 +320,7 @@ export const routes = [
       // only on the client) stays out of every other page's bundle.
       { path: "map", lazy: () => import("./map/MapPage.jsx").then((m) => ({ Component: m.default })) },
       { path: "saved", lazy: () => import("./SavedPage.jsx").then((m) => ({ Component: m.default })) },
+      { path: "trip", lazy: () => import("./TripPage.jsx").then((m) => ({ Component: m.default })) },
       {
         path: "county/:countySlug",
         Component: CountyPage,
@@ -1198,6 +1201,7 @@ const HEADER_LINKS = [
   { label: "Home", to: "/", end: true },
   { label: "Map", to: "/map" },
   { label: "Saved", to: "/saved", savedBadge: true },
+  { label: "Trip", to: "/trip", tripBadge: true },
   { label: "About", to: "/about" },
   { label: "Books", to: "/books" },
   { label: "News", to: "/news" },
@@ -1214,6 +1218,17 @@ function SavedNavLink({ className }) {
   return (
     <NavLink to="/saved" className={className} aria-label={count ? `Saved places (${count})` : "Saved places"}>
       Saved{count > 0 && <span className="saved-badge" aria-hidden="true">{count > 99 ? "99+" : count}</span>}
+    </NavLink>
+  );
+}
+
+// The header's Trip link, with a badge counting the stops in the current trip
+// on this device (none in the prerender).
+function TripNavLink({ className }) {
+  const count = currentTrip(useTrips().state)?.stops.length || 0;
+  return (
+    <NavLink to="/trip" className={className} aria-label={count ? `Trip (${count} ${count === 1 ? "stop" : "stops"})` : "Trip"}>
+      Trip{count > 0 && <span className="saved-badge" aria-hidden="true">{count}</span>}
     </NavLink>
   );
 }
@@ -1246,6 +1261,7 @@ function TopNav() {
           </button>
           <NavLink to="/map" className="topnav-link topnav-map">Map</NavLink>
           <SavedNavLink className="topnav-link topnav-map" />
+          <TripNavLink className="topnav-link topnav-map" />
         </div>
         <div id="topnav-links" className={"topnav-links" + (menuOpen ? " open" : "")}>
           {HEADER_LINKS.map((item) => {
@@ -1256,6 +1272,7 @@ function TopNav() {
               <a key={item.label} href={item.href} className={className} aria-label={item.ariaLabel} {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{item.label}</a>
             ) : (
               item.savedBadge ? <SavedNavLink key={item.label} className={className} /> :
+              item.tripBadge ? <TripNavLink key={item.label} className={className} /> :
               <NavLink key={item.label} to={item.to} end={item.end} className={className}>{item.label}</NavLink>
             );
           })}
@@ -2423,6 +2440,7 @@ function ListingPage() {
         <Link to="/" className="back-link">← Back to all resources</Link>
         {listing && (
           <div className="listing-page-actions">
+            <TripButton id={listing.id} name={listing.name} className="listing-trip" />
             <SavedButton id={listing.id} name={listing.name} withText className="listing-save" />
             <button className="share-btn" onClick={handleShare}>Share</button>
           </div>

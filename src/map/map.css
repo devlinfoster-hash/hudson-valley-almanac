@@ -128,3 +128,19 @@ a.mp-popup-value { color: #1C3A5E; }
 .mp-remove { background: none; border: none; padding: 0; color: #A23B2A; font: inherit; text-decoration: underline; cursor: pointer; min-height: 32px; }
 .mp-popup-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
 .mp-popup-save { margin: -6px -8px 0 0; flex: 0 0 auto; }
+
+/* Trip planner: "Add to trip" beside the heart, stop numbers, numbered pins. */
+.mp-result-actions { flex: 0 0 auto; display: flex; align-items: flex-start; gap: 2px; }
+.mp-result-actions .mp-result-save { margin: 0 -4px 0 0; }
+.mp-result-trip .trip-btn { padding: 0 8px; font-size: 10px; }
+.mp-result-number { flex: 0 0 28px; height: 28px; border-radius: 50%; background: #1C3A5E; color: #EFF0E8; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; }
+.mp-popup-trip { align-items: flex-start; margin: 2px 0 8px; }
+.mp-popup-trip .trip-btn-msg { text-align: left; }
+.mp-pin-num { transform: rotate(45deg); font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: #fff; line-height: 1; }
+.leaflet-tooltip.mp-approx-label-numbered b { font-size: 12px; color: #1C3A5E; }
+.mp-zoom-low .leaflet-tooltip.mp-approx-label-numbered { display: block; }
+.mp-zoom-low .leaflet-tooltip.mp-approx-label-numbered .mp-approx-text { display: none; }
+@media (max-width: 480px) {
+  .mp-result-main { flex-wrap: wrap; }
+  .mp-result-actions { margin-left: auto; }
+}

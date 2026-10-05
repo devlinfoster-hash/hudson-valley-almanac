@@ -60,6 +60,10 @@ test("page navigations are network-first; other requests and non-GETs are left a
   assert.equal(cacheRuleFor(get(`${ORIGIN}/`, "navigate"), ORIGIN), "page");
   assert.equal(cacheRuleFor(get(`${ORIGIN}/listing/apple-barn`, "navigate"), ORIGIN), "page");
   assert.equal(cacheRuleFor(get(`${ORIGIN}/map?q=cider`, "navigate"), ORIGIN), "page");
+  // /trip (own or shared) gets only the network-first page rule, nothing more.
+  assert.equal(cacheRuleFor(get(`${ORIGIN}/trip`, "navigate"), ORIGIN), "page");
+  assert.equal(cacheRuleFor(get(`${ORIGIN}/trip?ids=12,408&name=Loop`, "navigate"), ORIGIN), "page");
+  assert.equal(cacheRuleFor(get(`${ORIGIN}/trip?ids=12`), ORIGIN), null);
   assert.equal(cacheRuleFor(get(`${ORIGIN}/book-covers/x.jpg`, "no-cors"), ORIGIN), null);
   assert.equal(cacheRuleFor({ url: `${ORIGIN}/`, method: "POST", mode: "navigate" }, ORIGIN), null);
   assert.equal(cacheRuleFor({ url: "not a url", method: "GET" }, ORIGIN), null);
