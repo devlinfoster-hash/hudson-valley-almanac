@@ -95,6 +95,36 @@ async function fetchNews() {
   return data || [];
 }
 
+// Map data for /map (public.listings_map, a public view with coordinates).
+// Written to its own JSON file that only the /map route fetches, lazily, so the
+// rest of the site never downloads it. Explicit column allowlist, never
+// select('*'): only the public columns the map page renders or filters on.
+// A failed fetch writes an empty list (the page then says no data is available)
+// rather than failing the whole build.
+const MAP_OUT_PATH = resolve(dirname(OUT_PATH), "listings-map.json");
+const MAP_COLUMNS =
+  "id, slug, name, category, tags, town, county, address, phone, website, hours, verification_status, is_online_or_statewide, latitude, longitude, location_precision";
+
+async function fetchMapListings() {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const pageSize = 1000;
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await supabase
+      .from("listings_map")
+      .select(MAP_COLUMNS)
+      .not("slug", "is", null)
+      .order("name", { ascending: true })
+      .order("id", { ascending: true })
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return all;
+}
+
 async function main() {
   let news = [];
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
@@ -123,6 +153,21 @@ async function main() {
     }
   }
   await writeFile(BOOKS_OUT_PATH, JSON.stringify(books), "utf8");
+
+  let mapListings = [];
+  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+    try {
+      mapListings = await fetchMapListings();
+      console.log(`[snapshot] ${mapListings.length} map listings fetched.`);
+    } catch (err) {
+      console.warn(`[snapshot] Failed to load map listings (${err.message}); writing an empty list.`);
+    }
+  }
+  await writeFile(
+    MAP_OUT_PATH,
+    JSON.stringify({ generatedAt: new Date().toISOString(), listings: mapListings }),
+    "utf8"
+  );
 
   let listings = [];
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
