@@ -29,6 +29,7 @@ import {
   websiteHref,
 } from "../utils/map-listings.js";
 import { isSaved, toggleSaved } from "../utils/saved.js";
+import { addStop, currentTrip, getTripsSnapshot, normId, removeStop, updateTrips } from "../utils/trips.js";
 
 // Roughly the Almanac's service area (Westchester/Rockland up to Warren/Hamilton).
 const DEFAULT_BOUNDS = L.latLngBounds([40.9, -75.4], [43.9, -73.2]);
@@ -118,6 +119,62 @@ function saveButton(listing) {
   return button;
 }
 
+// "Add to trip" for a popup (DOM twin of TripButton). Adds to the current trip
+// (creating "My trip" if needed); with several trips it lists them first. Once
+// added it reads "In your trip"; tapping removes the stop.
+function tripButton(listing) {
+  const box = el("div", "trip-btn-wrap mp-popup-trip");
+  const key = normId(listing.id);
+  const name = listing.name || "this listing";
+  const button = el("button", "trip-btn");
+  button.type = "button";
+  const picker = el("div", "trip-picker trip-picker-inline");
+  picker.hidden = true;
+  const msg = el("div", "trip-btn-msg");
+  msg.setAttribute("role", "status");
+  const show = (result, done) => {
+    msg.textContent = !result.ok ? result.error : result.persisted ? "" : `${done} for this visit only: this browser isn't letting the site store data.`;
+  };
+  const sync = () => {
+    const { state } = getTripsSnapshot();
+    const trip = currentTrip(state);
+    const inTrip = !!trip && trip.stops.includes(key);
+    button.classList.toggle("in-trip", inTrip);
+    button.setAttribute("aria-pressed", String(inTrip));
+    button.setAttribute("aria-label", inTrip ? `${name} is in your trip. Remove it` : `Add ${name} to a trip`);
+    button.textContent = inTrip ? "✓ In your trip" : "+ Add to trip";
+    return { state, inTrip };
+  };
+  const add = (tripId) => {
+    picker.hidden = true;
+    show(updateTrips((st) => addStop(st, key, tripId ? { tripId } : {})), "Added");
+    sync();
+  };
+  button.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const { state, inTrip } = sync();
+    if (inTrip) {
+      show(updateTrips((st) => removeStop(st, key)), "Removed");
+      sync();
+    } else if (state.trips.length > 1) {
+      picker.replaceChildren(el("div", "trip-picker-title", "Add to which trip?"));
+      for (const t of state.trips) {
+        const item = el("button", "trip-picker-item", t.name);
+        item.type = "button";
+        item.appendChild(el("span", "trip-picker-count", String(t.stops.length)));
+        item.addEventListener("click", (ev) => { ev.stopPropagation(); add(t.id); });
+        picker.appendChild(item);
+      }
+      picker.hidden = !picker.hidden;
+    } else {
+      add();
+    }
+  });
+  sync();
+  box.append(button, picker, msg);
+  return box;
+}
+
 // One listing's details. `approximate` adds the "approximate area" note.
 function listingBlock(listing, { approximate, onNavigate }) {
   const box = el("div", "mp-popup-listing");
@@ -129,6 +186,7 @@ function listingBlock(listing, { approximate, onNavigate }) {
   head.appendChild(title);
   head.appendChild(saveButton(listing));
   box.appendChild(head);
+  box.appendChild(tripButton(listing));
   if (approximate) {
     box.appendChild(
       el("p", "mp-popup-approx", `Location shown is an ${APPROXIMATE_LABEL} (about ${APPROXIMATE_RADIUS_MILES} miles), not the exact spot.`)
@@ -264,7 +322,22 @@ function ViewController({ viewTarget, viewKey, drawnBounds, initialBounds, cover
   return null;
 }
 
-function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
+// A numbered stop marker for /trip (numbers are ours, never listing data).
+function numberIcon(n, dbCategory) {
+  const color = categoryStyle(dbCategory).color;
+  return L.divIcon({
+    className: "mp-pin mp-pin-numbered",
+    html: `<span class="mp-pin-body" style="background:${color}"><span class="mp-pin-num">${Number(n)}</span></span>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -28],
+  });
+}
+
+// `numbered` (/trip): every row has a `number`; pins show it and are never
+// clustered, and approximate circles carry their stop numbers in the label.
+// No lines are drawn between stops.
+function Layers({ rows, near, onSelect, onNavigate, apiRef, numbered }) {
   const map = useMap();
   const state = useRef(null);
 
@@ -277,6 +350,7 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
         iconCreateFunction: clusterIcon,
       }),
       circles: L.layerGroup(),
+      plain: L.layerGroup(), // numbered pins (never clustered)
       nearLayer: L.layerGroup(),
       markers: new Map(), // listing id -> marker
       circleByListing: new Map(), // listing id -> circle for the current rows
@@ -291,6 +365,7 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
     const s = state.current;
     s.circles.addTo(map);
     s.cluster.addTo(map);
+    s.plain.addTo(map);
     s.nearLayer.addTo(map);
     const container = map.getContainer();
     const syncZoomClass = () => container.classList.toggle("mp-zoom-low", map.getZoom() < LABEL_MIN_ZOOM);
@@ -300,6 +375,7 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
       map.off("zoomend", syncZoomClass);
       s.circles.remove();
       s.cluster.remove();
+      s.plain.remove();
       s.nearLayer.remove();
     };
   }, [map]);
@@ -310,8 +386,22 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
       onNavigate: (path) => cb.current.onNavigate(path),
     };
     const points = [];
+    s.plain.clearLayers();
     for (const row of rows) {
       if (row.placement.kind !== "point") continue;
+      if (numbered) {
+        // Rebuilt every time: a stop's number changes when the trip is reordered.
+        const listing = row.listing;
+        const marker = L.marker([row.placement.lat, row.placement.lng], {
+          icon: numberIcon(row.number, listing.category),
+          title: `${row.number}. ${listing.name || ""}`,
+          alt: `Stop ${row.number}: ${listing.name || ""}`,
+        });
+        marker.bindPopup(() => popupContent([listing], { ...opts, approximate: false }), { maxWidth: 300, autoPanPadding: [20, 20] });
+        marker.addTo(s.plain);
+        s.markers.set(listing.id, marker);
+        continue;
+      }
       let marker = s.markers.get(row.listing.id);
       if (!marker) {
         const listing = row.listing;
@@ -342,14 +432,23 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
         fillColor: color,
         fillOpacity: 0.15,
       });
-      const label = group.listings.length > 1 ? `${APPROXIMATE_LABEL} · ${group.listings.length} listings` : APPROXIMATE_LABEL;
-      circle.bindTooltip(label, { permanent: true, direction: "center", className: "mp-approx-label", interactive: false });
+      if (numbered) {
+        // "1, 3 · approximate area"; the numbers stay visible at every zoom.
+        const numbers = rows.filter((r) => group.listings.includes(r.listing)).map((r) => r.number).sort((a, b) => a - b);
+        const label = el("span", "mp-approx-numbered");
+        label.appendChild(el("b", "", numbers.join(", ")));
+        label.appendChild(el("span", "mp-approx-text", ` · ${APPROXIMATE_LABEL}`));
+        circle.bindTooltip(label, { permanent: true, direction: "center", className: "mp-approx-label mp-approx-label-numbered", interactive: false });
+      } else {
+        const label = group.listings.length > 1 ? `${APPROXIMATE_LABEL} · ${group.listings.length} listings` : APPROXIMATE_LABEL;
+        circle.bindTooltip(label, { permanent: true, direction: "center", className: "mp-approx-label", interactive: false });
+      }
       circle.bindPopup(() => popupContent(group.listings, { ...opts, approximate: true }), { maxWidth: 300, maxHeight: 340, autoPanPadding: [20, 20] });
       circle.on("popupopen", () => cb.current.onSelect(group.listings[0].id));
       circle.addTo(s.circles);
       for (const l of group.listings) s.circleByListing.set(l.id, circle);
     }
-  }, [rows, map]);
+  }, [rows, map, numbered]);
 
   useEffect(() => {
     const s = state.current;
@@ -413,7 +512,7 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
   return null;
 }
 
-const MapView = forwardRef(function MapView({ rows, viewTarget, viewKey, initialBounds, coverRef, near, onSelect, onNavigate }, apiRef) {
+const MapView = forwardRef(function MapView({ rows, viewTarget, viewKey, initialBounds, coverRef, near, onSelect, onNavigate, numbered = false }, apiRef) {
   const drawnBounds = useMemo(() => {
     const pts = rows.filter((r) => r.placement.kind !== "none").map((r) => [r.placement.lat, r.placement.lng]);
     return pts.length ? L.latLngBounds(pts) : null;
@@ -434,7 +533,7 @@ const MapView = forwardRef(function MapView({ rows, viewTarget, viewKey, initial
           drawer (the map ends above the collapsed drawer bar). */}
       <AttributionControl position="bottomright" />
       <ResetViewControl initialBounds={initialBounds} coverRef={coverRef} />
-      <Layers rows={rows} near={near} onSelect={onSelect} onNavigate={onNavigate} apiRef={apiRef} />
+      <Layers rows={rows} near={near} onSelect={onSelect} onNavigate={onNavigate} apiRef={apiRef} numbered={numbered} />
       {ready && (
         <ViewController viewTarget={viewTarget} viewKey={viewKey} drawnBounds={drawnBounds} initialBounds={initialBounds} coverRef={coverRef} apiRef={apiRef} />
       )}
