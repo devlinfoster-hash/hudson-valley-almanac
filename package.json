@@ -7,7 +7,7 @@
     "dev": "node scripts/snapshot.mjs && node scripts/check-guide-links.mjs && vite-react-ssg dev",
     "build": "node scripts/snapshot.mjs && node scripts/check-guide-links.mjs && vite-react-ssg build && node scripts/generate-sitemap.mjs",
     "preview": "vite preview",
-    "test": "node --test src/utils/email.test.js",
+    "test": "node --test \"src/utils/*.test.js\"",
     "check-guide-links": "node scripts/check-guide-links.mjs",
     "redirects": "node scripts/sync-listing-redirects.mjs"
   },
