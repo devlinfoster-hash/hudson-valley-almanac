@@ -28,6 +28,7 @@ import {
   townCountyLine,
   websiteHref,
 } from "../utils/map-listings.js";
+import { isSaved, toggleSaved } from "../utils/saved.js";
 
 // Roughly the Almanac's service area (Westchester/Rockland up to Warren/Hamilton).
 const DEFAULT_BOUNDS = L.latLngBounds([40.9, -75.4], [43.9, -73.2]);
@@ -93,14 +94,41 @@ function field(label, text, href, external) {
   return row;
 }
 
+// The save heart for a popup (DOM twin of SavedButton). Popups are rebuilt on
+// each open, so it reads the saved state then and updates itself on click.
+function saveButton(listing) {
+  const button = el("button", "save-btn mp-popup-save");
+  button.type = "button";
+  const name = listing.name || "this listing";
+  button.setAttribute("aria-label", `Save ${name}`);
+  const sync = () => {
+    const saved = isSaved(listing.id);
+    button.classList.toggle("saved", saved);
+    button.setAttribute("aria-pressed", String(saved));
+    button.title = saved ? "Saved on this device" : `Save ${name}`;
+    button.replaceChildren(el("span", "", saved ? "♥" : "♡"));
+    button.firstChild.setAttribute("aria-hidden", "true");
+  };
+  sync();
+  button.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleSaved(listing.id);
+    sync();
+  });
+  return button;
+}
+
 // One listing's details. `approximate` adds the "approximate area" note.
 function listingBlock(listing, { approximate, onNavigate }) {
   const box = el("div", "mp-popup-listing");
   const style = categoryStyle(listing.category);
   box.appendChild(el("div", "mp-popup-cat", `${style.icon} ${style.label}`));
+  const head = el("div", "mp-popup-head");
   const title = el("div", "mp-popup-name", displayValue(listing.name));
   if (isVerified(listing)) title.appendChild(el("span", "mp-badge", "Verified"));
-  box.appendChild(title);
+  head.appendChild(title);
+  head.appendChild(saveButton(listing));
+  box.appendChild(head);
   if (approximate) {
     box.appendChild(
       el("p", "mp-popup-approx", `Location shown is an ${APPROXIMATE_LABEL} (about ${APPROXIMATE_RADIUS_MILES} miles), not the exact spot.`)

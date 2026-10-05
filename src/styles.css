@@ -410,3 +410,30 @@
   .trail-soon-name { color: #1A2B3C; }
   .trail-soon-area { color: #8AA0AE; font-size: 13px; }
   @media (max-width: 600px) { .trail-grid { grid-template-columns: 1fr; } }
+
+  /* Saved places: the heart (SavedButton and the map popup's twin), the header
+     badge, and the /saved page. Hearts are 44px targets. */
+  .save-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 0 10px; background: transparent; color: #A23B2A; border: 1.5px solid transparent; border-radius: 22px; font-size: 22px; line-height: 1; cursor: pointer; transition: background 0.15s; }
+  .save-btn:hover { background: rgba(162,59,42,0.08); }
+  .save-btn:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
+  .save-btn-text { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #1C3A5E; }
+  .listing-page-actions { display: flex; align-items: center; gap: 8px; }
+  .listing-save { border-color: #1C3A5E; border-radius: 0; padding: 0 14px; }
+  .saved-badge { display: inline-block; min-width: 18px; margin-left: 6px; padding: 1px 5px; background: #C4862D; color: #1C3A5E; border-radius: 9px; font-size: 10px; font-weight: 500; letter-spacing: 0; line-height: 16px; text-align: center; vertical-align: 1px; }
+  .saved-page-wrap { background: #EFF0E8; min-height: 100vh; }
+  .saved-page { max-width: 760px; margin: 0 auto; padding: 36px 20px 64px; font-family: 'Lora', Georgia, serif; color: #1A2B3C; }
+  .saved-title { font-family: 'Libre Baskerville', serif; font-size: 30px; font-weight: 700; margin-bottom: 6px; }
+  .saved-sub { color: #4A6472; font-style: italic; margin-bottom: 20px; }
+  .saved-note { color: #4A6472; font-style: italic; padding: 16px 0; border-top: 1px solid rgba(28,58,94,0.15); }
+  .saved-note a { color: #C4862D; }
+  .saved-results { background: #F5F6F0; border: 1.5px solid #1C3A5E; padding: 0 12px; }
+  .saved-results .mp-result:first-child { border-top: none; }
+
+  /* App prompts (src/pwa/PwaPrompts.jsx): small toasts at the bottom, lifted
+     above the results drawer on the mobile map. */
+  .pwa-prompts { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 8px; width: max-content; max-width: calc(100vw - 32px); }
+  .pwa-toast { display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px; background: #1C3A5E; color: #EFF0E8; border-bottom: 3px solid #C4862D; box-shadow: 0 4px 14px rgba(0,0,0,0.25); font-family: 'Lora', serif; font-size: 14px; }
+  .pwa-toast-btn { min-height: 44px; padding: 0 14px; background: #C4862D; color: #1C3A5E; border: none; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+  .pwa-toast-close { min-width: 44px; min-height: 44px; background: none; border: none; color: rgba(239,240,232,0.8); font-size: 16px; cursor: pointer; }
+  .pwa-toast-btn:focus-visible, .pwa-toast-close:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
+  @media (max-width: 860px) { .pwa-prompts-map { bottom: 68px; } }
