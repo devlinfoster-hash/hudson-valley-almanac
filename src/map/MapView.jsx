@@ -345,7 +345,8 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
       } else if (row.placement.kind === "circle") {
         const circle = s.circleByListing.get(row.listing.id);
         if (!circle) return;
-        map.flyTo([row.placement.lat, row.placement.lng], Math.max(map.getZoom(), 12), { duration: 0.6 });
+        // A merged circle sits at the average of its members' centers.
+        map.flyTo(circle.getLatLng(), Math.max(map.getZoom(), 12), { duration: 0.6 });
         map.once("moveend", () => circle.openPopup());
       }
     },
