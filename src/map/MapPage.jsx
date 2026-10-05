@@ -11,26 +11,21 @@
 // Every filter lives in the URL query string (see parseFilters/filtersToParams),
 // so any view can be shared by copying the address.
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Head } from "vite-react-ssg";
-import mapDataUrl from "../data/listings-map.json?url";
+import { ResultItem, useMapData } from "./ResultItem.jsx";
 import { categories, NON_GEOGRAPHIC_COUNTIES, SITE_ORIGIN } from "../catalog.js";
 import {
-  APPROXIMATE_LABEL,
   NEAR_ME_RADII,
-  NOT_ON_MAP,
   activeFilters,
-  categoryStyle,
   countyNamesOf,
   filterListings,
   filtersToParams,
-  isVerified,
   mostRestrictiveFilter,
   parseFilters,
   listingFocus,
   percentileBounds,
   resolveSearch,
-  townCountyLine,
 } from "../utils/map-listings.js";
 import "./map.css";
 
@@ -40,58 +35,6 @@ const PAGE_SIZE = 50;
 const TITLE = "Map — Hudson Valley Almanac";
 const DESCRIPTION =
   "Find farm stands, markets, makers and more on a map of the Hudson Valley, Catskills and Capital Region. Search, filter by category or county, or look near you.";
-
-function useMapData() {
-  const [state, setState] = useState({ status: "loading", listings: [] });
-  useEffect(() => {
-    let cancelled = false;
-    fetch(mapDataUrl)
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
-      .then((json) => {
-        if (cancelled) return;
-        const listings = Array.isArray(json?.listings) ? json.listings : [];
-        setState({ status: "ready", listings });
-      })
-      .catch(() => {
-        if (!cancelled) setState({ status: "error", listings: [] });
-      });
-    return () => { cancelled = true; };
-  }, []);
-  return state;
-}
-
-function ResultItem({ row, selected, onFocus }) {
-  const { listing, placement, distance } = row;
-  const style = categoryStyle(listing.category);
-  const approximate = placement.kind === "circle";
-  return (
-    <li className={"mp-result" + (selected ? " selected" : "")}>
-      <div className="mp-result-main">
-        <span className="mp-result-dot" style={{ background: style.color }} aria-hidden="true">{style.icon}</span>
-        <div className="mp-result-text">
-          <Link to={`/listing/${encodeURIComponent(listing.slug)}`} className="mp-result-name">{listing.name}</Link>
-          {isVerified(listing) && <span className="mp-badge">Verified</span>}
-          <div className="mp-result-meta">{style.label} · {townCountyLine(listing)}</div>
-          <div className="mp-result-loc">
-            {placement.kind === "none" ? (
-              <span className="mp-not-on-map">{NOT_ON_MAP}</span>
-            ) : (
-              <button type="button" className="mp-show-on-map" onClick={() => onFocus(row)}>
-                {approximate ? `Show ${APPROXIMATE_LABEL} on map` : "Show on map"}
-              </button>
-            )}
-            {distance !== null && (
-              <span className="mp-distance">{approximate ? "about " : ""}{distance < 10 ? distance.toFixed(1) : Math.round(distance)} mi</span>
-            )}
-          </div>
-        </div>
-      </div>
-    </li>
-  );
-}
 
 // Shown when no listings match: the active filters as removable chips, a
 // one-click Clear all, and which single filter is holding the results back.

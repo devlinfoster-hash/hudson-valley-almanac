@@ -120,3 +120,11 @@ a.mp-popup-value { color: #1C3A5E; }
 @media (max-width: 860px) {
   .mp-map .leaflet-control-attribution { font-size: 10px; max-width: 100%; }
 }
+
+/* Saved-places hearts in the list and popups, and the /saved Remove button. */
+.mp-result-main { position: relative; }
+.mp-result-text { flex: 1; }
+.mp-result-save { flex: 0 0 auto; margin: -8px -4px 0 0; }
+.mp-remove { background: none; border: none; padding: 0; color: #A23B2A; font: inherit; text-decoration: underline; cursor: pointer; min-height: 32px; }
+.mp-popup-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+.mp-popup-save { margin: -6px -8px 0 0; flex: 0 0 auto; }

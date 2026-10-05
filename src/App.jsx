@@ -9,6 +9,8 @@ import { NEWS_POSTS } from "./data/news.js";
 import SITE_STATS from "./data/site-stats.json";
 import FreezerFullContent from "./FreezerFullPage.jsx";
 import "./styles.css";
+import { SavedButton, useSavedIds } from "./SavedButton.jsx";
+import PwaPrompts from "./pwa/PwaPrompts.jsx";
 import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 import { validateEmail, suggestEmailFix } from "./utils/email.js";
 import { submitListing, FIELD_MAX_LENGTHS } from "./utils/submit-listing.js";
@@ -260,6 +262,7 @@ function Layout() {
         <TopNav />
         <Outlet />
         {showSubmit && <SubmitForm onClose={() => setShowSubmit(false)} />}
+        <PwaPrompts />
       </SubmitFormContext.Provider>
     </ErrorBoundary>
   );
@@ -314,6 +317,7 @@ export const routes = [
       // Map discovery page. Lazy route: its code (and Leaflet, which it loads
       // only on the client) stays out of every other page's bundle.
       { path: "map", lazy: () => import("./map/MapPage.jsx").then((m) => ({ Component: m.default })) },
+      { path: "saved", lazy: () => import("./SavedPage.jsx").then((m) => ({ Component: m.default })) },
       {
         path: "county/:countySlug",
         Component: CountyPage,
@@ -1193,6 +1197,7 @@ function Footer() {
 const HEADER_LINKS = [
   { label: "Home", to: "/", end: true },
   { label: "Map", to: "/map" },
+  { label: "Saved", to: "/saved", savedBadge: true },
   { label: "About", to: "/about" },
   { label: "Books", to: "/books" },
   { label: "News", to: "/news" },
@@ -1201,6 +1206,17 @@ const HEADER_LINKS = [
   { label: "Report an Error", href: `mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`, className: "topnav-secondary" },
   { label: "Buy Me a Coffee", href: BMC_SUPPORT_URL, external: true, className: "topnav-support", ariaLabel: "Support the Almanac on Buy Me a Coffee" },
 ];
+
+// The header's Saved link, with a count badge once anything is saved on this
+// device (the prerender, which can't see the device, shows no badge).
+function SavedNavLink({ className }) {
+  const count = useSavedIds().length;
+  return (
+    <NavLink to="/saved" className={className} aria-label={count ? `Saved places (${count})` : "Saved places"}>
+      Saved{count > 0 && <span className="saved-badge" aria-hidden="true">{count > 99 ? "99+" : count}</span>}
+    </NavLink>
+  );
+}
 
 // Primary navigation bar. Styled in the site's nav language (.topnav — navy bar
 // + gold rule, DM Mono uppercase links) to match .cat-nav/.topbar rather than
@@ -1229,6 +1245,7 @@ function TopNav() {
             {menuOpen ? "Close ✕" : "Menu ☰"}
           </button>
           <NavLink to="/map" className="topnav-link topnav-map">Map</NavLink>
+          <SavedNavLink className="topnav-link topnav-map" />
         </div>
         <div id="topnav-links" className={"topnav-links" + (menuOpen ? " open" : "")}>
           {HEADER_LINKS.map((item) => {
@@ -1238,6 +1255,7 @@ function TopNav() {
             ) : item.href ? (
               <a key={item.label} href={item.href} className={className} aria-label={item.ariaLabel} {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{item.label}</a>
             ) : (
+              item.savedBadge ? <SavedNavLink key={item.label} className={className} /> :
               <NavLink key={item.label} to={item.to} end={item.end} className={className}>{item.label}</NavLink>
             );
           })}
@@ -2403,7 +2421,12 @@ function ListingPage() {
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
         <Link to="/" className="back-link">← Back to all resources</Link>
-        {listing && <button className="share-btn" onClick={handleShare}>Share</button>}
+        {listing && (
+          <div className="listing-page-actions">
+            <SavedButton id={listing.id} name={listing.name} withText className="listing-save" />
+            <button className="share-btn" onClick={handleShare}>Share</button>
+          </div>
+        )}
       </div>
       <div className="listing-page-article">
         {loading ? (
