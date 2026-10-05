@@ -363,6 +363,39 @@ export function groupApproximate(rows, mergeMiles = MERGE_DISTANCE_MILES) {
   });
 }
 
+// --- ?listing=<slug> -----------------------------------------------------------
+
+// Zoom for a street-precision listing opened from its listing page.
+export const LISTING_FOCUS_ZOOM = 15;
+
+// Where /map?listing=<slug> should look, among the rows currently on the map:
+//   { id, kind: "point", lat, lng, zoom }       - a street pin, centered at zoom 15
+//   { id, kind: "circle", lat, lng, radiusMeters } - the (possibly merged)
+//                                                  approximate circle it is drawn in
+// or null for an unknown slug or a listing that isn't on the map, so the map
+// opens as it otherwise would.
+export function listingFocus(rows, slug) {
+  if (!slug) return null;
+  const row = (rows || []).find((r) => r.listing.slug === slug);
+  if (!row) return null;
+  const { placement, listing } = row;
+  if (placement.kind === "point") {
+    return { id: listing.id, kind: "point", lat: placement.lat, lng: placement.lng, zoom: LISTING_FOCUS_ZOOM };
+  }
+  if (placement.kind === "circle") {
+    const group = groupApproximate(rows).find((g) => g.listings.includes(listing));
+    if (group) return { id: listing.id, kind: "circle", lat: group.lat, lng: group.lng, radiusMeters: group.radiusMeters };
+  }
+  return null;
+}
+
+// Whether /map can show this listing: it is in the map snapshot with a
+// usable placement. Listing pages use it to decide on a "See on map" link.
+export function isListingOnMap(mapListings, slug) {
+  if (!slug) return false;
+  return (mapListings || []).some((l) => l.slug === slug && isShownOnMap(l));
+}
+
 // --- URL query string ------------------------------------------------------
 
 function parseNumberList(value, count) {

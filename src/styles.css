@@ -49,8 +49,10 @@
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
   .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
   .topnav-toggle { background: none; border: none; cursor: pointer; }
+  .topnav-bar { display: none; }
   @media (max-width: 1279px) {
     .topnav-inner { justify-content: space-between; }
+    .topnav-bar { display: flex; align-items: center; gap: 20px; }
     .topnav-toggle { display: inline-block; }
     .topnav-links { display: none; order: 3; flex-basis: 100%; padding: 6px 0 2px; gap: 10px 20px; }
     .topnav-links.open { display: flex; }
@@ -67,6 +69,32 @@
     .cat-nav-inner { display: flex; flex-wrap: wrap; justify-content: center; padding: 0 8px; }
     .cat-btn { padding: 11px 10px; }
   }
+  /* Homepage entry to /map (MapEntry): one row on wide screens, a search row
+     plus two half-width buttons on phones. Targets are at least 44px tall. */
+  .map-entry { display: flex; flex-wrap: wrap; gap: 10px; max-width: 860px; margin: -12px auto 24px; padding: 12px; background: #F5F6F0; border: 1.5px solid #1C3A5E; border-radius: 8px; }
+  .map-entry-search { display: flex; flex: 1 1 380px; gap: 8px; min-width: 0; }
+  .map-entry-input { flex: 1; min-width: 0; min-height: 44px; padding: 10px 14px; font-family: 'Lora', serif; font-size: 16px; border: 1.5px solid #1C3A5E; background: #EFF0E8; color: #1A2B3C; border-radius: 4px; outline: none; }
+  .map-entry-input:focus { border-color: #C4862D; }
+  .map-entry-input::placeholder { color: #8AA0AE; font-style: italic; }
+  .map-entry-actions { display: flex; gap: 8px; flex: 0 1 auto; }
+  .map-entry-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 10px 16px; background: #1C3A5E; color: #EFF0E8; border: 1.5px solid #1C3A5E; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .map-entry-btn:hover { background: #14304F; }
+  .map-entry-btn:focus-visible, .map-entry-input:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
+  .map-entry-btn:disabled { opacity: 0.6; cursor: default; }
+  .map-entry-explore { background: #C4862D; border-color: #C4862D; color: #1C3A5E; font-weight: 500; }
+  .map-entry-explore:hover { background: #B07624; }
+  .map-entry-near { background: transparent; color: #1C3A5E; }
+  .map-entry-near:hover { background: rgba(28,58,94,0.08); }
+  .map-entry-error { flex-basis: 100%; margin: 0; color: #A23B2A; font-size: 14px; font-style: italic; }
+  @media (max-width: 640px) {
+    .map-entry { margin: -16px auto 20px; padding: 10px; gap: 8px; }
+    .map-entry-search { flex-basis: 100%; }
+    .map-entry-btn { padding: 10px 12px; }
+    .map-entry-actions { flex-basis: 100%; }
+    .map-entry-actions .map-entry-btn { flex: 1 1 0; }
+  }
+  /* "See on map" under a listing's address (listings /map can show). */
+  .modal-field a.see-on-map { display: flex; width: max-content; align-items: center; min-height: 44px; margin-top: 2px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4862D; }
   .quick-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 1140px; margin: 22px auto 0; }
   .quick-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 10px 14px; background: #F5F6F0; color: #1C3A5E; border: 1.5px solid #1C3A5E; border-radius: 8px; font-family: 'Lora', serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
   .quick-btn:hover { background: rgba(28,58,94,0.08); }

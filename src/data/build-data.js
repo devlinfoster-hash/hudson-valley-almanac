@@ -9,6 +9,8 @@
 // manifest instead, and falls back to a live Supabase fetch for any listing
 // added after the last build).
 import snapshot from "./listings.json";
+import mapSnapshot from "./listings-map.json";
+import { isListingOnMap } from "../utils/map-listings.js";
 import {
   categories,
   getCategory,
@@ -19,6 +21,8 @@ import {
 } from "../catalog.js";
 
 const ALL = Array.isArray(snapshot?.listings) ? snapshot.listings : [];
+// The /map snapshot (public.listings_map): which listings /map can show.
+const MAP_ALL = Array.isArray(mapSnapshot?.listings) ? mapSnapshot.listings : [];
 
 // Only the fields the listing-card UI on county/category/combo pages renders —
 // keeps the loader data inlined into each prerendered page small.
@@ -92,9 +96,11 @@ export function comboPaths() {
 }
 
 // --- Loader data ------------------------------------------------------------
+// on_map: whether /map can show this listing (it has usable coordinates in the
+// map snapshot), which decides the listing page's "See on map" link.
 export function listingLoader(slug) {
   const found = ALL.find((l) => l.slug === slug);
-  return found || null;
+  return found ? { ...found, on_map: isListingOnMap(MAP_ALL, slug) } : null;
 }
 
 export function countyLoader(slug) {

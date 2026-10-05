@@ -27,6 +27,7 @@ import {
   isVerified,
   mostRestrictiveFilter,
   parseFilters,
+  listingFocus,
   percentileBounds,
   resolveSearch,
   townCountyLine,
@@ -186,9 +187,18 @@ export default function MapPage() {
     return [...geo, ...other];
   }, [countyNames, search.county]);
 
+  // ?listing=<slug> (the "See on map" link on listing pages) centers on that
+  // listing and opens its popup. An unknown slug, or one not in the current
+  // results, is ignored. Changing any filter rewrites the query string without
+  // it, so it only applies on arrival.
+  const listingSlug = searchParams.get("listing") || "";
+  const focus = useMemo(() => listingFocus(rows, listingSlug), [rows, listingSlug]);
+
   // With no area, near-me, search, category or county in the URL, the map opens
   // on the framed initial view rather than fitting every result.
-  const viewTarget = filters.bounds
+  const viewTarget = focus
+    ? { type: "listing", focus }
+    : filters.bounds
     ? { type: "bounds", bounds: filters.bounds }
     : filters.near
     ? { type: "near", center: filters.near, radiusMiles: filters.radius }
@@ -198,7 +208,9 @@ export default function MapPage() {
   // What makes the map refit. With no area or near-me filter, a change in the
   // search (text, category, county) fits the map to the matching listings. With
   // either active, search changes leave the view alone.
-  const viewKey = filters.bounds
+  const viewKey = focus
+    ? `listing|${data.status}|${focus.id}`
+    : filters.bounds
     ? `bounds|${data.status}|${searchParams.get("bbox")}`
     : filters.near
     ? `near|${data.status}|${searchParams.get("near")}|${filters.radius}`
