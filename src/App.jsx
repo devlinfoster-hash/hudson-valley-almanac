@@ -311,6 +311,9 @@ export const routes = [
         },
       },
       { path: "admin", Component: AdminPage },
+      // Map discovery page. Lazy route: its code (and Leaflet, which it loads
+      // only on the client) stays out of every other page's bundle.
+      { path: "map", lazy: () => import("./map/MapPage.jsx").then((m) => ({ Component: m.default })) },
       {
         path: "county/:countySlug",
         Component: CountyPage,
@@ -1129,6 +1132,7 @@ function Footer() {
 // fire tower pages are linked from the footer and the home page, not here.
 const HEADER_LINKS = [
   { label: "Home", to: "/", end: true },
+  { label: "Map", to: "/map" },
   { label: "About", to: "/about" },
   { label: "Books", to: "/books" },
   { label: "News", to: "/news" },

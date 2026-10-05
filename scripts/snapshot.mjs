@@ -16,6 +16,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { NON_GEOGRAPHIC_COUNTIES } from "../src/catalog.js";
+import { assertMapSnapshot, assertSupabaseEnvForCi } from "../src/utils/map-snapshot.js";
 
 const OUT_PATH = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -95,6 +96,38 @@ async function fetchNews() {
   return data || [];
 }
 
+// Map data for /map (public.listings_map, a public view with coordinates).
+// Written to its own JSON file that only the /map route fetches, lazily, so the
+// rest of the site never downloads it. Explicit column allowlist, never
+// select('*'): only the public columns the map page renders or filters on.
+// Unlike books, a failed fetch, or fewer than MIN_MAP_LISTINGS rows, fails the
+// build (exit 1) rather than shipping an empty map. Missing Supabase env also
+// fails the build on Vercel/CI (VERCEL or CI set); only a local build or
+// `npm run dev` writes an empty list, like the other snapshots.
+const MAP_OUT_PATH = resolve(dirname(OUT_PATH), "listings-map.json");
+const MAP_COLUMNS =
+  "id, slug, name, category, tags, town, county, address, phone, website, hours, verification_status, is_online_or_statewide, latitude, longitude, location_precision";
+
+async function fetchMapListings() {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const pageSize = 1000;
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await supabase
+      .from("listings_map")
+      .select(MAP_COLUMNS)
+      .not("slug", "is", null)
+      .order("name", { ascending: true })
+      .order("id", { ascending: true })
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return all;
+}
+
 async function main() {
   let news = [];
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
@@ -123,6 +156,32 @@ async function main() {
     }
   }
   await writeFile(BOOKS_OUT_PATH, JSON.stringify(books), "utf8");
+
+  let mapListings = [];
+  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+    try {
+      mapListings = await fetchMapListings();
+      assertMapSnapshot(mapListings);
+      console.log(`[snapshot] ${mapListings.length} map listings fetched.`);
+    } catch (err) {
+      console.error(`[snapshot] ERROR: map snapshot (public.listings_map) failed: ${String(err.message).replace(/\.?$/, ".")} Failing the build.`);
+      process.exit(1);
+    }
+  } else {
+    // On Vercel/CI a missing URL or key is a misconfiguration, not a local build.
+    try {
+      assertSupabaseEnvForCi(process.env, { url: SUPABASE_URL, key: SUPABASE_ANON_KEY });
+    } catch (err) {
+      console.error(`[snapshot] ERROR: ${err.message} Failing the build.`);
+      process.exit(1);
+    }
+    console.warn("[snapshot] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY not set (local build); writing empty map listings.");
+  }
+  await writeFile(
+    MAP_OUT_PATH,
+    JSON.stringify({ generatedAt: new Date().toISOString(), listings: mapListings }),
+    "utf8"
+  );
 
   let listings = [];
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {

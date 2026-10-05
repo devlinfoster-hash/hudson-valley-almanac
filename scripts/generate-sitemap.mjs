@@ -69,6 +69,7 @@ async function main() {
   add("/fire-towers", today);
   add("/freezer-full", today);
   add("/about", today);
+  add("/map", today);
   add("/books", today);
   add("/news", today);
   const news = JSON.parse(await readFile(resolve(HERE, "..", "src", "data", "news.json"), "utf8").catch(() => "[]"));
