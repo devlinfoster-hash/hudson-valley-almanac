@@ -27,6 +27,7 @@ import {
   isVerified,
   mostRestrictiveFilter,
   parseFilters,
+  percentileBounds,
   resolveSearch,
   townCountyLine,
 } from "../utils/map-listings.js";
@@ -133,6 +134,9 @@ export default function MapPage() {
   // A query that is exactly a county name drives the county dropdown.
   const search = useMemo(() => resolveSearch(filters, countyNames), [filters, countyNames]);
   const rows = useMemo(() => filterListings(data.listings, filters, { countyNames }), [data.listings, filters, countyNames]);
+  // The opening view frames every listing with coordinates (minus outliers),
+  // whatever the filters, so "Reset view" always goes back to the same place.
+  const initialBounds = useMemo(() => percentileBounds(data.listings), [data.listings]);
   const onMapCount = useMemo(() => rows.filter((r) => r.placement.kind !== "none").length, [rows]);
 
   const [mounted, setMounted] = useState(false);
@@ -143,6 +147,7 @@ export default function MapPage() {
   const [geo, setGeo] = useState({ status: "idle", message: "" });
   const mapApi = useRef(null);
   const pageRef = useRef(null);
+  const panelRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
@@ -181,11 +186,15 @@ export default function MapPage() {
     return [...geo, ...other];
   }, [countyNames, search.county]);
 
+  // With no area, near-me, search, category or county in the URL, the map opens
+  // on the framed initial view rather than fitting every result.
   const viewTarget = filters.bounds
     ? { type: "bounds", bounds: filters.bounds }
     : filters.near
     ? { type: "near", center: filters.near, radiusMiles: filters.radius }
-    : { type: "results" };
+    : filters.q.trim() || filters.category || filters.county
+    ? { type: "results" }
+    : { type: "initial" };
   // What makes the map refit. With no area or near-me filter, a change in the
   // search (text, category, county) fits the map to the matching listings. With
   // either active, search changes leave the view alone.
@@ -193,6 +202,8 @@ export default function MapPage() {
     ? `bounds|${data.status}|${searchParams.get("bbox")}`
     : filters.near
     ? `near|${data.status}|${searchParams.get("near")}|${filters.radius}`
+    : viewTarget.type === "initial"
+    ? `initial|${data.status}`
     : `results|${data.status}|${search.words.join(" ")}|${filters.category}|${search.county}`;
   const near = filters.near ? { center: filters.near, radiusMiles: filters.radius } : null;
 
@@ -260,7 +271,7 @@ export default function MapPage() {
         <meta property="og:type" content="website" />
       </Head>
 
-      <aside className={"mp-panel" + (drawerOpen ? " open" : "")} aria-label="Search and results">
+      <aside ref={panelRef} className={"mp-panel" + (drawerOpen ? " open" : "")} aria-label="Search and results">
         <button
           type="button"
           className="mp-drawer-handle"
@@ -366,6 +377,8 @@ export default function MapPage() {
               rows={rows}
               viewTarget={viewTarget}
               viewKey={viewKey}
+              initialBounds={initialBounds}
+              coverRef={panelRef}
               near={near}
               onSelect={setSelectedId}
               onNavigate={onNavigate}

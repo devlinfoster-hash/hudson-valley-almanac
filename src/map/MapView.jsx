@@ -33,6 +33,10 @@ import {
 const DEFAULT_BOUNDS = L.latLngBounds([40.9, -75.4], [43.9, -73.2]);
 // Approximate-area labels only appear once circles are big enough to hold them.
 const LABEL_MIN_ZOOM = 11;
+// The opening view never zooms in tighter than this.
+const INITIAL_MAX_ZOOM = 9;
+// Breathing room around the opening view; the top clears "Search this area".
+const INITIAL_PADDING = { top: 60, right: 30, bottom: 30, left: 30 };
 
 const iconCache = new Map();
 function pinIcon(dbCategory) {
@@ -130,8 +134,68 @@ function popupContent(listings, opts) {
   return root;
 }
 
+// How much of the map container `cover` (the results panel / mobile drawer)
+// sits on top of, per side. Measured rather than assumed so the framing stays
+// right whether the panel sits beside the map (0) or overlaps it.
+function coveredInsets(map, cover) {
+  const none = { top: 0, right: 0, bottom: 0, left: 0 };
+  if (!cover) return none;
+  const m = map.getContainer().getBoundingClientRect();
+  const c = cover.getBoundingClientRect();
+  const left = Math.max(m.left, c.left);
+  const right = Math.min(m.right, c.right);
+  const top = Math.max(m.top, c.top);
+  const bottom = Math.min(m.bottom, c.bottom);
+  if (right <= left || bottom <= top) return none;
+  // A panel along the bottom edge (mobile drawer) vs. one on the left (desktop).
+  if (bottom >= m.bottom - 1 && right - left >= m.width - 1) return { ...none, bottom: m.bottom - top };
+  if (left <= m.left + 1) return { ...none, left: right - m.left };
+  if (right >= m.right - 1) return { ...none, right: m.right - left };
+  return none;
+}
+
+// The opening view: the percentile bounds of the listings (or the service area
+// before they load), inside whatever part of the map isn't under the panel.
+function fitInitial(map, initialBounds, cover) {
+  const b = initialBounds
+    ? L.latLngBounds([initialBounds.south, initialBounds.west], [initialBounds.north, initialBounds.east])
+    : DEFAULT_BOUNDS;
+  const inset = coveredInsets(map, cover);
+  const size = map.getSize();
+  // Never pad away more than most of the map, whatever the layout does.
+  const clamp = (n, total) => Math.min(n, total * 0.6);
+  map.fitBounds(b, {
+    paddingTopLeft: [clamp(INITIAL_PADDING.left + inset.left, size.x), clamp(INITIAL_PADDING.top + inset.top, size.y)],
+    paddingBottomRight: [clamp(INITIAL_PADDING.right + inset.right, size.x), clamp(INITIAL_PADDING.bottom + inset.bottom, size.y)],
+    maxZoom: INITIAL_MAX_ZOOM,
+  });
+}
+
+// "Reset view", stacked under the zoom buttons: back to the opening view.
+function ResetViewControl({ initialBounds, coverRef }) {
+  const map = useMap();
+  const latest = useRef(initialBounds);
+  latest.current = initialBounds;
+  useEffect(() => {
+    const control = L.control({ position: "topleft" });
+    control.onAdd = () => {
+      const bar = L.DomUtil.create("div", "leaflet-bar mp-reset-control");
+      const button = L.DomUtil.create("button", "mp-reset-btn", bar);
+      button.type = "button";
+      button.title = "Back to the full map of listings";
+      button.textContent = "Reset view";
+      L.DomEvent.disableClickPropagation(bar);
+      L.DomEvent.on(button, "click", () => fitInitial(map, latest.current, coverRef?.current));
+      return bar;
+    };
+    control.addTo(map);
+    return () => control.remove();
+  }, [map]);
+  return null;
+}
+
 // Fits the view when the filters change (not while the user pans around).
-function ViewController({ viewTarget, viewKey, drawnBounds }) {
+function ViewController({ viewTarget, viewKey, drawnBounds, initialBounds, coverRef }) {
   const map = useMap();
   const first = useRef(true);
   useEffect(() => {
@@ -140,7 +204,9 @@ function ViewController({ viewTarget, viewKey, drawnBounds }) {
     // An area filter is the user's own current view: only fit to it on load.
     if (viewTarget.type === "bounds" && !isFirst) return;
     const t = setTimeout(() => {
-      if (viewTarget.type === "bounds") {
+      if (viewTarget.type === "initial") {
+        fitInitial(map, initialBounds, coverRef?.current);
+      } else if (viewTarget.type === "bounds") {
         const b = viewTarget.bounds;
         map.fitBounds([[b.south, b.west], [b.north, b.east]]);
       } else if (viewTarget.type === "near") {
@@ -152,7 +218,7 @@ function ViewController({ viewTarget, viewKey, drawnBounds }) {
       }
     }, isFirst ? 0 : 350);
     return () => clearTimeout(t);
-    // drawnBounds is derived from the same filters as viewKey.
+    // drawnBounds and initialBounds are derived from the data/filters in viewKey.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewKey, map]);
   return null;
@@ -292,7 +358,7 @@ function Layers({ rows, near, onSelect, onNavigate, apiRef }) {
   return null;
 }
 
-const MapView = forwardRef(function MapView({ rows, viewTarget, viewKey, near, onSelect, onNavigate }, apiRef) {
+const MapView = forwardRef(function MapView({ rows, viewTarget, viewKey, initialBounds, coverRef, near, onSelect, onNavigate }, apiRef) {
   const drawnBounds = useMemo(() => {
     const pts = rows.filter((r) => r.placement.kind !== "none").map((r) => [r.placement.lat, r.placement.lng]);
     return pts.length ? L.latLngBounds(pts) : null;
@@ -312,8 +378,11 @@ const MapView = forwardRef(function MapView({ rows, viewTarget, viewKey, near, o
       {/* Tile/OSM attribution: bottom right, which stays clear of the mobile
           drawer (the map ends above the collapsed drawer bar). */}
       <AttributionControl position="bottomright" />
+      <ResetViewControl initialBounds={initialBounds} coverRef={coverRef} />
       <Layers rows={rows} near={near} onSelect={onSelect} onNavigate={onNavigate} apiRef={apiRef} />
-      {ready && <ViewController viewTarget={viewTarget} viewKey={viewKey} drawnBounds={drawnBounds} />}
+      {ready && (
+        <ViewController viewTarget={viewTarget} viewKey={viewKey} drawnBounds={drawnBounds} initialBounds={initialBounds} coverRef={coverRef} />
+      )}
     </MapContainer>
   );
 });

@@ -245,6 +245,32 @@ export function filterListings(listings, filters = {}, { countyNames } = {}) {
   return rows;
 }
 
+// The bounds the map opens on: the 5th–95th percentile of the latitudes and
+// longitudes of listings with coordinates, so a few far-off (often mis-geocoded)
+// listings don't zoom the whole map out. Lows round down and highs round up to
+// the nearest actual value, so a short list (20 or fewer) keeps its full extent.
+// Returns { south, west, north, east }, or null when nothing has coordinates.
+export const INITIAL_VIEW_PERCENTILES = [0.05, 0.95];
+
+export function percentileBounds(listings, [low, high] = INITIAL_VIEW_PERCENTILES) {
+  const lats = [];
+  const lngs = [];
+  for (const listing of listings || []) {
+    const coords = coordinatesOf(listing);
+    if (!coords) continue;
+    lats.push(coords.lat);
+    lngs.push(coords.lng);
+  }
+  if (!lats.length) return null;
+  const byValue = (a, b) => a - b;
+  lats.sort(byValue);
+  lngs.sort(byValue);
+  const last = lats.length - 1;
+  const lo = Math.floor(low * last);
+  const hi = Math.ceil(high * last);
+  return { south: lats[lo], west: lngs[lo], north: lats[hi], east: lngs[hi] };
+}
+
 // --- Active filters and the empty state -------------------------------------
 
 // The filters currently narrowing the results, in display order, each with a

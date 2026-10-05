@@ -19,6 +19,7 @@ import {
   MERGE_DISTANCE_MILES,
   parseFilters,
   filtersToParams,
+  percentileBounds,
   APPROXIMATE_RADIUS_METERS,
   NOT_AVAILABLE,
 } from "./map-listings.js";
@@ -191,6 +192,39 @@ test("invalid query-string values are ignored", () => {
   assert.equal(parsed.bounds, null);
   assert.equal(parsed.near, null);
   assert.equal(parsed.radius, 10);
+});
+
+// --- Initial view ------------------------------------------------------------
+
+const at = (lat, lng, extra = {}) => ({ ...base, latitude: lat, longitude: lng, location_precision: "street", ...extra });
+
+test("initial bounds ignore far-off outliers (5th–95th percentile)", () => {
+  // 100 listings spread over lat 41.0–42.98 and lng -74.99 to -74.0 …
+  const listings = Array.from({ length: 100 }, (_, i) => at(41 + i * 0.02, -75 + i * 0.01));
+  // … plus a mis-geocoded listing in Michigan and one off the coast.
+  listings.push(at(42.3, -83.0), at(40.0, -70.0));
+  const b = percentileBounds(listings);
+  assert.ok(b.west > -76 && b.east < -73.5, `lng ${b.west}..${b.east} should exclude the outliers`);
+  assert.ok(b.south > 41 && b.north < 43, `lat ${b.south}..${b.north} should exclude the outliers`);
+  assert.ok(b.south < 41.2 && b.north > 42.7, "the bulk of the listings is still framed");
+});
+
+test("initial bounds skip listings without usable coordinates", () => {
+  const b = percentileBounds([at(41.5, -74.0), at(null, null), at("abc", -74), { ...base }, at(42.0, -73.5)]);
+  assert.deepEqual(b, { south: 41.5, west: -74.0, north: 42.0, east: -73.5 });
+});
+
+test("initial bounds of an empty list are null", () => {
+  assert.equal(percentileBounds([]), null);
+  assert.equal(percentileBounds(undefined), null);
+  assert.equal(percentileBounds([{ ...base }]), null);
+});
+
+test("initial bounds of a tiny list keep every listing", () => {
+  assert.deepEqual(percentileBounds([at(41.9, -74.1)]), { south: 41.9, west: -74.1, north: 41.9, east: -74.1 });
+  assert.deepEqual(percentileBounds([at(42.5, -73.5), at(41.0, -75.0)]), { south: 41.0, west: -75.0, north: 42.5, east: -73.5 });
+  const twenty = Array.from({ length: 20 }, (_, i) => at(41 + i * 0.1, -75 + i * 0.1));
+  assert.deepEqual(percentileBounds(twenty), { south: 41, west: -75, north: 41 + 19 * 0.1, east: -75 + 19 * 0.1 });
 });
 
 // --- Search: address/ZIP, "county", AND matching -----------------------------
