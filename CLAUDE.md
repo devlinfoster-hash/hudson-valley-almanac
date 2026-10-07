@@ -18,6 +18,7 @@ for the stack and build pipeline.
   deployments send it by default; production must not.
 - `/map`, `/saved`, `/trip` and `/admin` send `X-Robots-Tag: noindex` on
   purpose (see `vercel.json`). Keep it.
+- /map, /saved, /trip and /admin send both the noindex header and a noindex meta tag.
 - Sitemaps are built from the finished HTML (`scripts/generate-sitemap.mjs`) and
   list only pages whose canonical points to themselves. Never add noindex or
   non-canonical pages to them.
