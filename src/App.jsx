@@ -672,12 +672,18 @@ function MapEntry() {
 }
 
 // Real links to every county and category landing page, in the static HTML.
-// `data` is the homepage loader's list (only pages that exist, with counts);
-// without it (the 404 page) it falls back to the catalog's lists.
+// `data` is the homepage loader's list (only pages that exist, with counts).
+// Without it (the 404 page), counties come from the build's site-stats.json,
+// which the browser bundle imports too, so the 404 page hydrates with the same
+// list; SERVED_COUNTIES covers a build with no snapshot.
+const SITE_COUNTIES = Array.isArray(SITE_STATS.counties) && SITE_STATS.counties.length
+  ? SITE_STATS.counties
+  : SERVED_COUNTIES.map((name) => ({ name, slug: countySlug(name) }));
+
 function DirectoryLinks({ data, headingLevel = "h2" }) {
   const Heading = headingLevel;
   const cats = data?.categories || categories.map((c) => ({ id: c.id, label: c.label, icon: c.icon }));
-  const counties = data?.counties || SERVED_COUNTIES.map((name) => ({ name, slug: countySlug(name) }));
+  const counties = data?.counties || SITE_COUNTIES;
   return (
     <section className="directory-links" aria-label="Browse the directory">
       <div className="landing-crosslinks">
