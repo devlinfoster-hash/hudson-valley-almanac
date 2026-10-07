@@ -18,16 +18,33 @@ Per-page `<head>` tags are rendered with react-helmet via `vite-react-ssg`'s
 Prerendered route types:
 
 - `/` and `/fire-towers`
-- `/listing/:slug` — every published listing (LocalBusiness JSON-LD)
+- `/listing/:slug` — every published listing (LocalBusiness + BreadcrumbList
+  JSON-LD, a Home › Category › County breadcrumb, and 12 related listings)
 - `/county/:county` — every geographic county
 - `/category/:category` — every mapped category
 - `/county/:county/:category` — every non-empty county×category combo
+- `<any of the three above>/page/:n` — pages 2..N when a set has more than
+  `COLLECTION_PAGE_SIZE` (100) listings
 
 `/admin` is excluded from prerendering and the sitemap.
 
+### URLs, 404s and redirects
+
+- Any URL without a prerendered page gets `dist/404.html` with HTTP 404 (a
+  noindex "Page not found" page linking home and every category and county).
+  There is no catch-all SPA rewrite; only `/admin` is rewritten (to the 404
+  shell, with HTTP 200), since it renders client-side.
+- `vercel.json` 301s trailing-slash URLs to the slashless URL, `/buy-sell-trade`
+  to `/category/buy-sell-trade`, `/news/page/1` to `/news`, `/listings/:slug` to
+  `/listing/:slug`, and the `.vercel.app` host to www.
+- The apex `hudsonvalleyalmanac.com` → `www` redirect is a Vercel domain
+  setting, not `vercel.json`. Vercel's own HTTP → HTTPS redirect (308, same
+  host) always runs first, so `http://hudsonvalleyalmanac.com/` takes two hops.
+- `/map`, `/saved` and `/trip` are noindex (meta tag and `X-Robots-Tag`).
+
 ### Build pipeline
 
-`npm run build` runs four steps:
+`npm run build` runs five steps (plus a service worker check):
 
 1. `scripts/snapshot.mjs` — fetches all published listings once (paginated past
    PostgREST's 1,000-row cap) into `src/data/listings.json` (an explicit,
@@ -47,8 +64,14 @@ Prerendered route types:
    enumerate routes (`getStaticPaths`) and supply each page's data (`loader`).
    The snapshot is dynamically imported behind an `import.meta.env.SSR` guard, so
    it never ships to the browser.
-4. `scripts/generate-sitemap.mjs` — writes `dist/sitemap.xml` from the same
-   snapshot.
+4. `scripts/emit-404.mjs` — moves the prerendered `/404` route to
+   `dist/404.html`, which Vercel serves for unknown URLs.
+5. `scripts/generate-sitemap.mjs` — scans the built HTML and writes a sitemap
+   index (`dist/sitemap.xml`, which `robots.txt` points at) over per-type
+   sitemaps: listings, news, trails & themes, categories & counties, and other
+   pages. Only pages that are indexable and canonical to themselves are listed.
+   `lastmod` changes only when a page's content hash changes: the previous
+   build's hashes are read back from the live `/sitemap-state.json`.
 
 Requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the build
 environment (set on Vercel). Without them the snapshot is empty and only the

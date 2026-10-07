@@ -15,7 +15,7 @@ import { createClient } from "@supabase/supabase-js";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { NON_GEOGRAPHIC_COUNTIES } from "../src/catalog.js";
+import { NON_GEOGRAPHIC_COUNTIES, countySlug } from "../src/catalog.js";
 import { assertMapSnapshot, assertSupabaseEnvForCi } from "../src/utils/map-snapshot.js";
 
 const OUT_PATH = resolve(
@@ -220,6 +220,11 @@ async function main() {
     countyCount: new Set(
       listings.map((l) => l.county).filter((c) => c && !NON_GEOGRAPHIC_COUNTIES.has(c))
     ).size,
+    // Every county with a landing page, A-Z: the 404 page's county links (it has
+    // no loader data, so it can't use the homepage's list).
+    counties: [...new Set(
+      listings.map((l) => l.county).filter((c) => c && !NON_GEOGRAPHIC_COUNTIES.has(c))
+    )].sort().map((name) => ({ name, slug: countySlug(name) })),
   };
   await writeFile(STATS_OUT_PATH, JSON.stringify(stats), "utf8");
   console.log(`[snapshot] Wrote ${STATS_OUT_PATH} (${stats.listingCount} listings, ${stats.countyCount} counties).`);

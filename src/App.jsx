@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useId, Component, Fragment, createContext,
 import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData, useNavigate } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
-import { categories, getCategory, getCategoryForKey, categoryKeys, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE } from "./catalog";
+import { categories, getCategory, getCategoryForKey, categoryKeys, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE, TAG_FILTERS } from "./catalog";
 import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs, featuredTrailFor } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
@@ -281,7 +281,14 @@ export const routes = [
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, Component: HomePage },
+      {
+        index: true,
+        Component: HomePage,
+        async loader() {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).homeLoader();
+        },
+      },
       { path: "fire-towers", Component: FireTowersPage },
       { path: "freezer-full", Component: FreezerFullPage },
       { path: "about", Component: AboutPage },
@@ -321,6 +328,9 @@ export const routes = [
       { path: "map", lazy: () => import("./map/MapPage.jsx").then((m) => ({ Component: m.default })) },
       { path: "saved", lazy: () => import("./SavedPage.jsx").then((m) => ({ Component: m.default })) },
       { path: "trip", lazy: () => import("./TripPage.jsx").then((m) => ({ Component: m.default })) },
+      // County, category and county×category pages. Long ones are split into
+      // pages of COLLECTION_PAGE_SIZE: page 1 is the base URL, pages 2..N live
+      // at <base>/page/<n>, each prerendered with real links to its listings.
       {
         path: "county/:countySlug",
         Component: CountyPage,
@@ -331,6 +341,18 @@ export const routes = [
         async loader({ params }) {
           if (!import.meta.env.SSR) return null;
           return (await import("./data/build-data.js")).countyLoader(params.countySlug);
+        },
+      },
+      {
+        path: "county/:countySlug/page/:page",
+        Component: CountyPage,
+        async getStaticPaths() {
+          if (!import.meta.env.SSR) return [];
+          return (await import("./data/build-data.js")).countyPagePaths();
+        },
+        async loader({ params }) {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).countyLoader(params.countySlug, params.page);
         },
       },
       {
@@ -346,6 +368,18 @@ export const routes = [
         },
       },
       {
+        path: "category/:categorySlug/page/:page",
+        Component: CategoryPage,
+        async getStaticPaths() {
+          if (!import.meta.env.SSR) return [];
+          return (await import("./data/build-data.js")).categoryPagePaths();
+        },
+        async loader({ params }) {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).categoryLoader(params.categorySlug, params.page);
+        },
+      },
+      {
         path: "county/:countySlug/:categorySlug",
         Component: ComboPage,
         async getStaticPaths() {
@@ -357,6 +391,22 @@ export const routes = [
           return (await import("./data/build-data.js")).comboLoader(
             params.countySlug,
             params.categorySlug
+          );
+        },
+      },
+      {
+        path: "county/:countySlug/:categorySlug/page/:page",
+        Component: ComboPage,
+        async getStaticPaths() {
+          if (!import.meta.env.SSR) return [];
+          return (await import("./data/build-data.js")).comboPagePaths();
+        },
+        async loader({ params }) {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).comboLoader(
+            params.countySlug,
+            params.categorySlug,
+            params.page
           );
         },
       },
@@ -380,6 +430,10 @@ export const routes = [
       // client-side and falls back to a live Supabase fetch, with its canonical
       // pointing at /listing/:slug either way.
       { path: "listings/:slug", Component: ListingPage },
+      // Prerendered only so the build has a 404 page to ship: the build moves
+      // it to dist/404.html, which Vercel serves, with a 404 status, for every
+      // URL that has no prerendered page. "*" renders the same page client-side.
+      { path: "404", Component: NotFoundPage },
       { path: "*", Component: NotFoundPage },
     ],
   },
@@ -450,11 +504,10 @@ function ResultCard({ d }) {
   );
 }
 
-// Plain responsive grid of ResultCards — no pagination. Used on the
-// statically-prerendered county/category/combo pages, where every listing is
-// intentionally present in the static HTML for SEO/crawlability. Those pages
-// are bounded (under ~180 listings even for the largest county), so a grid is
-// purely a layout improvement with no content tradeoff.
+// Plain responsive grid of ResultCards — no client-side pagination. Used on the
+// statically-prerendered county/category/combo pages, where every listing on
+// the page is intentionally present in the static HTML for SEO/crawlability.
+// Long sets are split across real URLs instead (see CollectionPager).
 function ResultsGrid({ listings }) {
   return (
     <div className="results-grid">
@@ -618,7 +671,47 @@ function MapEntry() {
   );
 }
 
+// Real links to every county and category landing page, in the static HTML.
+// `data` is the homepage loader's list (only pages that exist, with counts).
+// Without it (the 404 page), counties come from the build's site-stats.json,
+// which the browser bundle imports too, so the 404 page hydrates with the same
+// list; SERVED_COUNTIES covers a build with no snapshot.
+const SITE_COUNTIES = Array.isArray(SITE_STATS.counties) && SITE_STATS.counties.length
+  ? SITE_STATS.counties
+  : SERVED_COUNTIES.map((name) => ({ name, slug: countySlug(name) }));
+
+function DirectoryLinks({ data, headingLevel = "h2" }) {
+  const Heading = headingLevel;
+  const cats = data?.categories || categories.map((c) => ({ id: c.id, label: c.label, icon: c.icon }));
+  const counties = data?.counties || SITE_COUNTIES;
+  return (
+    <section className="directory-links" aria-label="Browse the directory">
+      <div className="landing-crosslinks">
+        <Heading className="landing-crosslinks-label">Browse by category</Heading>
+        <div className="chip-row">
+          {cats.map((c) => (
+            <Link key={c.id} className="chip" to={`/category/${c.id}`}>
+              <span>{c.icon} {c.label}</span>{c.count ? <span className="chip-count">{c.count}</span> : null}
+            </Link>
+          ))}
+        </div>
+      </div>
+      <div className="landing-crosslinks">
+        <Heading className="landing-crosslinks-label">Browse by county</Heading>
+        <div className="chip-row">
+          {counties.map((c) => (
+            <Link key={c.slug} className="chip" to={`/county/${c.slug}`}>
+              <span>{c.name} County</span>{c.count ? <span className="chip-count">{c.count}</span> : null}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage() {
+  const directory = useLoaderData();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -900,6 +993,8 @@ function HomePage() {
           </div>
         </div>
       )}
+
+      <DirectoryLinks data={directory} />
 
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
@@ -1704,8 +1799,12 @@ function NotFoundPage() {
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 48, fontWeight: 700, color: "#C4862D", marginBottom: 8 }}>404</div>
           <div style={{ fontFamily: "'Libre Baskerville',serif", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Page not found</div>
           <p style={{ color: "#4A6472", fontStyle: "italic", marginBottom: 24 }}>We couldn't find the page you were looking for. It may have moved or never existed.</p>
-          <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Browse all resources</Link>
+          <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Go to the homepage</Link>
+          <p style={{ marginTop: 20 }}>
+            Or try <Link to="/map">the map</Link>, <Link to="/farm-trails">Farm Trails</Link>, <Link to="/beverage-trails">Beverage Trails</Link>, or <Link to="/news">the news</Link>.
+          </p>
         </div>
+        <DirectoryLinks headingLevel="h3" />
       </div>
       <Footer />
     </div>
@@ -2147,27 +2246,47 @@ function FarmTrailGuidePage() {
 // Shared shell for the county / category / combo landing pages: render-time
 // meta + JSON-LD, masthead, optional cross-link chips, and the listing cards
 // rendered as real HTML text (so they're in the static source, not JS-only).
-// Quick filters shown on county/category/combo pages. Each maps to a canonical
-// tag in the listings table; a chip only appears when at least one listing on
-// the page carries that tag.
-const TAG_FILTERS = [
-  { id: "snap", tag: "SNAP", label: "Accepts SNAP" },
-  { id: "self", tag: "Self-Serve", label: "Self-serve farm stand" },
-  { id: "shares", tag: "Meat Shares", label: "Sells meat shares" },
-];
-
 function hasTag(l, tag) {
   return Array.isArray(l.tags) && l.tags.includes(tag);
 }
 
-function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings: allListings, jsonLd, inlineNewsletter, featureModule }) {
+// Path of page `n` of a paginated county/category/combo page.
+function collectionPagePath(basePath, n) {
+  return n > 1 ? `${basePath}/page/${n}` : basePath;
+}
+
+// Numbered page links for a long county/category/combo page. Real <a href>s in
+// the static HTML, so crawlers reach every listing without running JS.
+function CollectionPager({ basePath, page, pageCount }) {
+  if (pageCount <= 1) return null;
+  return (
+    <nav className="collection-pager" aria-label="Pages">
+      {page > 1 ? <Link className="back-link" to={collectionPagePath(basePath, page - 1)}>← Previous</Link> : null}
+      {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) =>
+        n === page ? (
+          <span key={n} className="chip chip-active" aria-current="page">{n}</span>
+        ) : (
+          <Link key={n} className="chip" to={collectionPagePath(basePath, n)}>{n}</Link>
+        )
+      )}
+      {page < pageCount ? <Link className="back-link" to={collectionPagePath(basePath, page + 1)}>Next →</Link> : null}
+    </nav>
+  );
+}
+
+// `listings` is this page's slice; `tagged` maps each quick-filter tag to every
+// matching listing across all pages, so a filter isn't limited to one page.
+function ListingCollection({ basePath, total, page = 1, pageCount = 1, pageTitle, metaTitle, metaDescription, eyebrow, sub, crosslinks, listings: pageListings, tagged = {}, jsonLd, inlineNewsletter, featureModule }) {
   const [active, setActive] = useState(null);
-  const available = TAG_FILTERS.filter((f) => allListings.some((l) => hasTag(l, f.tag)));
+  const tagMatches = (tag) => tagged[tag] || pageListings.filter((l) => hasTag(l, tag));
+  const available = TAG_FILTERS.filter((f) => tagMatches(f.tag).length > 0);
   const current = available.find((f) => f.id === active) || null;
-  const listings = current ? allListings.filter((l) => hasTag(l, current.tag)) : allListings;
+  const listings = current ? tagMatches(current.tag) : pageListings;
+  const canonical = `${SITE_ORIGIN}${collectionPagePath(basePath, page)}`;
+  const pageSuffix = page > 1 ? ` — Page ${page} of ${pageCount}` : "";
   return (
     <div className="landing-wrap">
-      <PageMeta title={metaTitle} description={metaDescription} canonical={canonical} />
+      <PageMeta title={metaTitle.replace(/ — Hudson Valley Almanac$/, `${pageSuffix} — Hudson Valley Almanac`)} description={metaDescription} canonical={canonical} />
       {jsonLd ? (
         <Head>
           <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
@@ -2197,20 +2316,24 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
                   aria-pressed={active === f.id}
                   onClick={() => setActive(active === f.id ? null : f.id)}
                 >
-                  {f.label} <span className="chip-count">{allListings.filter((l) => hasTag(l, f.tag)).length}</span>
+                  {f.label} <span className="chip-count">{tagMatches(f.tag).length}</span>
                 </button>
               ))}
             </div>
           </div>
         ) : null}
         <div className="listings-header">
-          <div className="listings-title">{listings.length} {listings.length === 1 ? "resource" : "resources"}</div>
+          <div className="listings-title">
+            {current ? listings.length : total} {(current ? listings.length : total) === 1 ? "resource" : "resources"}
+            {!current && pageCount > 1 ? ` · page ${page} of ${pageCount}` : ""}
+          </div>
         </div>
         {listings.length === 0 ? (
           <div className="no-results">Nothing listed here yet.</div>
         ) : (
           <ResultsGrid listings={listings} />
         )}
+        {current ? null : <CollectionPager basePath={basePath} page={page} pageCount={pageCount} />}
         {inlineNewsletter}
       </div>
       <Footer />
@@ -2221,7 +2344,7 @@ function ListingCollection({ canonical, pageTitle, metaTitle, metaDescription, e
 function CountyPage() {
   const data = useLoaderData();
   if (!data) return <NotFoundPage />;
-  const canonical = `${SITE_ORIGIN}/county/${data.slug}`;
+  const basePath = `/county/${data.slug}`;
   const metaTitle = `Farms, Makers & Markets in ${data.county} County — Hudson Valley Almanac`;
   const metaDescription = `Browse ${data.total} local farms, makers, markets, and producers across ${data.county} County in the Hudson Valley.`;
   const crosslinks = data.categories.length ? (
@@ -2236,10 +2359,14 @@ function CountyPage() {
       </div>
     </div>
   ) : null;
-  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: canonical };
+  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: `${SITE_ORIGIN}${collectionPagePath(basePath, data.page)}` };
   return (
     <ListingCollection
-      canonical={canonical}
+      basePath={basePath}
+      total={data.total}
+      page={data.page}
+      pageCount={data.pageCount}
+      tagged={data.tagged}
       pageTitle={`${data.county} County`}
       metaTitle={metaTitle}
       metaDescription={metaDescription}
@@ -2264,7 +2391,7 @@ function CountyPage() {
 function CategoryPage() {
   const data = useLoaderData();
   if (!data) return <NotFoundPage />;
-  const canonical = `${SITE_ORIGIN}/category/${data.slug}`;
+  const basePath = `/category/${data.slug}`;
   const metaTitle = `${data.label} in the Hudson Valley — Hudson Valley Almanac`;
   const metaDescription = `Browse ${data.total} ${data.label.toLowerCase()} listings across the Hudson Valley and the adjacent Catskill highlands.`;
   const crosslinks = data.counties.length ? (
@@ -2279,10 +2406,14 @@ function CategoryPage() {
       </div>
     </div>
   ) : null;
-  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: canonical };
+  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: `${SITE_ORIGIN}${collectionPagePath(basePath, data.page)}` };
   return (
     <ListingCollection
-      canonical={canonical}
+      basePath={basePath}
+      total={data.total}
+      page={data.page}
+      pageCount={data.pageCount}
+      tagged={data.tagged}
       pageTitle={`${data.icon} ${data.label}`}
       metaTitle={metaTitle}
       metaDescription={metaDescription}
@@ -2298,7 +2429,7 @@ function CategoryPage() {
 function ComboPage() {
   const data = useLoaderData();
   if (!data) return <NotFoundPage />;
-  const canonical = `${SITE_ORIGIN}/county/${data.countySlug}/${data.categorySlug}`;
+  const basePath = `/county/${data.countySlug}/${data.categorySlug}`;
   const metaTitle = `${data.label} in ${data.county} County — Hudson Valley Almanac`;
   const metaDescription = `Browse ${data.total} ${data.label.toLowerCase()} in ${data.county} County, in the Hudson Valley.`;
   const crosslinks = (
@@ -2310,10 +2441,14 @@ function ComboPage() {
       </div>
     </div>
   );
-  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: canonical };
+  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: metaTitle, url: `${SITE_ORIGIN}${collectionPagePath(basePath, data.page)}` };
   return (
     <ListingCollection
-      canonical={canonical}
+      basePath={basePath}
+      total={data.total}
+      page={data.page}
+      pageCount={data.pageCount}
+      tagged={data.tagged}
       pageTitle={`${data.icon} ${data.label} in ${data.county} County`}
       metaTitle={metaTitle}
       metaDescription={metaDescription}
@@ -2371,6 +2506,19 @@ function ListingPage() {
   }, [listing?.id]);
 
   const cat = listing ? getCategoryForKey(listing.category) : null;
+  // Home › Category › County. The county crumb is the county×category page (the
+  // category's page for this county); "More in <county>" below links the whole
+  // county page. Non-geographic counties (Online, Statewide) have no page.
+  const geoCounty = listing && listing.county && !NON_GEOGRAPHIC_COUNTIES.has(listing.county) ? listing.county : null;
+  const crumbs = listing
+    ? [
+        { name: "Home", path: "/" },
+        ...(cat ? [{ name: cat.label, path: `/category/${cat.id}` }] : []),
+        ...(geoCounty
+          ? [{ name: `${geoCounty} County`, path: cat ? `/county/${countySlug(geoCounty)}/${cat.id}` : `/county/${countySlug(geoCounty)}` }]
+          : []),
+      ]
+    : [];
 
   // SEO meta + LocalBusiness JSON-LD, computed at render time so they land in the
   // static HTML for prerendered pages (via <Head> = react-helmet), and apply on
@@ -2412,6 +2560,18 @@ function ListingPage() {
     }
   }
 
+  const breadcrumbLd = crumbs.length > 1 ? {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [...crumbs, { name: listing.name }].map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.name,
+      ...(c.path ? { item: `${SITE_ORIGIN}${c.path}` } : {}),
+    })),
+  } : null;
+  const related = listing?.related || null;
+
   async function handleShare() {
     if (!listing) return;
     const shareData = { title: listing.name, text: listing.description || "", url: window.location.href };
@@ -2435,9 +2595,22 @@ function ListingPage() {
           <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         </Head>
       ) : null}
+      {breadcrumbLd ? (
+        <Head>
+          <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+        </Head>
+      ) : null}
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-        <Link to="/" className="back-link">← Back to all resources</Link>
+        {crumbs.length > 1 ? (
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <ol>
+              {crumbs.map((c) => <li key={c.path}><Link to={c.path}>{c.name}</Link></li>)}
+            </ol>
+          </nav>
+        ) : (
+          <Link to="/" className="back-link">← Back to all resources</Link>
+        )}
         {listing && (
           <div className="listing-page-actions">
             <TripButton id={listing.id} name={listing.name} className="listing-trip" />
@@ -2517,12 +2690,38 @@ function ListingPage() {
                 )}
               </div>
               <UpdateListingBox listing={listing} />
+              {related?.county ? (
+                <section className="related-block" aria-labelledby="related-county">
+                  <h2 id="related-county">More in <Link to={`/county/${related.county.slug}`}>{related.county.name} County</Link></h2>
+                  <RelatedList items={related.county.items} />
+                </section>
+              ) : null}
+              {related?.category ? (
+                <section className="related-block" aria-labelledby="related-category">
+                  <h2 id="related-category">More in <Link to={`/category/${related.category.id}`}>{related.category.label}</Link></h2>
+                  <RelatedList items={related.category.items} />
+                </section>
+              ) : null}
             </div>
           </>
         )}
       </div>
       <Footer />
     </div>
+  );
+}
+
+// Links to related listings (from the listing page's build-time loader data).
+function RelatedList({ items }) {
+  return (
+    <ul className="related-list">
+      {items.map((l) => (
+        <li key={l.slug}>
+          <Link to={`/listing/${l.slug}`}>{l.name}</Link>
+          {l.town ? <span className="related-town"> · {l.town}</span> : null}
+        </li>
+      ))}
+    </ul>
   );
 }
 
