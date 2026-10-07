@@ -12,6 +12,25 @@ export const SITE_ORIGIN = "https://www.hudsonvalleyalmanac.com";
 // Shared by the route table (src/App.jsx) and scripts/generate-sitemap.mjs.
 export const NEWS_PAGE_SIZE = 20;
 
+// Listings per county/category/combo page. Page 1 is the base URL
+// (/county/ulster); longer sets continue at /county/ulster/page/2, ... so every
+// listing is one real link away from its landing page. Shared by the route
+// table and the build data layer.
+export const COLLECTION_PAGE_SIZE = 100;
+
+export function pageCountFor(total) {
+  return Math.max(1, Math.ceil(total / COLLECTION_PAGE_SIZE));
+}
+
+// Quick filters shown on county/category/combo pages. Each maps to a canonical
+// tag in the listings table; a chip only appears when at least one listing in
+// the set carries that tag.
+export const TAG_FILTERS = [
+  { id: "snap", tag: "SNAP", label: "Accepts SNAP" },
+  { id: "self", tag: "Self-Serve", label: "Self-serve farm stand" },
+  { id: "shares", tag: "Meat Shares", label: "Sells meat shares" },
+];
+
 // The mapped categories. A tile's `id` is its URL slug for /category/:slug and
 // the third segment of /county/:county/:slug. By default `id` is also the DB
 // `category` value the tile filters on; a tile may instead declare `keys` to

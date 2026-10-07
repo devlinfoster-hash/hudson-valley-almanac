@@ -18,6 +18,9 @@
       "destination": "https://www.hudsonvalleyalmanac.com/:path*",
       "statusCode": 301
     },
+    { "source": "/(.+)/", "destination": "/$1", "statusCode": 301 },
+    { "source": "/buy-sell-trade", "destination": "/category/buy-sell-trade", "statusCode": 301 },
+    { "source": "/news/page/1", "destination": "/news", "statusCode": 301 },
     {
       "source": "/listings/:slug",
       "destination": "/listing/:slug",
@@ -25,7 +28,7 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!api|.*\\.).*)", "destination": "/index.html" }
+    { "source": "/admin", "destination": "/404.html" }
   ],
   "headers": [
     {
@@ -35,6 +38,12 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "Content-Security-Policy", "value": "frame-ancestors 'self'" }
+      ]
+    },
+    {
+      "source": "/(map|saved|trip|admin)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" }
       ]
     },
     {

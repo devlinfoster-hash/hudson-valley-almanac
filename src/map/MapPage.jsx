@@ -219,7 +219,9 @@ export default function MapPage() {
       <Head>
         <title>{TITLE}</title>
         <meta name="description" content={DESCRIPTION} />
-        <link rel="canonical" href={`${SITE_ORIGIN}/map`} />
+        {/* A utility view over the listing pages, not a page to index: its content
+            is the listings, which have their own pages. */}
+        <meta name="robots" content="noindex" />
         <meta property="og:title" content={TITLE} />
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:url" content={`${SITE_ORIGIN}/map`} />
