@@ -52,4 +52,12 @@ export const BOOK_LINKS = {
     label: "Buy at Barnes & Noble",
     url: "https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584565?ean=9798179047605&utm_source=hva&utm_medium=books",
   },
+  "shelf-life": {
+    label: "Buy at Barnes & Noble",
+    url: "https://www.barnesandnoble.com/w/shelf-life-devlin-foster/1151609632?ean=2940184879611&utm_source=hva&utm_medium=books",
+  },
+  "bad-weather-guide": {
+    label: "Buy at Barnes & Noble",
+    url: "https://www.barnesandnoble.com/w/bad-weather-guide-devlin-foster/1151609635?ean=9798179047544&utm_source=hva&utm_medium=books",
+  },
 };
