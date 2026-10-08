@@ -46,10 +46,10 @@ export const BOOK_LINKS = {
   },
   "freezer-full": {
     label: "Buy at Barnes & Noble",
-    url: "https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584598?utm_source=hva&utm_medium=books",
+    url: "https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584598?ean=9798179045335&utm_source=hva&utm_medium=books",
   },
   "freezer-full-mohawk-valley": {
     label: "Buy at Barnes & Noble",
-    url: "https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584565?utm_source=hva&utm_medium=books",
+    url: "https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584565?ean=9798179047605&utm_source=hva&utm_medium=books",
   },
 };
