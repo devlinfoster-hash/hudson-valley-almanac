@@ -30,7 +30,7 @@ export const BOOK_LINKS = {
   },
   "free-legal-backcountry-camping": {
     label: "Buy on Gumroad",
-    url: "https://devlinfoster.gumroad.com/l/longpath-camping?utm_source=hva&utm_medium=books",
+    url: "https://devlinfoster.gumroad.com/l/long-path-north?utm_source=hva&utm_medium=books",
   },
   "rambles-1863": {
     label: "Read free on Gumroad",
