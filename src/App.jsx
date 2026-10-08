@@ -1605,7 +1605,7 @@ function FreezerFullPage() {
       <div className="listing-page-nav">
         <Link to="/" className="back-link">← Back to all resources</Link>
       </div>
-      <FreezerFullContent siteName="Hudson Valley Almanac" bookTitle="Freezer Full" />
+      <FreezerFullContent siteName="Hudson Valley Almanac" bookTitle="Freezer Full" buyUrl="https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584598?ean=9798179045335&utm_source=hva&utm_medium=companion" />
       <Footer />
     </div>
   );

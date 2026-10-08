@@ -44,7 +44,7 @@ function FarmItem({ f }) {
   );
 }
 
-export default function FreezerFullContent({ siteName, bookTitle }) {
+export default function FreezerFullContent({ siteName, bookTitle, buyUrl }) {
   const [q, setQ] = useState("");
   const [sharesOnly, setSharesOnly] = useState(false);
   const all = useMemo(() => [...FREEZER_FULL_FARMS, ...FREEZER_FULL_MORE], []);
@@ -62,6 +62,13 @@ export default function FreezerFullContent({ siteName, bookTitle }) {
         the {siteName} that sell meat direct. Farms sell out and change how they sell, so call or check a farm's website
         before you drive. No one paid to be listed. Last updated {FREEZER_FULL_UPDATED}.
       </p>
+      {buyUrl ? (
+        <p style={{ margin: "12px 0 0" }}>
+          <a href={buyUrl} target="_blank" rel="noreferrer" style={{ display: "inline-block", padding: "6px 14px", border: `1.5px solid ${P.gold}`, color: P.navy, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
+            Get the book <span aria-hidden="true">↗</span>
+          </a>
+        </p>
+      ) : null}
 
       {FREEZER_FULL_CHANGES.length > 0 && (
         <div style={{ background: P.surface, border: `1px solid ${P.border}`, padding: 16, margin: "16px 0" }}>
