@@ -54,6 +54,31 @@ export async function setListingStatus(supabase, listing, status) {
   expectRow(data, error, `Setting status to ${status} failed`);
 }
 
+// Puts a closed or duplicate listing back on the public site.
+export const REOPENABLE_STATUSES = ["closed", "duplicate"];
+
+export async function reopenListing(supabase, listing) {
+  await setListingStatus(supabase, listing, "published");
+}
+
+// Confirmation dialog copy per admin action. A duplicate being reopened gets
+// an extra warning line, since its original may already be published.
+export const ADMIN_CONFIRM_COPY = {
+  close: { title: "Close this listing?", body: "Sets the status to closed. It leaves the public site on the next build and can be reopened later.", button: "Close listing" },
+  duplicate: { title: "Mark this listing as a duplicate?", body: "Sets the status to duplicate. It leaves the public site on the next build and can be restored later.", button: "Mark duplicate" },
+  reopen: { title: "Reopen and publish this listing?", body: "Sets the status to published. It returns to the public site on the next build.", button: "Reopen (publish)" },
+  delete: { title: "Delete this listing permanently?", body: "Removes the row from the database. This can't be undone.", button: "Delete permanently" },
+};
+
+export const REOPEN_DUPLICATE_WARNING =
+  "This listing was marked as a duplicate. Check that its original isn't already published before reopening, or the directory will show it twice.";
+
+// { title, body, button, warning } for the dialog; warning is null unless set.
+export function confirmDialogCopy(action, listing) {
+  const warning = action === "reopen" && listing?.status === "duplicate" ? REOPEN_DUPLICATE_WARNING : null;
+  return { ...ADMIN_CONFIRM_COPY[action], warning };
+}
+
 export async function deleteListingPermanently(supabase, listing) {
   if (!canDeletePermanently(listing)) throw new Error("Published listings can't be deleted. Close the listing instead.");
   const { data, error } = await supabase

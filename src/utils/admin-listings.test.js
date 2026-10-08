@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   ADMIN_LISTING_COLUMNS, EDITABLE_FIELDS, PRIVATE_COLUMNS, canDeletePermanently, fetchAdminListings,
-  setListingStatus, deleteListingPermanently, editFormFor, buildListingEdits, saveListingEdits,
+  setListingStatus, reopenListing, REOPENABLE_STATUSES, confirmDialogCopy, REOPEN_DUPLICATE_WARNING, deleteListingPermanently, editFormFor, buildListingEdits, saveListingEdits,
 } from "./admin-listings.js";
 
 const READABLE = ["id", "slug", "name", "description", "category", "county", "town", "established", "tags", "address", "phone", "website", "hours", "featured", "verified_at", "status", "created_at", "accepts_garden_produce"];
@@ -107,4 +107,43 @@ test("no change means no request; bad edits are rejected before any request", as
   await assert.rejects(saveListingEdits(db, PUBLISHED, { ...editFormFor(PUBLISHED), name: " " }), /Name can't be empty/);
   await assert.rejects(saveListingEdits(db, PUBLISHED, { ...editFormFor(PUBLISHED), website: "hilltop.com" }), /http/);
   assert.equal(db.calls.length, 0);
+});
+
+test("reopen sends status='published' for that id only and selects back only id", async () => {
+  assert.deepEqual(REOPENABLE_STATUSES, ["closed", "duplicate"]);
+  for (const status of REOPENABLE_STATUSES) {
+    const db = mockSupabase();
+    await reopenListing(db, { ...PUBLISHED, id: 9, status });
+    assert.equal(db.calls.length, 1);
+    const [q] = db.calls;
+    assert.equal(q.table, "listings");
+    assert.deepEqual(op(q, "update"), [[{ status: "published" }]]);
+    assert.deepEqual(op(q, "eq"), [["id", 9]]);
+    assert.deepEqual(op(q, "select"), [["id"]]);
+    assert.deepEqual(op(q, "delete"), []);
+  }
+});
+
+test("reopen surfaces an error when no row changed or the update fails", async () => {
+  const closed = { ...PUBLISHED, id: 9, status: "closed" };
+  await assert.rejects(reopenListing(mockSupabase([{ data: [], error: null }]), closed), /no listing was changed/);
+  await assert.rejects(reopenListing(mockSupabase([{ data: null, error: null }]), closed), /no listing was changed/);
+  await assert.rejects(reopenListing(mockSupabase([{ data: null, error: new Error("permission denied") }]), closed), /permission denied/);
+});
+
+test("the reopen dialog warns on the Duplicate tab only", () => {
+  assert.equal(REOPEN_DUPLICATE_WARNING, "This listing was marked as a duplicate. Check that its original isn't already published before reopening, or the directory will show it twice.");
+  const dup = confirmDialogCopy("reopen", { ...PUBLISHED, status: "duplicate" });
+  assert.equal(dup.warning, REOPEN_DUPLICATE_WARNING);
+  assert.equal(dup.title, "Reopen and publish this listing?");
+  assert.equal(dup.body, "Sets the status to published. It returns to the public site on the next build.");
+  assert.equal(dup.button, "Reopen (publish)");
+
+  const closed = confirmDialogCopy("reopen", { ...PUBLISHED, status: "closed" });
+  assert.equal(closed.warning, null);
+  assert.deepEqual({ ...closed, warning: undefined }, { ...dup, warning: undefined });
+  assert.ok(!JSON.stringify(closed).includes("marked as a duplicate"));
+
+  // Other actions never carry the warning, even on a duplicate listing.
+  for (const action of ["close", "delete"]) assert.equal(confirmDialogCopy(action, { status: "duplicate" }).warning, null);
 });
