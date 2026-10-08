@@ -44,4 +44,12 @@ export const BOOK_LINKS = {
     label: "Buy at Barnes & Noble",
     url: "https://www.barnesandnoble.com/w/when-the-numbers-change-devlin-foster/1151359465?ean=2940184837802&utm_source=hva&utm_medium=books",
   },
+  "freezer-full": {
+    label: "Buy at Barnes & Noble",
+    url: "https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584598?ean=9798179045335&utm_source=hva&utm_medium=books",
+  },
+  "freezer-full-mohawk-valley": {
+    label: "Buy at Barnes & Noble",
+    url: "https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584565?ean=9798179047605&utm_source=hva&utm_medium=books",
+  },
 };
