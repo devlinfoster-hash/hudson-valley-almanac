@@ -17,8 +17,8 @@ export const BOOK_LINKS = {
     url: "https://www.barnesandnoble.com/w/catskill-waterfalls-devlin-foster/1151459185?ean=2940184788791&utm_source=hva&utm_medium=books",
   },
   "catskills-fire-tower-challenge": {
-    label: "Buy on Gumroad",
-    url: "https://devlinfoster.gumroad.com/l/catskills-fire-towers?utm_source=hva&utm_medium=books",
+    label: "Buy at Barnes & Noble",
+    url: "https://www.barnesandnoble.com/w/fire-towers-of-the-catskills-hudson-valley-devlin-foster/1151609377?ean=9798179047636&utm_source=hva&utm_medium=books",
   },
   "trails-that-say-yes": {
     label: "Buy at Barnes & Noble",
