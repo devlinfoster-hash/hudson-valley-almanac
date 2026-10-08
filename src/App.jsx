@@ -1169,20 +1169,14 @@ function RamblesBookCard() {
   );
 }
 
-// The paid Catskills Fire Tower Challenge completion guide, also on Gumroad.
+// The paid Catskills Fire Tower Challenge completion guide, sold at Barnes &
+// Noble (the same page the /books button uses, with this card's own UTM tags).
 // Sits directly under the free 1863 book on /fire-towers (free offer first, paid
 // second) and reuses the same .rambles-* card styling so the two read as a pair.
 // Unlike the free book this is fire-towers-only — it is deliberately NOT added to
 // RAMBLES_BOOK_COUNTIES or any county page.
-//
-// ⚠️ UNVERIFIED SLUG: `catskills-fire-towers` was inferred from old listing notes
-// and could not be confirmed live from this environment — Gumroad is blocked by
-// the network egress policy (the known-good rambles-1863 URL above fails the same
-// way, so this is a policy block, not evidence the slug is wrong). Open the URL
-// once before/after merging; if the real slug differs, this constant is the only
-// place to change it.
 const FIRE_TOWER_GUIDE_URL =
-  "https://devlinfoster.gumroad.com/l/catskills-fire-towers?utm_source=hva&utm_medium=cross&utm_campaign=fire-tower-guide";
+  "https://www.barnesandnoble.com/w/fire-towers-of-the-catskills-hudson-valley-devlin-foster/1151609377?ean=9798179047636&utm_source=hva&utm_medium=cross&utm_campaign=fire-tower-guide";
 
 function FireTowerGuideCard() {
   return (
