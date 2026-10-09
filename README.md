@@ -81,6 +81,21 @@ A listing added after a build has no prerendered page until the next deploy; the
 live homepage reads Supabase directly so new listings appear there immediately,
 and `/listing/:slug` falls back to a live fetch for any not-yet-prerendered slug.
 
+### Weekly listings health report
+
+`.github/workflows/listings-health.yml` runs `scripts/check-listings.mjs` every
+Monday (or on demand from the Actions tab). It is read-only: it checks every
+published listing's website (dead, or redirecting to another domain) and lists
+listings whose `season_end` has passed or whose `last_verified` is missing or
+over 12 months old. The report is uploaded as the `listings-report` artifact,
+with a summary in the job log. To run it locally:
+
+```sh
+VITE_SUPABASE_URL=... VITE_SUPABASE_ANON_KEY=... node scripts/check-listings.mjs
+```
+
+It writes `listings-report.md` (git-ignored; `--out <path>` to change it).
+
 ### Changing a listing's slug
 
 Listing pages live at `/listing/<slug>`, and the slug is also hard-coded in

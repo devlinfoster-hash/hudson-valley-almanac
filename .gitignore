@@ -12,3 +12,6 @@ src/data/site-stats.json
 src/data/books.json
 src/data/guide-links.json
 src/data/listings-map.json
+
+# Written by scripts/check-listings.mjs.
+listings-report.md
