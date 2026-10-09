@@ -6,8 +6,10 @@
 // 2. Freshness: published listings whose season_end is before today, or whose
 //    last_verified is null or more than 12 months old.
 //
-// Writes a markdown report (default listings-report.md, or --out <path>) and
-// prints a summary. Reads the public anon key from the same env vars as
+// Writes the full markdown report (default listings-report.md, or --out <path>).
+// The job log gets the summary, every dead link and redirect (one line each)
+// and the first FRESHNESS_LOG_ROWS freshness rows; $GITHUB_STEP_SUMMARY gets
+// the summary, dead links and redirects. Reads the public anon key from the same env vars as
 // scripts/snapshot.mjs. Exits 1 only if the listings can't be fetched.
 //
 //   VITE_SUPABASE_URL=... VITE_SUPABASE_ANON_KEY=... node scripts/check-listings.mjs
@@ -23,6 +25,7 @@ const OUT_PATH = outIdx > -1 ? process.argv[outIdx + 1] : "listings-report.md";
 const SITE = "https://www.hudsonvalleyalmanac.com";
 const TIMEOUT_MS = 10_000;
 const CONCURRENCY = 5;
+const FRESHNESS_LOG_ROWS = 100;
 const USER_AGENT = `HudsonValleyAlmanacLinkCheck/1.0 (+${SITE}; hello@hudsonvalleyalmanac.com)`;
 
 async function fetchListings() {
@@ -31,7 +34,7 @@ async function fetchListings() {
   for (let from = 0; ; from += 1000) {
     const { data, error } = await supabase
       .from("listings")
-      .select("id, slug, name, category, county, website, season_end, last_verified")
+      .select("id, slug, name, town, category, county, website, season_end, last_verified")
       .eq("status", "published")
       .order("id", { ascending: true })
       .range(from, from + 999);
@@ -142,6 +145,17 @@ function table(rows, header, row) {
   return [`| ${header.join(" | ")} |`, `|${header.map(() => " --- ").join("|")}|`, ...rows.map((r) => `| ${row(r).join(" | ")} |`)].join("\n") + "\n";
 }
 
+// Plain-text log lines: id | name | town | county | ...rest.
+const logLine = (l, ...rest) => [l.id, l.name, l.town, l.county, ...rest].map((v) => String(v ?? "").replace(/\|/g, "\\|").replace(/\s+/g, " ")).join(" | ");
+function logSection(title, rows, line) {
+  console.log(`\n${title}`);
+  for (const l of rows) console.log(line(l));
+  if (!rows.length) console.log("(none)");
+}
+
+const linkTable = (rows, last) =>
+  table(rows, ["ID", "Listing", "Town", "County", "Category", "Website", last], (l) => [l.id, listingLink(l), cell(l.town), cell(l.county), cell(l.category), cell(l.website), cell(l.detail)]);
+
 async function main() {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     console.error("Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.");
@@ -160,8 +174,17 @@ async function main() {
   const { checked, results } = await linkCheck(listings);
   const dead = results.filter((r) => r.kind === "dead").sort(byCategoryCounty);
   const moved = results.filter((r) => r.kind === "redirect").sort(byCategoryCounty);
-  const stale = freshness(listings, today).sort(byCategoryCounty);
-  const ended = stale.filter((l) => l.season_end && l.season_end < today).length;
+
+  // Freshness by priority: season ended, then website dead or redirecting,
+  // then everything else; category/county/name within each group.
+  const linkProblem = new Map(results.map((r) => [r.id, r.kind === "dead" ? `website dead (${r.detail})` : "website redirects to another domain"]));
+  const stale = freshness(listings, today).map((l) => {
+    const ended = Boolean(l.season_end && l.season_end < today);
+    const link = linkProblem.get(l.id);
+    return { ...l, rank: ended ? 0 : link ? 1 : 2, detail: link ? `${l.detail}; ${link}` : l.detail };
+  });
+  stale.sort((a, b) => a.rank - b.rank || byCategoryCounty(a, b));
+  const ended = stale.filter((l) => l.rank === 0).length;
   const neverVerified = listings.filter((l) => !l.last_verified).length;
 
   const summary = [
@@ -174,25 +197,36 @@ async function main() {
     `- Needing a freshness review: ${stale.length} (season ended: ${ended}; never verified: ${neverVerified})`,
     "",
   ].join("\n");
+  const linkSections = [
+    `### Dead websites (${dead.length})`,
+    "",
+    linkTable(dead, "Problem"),
+    `### Redirects to a different domain (${moved.length})`,
+    "",
+    linkTable(moved, "Ends up at"),
+  ].join("\n");
 
   const report = [
     summary,
-    `### Dead websites (${dead.length})`,
-    "",
-    table(dead, ["Category", "County", "Listing", "Website", "Problem"], (l) => [cell(l.category), cell(l.county), listingLink(l), cell(l.website), cell(l.detail)]),
-    `### Redirects to a different domain (${moved.length})`,
-    "",
-    table(moved, ["Category", "County", "Listing", "Website", "Ends up at"], (l) => [cell(l.category), cell(l.county), listingLink(l), cell(l.website), cell(l.detail)]),
+    linkSections,
     `### Freshness (${stale.length})`,
     "",
-    "Season ended before today, or last_verified missing or more than 12 months old.",
+    "Season ended before today, or last_verified missing or more than 12 months old. Sorted by priority: season ended, then website dead or redirecting, then the rest by category, county and name.",
     "",
-    table(stale, ["Category", "County", "Listing", "Issue"], (l) => [cell(l.category), cell(l.county), listingLink(l), cell(l.detail)]),
+    table(stale, ["ID", "Listing", "Town", "County", "Category", "Issue"], (l) => [l.id, listingLink(l), cell(l.town), cell(l.county), cell(l.category), cell(l.detail)]),
   ].join("\n");
 
   await writeFile(OUT_PATH, report, "utf8");
-  console.log(`\n${summary}\nWrote ${OUT_PATH}`);
-  if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, summary);
+
+  console.log(`\n${summary}`);
+  logSection(`DEAD WEBSITES (${dead.length}) — id | name | town | county | url | error/status`, dead, (l) => logLine(l, l.website, l.detail));
+  logSection(`REDIRECTS TO A DIFFERENT DOMAIN (${moved.length}) — id | name | town | county | url | final URL`, moved, (l) => logLine(l, l.website, l.detail));
+  const shown = stale.slice(0, FRESHNESS_LOG_ROWS);
+  logSection(`FRESHNESS (first ${shown.length} of ${stale.length}; full list in ${OUT_PATH}) — id | name | town | county | category | issue`, shown, (l) => logLine(l, l.category, l.detail));
+  console.log(`\nWrote ${OUT_PATH}`);
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    await appendFile(process.env.GITHUB_STEP_SUMMARY, `${summary}\n${linkSections}\nFull freshness list (${stale.length}) is in the listings-report artifact.\n`);
+  }
 }
 
 main();
