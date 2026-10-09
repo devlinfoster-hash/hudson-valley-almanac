@@ -24,51 +24,69 @@
   .search-input:focus { border-color: #C4862D; }
   .search-input::placeholder { color: #8AA0AE; font-style: italic; }
   .town-select { padding: 11px 14px; font-family: 'Lora', serif; font-size: 15px; border: 1.5px solid #1C3A5E; background: #F5F6F0; color: #1A2B3C; outline: none; cursor: pointer; min-width: 150px; }
-  .cat-nav { background: #1C3A5E; overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 3px solid #C4862D; }
-  .cat-nav::-webkit-scrollbar { display: none; }
-  .cat-nav-inner { display: inline-flex; padding: 0 16px; }
-  .cat-btn { background: none; border: none; color: rgba(239,240,232,0.65); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; transition: color 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; text-decoration: none; }
-  .cat-btn:hover { color: #EFF0E8; }
-  .cat-btn.active { color: #EFF0E8; border-bottom-color: #C4862D; }
   .topnav { background: #1C3A5E; border-bottom: 3px solid #C4862D; padding: 12px 24px; }
   .topnav-inner { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 20px; max-width: 1340px; margin: 0 auto; }
-  /* The header links (HEADER_LINKS) sit on one row on desktop. Below 1280px
+  /* The header links (HEADER_LINKS) sit on one row from 1200px up. Below that
      they fold behind the Menu toggle (a full-width wrapped panel when open). */
   .topnav-links { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
-  .topnav-links .topnav-link { font-size: 11px; letter-spacing: 0.08em; white-space: nowrap; }
+  .topnav-links .topnav-link { font-size: 14px; letter-spacing: 0.06em; white-space: nowrap; }
   .topnav-toggle { display: none; }
   /* <button>s that open the SubmitForm but should look like the links beside
      them. Declared before .topnav-link so the nav link styles win. */
   .link-button { background: none; border: none; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
-  .topnav-link { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(239,240,232,0.75); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.2s; }
-  .topnav-link:hover { color: #EFF0E8; }
+  .topnav-link { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #EFF0E8; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+  /* Links are full cream at rest, so hover shows a faint gold rule instead of
+     brightening; the active link keeps the solid gold underline. */
+  .topnav-link:hover { color: #EFF0E8; border-bottom-color: rgba(196,134,45,0.55); }
   .topnav-link.active { color: #EFF0E8; border-bottom-color: #C4862D; }
   .topnav-link:focus-visible { outline: 2px solid #C4862D; outline-offset: 3px; }
   /* The one action among the links: gold ghost CTA, DM Mono like .topnav-link
      (composed alongside it) but boxed in the site accent so it reads as a CTA. */
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
-  .topnav-support:hover { background: #C4862D; color: #1C3A5E; }
+  .topnav-support:hover { background: #C4862D; color: #1C3A5E; border-color: #C4862D; }
+  /* Guides (GuidesMenu): a disclosure button with a dropdown panel of the four
+     guide sections. Navy panel, cream links, gold rule, like the bar itself. */
+  .topnav-guides { position: relative; display: flex; align-items: center; }
+  .topnav-guides-toggle { background: none; border-top: none; border-left: none; border-right: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .topnav-guides-caret { font-size: 0.8em; transition: transform 0.15s; }
+  .topnav-guides.open .topnav-guides-caret { transform: rotate(180deg); }
+  .topnav-guides-heading { display: none; }
+  .topnav-guides-panel { display: none; position: absolute; top: calc(100% + 15px); left: 50%; transform: translateX(-50%); z-index: 50; min-width: 220px; margin: 0; padding: 8px 0; list-style: none; background: #1C3A5E; border: 1px solid rgba(239,240,232,0.18); border-top: 3px solid #C4862D; box-shadow: 0 8px 20px rgba(15,38,64,0.35); }
+  .topnav-guides.open .topnav-guides-panel { display: block; }
+  .topnav-guides-link { display: block; padding: 10px 18px; font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; color: #EFF0E8; text-decoration: none; border-left: 3px solid transparent; }
+  .topnav-guides-link:hover { background: rgba(239,240,232,0.08); border-left-color: rgba(196,134,45,0.55); }
+  .topnav-guides-link.active { border-left-color: #C4862D; color: #E8D9B8; }
+  .topnav-guides-link:focus-visible { outline: 2px solid #C4862D; outline-offset: -2px; }
   .topnav-toggle { background: none; border: none; cursor: pointer; }
   .topnav-bar { display: none; }
-  @media (max-width: 1279px) {
+  @media (max-width: 1199px) {
     .topnav-inner { justify-content: space-between; }
     .topnav-bar { display: flex; align-items: center; gap: 20px; }
     .topnav-toggle { display: inline-block; }
     .topnav-links { display: none; order: 3; flex-basis: 100%; padding: 6px 0 2px; gap: 10px 20px; }
     .topnav-links.open { display: flex; }
-    .topnav-links .topnav-link { font-size: 12px; letter-spacing: 0.12em; }
+    .topnav-links .topnav-link { font-size: 14px; letter-spacing: 0.08em; }
+    /* In the Menu panel, Guides is a heading over its four links, always open:
+       the button is hidden and the panel sits inline as its own full row. */
+    .topnav-guides { flex-basis: 100%; flex-direction: column; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid rgba(239,240,232,0.15); border-bottom: 1px solid rgba(239,240,232,0.15); }
+    .topnav-guides-toggle { display: none; }
+    .topnav-guides-heading { display: block; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: #C4862D; }
+    .topnav-guides-panel, .topnav-guides.open .topnav-guides-panel { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 20px; position: static; transform: none; min-width: 0; padding: 0; background: none; border: none; box-shadow: none; }
+    .topnav-guides-link { padding: 4px 0; border-left: none; border-bottom: 2px solid transparent; }
+    .topnav-guides-link:hover { background: none; border-bottom-color: rgba(196,134,45,0.55); }
+    .topnav-guides-link.active { border-bottom-color: #C4862D; color: #EFF0E8; }
+    .topnav-bar .topnav-link { white-space: nowrap; }
+  }
+  /* Small phones: tighten the bar so Menu, Map, Saved and Trip stay on one
+     line even with both count badges showing. */
+  @media (max-width: 400px) {
+    .topnav { padding-left: 16px; padding-right: 16px; }
+    .topnav-bar { gap: 12px; }
+    .topnav-bar .topnav-link { letter-spacing: 0.04em; }
   }
   /* The county strip isn't clickable and the home stats line covers it, so
      it's hidden at every width (the markup stays in place). */
   .topbar { display: none; }
-  /* Phones: the theme menu drops its duplicate About (it's in the top nav)
-     and wraps instead of scrolling. */
-  @media (max-width: 640px) {
-    .cat-btn-about { display: none; }
-    .cat-nav { overflow-x: visible; white-space: normal; }
-    .cat-nav-inner { display: flex; flex-wrap: wrap; justify-content: center; padding: 0 8px; }
-    .cat-btn { padding: 11px 10px; }
-  }
   /* Homepage entry to /map (MapEntry): one row on wide screens, a search row
      plus two half-width buttons on phones. Targets are at least 44px tall. */
   .map-entry { display: flex; flex-wrap: wrap; gap: 10px; max-width: 860px; margin: -12px auto 24px; padding: 12px; background: #F5F6F0; border: 1.5px solid #1C3A5E; border-radius: 8px; }
@@ -327,7 +345,7 @@
   .related-list { list-style: none; margin: 0 0 20px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 20px; font-size: 14px; }
   .related-list a { color: #1C3A5E; }
   .related-list .related-town { color: #4A6472; font-size: 12px; }
-  .directory-links { max-width: 1200px; margin: 32px auto 0; padding: 0 24px; }
+  .directory-links { max-width: 1140px; margin: 32px auto 0; padding: 0 24px; }
   .newsletter-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; color: #1A2B3C; margin-bottom: 8px; }
   .newsletter-sub { font-family: 'Lora', serif; font-size: 0.95rem; color: #4A6472; line-height: 1.6; max-width: 520px; margin: 0 auto 18px; }
   .newsletter-form { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
