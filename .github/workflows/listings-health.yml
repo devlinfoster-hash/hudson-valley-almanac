@@ -15,10 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      # The site's public anon key (it ships in every page's JavaScript and can
-      # only read what anon is granted). Not a secret.
+      # The site's own VITE_SUPABASE_ANON_KEY: the project's publishable key,
+      # which ships in every page's JavaScript and can only read what anon is
+      # granted. Not a secret.
       VITE_SUPABASE_URL: https://cntafkasuhnpdlhdwajm.supabase.co
-      VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNudGFma2FzdWhucGRsaGR3YWptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MDY2NjAsImV4cCI6MjA5NDI4MjY2MH0.-dfgA5arxsCAz0qnqx6O1wvppFefrafRpILm_xN4fuw
+      VITE_SUPABASE_ANON_KEY: sb_publishable_rV-JfhGjoG1s0XEu4_7Mog_Ct2bVLeI
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
