@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useId, Component, Fragment, createContext,
 import { Link, NavLink, Outlet, useParams, useSearchParams, useLocation, useLoaderData, useNavigate } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { supabase } from "./supabase";
-import { categories, getCategory, getCategoryForKey, categoryKeys, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE, TAG_FILTERS } from "./catalog";
+import { categories, getCategory, getCategoryForKey, categoryKeys, sortCategoriesByLabel, countySlug, SITE_ORIGIN, NON_GEOGRAPHIC_COUNTIES, SERVED_COUNTIES, NEWS_PAGE_SIZE, TAG_FILTERS } from "./catalog";
 import { FARM_TRAILS, PUBLISHED_FARM_TRAILS, PUBLISHED_DAY_TRIP_TRAILS, PUBLISHED_BEVERAGE_TRAILS, PUBLISHED_THEME_TRAILS, farmTrailBySlug, farmTrailSlugs, featuredTrailFor } from "./data/farm-trails-index.js";
 import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
@@ -682,7 +682,7 @@ const SITE_COUNTIES = Array.isArray(SITE_STATS.counties) && SITE_STATS.counties.
 
 function DirectoryLinks({ data, headingLevel = "h2" }) {
   const Heading = headingLevel;
-  const cats = data?.categories || categories.map((c) => ({ id: c.id, label: c.label, icon: c.icon }));
+  const cats = sortCategoriesByLabel(data?.categories || categories.map((c) => ({ id: c.id, label: c.label, icon: c.icon })));
   const counties = data?.counties || SITE_COUNTIES;
   return (
     <section className="directory-links" aria-label="Browse the directory">
@@ -907,7 +907,7 @@ function HomePage() {
               <div role="button" tabIndex={0} aria-pressed={activeCategory === "all"} className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => setParam("category", "all", "all")} onKeyDown={(e) => handleKeyActivate(e, () => setParam("category", "all", "all"))}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
-              {categories.map((c) => {
+              {sortCategoriesByLabel(categories).map((c) => {
                 const count = listings.filter((d) => categoryKeys(c).includes(d.category) && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
                   <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => setParam("category", c.id, "all")} onKeyDown={(e) => handleKeyActivate(e, () => setParam("category", c.id, "all"))}>
@@ -971,7 +971,7 @@ function HomePage() {
               <div role="button" tabIndex={0} aria-pressed={activeCategory === "all"} className={"sidebar-cat-item " + (activeCategory === "all" ? "active" : "")} onClick={() => { setParam("category", "all", "all"); setShowMobileCats(false); }} onKeyDown={(e) => handleKeyActivate(e, () => { setParam("category", "all", "all"); setShowMobileCats(false); })}>
                 <span>All Resources</span><span className="sidebar-count">{listings.length}</span>
               </div>
-              {categories.map((c) => {
+              {sortCategoriesByLabel(categories).map((c) => {
                 const count = listings.filter((d) => categoryKeys(c).includes(d.category) && (c.id !== "craftbeverages" || !agOnly || hasAgRegistry(d))).length;
                 return (
                   <div key={c.id} role="button" tabIndex={0} aria-pressed={activeCategory === c.id} className={"sidebar-cat-item " + (activeCategory === c.id ? "active" : "")} onClick={() => { setParam("category", c.id, "all"); setShowMobileCats(false); }} onKeyDown={(e) => handleKeyActivate(e, () => { setParam("category", c.id, "all"); setShowMobileCats(false); })}>
@@ -2423,7 +2423,7 @@ function CountyPage() {
     <div className="landing-crosslinks">
       <div className="landing-crosslinks-label">Browse {data.county} County by category</div>
       <div className="chip-row">
-        {data.categories.map((c) => (
+        {sortCategoriesByLabel(data.categories).map((c) => (
           <Link key={c.id} className="chip" to={`/county/${data.slug}/${c.id}`}>
             <span>{c.icon} {c.label}</span> <span className="chip-count">{c.count}</span>
           </Link>
@@ -2927,7 +2927,7 @@ function SubmitForm({ onClose }) {
                 {/* Submit the tile's primary DB category value (== id for normal
                     tiles; the first real key for a multi-key tile) so a new
                     pending listing lands on a real, tiled category. */}
-                {categories.map((c) => <option key={c.id} value={categoryKeys(c)[0]}>{c.label}</option>)}
+                {sortCategoriesByLabel(categories).map((c) => <option key={c.id} value={categoryKeys(c)[0]}>{c.label}</option>)}
               </select>
               <div className="form-row">
                 <div><label>Town</label><input value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} maxLength={FIELD_MAX_LENGTHS.town} placeholder="e.g. Cooperstown" /></div>
@@ -3267,7 +3267,7 @@ function AdminPage() {
                     {key === "category" ? (
                       <select id={`admin-edit-${l.id}-${key}`} value={editForm.category} onChange={(e) => setEditForm({ ...editForm, category: e.target.value })} style={adminInputStyle}>
                         {!ADMIN_CATEGORY_OPTIONS.some((o) => o.value === editForm.category) && <option value={editForm.category}>{editForm.category || "(none)"}</option>}
-                        {ADMIN_CATEGORY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        {sortCategoriesByLabel(ADMIN_CATEGORY_OPTIONS).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                       </select>
                     ) : multiline ? (
                       <textarea id={`admin-edit-${l.id}-${key}`} rows={4} value={editForm[key]} onChange={(e) => setEditForm({ ...editForm, [key]: e.target.value })} style={adminInputStyle} />
