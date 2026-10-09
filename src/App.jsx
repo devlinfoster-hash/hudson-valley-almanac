@@ -710,6 +710,57 @@ function DirectoryLinks({ data, headingLevel = "h2" }) {
   );
 }
 
+// The homepage's two rows of quick category links, between the hero and the
+// results. Real links (to /category/:id, the DirectoryLinks pattern, or to a
+// published theme guide), so they are in the prerendered HTML. Shopper labels
+// have no category of their own: they point at a theme guide or at the
+// category most of those listings are filed under, and keep the icon the hero
+// quick filter uses for them. Homesteader labels are existing categories and
+// use their own icons, except Feed & Supply, which takes 🌽 so it doesn't
+// repeat Farm Stands' 🌾. "Rural Health & Wellness" is the Health & Wellness
+// category under a homesteader-facing label.
+const QUICK_CATEGORY_ROWS = [
+  { label: "For shoppers", items: [
+    { label: "Buy Meat Direct", to: "/farm-trails/buy-meat-direct-quarters-halves-and-shares", icon: "🥩" },
+    { label: "Cideries & Breweries", to: "/category/craftbeverages", icon: "🍺" },
+    { label: "Farm Stands", to: "/farm-trails/farm-stands-orchards-and-pick-your-own", icon: "🌾" },
+    { label: "Farmers' Markets", to: "/category/markets", icon: "🧺" },
+    { label: "Orchards & Pick-Your-Own", to: "/category/food", icon: "🍎" },
+  ] },
+  { label: "For homesteaders", items: [
+    { id: "animals" },
+    { id: "farmservices" },
+    { id: "feed", icon: "🌽" },
+    { id: "health", label: "Rural Health & Wellness" },
+    { id: "seeds" },
+  ].map(({ id, label, icon }) => {
+    const c = getCategory(id);
+    return { label: label || c.label, to: `/category/${id}`, icon: icon || c.icon };
+  }) },
+];
+
+function QuickCategoryRows() {
+  return (
+    <nav className="qcat" aria-label="Popular categories">
+      {QUICK_CATEGORY_ROWS.map((row) => (
+        <div key={row.label} className="qcat-row">
+          <h2 className="qcat-label">{row.label}</h2>
+          <ul className="qcat-grid">
+            {row.items.map((item) => (
+              <li key={item.label}>
+                <Link className="qcat-link" to={item.to}>
+                  <span className="qcat-icon" aria-hidden="true">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
 function HomePage() {
   const directory = useLoaderData();
   const [listings, setListings] = useState([]);
@@ -898,6 +949,8 @@ function HomePage() {
         <LatestNewsStrip />
         <PlanASaturday />
       </div>
+
+      <QuickCategoryRows />
 
       <div className="main">
         <div className="sidebar">

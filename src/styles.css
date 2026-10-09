@@ -111,6 +111,11 @@
     .map-entry-actions { flex-basis: 100%; }
     .map-entry-actions .map-entry-btn { flex: 1 1 0; }
   }
+  /* Small phones: let the two map buttons shrink and wrap so "Explore the
+     map" no longer pushes the page 10px wider than a 320px screen. */
+  @media (max-width: 360px) {
+    .map-entry-actions .map-entry-btn { min-width: 0; padding: 10px 8px; letter-spacing: 0.04em; white-space: normal; text-align: center; }
+  }
   /* "See on map" under a listing's address (listings /map can show). */
   .modal-field a.see-on-map { display: flex; width: max-content; align-items: center; min-height: 44px; margin-top: 2px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4862D; }
   .quick-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 1140px; margin: 22px auto 0; }
@@ -267,6 +272,20 @@
   .landing-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 4vw, 38px); font-weight: 700; color: #EFF0E8; line-height: 1.15; margin: 8px 0; }
   .landing-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(239,240,232,0.7); letter-spacing: 0.06em; line-height: 1.6; }
   .landing-crosslinks { margin-bottom: 28px; }
+  /* Homepage quick category rows (QuickCategoryRows): two labelled rows of
+     five equal link-buttons, in the .quick-btn style but a touch bigger.
+     Five across on desktop, two across below 900px. */
+  .qcat { max-width: 1140px; margin: 36px auto 0; padding: 0 24px; }
+  .qcat-row + .qcat-row { margin-top: 22px; }
+  .qcat-label { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin: 0 0 10px; }
+  .qcat-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .qcat-grid li { display: flex; }
+  .qcat-link { flex: 1; display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 12px 16px; background: #F5F6F0; color: #1C3A5E; border: 1.5px solid #1C3A5E; border-radius: 8px; font-family: 'Lora', serif; font-size: 15px; font-weight: 700; line-height: 1.25; text-decoration: none; transition: background 0.15s, color 0.15s; }
+  .qcat-link:hover { background: #1C3A5E; color: #EFF0E8; }
+  .qcat-link:focus-visible { outline: 3px solid #C4862D; outline-offset: 2px; }
+  .qcat-icon { font-size: 22px; line-height: 1; flex: none; }
+  @media (max-width: 899px) { .qcat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+  @media (max-width: 400px) { .qcat { padding: 0 16px; } .qcat-link { gap: 8px; padding: 10px 12px; font-size: 14px; } .qcat-icon { font-size: 20px; } }
   .landing-crosslinks-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #4A6472; margin-bottom: 10px; }
   .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
   button.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; border-radius: 999px; border: 1.5px solid #1C3A5E; background: transparent; color: #1C3A5E; cursor: pointer; }
