@@ -899,8 +899,6 @@ function HomePage() {
         <PlanASaturday />
       </div>
 
-      <DirectoryLinks data={directory} />
-
       <div className="main">
         <div className="sidebar">
           <div className="sidebar-box">
@@ -985,6 +983,8 @@ function HomePage() {
           </div>
         </div>
       )}
+
+      <DirectoryLinks data={directory} />
 
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
