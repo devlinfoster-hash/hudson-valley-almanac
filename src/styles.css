@@ -341,6 +341,9 @@
   }
   @media (max-width: 360px) { .book-btn { width: 100%; } }
   .verified-note { font-size: 12px; color: #5C7A8A; font-style: italic; margin: 8px 0 16px; }
+  .last-verified { font-size: 12px; color: #5C7A8A; margin: 8px 0 16px; }
+  .hours-ended { opacity: 0.55; }
+  span.season-ended { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #5C7A8A; border: 1px solid currentColor; border-radius: 3px; padding: 0 4px; white-space: nowrap; vertical-align: 1px; }
   .update-form { text-align: left; display: grid; gap: 10px; margin-top: 8px; }
   .update-form input, .update-form textarea, .update-form select { width: 100%; padding: 10px; border: 1.5px solid #D8DBCF; font-size: 15px; font-family: inherit; box-sizing: border-box; }
   .update-form textarea { min-height: 110px; }
