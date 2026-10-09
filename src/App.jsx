@@ -710,6 +710,48 @@ function DirectoryLinks({ data, headingLevel = "h2" }) {
   );
 }
 
+// The homepage's two rows of quick category links, between the hero and the
+// results. Real links to /category/:id (the DirectoryLinks pattern), so they
+// are in the prerendered HTML. Shopper labels have no category of their own,
+// so each points at the category most of those listings are filed under and
+// keeps the icon the hero quick filter uses for it; homesteader labels are
+// existing categories and use their own icons.
+const QUICK_CATEGORY_ROWS = [
+  { label: "For shoppers", items: [
+    { label: "Buy Meat Direct", id: "animals", icon: "🥩" },
+    { label: "Cideries & Breweries", id: "craftbeverages", icon: "🍺" },
+    { label: "Farm Stands", id: "food", icon: "🌾" },
+    { label: "Farmers' Markets", id: "markets", icon: "🧺" },
+    { label: "Orchards & Pick-Your-Own", id: "food", icon: "🍎" },
+  ] },
+  { label: "For homesteaders", items: ["animals", "farmservices", "feed", "land", "seeds"].map((id) => {
+    const c = getCategory(id);
+    return { label: c.label, id, icon: c.icon };
+  }) },
+];
+
+function QuickCategoryRows() {
+  return (
+    <nav className="qcat" aria-label="Popular categories">
+      {QUICK_CATEGORY_ROWS.map((row) => (
+        <div key={row.label} className="qcat-row">
+          <h2 className="qcat-label">{row.label}</h2>
+          <ul className="qcat-grid">
+            {row.items.map((item) => (
+              <li key={item.label}>
+                <Link className="qcat-link" to={`/category/${item.id}`}>
+                  <span className="qcat-icon" aria-hidden="true">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
 function HomePage() {
   const directory = useLoaderData();
   const [listings, setListings] = useState([]);
@@ -898,6 +940,8 @@ function HomePage() {
         <LatestNewsStrip />
         <PlanASaturday />
       </div>
+
+      <QuickCategoryRows />
 
       <div className="main">
         <div className="sidebar">
