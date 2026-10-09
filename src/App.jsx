@@ -2790,7 +2790,7 @@ function ListingPage() {
             </div>
             <div className="listing-page-body">
               {listing.description && <p className="modal-desc">{linkifyDescription(listing.description)}</p>}
-              {listing.verified_at ? (
+              {listing.verified_at && !listing.last_verified ? (
                 <p className="verified-note">Details last verified {formatVerified(listing.verified_at)}. Hours and offerings change, so call ahead.</p>
               ) : null}
               {listing.last_verified ? (
