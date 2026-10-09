@@ -1,0 +1,35 @@
+# Weekly read-only health report on the listings data: dead or moved websites,
+# and listings due a freshness review. See scripts/check-listings.mjs.
+name: Listings health report
+
+on:
+  schedule:
+    - cron: "47 12 * * 1" # Mondays, ~8:47am New York
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      # The site's public anon key (it ships in every page's JavaScript and can
+      # only read what anon is granted). Not a secret.
+      VITE_SUPABASE_URL: https://cntafkasuhnpdlhdwajm.supabase.co
+      VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNudGFma2FzdWhucGRsaGR3YWptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MDY2NjAsImV4cCI6MjA5NDI4MjY2MH0.-dfgA5arxsCAz0qnqx6O1wvppFefrafRpILm_xN4fuw
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/check-listings.mjs --out listings-report.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: listings-report
+          path: listings-report.md
+          if-no-files-found: ignore
