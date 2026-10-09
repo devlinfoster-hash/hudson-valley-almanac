@@ -16,6 +16,7 @@ import PwaPrompts from "./pwa/PwaPrompts.jsx";
 import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 import { validateEmail, suggestEmailFix } from "./utils/email.js";
 import { submitListing, FIELD_MAX_LENGTHS } from "./utils/submit-listing.js";
+import { localToday, isSeasonEnded } from "./utils/season.js";
 import { BOOK_LINKS } from "./data/book-links.js";
 import { ADMIN_STATUSES, canDeletePermanently, fetchAdminListings, setListingStatus, reopenListing, REOPENABLE_STATUSES, confirmDialogCopy, deleteListingPermanently, editFormFor, saveListingEdits } from "./utils/admin-listings.js";
 
@@ -169,7 +170,7 @@ const QUICK_FILTERS = [
 // private columns (email, submitter_*, first_contacted_*, review_note) that
 // must not be sent to visitors. Add a column here only when the UI renders it.
 const PUBLIC_LISTING_COLUMNS =
-  "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, verified_at";
+  "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, verified_at, season_end, last_verified";
 
 // The admin dashboard's columns live in src/utils/admin-listings.js.
 
@@ -499,9 +500,26 @@ function ResultCard({ d }) {
       </div>
       <p className="listing-desc">{linkifyDescription(d.description)}</p>
       <div className="tag-row">{(d.tags || []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
-      <div className="hours-line">{d.hours}</div>
+      <div className="hours-line"><Hours hours={d.hours} seasonEnd={d.season_end} /></div>
     </Link>
   );
+}
+
+// The visitor's local date ("YYYY-MM-DD"), or null until mounted. Read in the
+// browser after hydration, never at build time, so prerendered HTML doesn't bake
+// in the build date and hydration matches.
+function useLocalToday() {
+  const [today, setToday] = useState(null);
+  useEffect(() => { setToday(localToday()); }, []);
+  return today;
+}
+
+// A listing's hours text, softened with a "Season ended" label when season_end
+// is before today (local, date-only).
+function Hours({ hours, seasonEnd }) {
+  const today = useLocalToday();
+  if (!hours || !isSeasonEnded(seasonEnd, today)) return hours || null;
+  return <><span className="hours-ended">{hours}</span> <span className="season-ended">Season ended</span></>;
 }
 
 // Plain responsive grid of ResultCards — no client-side pagination. Used on the
@@ -2775,6 +2793,9 @@ function ListingPage() {
               {listing.verified_at ? (
                 <p className="verified-note">Details last verified {formatVerified(listing.verified_at)}. Hours and offerings change, so call ahead.</p>
               ) : null}
+              {listing.last_verified ? (
+                <p className="last-verified">Verified {formatVerified(listing.last_verified)}</p>
+              ) : null}
               {booksForListing(listing).map((b) => (
                 <p key={b.slug} className="related-guide">
                   Related guide: <Link to={`/books#${b.slug}`}><em>{b.title}</em></Link>{b.subtitle ? ` — ${b.subtitle}` : ""}
@@ -2803,7 +2824,7 @@ function ListingPage() {
                     </span>
                   </div>
                 )}
-                {listing.hours && <div className="modal-field"><label>Hours</label><span>{listing.hours}</span></div>}
+                {listing.hours && <div className="modal-field"><label>Hours</label><span><Hours hours={listing.hours} seasonEnd={listing.season_end} /></span></div>}
                 {cat && <div className="modal-field"><label>Category</label><span>{cat.label}</span></div>}
                 {listing.website && (
                   <div className="modal-field" style={{ gridColumn: "1 / -1" }}>

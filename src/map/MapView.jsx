@@ -15,6 +15,7 @@ import "leaflet.markercluster";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import { TILE_URL, TILE_ATTRIBUTION, TILE_MAX_ZOOM } from "./tiles.js";
+import { isSeasonEnded } from "../utils/season.js";
 import {
   APPROXIMATE_LABEL,
   APPROXIMATE_RADIUS_MILES,
@@ -196,7 +197,12 @@ function listingBlock(listing, { approximate, onNavigate }) {
   box.appendChild(field("Address", displayValue(listing.address)));
   box.appendChild(field("Phone", displayValue(listing.phone), telHref(listing.phone)));
   box.appendChild(field("Website", displayValue(listing.website), websiteHref(listing.website), true));
-  box.appendChild(field("Hours", displayValue(listing.hours)));
+  const hours = field("Hours", displayValue(listing.hours));
+  if (listing.hours && isSeasonEnded(listing.season_end)) {
+    const value = hours.lastChild;
+    value.replaceChildren(el("span", "hours-ended", value.textContent), " ", el("span", "season-ended", "Season ended"));
+  }
+  box.appendChild(hours);
   if (listing.slug) {
     const path = `/listing/${encodeURIComponent(listing.slug)}`;
     const a = el("a", "mp-popup-link", "View full listing →");

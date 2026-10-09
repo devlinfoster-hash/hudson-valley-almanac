@@ -41,6 +41,7 @@ function compact(l) {
     established: l.established,
     tags: Array.isArray(l.tags) ? l.tags : [],
     hours: l.hours,
+    season_end: l.season_end ?? null,
   };
 }
 

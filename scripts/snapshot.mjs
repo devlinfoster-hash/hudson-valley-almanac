@@ -36,7 +36,7 @@ const SUPABASE_ANON_KEY =
 // written into the snapshot, which becomes publicly-served static files. Keeps
 // the snapshot (and the loader data inlined into each prerendered page) lean too.
 const COLUMNS =
-  "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, created_at, verified_at";
+  "id, slug, name, description, category, county, town, established, tags, address, phone, website, hours, featured, created_at, verified_at, season_end, last_verified";
 
 async function fetchPublishedListings() {
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -177,11 +177,6 @@ async function main() {
     }
     console.warn("[snapshot] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY not set (local build); writing empty map listings.");
   }
-  await writeFile(
-    MAP_OUT_PATH,
-    JSON.stringify({ generatedAt: new Date().toISOString(), listings: mapListings }),
-    "utf8"
-  );
 
   let listings = [];
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
@@ -199,6 +194,16 @@ async function main() {
       "[snapshot] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY not set; writing empty snapshot."
     );
   }
+
+  // listings_map has no season_end column, so map popups take it from the
+  // published listings (by id). Missing or failed listings leave it null.
+  const seasonEndById = new Map(listings.map((l) => [l.id, l.season_end ?? null]));
+  mapListings = mapListings.map((l) => ({ ...l, season_end: seasonEndById.get(l.id) ?? null }));
+  await writeFile(
+    MAP_OUT_PATH,
+    JSON.stringify({ generatedAt: new Date().toISOString(), listings: mapListings }),
+    "utf8"
+  );
 
   const payload = {
     generatedAt: new Date().toISOString(),
