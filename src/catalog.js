@@ -72,6 +72,17 @@ export const categories = [
   { id: "buy-sell-trade", label: "Buy, Sell & Trade", icon: "🏷️", keys: ["buysell", "facebook"] },
 ];
 
+// Category lists are shown A to Z by label (case- and accent-insensitive), not
+// in the `categories` array's order. Pages sort when they render, so the
+// prerendered HTML is sorted and a new category lands in place on its own. The
+// fixed "en" locale keeps the prerender and the browser in the same order.
+export function byCategoryLabel(a, b) {
+  return a.label.localeCompare(b.label, "en", { sensitivity: "base" });
+}
+export function sortCategoriesByLabel(list) {
+  return [...list].sort(byCategoryLabel);
+}
+
 // The DB `category` value(s) a tile surfaces. Defaults to [id] for normal tiles.
 export function categoryKeys(cat) {
   if (!cat) return [];

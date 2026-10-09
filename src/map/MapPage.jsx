@@ -14,7 +14,7 @@ import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } fro
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Head } from "vite-react-ssg";
 import { ResultItem, useMapData } from "./ResultItem.jsx";
-import { categories, NON_GEOGRAPHIC_COUNTIES, SITE_ORIGIN } from "../catalog.js";
+import { categories, sortCategoriesByLabel, NON_GEOGRAPHIC_COUNTIES, SITE_ORIGIN } from "../catalog.js";
 import {
   NEAR_ME_RADII,
   activeFilters,
@@ -257,7 +257,7 @@ export default function MapPage() {
               <label className="mp-sr" htmlFor="mp-category">Category</label>
               <select id="mp-category" className="mp-select" value={filters.category} onChange={(e) => update({ category: e.target.value })}>
                 <option value="">All categories</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.label}</option>)}
+                {sortCategoriesByLabel(categories).map((c) => <option key={c.id} value={c.id}>{c.icon} {c.label}</option>)}
               </select>
               <label className="mp-sr" htmlFor="mp-county">County</label>
               <select
