@@ -899,15 +899,7 @@ function HomePage() {
         <PlanASaturday />
       </div>
 
-      <div className="cat-nav">
-        <div className="cat-nav-inner">
-          <Link to="/farm-trails" className="cat-btn">🌾 Farm Trails</Link>
-          <Link to="/beverage-trails" className="cat-btn">🍻 Beverage Trails</Link>
-          <Link to="/explore-by-theme" className="cat-btn">🗂️ Explore by Theme</Link>
-          <Link to="/fire-towers" className="cat-btn">🗼 Fire Towers</Link>
-          <Link to="/about" className="cat-btn cat-btn-about">About</Link>
-        </div>
-      </div>
+      <DirectoryLinks data={directory} />
 
       <div className="main">
         <div className="sidebar">
@@ -993,8 +985,6 @@ function HomePage() {
           </div>
         </div>
       )}
-
-      <DirectoryLinks data={directory} />
 
       <div style={{backgroundColor:"#EFF0E8",borderTop:"2px solid #D4D8C8",padding:"48px 24px",textAlign:"center",marginTop:"48px"}}>
         <div style={{maxWidth:"560px",margin:"0 auto"}}>
@@ -1281,16 +1271,19 @@ function Footer() {
 }
 
 // The header's links, in display order; the desktop bar and the Menu panel
-// (below 1280px) both render this one list. Entries take the same shapes as
+// (below 1200px) both render this one list. Entries take the same shapes as
 // NAV_LINKS (`to` / `href` / `submit`) plus an optional extra `className`.
 // Report an Error is the same mailto as the footer's; Buy Me a Coffee is
 // BMC_SUPPORT_URL, the page the About SupportButton points at. The trail and
-// fire tower pages are linked from the footer and the home page, not here.
+// fire tower pages are linked here through the Guides entry (GUIDE_LINKS): a
+// dropdown on desktop, a heading with the four links inline in the Menu panel.
+// The footer links them too.
 const HEADER_LINKS = [
   { label: "Home", to: "/", end: true },
   { label: "Map", to: "/map" },
   { label: "Saved", to: "/saved", savedBadge: true },
   { label: "Trip", to: "/trip", tripBadge: true },
+  { label: "Guides", guides: true },
   { label: "About", to: "/about" },
   { label: "Books", to: "/books" },
   { label: "News", to: "/news" },
@@ -1299,6 +1292,91 @@ const HEADER_LINKS = [
   { label: "Report an Error", href: `mailto:${CONTACT_EMAIL}?subject=Report an Error - Hudson Valley Almanac`, className: "topnav-secondary" },
   { label: "Buy Me a Coffee", href: BMC_SUPPORT_URL, external: true, className: "topnav-support", ariaLabel: "Support the Almanac on Buy Me a Coffee" },
 ];
+
+// The Guides dropdown's links. Every trail guide page lives under
+// /farm-trails/:slug, so any path under these four counts as a Guides page.
+const GUIDE_LINKS = [
+  { label: "Farm Trails", to: "/farm-trails" },
+  { label: "Beverage Trails", to: "/beverage-trails" },
+  { label: "Explore by Theme", to: "/explore-by-theme" },
+  { label: "Fire Towers", to: "/fire-towers" },
+];
+const isGuidePath = (pathname) => GUIDE_LINKS.some(({ to }) => pathname === to || pathname.startsWith(to + "/"));
+
+// The header's Guides entry. Desktop: a disclosure button (aria-expanded) that
+// opens a panel of GUIDE_LINKS; Enter/Space toggle it, ArrowDown/ArrowUp open
+// it on the first/last link and move between links, Home/End jump, Escape
+// closes it and returns focus to the button, and clicking outside, tabbing
+// away or navigating closes it. In the Menu panel (below 1200px) CSS hides the
+// button and shows the heading with the links inline, always visible.
+function GuidesMenu() {
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+  const buttonRef = useRef(null);
+  const panelId = useId();
+  const headingId = useId();
+  const active = isGuidePath(location.pathname);
+  const links = () => [...(rootRef.current?.querySelectorAll(".topnav-guides-panel a") || [])];
+  const focusLink = (i) => { const all = links(); if (all.length) all[(i + all.length) % all.length].focus(); };
+
+  useEffect(() => { setOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (e) => { if (!rootRef.current?.contains(e.target)) setOpen(false); };
+    document.addEventListener("pointerdown", onPointer);
+    return () => document.removeEventListener("pointerdown", onPointer);
+  }, [open]);
+
+  function onButtonKey(e) {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setOpen(true);
+      const last = e.key === "ArrowUp";
+      requestAnimationFrame(() => focusLink(last ? -1 : 0));
+    } else if (e.key === "Escape" && open) {
+      e.preventDefault();
+      setOpen(false);
+    }
+  }
+  function onPanelKey(e) {
+    const all = links();
+    const i = all.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); focusLink(i + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); focusLink(i - 1); }
+    else if (e.key === "Home") { e.preventDefault(); focusLink(0); }
+    else if (e.key === "End") { e.preventDefault(); focusLink(-1); }
+    else if (e.key === "Escape") { e.preventDefault(); setOpen(false); buttonRef.current?.focus(); }
+  }
+  // Tabbing out of the button and panel closes it.
+  function onBlur(e) {
+    if (open && !rootRef.current?.contains(e.relatedTarget)) setOpen(false);
+  }
+
+  return (
+    <div className={"topnav-guides" + (open ? " open" : "")} ref={rootRef} onBlur={onBlur}>
+      <button
+        ref={buttonRef}
+        type="button"
+        className={"topnav-link topnav-guides-toggle" + (active ? " active" : "")}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((o) => !o)}
+        onKeyDown={onButtonKey}
+      >
+        Guides <span className="topnav-guides-caret" aria-hidden="true">▾</span>
+      </button>
+      <span className="topnav-guides-heading" id={headingId}>Guides</span>
+      <ul className="topnav-guides-panel" id={panelId} aria-labelledby={headingId} onKeyDown={onPanelKey}>
+        {GUIDE_LINKS.map((g) => (
+          <li key={g.to}>
+            <NavLink to={g.to} className="topnav-guides-link" onClick={() => setOpen(false)}>{g.label}</NavLink>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 // The header's Saved link, with a count badge once anything is saved on this
 // device (the prerender, which can't see the device, shows no badge).
@@ -1323,8 +1401,7 @@ function TripNavLink({ className }) {
 }
 
 // Primary navigation bar. Styled in the site's nav language (.topnav — navy bar
-// + gold rule, DM Mono uppercase links) to match .cat-nav/.topbar rather than
-// the footer, so it reads as distinct chrome. Styling lives in src/styles.css so
+// + gold rule, DM Mono uppercase links) rather than the footer, so it reads as distinct chrome. Styling lives in src/styles.css so
 // hover/active/focus states work. The links come from HEADER_LINKS; internal
 // routes use NavLink for the active state. Below the desktop breakpoint the
 // links fold behind a Menu toggle.
@@ -1337,7 +1414,7 @@ function TopNav() {
   return (
     <nav className="topnav" aria-label="Primary">
       <div className="topnav-inner">
-        {/* Below 1280px: the Menu toggle, with Map kept visible beside it. */}
+        {/* Below 1200px: the Menu toggle, with Map kept visible beside it. */}
         <div className="topnav-bar">
           <button
             type="button"
@@ -1355,6 +1432,7 @@ function TopNav() {
         <div id="topnav-links" className={"topnav-links" + (menuOpen ? " open" : "")}>
           {HEADER_LINKS.map((item) => {
             const className = "topnav-link" + (item.className ? " " + item.className : "");
+            if (item.guides) return <GuidesMenu key={item.label} />;
             return item.submit ? (
               <button key={item.label} type="button" className={"link-button " + className} onClick={() => { setMenuOpen(false); openSubmitForm(); }}>{item.label}</button>
             ) : item.href ? (
