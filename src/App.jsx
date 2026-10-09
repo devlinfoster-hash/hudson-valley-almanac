@@ -711,22 +711,31 @@ function DirectoryLinks({ data, headingLevel = "h2" }) {
 }
 
 // The homepage's two rows of quick category links, between the hero and the
-// results. Real links to /category/:id (the DirectoryLinks pattern), so they
-// are in the prerendered HTML. Shopper labels have no category of their own,
-// so each points at the category most of those listings are filed under and
-// keeps the icon the hero quick filter uses for it; homesteader labels are
-// existing categories and use their own icons.
+// results. Real links (to /category/:id, the DirectoryLinks pattern, or to a
+// published theme guide), so they are in the prerendered HTML. Shopper labels
+// have no category of their own: they point at a theme guide or at the
+// category most of those listings are filed under, and keep the icon the hero
+// quick filter uses for them. Homesteader labels are existing categories and
+// use their own icons, except Feed & Supply, which takes 🌽 so it doesn't
+// repeat Farm Stands' 🌾. "Rural Health & Wellness" is the Health & Wellness
+// category under a homesteader-facing label.
 const QUICK_CATEGORY_ROWS = [
   { label: "For shoppers", items: [
-    { label: "Buy Meat Direct", id: "animals", icon: "🥩" },
-    { label: "Cideries & Breweries", id: "craftbeverages", icon: "🍺" },
-    { label: "Farm Stands", id: "food", icon: "🌾" },
-    { label: "Farmers' Markets", id: "markets", icon: "🧺" },
-    { label: "Orchards & Pick-Your-Own", id: "food", icon: "🍎" },
+    { label: "Buy Meat Direct", to: "/farm-trails/buy-meat-direct-quarters-halves-and-shares", icon: "🥩" },
+    { label: "Cideries & Breweries", to: "/category/craftbeverages", icon: "🍺" },
+    { label: "Farm Stands", to: "/farm-trails/farm-stands-orchards-and-pick-your-own", icon: "🌾" },
+    { label: "Farmers' Markets", to: "/category/markets", icon: "🧺" },
+    { label: "Orchards & Pick-Your-Own", to: "/category/food", icon: "🍎" },
   ] },
-  { label: "For homesteaders", items: ["animals", "farmservices", "feed", "land", "seeds"].map((id) => {
+  { label: "For homesteaders", items: [
+    { id: "animals" },
+    { id: "farmservices" },
+    { id: "feed", icon: "🌽" },
+    { id: "health", label: "Rural Health & Wellness" },
+    { id: "seeds" },
+  ].map(({ id, label, icon }) => {
     const c = getCategory(id);
-    return { label: c.label, id, icon: c.icon };
+    return { label: label || c.label, to: `/category/${id}`, icon: icon || c.icon };
   }) },
 ];
 
@@ -739,7 +748,7 @@ function QuickCategoryRows() {
           <ul className="qcat-grid">
             {row.items.map((item) => (
               <li key={item.label}>
-                <Link className="qcat-link" to={`/category/${item.id}`}>
+                <Link className="qcat-link" to={item.to}>
                   <span className="qcat-icon" aria-hidden="true">{item.icon}</span>
                   <span>{item.label}</span>
                 </Link>
