@@ -44,19 +44,24 @@
      (composed alongside it) but boxed in the site accent so it reads as a CTA. */
   .topnav-support { color: #C4862D; border: 1.5px solid #C4862D; border-radius: 4px; padding: 4px 14px; transition: background 0.2s, color 0.2s; }
   .topnav-support:hover { background: #C4862D; color: #1C3A5E; border-color: #C4862D; }
-  /* Guides (GuidesMenu): a disclosure button with a dropdown panel of the four
-     guide sections. Navy panel, cream links, gold rule, like the bar itself. */
+  /* Guides & Books (GuidesMenu): the label links to /guides and the caret
+     beside it is a disclosure button for a dropdown panel with two groups,
+     Free Guides and Books. Navy panel, cream links, gold rule, like the bar. */
   .topnav-guides { position: relative; display: flex; align-items: center; }
-  .topnav-guides-toggle { background: none; border-top: none; border-left: none; border-right: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .topnav-guides-label { padding-right: 4px; }
+  .topnav-guides-toggle { background: none; border-top: none; border-left: none; border-right: none; cursor: pointer; display: inline-flex; align-items: center; padding: 4px 2px 4px 4px; }
   .topnav-guides-caret { font-size: 0.8em; transition: transform 0.15s; }
   .topnav-guides.open .topnav-guides-caret { transform: rotate(180deg); }
-  .topnav-guides-heading { display: none; }
-  .topnav-guides-panel { display: none; position: absolute; top: calc(100% + 15px); left: 50%; transform: translateX(-50%); z-index: 50; min-width: 220px; margin: 0; padding: 8px 0; list-style: none; background: #1C3A5E; border: 1px solid rgba(239,240,232,0.18); border-top: 3px solid #C4862D; box-shadow: 0 8px 20px rgba(15,38,64,0.35); }
+  .topnav-guides-panel { display: none; position: absolute; top: calc(100% + 15px); left: 50%; transform: translateX(-50%); z-index: 50; min-width: 240px; margin: 0; padding: 8px 0; background: #1C3A5E; border: 1px solid rgba(239,240,232,0.18); border-top: 3px solid #C4862D; box-shadow: 0 8px 20px rgba(15,38,64,0.35); }
   .topnav-guides.open .topnav-guides-panel { display: block; }
+  .topnav-guides-group { list-style: none; margin: 0; padding: 0; }
+  .topnav-guides-group-label { padding: 8px 18px 4px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: #C4862D; }
+  .topnav-guides-group-label-books { margin-top: 6px; padding-top: 12px; border-top: 1px solid rgba(239,240,232,0.15); }
   .topnav-guides-link { display: block; padding: 10px 18px; font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; color: #EFF0E8; text-decoration: none; border-left: 3px solid transparent; }
   .topnav-guides-link:hover { background: rgba(239,240,232,0.08); border-left-color: rgba(196,134,45,0.55); }
   .topnav-guides-link.active { border-left-color: #C4862D; color: #E8D9B8; }
   .topnav-guides-link:focus-visible { outline: 2px solid #C4862D; outline-offset: -2px; }
+  .topnav-free-tag { display: inline-block; margin-left: 10px; padding: 1px 5px; font-size: 9px; line-height: 1.4; letter-spacing: 0.14em; color: #C4862D; border: 1px solid rgba(196,134,45,0.6); border-radius: 2px; vertical-align: 2px; }
   .topnav-toggle { background: none; border: none; cursor: pointer; }
   .topnav-bar { display: none; }
   @media (max-width: 1199px) {
@@ -66,15 +71,21 @@
     .topnav-links { display: none; order: 3; flex-basis: 100%; padding: 6px 0 2px; gap: 10px 20px; }
     .topnav-links.open { display: flex; }
     .topnav-links .topnav-link { font-size: 14px; letter-spacing: 0.08em; }
-    /* In the Menu panel, Guides is a heading over its four links, always open:
-       the button is hidden and the panel sits inline as its own full row. */
-    .topnav-guides { flex-basis: 100%; flex-direction: column; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid rgba(239,240,232,0.15); border-bottom: 1px solid rgba(239,240,232,0.15); }
+    /* In the Menu panel, Guides & Books is a heading link (to /guides) over its
+       two groups, always open: the caret is hidden and the panel sits inline
+       as its own full row. Links are at least 44px tall for thumbs, so the
+       active/hover mark is an underline under the text, not the box. */
+    .topnav-guides { flex-basis: 100%; flex-direction: column; align-items: center; gap: 0; padding: 4px 0 8px; border-top: 1px solid rgba(239,240,232,0.15); border-bottom: 1px solid rgba(239,240,232,0.15); }
     .topnav-guides-toggle { display: none; }
-    .topnav-guides-heading { display: block; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: #C4862D; }
-    .topnav-guides-panel, .topnav-guides.open .topnav-guides-panel { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 20px; position: static; transform: none; min-width: 0; padding: 0; background: none; border: none; box-shadow: none; }
-    .topnav-guides-link { padding: 4px 0; border-left: none; border-bottom: 2px solid transparent; }
-    .topnav-guides-link:hover { background: none; border-bottom-color: rgba(196,134,45,0.55); }
-    .topnav-guides-link.active { border-bottom-color: #C4862D; color: #EFF0E8; }
+    .topnav-links .topnav-guides-label { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border-bottom: none; font-size: 12px; letter-spacing: 0.2em; color: #C4862D; }
+    .topnav-links .topnav-guides-label:hover, .topnav-links .topnav-guides-label.active { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+    .topnav-guides-panel, .topnav-guides.open .topnav-guides-panel { display: flex; flex-direction: column; align-items: center; position: static; transform: none; min-width: 0; padding: 0; background: none; border: none; box-shadow: none; }
+    .topnav-guides-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 20px; }
+    .topnav-guides-group-label { padding: 4px 0 0; font-size: 10px; color: rgba(239,240,232,0.6); }
+    .topnav-guides-group-label-books { margin-top: 4px; padding-top: 4px; border-top: none; }
+    .topnav-guides-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border-left: none; }
+    .topnav-guides-link:hover { background: none; text-decoration: underline; text-decoration-color: rgba(196,134,45,0.55); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+    .topnav-guides-link.active { color: #EFF0E8; text-decoration: underline; text-decoration-color: #C4862D; text-decoration-thickness: 2px; text-underline-offset: 6px; }
     .topnav-bar .topnav-link { white-space: nowrap; }
   }
   /* Small phones: tighten the bar so Menu, Map, Saved and Trip stay on one
