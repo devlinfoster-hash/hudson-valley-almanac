@@ -17,6 +17,21 @@ test("Hayrides also matches descriptions", () => {
   assert.equal(matchesSection(listing({ tags: ["Hay"] }), section("hayrides-family-fun")), false);
 });
 
+test("names only count for farm-type listings", () => {
+  assert.equal(matchesSection(listing({ name: "Ridge Orchard Studio", category: "apothecary" }), section("apples-orchards")), false);
+  assert.equal(matchesSection(listing({ name: "Ridge Orchard", category: "food" }), section("apples-orchards")), true);
+  assert.equal(matchesSection(listing({ name: "Ridge Orchard Studio", category: "apothecary", tags: ["Apples"] }), section("apples-orchards")), true);
+});
+
+test("Hayrides leaves out sugarhouses, not other maple-category farms", () => {
+  const hay = section("hayrides-family-fun");
+  assert.equal(matchesSection(listing({ category: "maple", tags: ["Sugarhouse", "Hayrides"] }), hay), false);
+  assert.equal(matchesSection(listing({ category: "maple", description: "Wagon rides during NYS Maple Weekend." }), hay), false);
+  assert.equal(matchesSection(listing({ category: "maple", tags: ["Petting Zoo", "Hayrides"] }), hay), true);
+  assert.equal(matchesSection(listing({ category: "food", tags: ["Hayrides", "Maple Weekend"] }), hay), true);
+  assert.equal(matchesSection(listing({ category: "maple", tags: ["Sugarhouse", "U-Pick"] }), section("pick-your-own")), true);
+});
+
 test("pick-your-own spellings", () => {
   for (const t of ["U-Pick", "Pick Your Own", "Pick-Your-Own", "you-pick", "upick"]) {
     assert.equal(matchesSection(listing({ tags: [t] }), section("pick-your-own")), true, t);

@@ -2,12 +2,14 @@
 // (/fall-harvest). Run at build time over the listings snapshot (published
 // only), so the page is prerendered and refreshed by the nightly rebuild.
 //
-// Matching is deliberately strict: a listing's tags and name only, never its
-// description (descriptions mention "apple" or "festival" in passing), except
-// for Hayrides, whose tags are thin and whose phrases are specific enough to
-// trust in descriptions too. Cannabis is never included, and craft-beverage
-// listings (breweries, cideries, distilleries) only in Pick Your Own, so the
-// Cider section means sweet cider and donuts; hard cider has Beverage Trails.
+// Matching is deliberately strict: a listing's tags and (for farm-type
+// listings) its name only, never its description (descriptions mention "apple"
+// or "festival" in passing), except for Hayrides, whose tags are thin and whose
+// phrases are specific enough to trust in descriptions too; Hayrides also
+// leaves out sugarhouses, whose rides are for spring Maple Weekend. Cannabis
+// is never included, and craft-beverage listings (breweries, cideries,
+// distilleries) only in Pick Your Own, so the Cider section means sweet cider
+// and donuts; hard cider has Beverage Trails.
 import { isSeasonEnded } from "./season.js";
 
 export const FALL_HARVEST_SECTIONS = [
@@ -15,19 +17,26 @@ export const FALL_HARVEST_SECTIONS = [
   { id: "apples-orchards", title: "Apples & Orchards", match: /\b(apples?|orchards?)\b/i },
   { id: "pumpkins-corn-mazes", title: "Pumpkins & Corn Mazes", match: /\b(pumpkins?|mazes?)\b/i },
   { id: "cider-donuts-treats", title: "Cider, Donuts & Treats", match: /\b(ciders?|donuts?|doughnuts?)\b/i },
-  { id: "hayrides-family-fun", title: "Hayrides, Animals & Family Fun", match: /\b(hay ?rides?|wagon rides?|horse[- ]drawn wagons?|petting)\b/i, descriptions: true },
+  { id: "hayrides-family-fun", title: "Hayrides, Animals & Family Fun", match: /\b(hay ?rides?|wagon rides?|horse[- ]drawn wagons?|petting)\b/i, descriptions: true, noSugarhouses: true },
   { id: "harvest-festivals", title: "Harvest Festivals", match: /\b((harvest|fall|autumn|apple|pumpkin|farm) fest(ival)?s?|harvest fest)\b/i },
 ];
 
 const EXCLUDED_CATEGORY = "cannabis";
 const BEVERAGE_CATEGORY = "craftbeverages";
+// A name only counts for farm-type listings: an apothecary called "... Orchard
+// Studio" isn't an orchard.
+const NAME_MATCH_CATEGORIES = new Set(["food", "markets", "animals", "maple", "seeds", "learn", "outdoor", "artisanfood", BEVERAGE_CATEGORY]);
+// Sugarhouses' wagon rides and hayrides are for spring Maple Weekend, not fall.
+const SUGARHOUSE = /\b(sugar ?house|maple (weekend|days))\b/i;
+const isSugarhouse = (l) => l.category === "maple" && [...(l.tags || []), l.description || ""].some((t) => SUGARHOUSE.test(t));
 
 export function matchesSection(listing, section) {
   if (listing.category === EXCLUDED_CATEGORY) return false;
   if (listing.category === BEVERAGE_CATEGORY && !section.beverages) return false;
+  if (section.noSugarhouses && isSugarhouse(listing)) return false;
   const re = section.match;
   if ((listing.tags || []).some((t) => re.test(t))) return true;
-  if (re.test(listing.name || "")) return true;
+  if (NAME_MATCH_CATEGORIES.has(listing.category) && re.test(listing.name || "")) return true;
   return Boolean(section.descriptions && re.test(listing.description || ""));
 }
 
