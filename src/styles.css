@@ -467,6 +467,18 @@
   .trail-soon-name { color: #1A2B3C; }
   .trail-soon-area { color: #8AA0AE; font-size: 13px; }
   @media (max-width: 600px) { .trail-grid { grid-template-columns: 1fr; } }
+  /* Put Your Farm on the Map: the download card (rambles-card colours) inside
+     the guide reading column. Buttons stack full width on phones. */
+  .guide-download { background: #1C3A5E; border: 2px solid #1C3A5E; padding: 24px 28px; margin: 30px 0 22px; }
+  .trail-body .guide-download .rambles-desc { color: rgba(239,240,232,0.82); font-size: 16px; line-height: 1.6; margin-bottom: 18px; }
+  .guide-download-btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .trail-body a.guide-download-btn { display: inline-block; background: #C4862D; color: #0F2640; border: 1.5px solid #C4862D; padding: 12px 20px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; text-align: center; transition: background 0.2s, color 0.2s; }
+  .trail-body a.guide-download-btn:hover { background: #B0762A; border-color: #B0762A; color: #0F2640; }
+  .trail-body a.guide-download-btn-alt { background: transparent; color: #EFF0E8; border-color: #EFF0E8; }
+  .trail-body a.guide-download-btn-alt:hover { background: #EFF0E8; border-color: #EFF0E8; color: #1C3A5E; }
+  .trail-body a.guide-download-btn:focus-visible { outline: 2px solid #EFF0E8; outline-offset: 3px; }
+  .trail-body .guide-note { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.04em; line-height: 1.6; color: #4A6472; }
+  @media (max-width: 600px) { .guide-download { padding: 20px 18px; } .guide-download-btns { flex-direction: column; } .trail-body a.guide-download-btn { display: block; } }
 
   /* Saved places: the heart (SavedButton and the map popup's twin), the header
      badge, and the /saved page. Hearts are 44px targets. */
