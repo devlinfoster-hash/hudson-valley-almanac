@@ -186,6 +186,7 @@ const NAV_LINKS = [
   { label: "Beverage Trails", to: "/beverage-trails" },
   { label: "Explore by Theme", to: "/explore-by-theme" },
   { label: "Fire Towers", to: "/fire-towers" },
+  { label: "Put Your Farm on the Map", to: "/put-your-farm-on-the-map" },
   { label: "About", to: "/about" },
   { label: "Books", to: "/books" },
   { label: "News", to: "/news" },
@@ -314,6 +315,7 @@ export const routes = [
       { path: "farm-trails", Component: FarmTrailsIndexPage },
       { path: "beverage-trails", Component: BeverageTrailsIndexPage },
       { path: "explore-by-theme", Component: ThemeTrailsIndexPage },
+      { path: "put-your-farm-on-the-map", Component: PutYourFarmOnTheMapPage },
       {
         path: "farm-trails/:slug",
         Component: FarmTrailGuidePage,
@@ -1347,7 +1349,7 @@ function Footer() {
 // Report an Error is the same mailto as the footer's; Buy Me a Coffee is
 // BMC_SUPPORT_URL, the page the About SupportButton points at. The trail and
 // fire tower pages are linked here through the Guides entry (GUIDE_LINKS): a
-// dropdown on desktop, a heading with the four links inline in the Menu panel.
+// dropdown on desktop, a heading with its links inline in the Menu panel.
 // The footer links them too.
 const HEADER_LINKS = [
   { label: "Home", to: "/", end: true },
@@ -1365,12 +1367,13 @@ const HEADER_LINKS = [
 ];
 
 // The Guides dropdown's links. Every trail guide page lives under
-// /farm-trails/:slug, so any path under these four counts as a Guides page.
+// /farm-trails/:slug, so any path under these counts as a Guides page.
 const GUIDE_LINKS = [
   { label: "Farm Trails", to: "/farm-trails" },
   { label: "Beverage Trails", to: "/beverage-trails" },
   { label: "Explore by Theme", to: "/explore-by-theme" },
   { label: "Fire Towers", to: "/fire-towers" },
+  { label: "Put Your Farm on the Map", to: "/put-your-farm-on-the-map" },
 ];
 const isGuidePath = (pathname) => GUIDE_LINKS.some(({ to }) => pathname === to || pathname.startsWith(to + "/"));
 
@@ -2219,6 +2222,9 @@ function FarmTrailsIndexPage() {
         <p className="trail-crosslinks">
           Looking for cideries, breweries, distilleries, and wineries instead? See <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>, or maple, makers, fairs, and more on <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong>.
         </p>
+        <p className="trail-crosslinks">
+          Run a farm stand or sell food from home? <strong><Link to="/put-your-farm-on-the-map">Put Your Farm on the Map</Link></strong> is a free day-by-day planner for getting found.
+        </p>
       </div>
       <Footer />
     </div>
@@ -2379,6 +2385,96 @@ function FarmTrailGuidePage() {
         </header>
         <div className="listing-page-body trail-body">
           <Body />
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// "Put Your Farm on the Map": a free downloadable planner for people who sell
+// from home. A download page only (the guide itself is the .docx/.pdf in
+// public/downloads/), on the same reading shell as the Farm Trails guides.
+const PUT_YOUR_FARM_FILES = {
+  docx: "/downloads/put-your-farm-on-the-map.docx",
+  pdf: "/downloads/put-your-farm-on-the-map.pdf",
+};
+
+function PutYourFarmOnTheMapPage() {
+  const canonical = `${SITE_ORIGIN}/put-your-farm-on-the-map`;
+  const title = "Put Your Farm on the Map";
+  const subtitle = "A Day-by-Day Planner to Get Your Farm Stand, Homegrown Products and Small Food Business Found";
+  const description = "A free, plain-English day-by-day planner to get your farm stand, homegrown products and small food business found. Download it as a Word file or PDF, with nothing to sign up for.";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    alternativeHeadline: subtitle,
+    description,
+    url: canonical,
+    isAccessibleForFree: true,
+    author: { "@type": "Person", name: "Devlin Foster" },
+    publisher: { "@type": "Organization", name: "Hudson Valley Almanac", url: SITE_ORIGIN },
+    associatedMedia: [
+      { "@type": "MediaObject", contentUrl: `${SITE_ORIGIN}${PUT_YOUR_FARM_FILES.docx}`, encodingFormat: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
+      { "@type": "MediaObject", contentUrl: `${SITE_ORIGIN}${PUT_YOUR_FARM_FILES.pdf}`, encodingFormat: "application/pdf" },
+    ],
+  };
+  return (
+    <div className="listing-page-wrap">
+      <PageMeta
+        title={`${title} — Free Guide — Hudson Valley Almanac`}
+        description={description}
+        canonical={canonical}
+        ogType="article"
+      />
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="listing-page-article">
+        <header className="listing-page-masthead">
+          <div className="listing-page-eyebrow">Guides · Get Found</div>
+          <h1 className="listing-page-title">{title}</h1>
+          <p className="listing-page-sub">{subtitle}</p>
+        </header>
+        <div className="listing-page-body trail-body">
+          <p className="trail-lede">A plain-English guide for people who sell from home. No technical skills. No expensive website. Free options first. Just one manageable job a day.</p>
+
+          <h2 className="trail-h2">What's inside</h2>
+          <ul className="trail-list">
+            <li>17 one-job-a-day pages with tick-box checklists</li>
+            <li>Your Facebook Page, taking payments, Google Maps, reviews and scams</li>
+            <li>Who to call about the rules</li>
+            <li>Getting found offline</li>
+            <li>Free tools</li>
+            <li>A short guide to using AI helpers, including a prompt that writes prompts</li>
+          </ul>
+
+          <section className="guide-download" aria-labelledby="guide-download-title">
+            <div className="rambles-eyebrow">Free download</div>
+            <h2 id="guide-download-title" className="rambles-title">Download the guide</h2>
+            <p className="rambles-desc">It's free, with nothing to sign up for. The same guide in two formats: the Word file to edit, the PDF to print.</p>
+            <div className="guide-download-btns">
+              <a className="guide-download-btn" href={PUT_YOUR_FARM_FILES.docx} download="HVA_Put_Your_Farm_on_the_Map.docx">
+                Download the Word file (.docx)
+              </a>
+              <a className="guide-download-btn guide-download-btn-alt" href={PUT_YOUR_FARM_FILES.pdf} download="HVA_Put_Your_Farm_on_the_Map.pdf">
+                Download the PDF
+              </a>
+            </div>
+          </section>
+
+          <p className="guide-note">Prices last checked October 11, 2026. Apps change their screens, so the guide tells readers to look for the same words.</p>
+
+          <p className="trail-close">By Devlin Foster, Hudson Valley Almanac</p>
+
+          <p className="trail-crosslinks">
+            More guides: <strong><Link to="/farm-trails">Farm Trails</Link></strong>, <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>, <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong> and <strong><Link to="/fire-towers">Fire Towers</Link></strong>.
+          </p>
         </div>
       </div>
       <Footer />
