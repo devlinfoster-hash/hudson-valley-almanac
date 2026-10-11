@@ -182,6 +182,7 @@ const FACEBOOK_URL = "https://www.facebook.com/1072963332575328";
 // footer adds its footer-only Facebook link after Contact Us. The header has
 // its own shorter list (HEADER_LINKS, next to TopNav).
 const NAV_LINKS = [
+  { label: "Guides & Books", to: "/guides" },
   { label: "Farm Trails", to: "/farm-trails" },
   { label: "Beverage Trails", to: "/beverage-trails" },
   { label: "Explore by Theme", to: "/explore-by-theme" },
@@ -312,6 +313,7 @@ export const routes = [
           return NEWS_POSTS.map((p) => `news/${p.slug}`);
         },
       },
+      { path: "guides", Component: GuidesIndexPage },
       { path: "farm-trails", Component: FarmTrailsIndexPage },
       { path: "beverage-trails", Component: BeverageTrailsIndexPage },
       { path: "explore-by-theme", Component: ThemeTrailsIndexPage },
@@ -626,6 +628,7 @@ function PlanASaturday() {
             </Link>
           ))}
           <Link to="/explore-by-theme" className="back-link saturday-theme">or explore by theme →</Link>
+          <Link to="/guides" className="back-link saturday-theme">all guides &amp; books →</Link>
         </div>
       </div>
     </section>
@@ -1347,18 +1350,17 @@ function Footer() {
 // (below 1200px) both render this one list. Entries take the same shapes as
 // NAV_LINKS (`to` / `href` / `submit`) plus an optional extra `className`.
 // Report an Error is the same mailto as the footer's; Buy Me a Coffee is
-// BMC_SUPPORT_URL, the page the About SupportButton points at. The trail and
-// fire tower pages are linked here through the Guides entry (GUIDE_LINKS): a
-// dropdown on desktop, a heading with its links inline in the Menu panel.
-// The footer links them too.
+// BMC_SUPPORT_URL, the page the About SupportButton points at. The guide and
+// book pages are linked here through the Guides & Books entry (GUIDE_LINKS and
+// BOOK_LINKS_NAV): a link to /guides plus a dropdown on desktop, a heading with
+// its links inline in the Menu panel. The footer links them too.
 const HEADER_LINKS = [
   { label: "Home", to: "/", end: true },
   { label: "Map", to: "/map" },
   { label: "Saved", to: "/saved", savedBadge: true },
   { label: "Trip", to: "/trip", tripBadge: true },
-  { label: "Guides", guides: true },
+  { label: "Guides & Books", guides: true },
   { label: "About", to: "/about" },
-  { label: "Books", to: "/books" },
   { label: "News", to: "/news" },
   { label: "Contact Us", href: `mailto:${CONTACT_EMAIL}` },
   { label: "Submit a Listing", submit: true },
@@ -1366,30 +1368,38 @@ const HEADER_LINKS = [
   { label: "Buy Me a Coffee", href: BMC_SUPPORT_URL, external: true, className: "topnav-support", ariaLabel: "Support the Almanac on Buy Me a Coffee" },
 ];
 
-// The Guides dropdown's links. Every trail guide page lives under
-// /farm-trails/:slug, so any path under these counts as a Guides page.
+// The free guides: the Guides & Books dropdown's first group and the cards on
+// /guides. Every trail guide page lives under /farm-trails/:slug, so any path
+// under these counts as a Guides & Books page.
 const GUIDE_LINKS = [
-  { label: "Farm Trails", to: "/farm-trails" },
-  { label: "Beverage Trails", to: "/beverage-trails" },
-  { label: "Explore by Theme", to: "/explore-by-theme" },
-  { label: "Fire Towers", to: "/fire-towers" },
-  { label: "Put Your Farm on the Map", to: "/put-your-farm-on-the-map" },
+  { label: "Farm Trails", to: "/farm-trails", blurb: "Self-guided day trips through the Valley's best farm country, one good Saturday at a time." },
+  { label: "Beverage Trails", to: "/beverage-trails", blurb: "Cideries, breweries, distilleries, and wineries, region-wide and county by county." },
+  { label: "Explore by Theme", to: "/explore-by-theme", blurb: "Maple, makers, heritage breeds, fairs, the outdoors, and more, sorted by theme." },
+  { label: "Fire Towers", to: "/fire-towers", blurb: "Standing, climbable fire towers across the Hudson Valley and the Catskill highlands." },
+  { label: "Put Your Farm on the Map", to: "/put-your-farm-on-the-map", blurb: "A day-by-day planner to get your farm stand, homegrown products and small food business found." },
 ];
-const isGuidePath = (pathname) => GUIDE_LINKS.some(({ to }) => pathname === to || pathname.startsWith(to + "/"));
+// The dropdown's second group. /freezer-full (a book's companion farm list)
+// isn't in the menu but counts as a Books page for the active state.
+const BOOK_LINKS_NAV = [{ label: "Books", to: "/books" }];
+const GUIDES_AND_BOOKS_PATHS = ["/guides", "/freezer-full", ...GUIDE_LINKS.map((g) => g.to), ...BOOK_LINKS_NAV.map((b) => b.to)];
+const isGuidePath = (pathname) => GUIDES_AND_BOOKS_PATHS.some((to) => pathname === to || pathname.startsWith(to + "/"));
 
-// The header's Guides entry. Desktop: a disclosure button (aria-expanded) that
-// opens a panel of GUIDE_LINKS; Enter/Space toggle it, ArrowDown/ArrowUp open
-// it on the first/last link and move between links, Home/End jump, Escape
-// closes it and returns focus to the button, and clicking outside, tabbing
-// away or navigating closes it. In the Menu panel (below 1200px) CSS hides the
-// button and shows the heading with the links inline, always visible.
+// The header's Guides & Books entry. Desktop: the label links to /guides and a
+// caret disclosure button (aria-expanded) beside it opens a panel with two
+// groups, Free Guides (GUIDE_LINKS) and Books (BOOK_LINKS_NAV); Enter/Space
+// toggle it, ArrowDown/ArrowUp open it on the first/last link and move between
+// links, Home/End jump, Escape closes it and returns focus to the button, and
+// clicking outside, tabbing away or navigating closes it. In the Menu panel
+// (below 1200px) CSS hides the caret and shows the label as a heading with
+// both groups inline, always visible.
 function GuidesMenu() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
   const buttonRef = useRef(null);
   const panelId = useId();
-  const headingId = useId();
+  const guidesId = useId();
+  const booksId = useId();
   const active = isGuidePath(location.pathname);
   const links = () => [...(rootRef.current?.querySelectorAll(".topnav-guides-panel a") || [])];
   const focusLink = (i) => { const all = links(); if (all.length) all[(i + all.length) % all.length].focus(); };
@@ -1428,26 +1438,46 @@ function GuidesMenu() {
   }
 
   return (
-    <div className={"topnav-guides" + (open ? " open" : "")} ref={rootRef} onBlur={onBlur}>
+    <div className={"topnav-guides" + (open ? " open" : "") + (active ? " active" : "")} ref={rootRef} onBlur={onBlur}>
+      <NavLink
+        to="/guides"
+        end
+        className={() => "topnav-link topnav-guides-label" + (active ? " active" : "")}
+      >
+        Guides &amp; Books
+      </NavLink>
       <button
         ref={buttonRef}
         type="button"
         className={"topnav-link topnav-guides-toggle" + (active ? " active" : "")}
         aria-expanded={open}
         aria-controls={panelId}
+        aria-label="Guides & Books menu"
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onButtonKey}
       >
-        Guides <span className="topnav-guides-caret" aria-hidden="true">▾</span>
+        <span className="topnav-guides-caret" aria-hidden="true">▾</span>
       </button>
-      <span className="topnav-guides-heading" id={headingId}>Guides</span>
-      <ul className="topnav-guides-panel" id={panelId} aria-labelledby={headingId} onKeyDown={onPanelKey}>
-        {GUIDE_LINKS.map((g) => (
-          <li key={g.to}>
-            <NavLink to={g.to} className="topnav-guides-link" onClick={() => setOpen(false)}>{g.label}</NavLink>
-          </li>
-        ))}
-      </ul>
+      <div className="topnav-guides-panel" id={panelId} onKeyDown={onPanelKey}>
+        <div className="topnav-guides-group-label" id={guidesId}>Free Guides</div>
+        <ul className="topnav-guides-group" aria-labelledby={guidesId}>
+          {GUIDE_LINKS.map((g) => (
+            <li key={g.to}>
+              <NavLink to={g.to} className="topnav-guides-link" onClick={() => setOpen(false)}>
+                {g.label}<span className="topnav-free-tag">Free</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <div className="topnav-guides-group-label topnav-guides-group-label-books" id={booksId}>Books</div>
+        <ul className="topnav-guides-group" aria-labelledby={booksId}>
+          {BOOK_LINKS_NAV.map((b) => (
+            <li key={b.to}>
+              <NavLink to={b.to} className="topnav-guides-link" onClick={() => setOpen(false)}>{b.label}</NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -1677,7 +1707,7 @@ function FireTowersPage() {
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
-        <Link to="/" className="back-link">← Back to all resources</Link>
+        <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
       </div>
       <div className="ft-article">
         <header className="ft-masthead">
@@ -1749,7 +1779,7 @@ function FreezerFullPage() {
       />
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
-        <Link to="/" className="back-link">← Back to all resources</Link>
+        <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
       </div>
       <FreezerFullContent siteName="Hudson Valley Almanac" bookTitle="Freezer Full" buyUrl="https://www.barnesandnoble.com/w/freezer-full-devlin-foster/1151584598?ean=9798179045335&utm_source=hva&utm_medium=companion" />
       <Footer />
@@ -1865,7 +1895,7 @@ function BooksPage() {
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="books-wrap">
         <nav className="books-nav">
-          <Link to="/" className="back-link">← Back to all resources</Link>
+          <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
         </nav>
         <header className="landing-masthead">
           <div className="listing-page-eyebrow">Hudson Valley Almanac · About the editor</div>
@@ -1947,7 +1977,7 @@ function NotFoundPage() {
           <p style={{ color: "#4A6472", fontStyle: "italic", marginBottom: 24 }}>We couldn't find the page you were looking for. It may have moved or never existed.</p>
           <Link to="/" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>Go to the homepage</Link>
           <p style={{ marginTop: 20 }}>
-            Or try <Link to="/map">the map</Link>, <Link to="/farm-trails">Farm Trails</Link>, <Link to="/beverage-trails">Beverage Trails</Link>, or <Link to="/news">the news</Link>.
+            Or try <Link to="/map">the map</Link>, <Link to="/guides">Guides &amp; Books</Link>, <Link to="/farm-trails">Farm Trails</Link>, <Link to="/beverage-trails">Beverage Trails</Link>, or <Link to="/news">the news</Link>.
           </p>
         </div>
         <DirectoryLinks headingLevel="h3" />
@@ -2157,6 +2187,72 @@ function AboutPage() {
   );
 }
 
+// Guides & Books — the landing page the header's Guides & Books label links to,
+// and where the guide and book pages' back links go. Two groups, the same as
+// the dropdown: the free guides (GUIDE_LINKS) and the books. Same shell and
+// card grid as the trail indexes.
+function GuidesIndexPage() {
+  const canonical = `${SITE_ORIGIN}/guides`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Guides & Books — Hudson Valley Almanac",
+    url: canonical,
+  };
+  const books = [
+    { to: "/books", label: "Books by the Almanac's Editor", blurb: "Guidebooks to the Hudson Valley, Catskills, and Capital Region by Devlin Foster, the editor of the Almanac.", cta: "See the books →" },
+    { to: "/freezer-full", label: "Freezer Full: the farm list", blurb: "The up-to-date list of farms that sell beef, pork, lamb, and poultry direct, from the book Freezer Full.", cta: "See the list →" },
+  ];
+  return (
+    <div className="landing-wrap">
+      <PageMeta
+        title="Guides & Books — Hudson Valley Almanac"
+        description="Free guides to the Hudson Valley, Catskills, and Capital Region — farm trails, beverage trails, themes, fire towers, and a planner for farm stands — plus guidebooks by the Almanac's editor."
+        canonical={canonical}
+      />
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/" className="back-link">← Back to all resources</Link>
+      </div>
+      <div className="landing-article">
+        <header className="landing-masthead">
+          <div className="listing-page-eyebrow">Hudson Valley Almanac</div>
+          <h1 className="landing-title">Guides &amp; Books</h1>
+          <p className="landing-sub">Free guides to getting out into the Valley, and books for anyone who wants to go deeper.</p>
+        </header>
+
+        <h2 className="trail-h2">Free Guides</h2>
+        <div className="trail-grid">
+          {GUIDE_LINKS.map((g) => (
+            <Link key={g.to} to={g.to} className="trail-card">
+              <div className="trail-card-area">Free guide</div>
+              <div className="trail-card-name">{g.label}</div>
+              <p className="trail-card-blurb">{g.blurb}</p>
+              <span className="trail-card-cta">Open the guide →</span>
+            </Link>
+          ))}
+        </div>
+
+        <h2 className="trail-h2">Books</h2>
+        <div className="trail-grid">
+          {books.map((b) => (
+            <Link key={b.to} to={b.to} className="trail-card">
+              <div className="trail-card-area">Books</div>
+              <div className="trail-card-name">{b.label}</div>
+              <p className="trail-card-blurb">{b.blurb}</p>
+              <span className="trail-card-cta">{b.cta}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
 // Farm Trails index — the day-trip guide series landing. Published guides render
 // as cards; the rest appear as a "coming soon" list so the series scope is
 // visible. Built on the county/category landing shell (navy masthead + cream
@@ -2182,7 +2278,7 @@ function FarmTrailsIndexPage() {
       </Head>
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
-        <Link to="/" className="back-link">← Back to all resources</Link>
+        <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
       </div>
       <div className="landing-article">
         <header className="landing-masthead">
@@ -2255,7 +2351,7 @@ function BeverageTrailsIndexPage() {
       </Head>
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
-        <Link to="/" className="back-link">← Back to all resources</Link>
+        <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
       </div>
       <div className="landing-article">
         <header className="landing-masthead">
@@ -2312,7 +2408,7 @@ function ThemeTrailsIndexPage() {
       </Head>
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
-        <Link to="/" className="back-link">← Back to all resources</Link>
+        <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
       </div>
       <div className="landing-article">
         <header className="landing-masthead">
@@ -2433,7 +2529,7 @@ function PutYourFarmOnTheMapPage() {
       </Head>
       <div className="topbar">{TOPBAR_TEXT}</div>
       <div className="listing-page-nav">
-        <Link to="/" className="back-link">← Back to all resources</Link>
+        <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
       </div>
       <div className="listing-page-article">
         <header className="listing-page-masthead">
@@ -2473,7 +2569,7 @@ function PutYourFarmOnTheMapPage() {
           <p className="trail-close">By Devlin Foster, Hudson Valley Almanac</p>
 
           <p className="trail-crosslinks">
-            More guides: <strong><Link to="/farm-trails">Farm Trails</Link></strong>, <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>, <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong> and <strong><Link to="/fire-towers">Fire Towers</Link></strong>.
+            More guides: <strong><Link to="/farm-trails">Farm Trails</Link></strong>, <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>, <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong> and <strong><Link to="/fire-towers">Fire Towers</Link></strong>, or everything on <strong><Link to="/guides">Guides &amp; Books</Link></strong>.
           </p>
         </div>
       </div>
