@@ -17,6 +17,7 @@ import { BOOKS, booksForCounty, booksForListing } from "./data/books.js";
 import { validateEmail, suggestEmailFix } from "./utils/email.js";
 import { submitListing, FIELD_MAX_LENGTHS } from "./utils/submit-listing.js";
 import { localToday, isSeasonEnded } from "./utils/season.js";
+import { sortSeasonEndedLast } from "./utils/fall-harvest.js";
 import { BOOK_LINKS } from "./data/book-links.js";
 import { ADMIN_STATUSES, canDeletePermanently, fetchAdminListings, setListingStatus, reopenListing, REOPENABLE_STATUSES, confirmDialogCopy, deleteListingPermanently, editFormFor, saveListingEdits } from "./utils/admin-listings.js";
 
@@ -187,6 +188,7 @@ const NAV_LINKS = [
   { label: "Beverage Trails", to: "/beverage-trails" },
   { label: "Explore by Theme", to: "/explore-by-theme" },
   { label: "Fire Towers", to: "/fire-towers" },
+  { label: "Fall Harvest", to: "/fall-harvest" },
   { label: "Put Your Farm on the Map", to: "/put-your-farm-on-the-map" },
   { label: "About", to: "/about" },
   { label: "Books", to: "/books" },
@@ -318,6 +320,14 @@ export const routes = [
       { path: "beverage-trails", Component: BeverageTrailsIndexPage },
       { path: "explore-by-theme", Component: ThemeTrailsIndexPage },
       { path: "put-your-farm-on-the-map", Component: PutYourFarmOnTheMapPage },
+      {
+        path: "fall-harvest",
+        Component: FallHarvestPage,
+        async loader() {
+          if (!import.meta.env.SSR) return null;
+          return (await import("./data/build-data.js")).fallHarvestLoader();
+        },
+      },
       {
         path: "farm-trails/:slug",
         Component: FarmTrailGuidePage,
@@ -1376,6 +1386,7 @@ const GUIDE_LINKS = [
   { label: "Beverage Trails", to: "/beverage-trails", blurb: "Cideries, breweries, distilleries, and wineries, region-wide and county by county." },
   { label: "Explore by Theme", to: "/explore-by-theme", blurb: "Maple, makers, heritage breeds, fairs, the outdoors, and more, sorted by theme." },
   { label: "Fire Towers", to: "/fire-towers", blurb: "Standing, climbable fire towers across the Hudson Valley and the Catskill highlands." },
+  { label: "Fall Harvest", to: "/fall-harvest", blurb: "Apple picking, pumpkins, cider, and hayrides across the Hudson Valley, one good Saturday at a time." },
   { label: "Put Your Farm on the Map", to: "/put-your-farm-on-the-map", blurb: "A day-by-day planner to get your farm stand, homegrown products and small food business found." },
 ];
 // The dropdown's second group. /freezer-full (a book's companion farm list)
@@ -2570,6 +2581,107 @@ function PutYourFarmOnTheMapPage() {
 
           <p className="trail-crosslinks">
             More guides: <strong><Link to="/farm-trails">Farm Trails</Link></strong>, <strong><Link to="/beverage-trails">Beverage Trails</Link></strong>, <strong><Link to="/explore-by-theme">Explore by Theme</Link></strong> and <strong><Link to="/fire-towers">Fire Towers</Link></strong>, or everything on <strong><Link to="/guides">Guides &amp; Books</Link></strong>.
+          </p>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// Fall Harvest: a free guide to pick-your-own, orchards, pumpkins, cider,
+// hayrides and harvest festivals. The sections come from the build-time
+// listings snapshot (published only; see src/utils/fall-harvest.js), so every
+// stop is in the prerendered HTML and the nightly rebuild keeps it current. A
+// county select filters all sections at once; listings whose season has ended
+// get the site's "Season ended" label and sort to the bottom of each section.
+function FallHarvestPage() {
+  const data = useLoaderData();
+  const today = useLocalToday();
+  const openSubmitForm = useOpenSubmitForm();
+  const [county, setCounty] = useState("");
+  const sections = data?.sections || [];
+  const counties = data?.counties || [];
+  const canonical = `${SITE_ORIGIN}/fall-harvest`;
+  const description = "Apple picking, pumpkin patches, corn mazes, cider donuts, hayrides and harvest festivals across the Hudson Valley, Catskills and Capital Region, county by county, from the Hudson Valley Almanac.";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Fall Harvest — Hudson Valley Almanac",
+    description,
+    url: canonical,
+    author: { "@type": "Person", name: "Devlin Foster" },
+    publisher: { "@type": "Organization", name: "Hudson Valley Almanac", url: SITE_ORIGIN },
+  };
+  const countyLabel = (c) => (c && !NON_GEOGRAPHIC_COUNTIES.has(c) ? `${c} County` : c);
+  return (
+    <div className="listing-page-wrap">
+      <PageMeta
+        title="Fall Harvest — Apple Picking, Pumpkins, Cider & Hayrides — Hudson Valley Almanac"
+        description={description}
+        canonical={canonical}
+      />
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
+      <div className="topbar">{TOPBAR_TEXT}</div>
+      <div className="listing-page-nav">
+        <Link to="/guides" className="back-link">← Back to Guides &amp; Books</Link>
+      </div>
+      <div className="listing-page-article">
+        <header className="listing-page-masthead">
+          <div className="listing-page-eyebrow">Guides · Fall</div>
+          <h1 className="listing-page-title">Fall Harvest</h1>
+          <p className="listing-page-sub">Apple picking, pumpkins, cider, and hayrides across the Hudson Valley, one good Saturday at a time.</p>
+        </header>
+        <div className="listing-page-body trail-body">
+          <p className="trail-lede">
+            Fall is the busiest season on the farm calendar, and the best time to go and see it. I've gathered every orchard, pumpkin patch, cider stand, hayride and harvest festival in the Almanac into one place, sorted by what you want to do. Pick a county below to see only what's near you, then open any stop for its address, phone and directions.
+          </p>
+          <p>
+            Fall hours change week to week, with the weather, the crop and how busy the weekend gets, so call ahead or check the farm's own page before you drive. A place marked "Season ended" is closed for the year, and those sit at the bottom of each list.
+          </p>
+          <p className="fh-byline">Devlin Foster, Hudson Valley Almanac</p>
+
+          <div className="fh-filter">
+            <label htmlFor="fh-county" className="fh-filter-label">County</label>
+            <select id="fh-county" className="fh-select" value={county} onChange={(e) => setCounty(e.target.value)}>
+              <option value="">All counties</option>
+              {counties.map((c) => <option key={c} value={c}>{c} County</option>)}
+            </select>
+          </div>
+          <nav className="fh-jump" aria-label="Sections">
+            {sections.map((s) => <a key={s.id} href={`#${s.id}`}>{s.title}</a>)}
+          </nav>
+
+          {sections.map((s) => {
+            const items = sortSeasonEndedLast(county ? s.items.filter((it) => it.county === county) : s.items, today);
+            return (
+              <section key={s.id} className="fh-section" aria-labelledby={s.id}>
+                <h2 id={s.id} className="trail-h2">
+                  {s.title} <span className="fh-count">{items.length}</span>
+                </h2>
+                {items.length ? (
+                  <ul className="fh-list">
+                    {items.map((it) => (
+                      <li key={it.id}>
+                        <Link to={`/listing/${it.slug}`} className="fh-stop">
+                          <span className="fh-stop-name">{it.name}</span>
+                          <span className="fh-stop-place">{[it.town, countyLabel(it.county)].filter(Boolean).join(" · ")}</span>
+                          {it.hours ? <span className="fh-stop-hours"><Hours hours={it.hours} seasonEnd={it.season_end} /></span> : null}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="fh-empty">Nothing in {county} County for this one yet.</p>
+                )}
+              </section>
+            );
+          })}
+
+          <p className="trail-close">
+            Know a stand or orchard I missed? <button type="button" className="link-button fh-submit" onClick={openSubmitForm}>Submit a listing</button>
           </p>
         </div>
       </div>

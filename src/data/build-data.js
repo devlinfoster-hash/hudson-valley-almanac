@@ -11,6 +11,7 @@
 import snapshot from "./listings.json";
 import mapSnapshot from "./listings-map.json";
 import { isListingOnMap } from "../utils/map-listings.js";
+import { buildFallHarvestSections } from "../utils/fall-harvest.js";
 import {
   categories,
   getCategory,
@@ -202,6 +203,15 @@ export function homeLoader() {
       return { id: c.id, label: c.label, icon: c.icon, count: ALL.filter((l) => keys.includes(l.category)).length };
     }),
   };
+}
+
+// The Fall Harvest guide's sections (see src/utils/fall-harvest.js), plus the
+// counties its stops are in for the county filter.
+export function fallHarvestLoader() {
+  const sections = buildFallHarvestSections(ALL);
+  const counties = new Set();
+  for (const s of sections) for (const it of s.items) if (it.county && !NON_GEOGRAPHIC_COUNTIES.has(it.county)) counties.add(it.county);
+  return { sections, counties: [...counties].sort((a, b) => a.localeCompare(b)) };
 }
 
 // One page of a county/category/combo listing set. `listings` is the page's
