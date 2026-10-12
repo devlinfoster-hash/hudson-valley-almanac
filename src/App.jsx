@@ -2202,10 +2202,51 @@ function AboutPage() {
   );
 }
 
+// The free PDF guides on /guides, in their groups. Files live in
+// public/downloads/ under a lowercase-hyphen name; `download` is the filename
+// the visitor's copy is saved as (the original HVA_ name). `page` links the
+// guides that also have an online page. Descriptions are the PDFs' own
+// cover subtitles.
+const PDF_GUIDES_AS_OF = "October 11, 2026";
+const PDF_GUIDE_GROUPS = [
+  {
+    title: "Seasonal and local",
+    guides: [
+      { title: "Fall Harvest", file: "fall-harvest", download: "HVA_Fall_Harvest.pdf", page: "/fall-harvest", blurb: "Apple picking, pumpkins, cider, and hayrides across the Hudson Valley, one good Saturday at a time." },
+      { title: "Farm Stands Open in Winter", file: "farm-stands-open-in-winter", download: "HVA_Farm_Stands_Open_in_Winter.pdf", blurb: "Where to buy local when the stands close, and the farmers markets that stay open through the cold." },
+      { title: "Rainy Day Almanac", file: "rainy-day-almanac", download: "HVA_Rainy_Day_Almanac.pdf", blurb: "Tasting rooms, cheese counters, and working studios for the days you'd rather be inside." },
+      { title: "Local Holiday Gift Guide", file: "local-holiday-gift-guide", download: "HVA_Local_Holiday_Gift_Guide.pdf", blurb: "Trees, maple syrup, and honey from Hudson Valley farms." },
+      { title: "Cheese & Dairy Trail", file: "cheese-and-dairy-trail", download: "HVA_Cheese_and_Dairy_Trail.pdf", blurb: "Cheesemakers, creameries, and dairies across the Hudson Valley." },
+      { title: "Eggs, Chickens & Turkeys", file: "eggs-chickens-and-turkeys", download: "HVA_Eggs_Chickens_and_Turkeys.pdf", blurb: "How to buy from a farm, plus where to find eggs and Thanksgiving turkeys." },
+    ],
+  },
+  {
+    title: "Buying local",
+    guides: [
+      { title: "How to Buy a Share", file: "how-to-buy-a-share", download: "HVA_How_to_Buy_a_Share.pdf", blurb: "What a CSA, a farm share, and a meat share are, how they work, and what to ask before you pay." },
+      { title: "Buy Local on a Budget", file: "buy-local-on-a-budget", download: "HVA_Buy_Local_on_a_Budget.pdf", blurb: "Ways to stretch your food dollars at farm stands and farmers markets, including SNAP and market coupons." },
+      { title: "Stock Your Freezer from Local Farms", file: "stock-your-freezer", download: "HVA_Stock_Your_Freezer.pdf", blurb: "How to plan, buy, store, and thaw local meat so a freezer full of it stays safe and tastes good." },
+      { title: "Preserve the Harvest", file: "preserve-the-harvest", download: "HVA_Preserve_the_Harvest.pdf", blurb: "Freezing, drying, and canning basics for the food you pick up from local farms." },
+    ],
+  },
+  {
+    title: "For farms",
+    guides: [
+      { title: "Put Your Farm on the Map", file: "put-your-farm-on-the-map", download: "HVA_Put_Your_Farm_on_the_Map.pdf", page: "/put-your-farm-on-the-map", blurb: "A day-by-day planner to get your farm stand, homegrown products and small food business found." },
+      { title: "Sell at a Farmers Market", file: "sell-at-a-farmers-market", download: "HVA_Sell_at_a_Farmers_Market.pdf", blurb: "A step-by-step planner for getting your table into your first market, and keeping it there." },
+      { title: "Run a Farm Stand", file: "run-a-farm-stand", download: "HVA_Run_a_Farm_Stand.pdf", blurb: "A short checklist for opening, stocking, pricing, and promoting a roadside stand." },
+      { title: "Farm Social Media in 30 Minutes a Week", file: "farm-social-media-30-minutes", download: "HVA_Farm_Social_Media_30_Minutes.pdf", blurb: "A simple weekly routine for a farm that would rather be farming." },
+      { title: "Take Your Farm into SNAP and Market Incentives", file: "snap-and-market-incentives-for-farms", download: "HVA_SNAP_and_Market_Incentives_for_Farms.pdf", blurb: "How New York farms and farm stands can accept SNAP, WIC and Senior FMNP checks, FreshConnect checks, and Double Up Food Bucks." },
+      { title: "Keep It Going in Winter", file: "keep-it-going-in-winter", download: "HVA_Keep_It_Going_in_Winter.pdf", blurb: "Ten small jobs for the quiet months, so your customers remember you and your spring starts ahead." },
+    ],
+  },
+];
+
 // Guides & Books — the landing page the header's Guides & Books label links to,
-// and where the guide and book pages' back links go. Two groups, the same as
-// the dropdown: the free guides (GUIDE_LINKS) and the books. Same shell and
-// card grid as the trail indexes.
+// and where the guide and book pages' back links go. The online free guides
+// (GUIDE_LINKS, as in the dropdown), then the free PDF guides in their groups
+// (PDF_GUIDE_GROUPS), then the books. Same shell and card grid as the trail
+// indexes.
 function GuidesIndexPage() {
   const canonical = `${SITE_ORIGIN}/guides`;
   const jsonLd = {
@@ -2222,7 +2263,7 @@ function GuidesIndexPage() {
     <div className="landing-wrap">
       <PageMeta
         title="Guides & Books — Hudson Valley Almanac"
-        description="Free guides to the Hudson Valley, Catskills, and Capital Region — farm trails, beverage trails, themes, fire towers, and a planner for farm stands — plus guidebooks by the Almanac's editor."
+        description="Free guides to the Hudson Valley, Catskills, and Capital Region — farm trails, fall harvest, fire towers, and free PDF guides to buying local and selling from the farm — plus guidebooks by the Almanac's editor."
         canonical={canonical}
       />
       <Head>
@@ -2250,6 +2291,33 @@ function GuidesIndexPage() {
             </Link>
           ))}
         </div>
+
+        <p className="guides-pdf-note">
+          The guides below are free PDFs to download and print, with nothing to sign up for. Listings in the guides are as of {PDF_GUIDES_AS_OF}.
+        </p>
+        {PDF_GUIDE_GROUPS.map((group) => (
+          <Fragment key={group.title}>
+            <h2 className="trail-h2">{group.title}</h2>
+            <div className="trail-grid">
+              {group.guides.map((g) => (
+                // Not one big link like the cards above: each card has its own
+                // download link (and maybe a page link), and a link can't sit
+                // inside another link.
+                <div key={g.file} className="trail-card pdf-card">
+                  <div className="trail-card-area">Free guide · PDF</div>
+                  <div className="trail-card-name">{g.title}</div>
+                  <p className="trail-card-blurb">{g.blurb}</p>
+                  <div className="pdf-card-links">
+                    <a className="pdf-card-download" href={`/downloads/${g.file}.pdf`} download={g.download} aria-label={`Free download: ${g.title} (PDF)`}>
+                      Free download · PDF
+                    </a>
+                    {g.page ? <Link className="pdf-card-online" to={g.page}>or read it online →</Link> : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Fragment>
+        ))}
 
         <h2 className="trail-h2">Books</h2>
         <div className="trail-grid">
