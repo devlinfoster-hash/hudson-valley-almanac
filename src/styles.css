@@ -478,6 +478,17 @@
   .trail-soon-name { color: #1A2B3C; }
   .trail-soon-area { color: #8AA0AE; font-size: 13px; }
   @media (max-width: 600px) { .trail-grid { grid-template-columns: 1fr; } }
+  /* /guides free PDF guides: the trail-card look, but the card itself isn't a
+     link (it holds a download link and maybe a page link), so no hover lift.
+     Both links are at least 44px tall. */
+  .guides-pdf-note { font-family: 'Lora', serif; font-size: 16px; font-style: italic; line-height: 1.6; color: #4A6472; margin: 6px 0 0; }
+  .trail-card.pdf-card:hover { border-color: rgba(28,58,94,0.2); box-shadow: none; transform: none; }
+  .pdf-card-links { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+  .pdf-card-download { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; background: #1C3A5E; color: #EFF0E8; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+  .pdf-card-download:hover { background: #0F2640; color: #EFF0E8; }
+  .pdf-card-online { display: inline-flex; align-items: center; min-height: 44px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #1C3A5E; text-decoration: none; }
+  .pdf-card-online:hover { color: #C4862D; }
+  .pdf-card-download:focus-visible, .pdf-card-online:focus-visible { outline: 2px solid #C4862D; outline-offset: 2px; }
   /* Fall Harvest (/fall-harvest): county filter, section jump links and the
      stop rows, in the guide reading column. Every control and row is at least
      44px tall for thumbs. No photos. */
