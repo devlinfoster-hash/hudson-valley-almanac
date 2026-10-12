@@ -2227,7 +2227,6 @@ const PDF_GUIDE_GROUPS = [
       { title: "Buy Local on a Budget", file: "buy-local-on-a-budget", download: "HVA_Buy_Local_on_a_Budget.pdf", blurb: "Ways to stretch your food dollars at farm stands and farmers markets, including SNAP and market coupons." },
       { title: "Stock Your Freezer from Local Farms", file: "stock-your-freezer", download: "HVA_Stock_Your_Freezer.pdf", blurb: "How to plan, buy, store, and thaw local meat so a freezer full of it stays safe and tastes good." },
       { title: "Preserve the Harvest", file: "preserve-the-harvest", download: "HVA_Preserve_the_Harvest.pdf", blurb: "Freezing, drying, and canning basics for the food you pick up from local farms." },
-      { title: "Keep It Going in Winter", file: "keep-it-going-in-winter", download: "HVA_Keep_It_Going_in_Winter.pdf", blurb: "Ten small jobs for the quiet months, so your customers remember you and your spring starts ahead." },
     ],
   },
   {
@@ -2238,6 +2237,7 @@ const PDF_GUIDE_GROUPS = [
       { title: "Run a Farm Stand", file: "run-a-farm-stand", download: "HVA_Run_a_Farm_Stand.pdf", blurb: "A short checklist for opening, stocking, pricing, and promoting a roadside stand." },
       { title: "Farm Social Media in 30 Minutes a Week", file: "farm-social-media-30-minutes", download: "HVA_Farm_Social_Media_30_Minutes.pdf", blurb: "A simple weekly routine for a farm that would rather be farming." },
       { title: "Take Your Farm into SNAP and Market Incentives", file: "snap-and-market-incentives-for-farms", download: "HVA_SNAP_and_Market_Incentives_for_Farms.pdf", blurb: "How New York farms and farm stands can accept SNAP, WIC and Senior FMNP checks, FreshConnect checks, and Double Up Food Bucks." },
+      { title: "Keep It Going in Winter", file: "keep-it-going-in-winter", download: "HVA_Keep_It_Going_in_Winter.pdf", blurb: "Ten small jobs for the quiet months, so your customers remember you and your spring starts ahead." },
     ],
   },
 ];
