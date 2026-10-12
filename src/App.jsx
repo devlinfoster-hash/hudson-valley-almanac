@@ -512,7 +512,11 @@ function ResultCard({ d }) {
           <div className="listing-meta">{cat ? cat.icon : ""} {cat ? cat.label : ""} - {d.town}, {d.county} Co.{d.established ? " - Est. " + d.established : ""}</div>
         </div>
       </div>
-      <p className="listing-desc">{linkifyDescription(d.description)}</p>
+      {/* Plain text, not linkifyDescription: the whole card is already a link,
+          and a link inside a link is invalid HTML that the browser splits
+          apart, so the prerendered card no longer matched React's on hydration
+          (React error #418). The listing page itself links the URLs. */}
+      <p className="listing-desc">{d.description}</p>
       <div className="tag-row">{(d.tags || []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
       <div className="hours-line"><Hours hours={d.hours} seasonEnd={d.season_end} /></div>
     </Link>
