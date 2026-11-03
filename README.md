@@ -37,6 +37,14 @@ Prerendered route types:
 - `vercel.json` 301s trailing-slash URLs to the slashless URL, `/buy-sell-trade`
   to `/category/buy-sell-trade`, `/news/page/1` to `/news`, `/listings/:slug` to
   `/listing/:slug`, and the `.vercel.app` host to www.
+- `vercel.json` also 301s old URLs that crawlers still request but the site no
+  longer has: `/guidesMap` → `/guides`, `/contact` → `/about` (contact is the
+  `mailto:` link), `/county/greene/page/3`–`8` → `/county/greene/page/2`, and
+  the old Sullivan County category slugs (`bakery`, `dairy`, `eggs`,
+  `farm-stands`, `produce` → `/county/sullivan/food`; `stores` →
+  `/county/sullivan`). `scripts/check-redirects.mjs` fails the build if a
+  fixed-path redirect's source has become a real page (Vercel would hide it) or
+  its destination isn't a page (it would 404).
 - The apex `hudsonvalleyalmanac.com` → `www` redirect is a Vercel domain
   setting, not `vercel.json`. Vercel's own HTTP → HTTPS redirect (308, same
   host) always runs first, so `http://hudsonvalleyalmanac.com/` takes two hops.
