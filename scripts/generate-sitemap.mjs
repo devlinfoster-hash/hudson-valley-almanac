@@ -48,7 +48,8 @@ const GROUPS = [
     name: "trails-themes",
     test: (p) =>
       ["/guides", "/farm-trails", "/beverage-trails", "/explore-by-theme", "/fire-towers", "/put-your-farm-on-the-map", "/fall-harvest"].includes(p) ||
-      p.startsWith("/farm-trails/"),
+      p.startsWith("/farm-trails/") ||
+      p.startsWith("/put-your-farm-on-the-map/"),
   },
   { name: "categories-counties", test: (p) => p.startsWith("/category/") || p.startsWith("/county/") },
   { name: "pages", test: () => true },

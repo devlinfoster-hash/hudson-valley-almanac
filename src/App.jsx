@@ -8,6 +8,7 @@ import { FARM_TRAIL_BODIES } from "./data/farm-trails-bodies.jsx";
 import { NEWS_POSTS } from "./data/news.js";
 import SITE_STATS from "./data/site-stats.json";
 import FreezerFullContent from "./FreezerFullPage.jsx";
+import { PYF_BASE, PYF_TOC, pyfPath, pyfDisplayTitle, PyfContents } from "./PutYourFarmGuide.jsx";
 import "./styles.css";
 import { SavedButton, useSavedIds } from "./SavedButton.jsx";
 import { TripButton, useTrips } from "./TripButton.jsx";
@@ -126,7 +127,7 @@ function linkifyDescription(text) {
 
 // The county line and county counts are generated from SERVED_COUNTIES
 // (src/catalog.js), so the number always matches the list.
-const TOPBAR_TEXT = `${SERVED_COUNTIES.join(" · ")} Counties`;
+export const TOPBAR_TEXT = `${SERVED_COUNTIES.join(" · ")} Counties`;
 const FOOTER_COUNTIES = `Serving ${SERVED_COUNTIES.length} counties across the Hudson Valley and the adjacent Catskill highlands`;
 // The listing count comes from the build-time snapshot (scripts/snapshot.mjs),
 // so it refreshes on every build. Zero means no snapshot (e.g. a local build
@@ -321,6 +322,15 @@ export const routes = [
       { path: "explore-by-theme", Component: ThemeTrailsIndexPage },
       { path: "put-your-farm-on-the-map", Component: PutYourFarmOnTheMapPage },
       {
+        path: "put-your-farm-on-the-map/:section",
+        // Lazy route: the guide text (src/data/put-your-farm-guide.json) loads
+        // in its own chunk, so it isn't in every page's bundle.
+        lazy: () => import("./PutYourFarmSection.jsx").then((m) => ({ Component: m.default })),
+        getStaticPaths() {
+          return PYF_TOC.map((t) => `put-your-farm-on-the-map/${t.slug}`);
+        },
+      },
+      {
         path: "fall-harvest",
         Component: FallHarvestPage,
         async loader() {
@@ -476,7 +486,7 @@ const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 // in the database). Those must not carry a canonical either: pointing one at the
 // homepage tells Google this URL is a duplicate of "/" rather than a dead end,
 // which is how empty URLs end up reported as redirects instead of 404s.
-function PageMeta({ title, description, canonical, ogType = "website", noindex = false }) {
+export function PageMeta({ title, description, canonical, ogType = "website", noindex = false }) {
   const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 300);
   return (
     <Head>
@@ -1325,7 +1335,7 @@ function SupportButton({
 
 const footerLinkStyle = {color:"#A8B8C4",textDecoration:"none",fontSize:"0.9rem"};
 
-function Footer() {
+export function Footer() {
   const openSubmitForm = useOpenSubmitForm();
   return (
     <footer style={{backgroundColor:"#0F2640",color:"#A8B8C4",padding:"40px 24px",textAlign:"center"}}>
@@ -1974,7 +1984,7 @@ function BookContextCard({ book }) {
   );
 }
 
-function NotFoundPage() {
+export function NotFoundPage() {
   return (
     <div className="listing-page-wrap">
       <Head>
@@ -2571,19 +2581,42 @@ function FarmTrailGuidePage() {
   );
 }
 
-// "Put Your Farm on the Map": a free downloadable planner for people who sell
-// from home. A download page only (the guide itself is the .docx/.pdf in
-// public/downloads/), on the same reading shell as the Farm Trails guides.
-const PUT_YOUR_FARM_FILES = {
+// "Put Your Farm on the Map": a free planner for people who sell from home.
+// The landing page (download buttons, what's inside, table of contents) plus
+// one web page per section at /put-your-farm-on-the-map/<slug>
+// (src/PutYourFarmSection.jsx, a lazy route). The section text comes from
+// src/data/put-your-farm-guide.json, built from the .docx in public/downloads/
+// by scripts/put-your-farm-guide.py.
+export const PUT_YOUR_FARM_FILES = {
   docx: "/downloads/put-your-farm-on-the-map.docx",
   pdf: "/downloads/put-your-farm-on-the-map.pdf",
 };
+export const PUT_YOUR_FARM_TITLE = "Put Your Farm on the Map";
+const PUT_YOUR_FARM_SUBTITLE = "A Day-by-Day Planner to Get Your Farm Stand, Homegrown Products and Small Food Business Found";
+
+function PutYourFarmDownloads() {
+  return (
+    <section className="guide-download" aria-labelledby="guide-download-title">
+      <div className="rambles-eyebrow">Free download</div>
+      <h2 id="guide-download-title" className="rambles-title">Download the guide</h2>
+      <p className="rambles-desc">It's free, with nothing to sign up for. The same guide in two formats: the Word file to edit, the PDF to print.</p>
+      <div className="guide-download-btns">
+        <a className="guide-download-btn" href={PUT_YOUR_FARM_FILES.docx} download="HVA_Put_Your_Farm_on_the_Map.docx">
+          Download the Word file (.docx)
+        </a>
+        <a className="guide-download-btn guide-download-btn-alt" href={PUT_YOUR_FARM_FILES.pdf} download="HVA_Put_Your_Farm_on_the_Map.pdf">
+          Download the PDF
+        </a>
+      </div>
+    </section>
+  );
+}
 
 function PutYourFarmOnTheMapPage() {
-  const canonical = `${SITE_ORIGIN}/put-your-farm-on-the-map`;
-  const title = "Put Your Farm on the Map";
-  const subtitle = "A Day-by-Day Planner to Get Your Farm Stand, Homegrown Products and Small Food Business Found";
-  const description = "A free, plain-English day-by-day planner to get your farm stand, homegrown products and small food business found. Download it as a Word file or PDF, with nothing to sign up for.";
+  const canonical = `${SITE_ORIGIN}${PYF_BASE}`;
+  const title = PUT_YOUR_FARM_TITLE;
+  const subtitle = PUT_YOUR_FARM_SUBTITLE;
+  const description = "A free, plain-English day-by-day planner to get your farm stand, homegrown products and small food business found. Read it here one day at a time, or download it as a Word file or PDF, with nothing to sign up for.";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -2594,13 +2627,15 @@ function PutYourFarmOnTheMapPage() {
     isAccessibleForFree: true,
     author: { "@type": "Person", name: "Devlin Foster" },
     publisher: { "@type": "Organization", name: "Hudson Valley Almanac", url: SITE_ORIGIN },
+    hasPart: PYF_TOC.map((t) => ({ "@type": "WebPage", name: pyfDisplayTitle(t), url: `${SITE_ORIGIN}${pyfPath(t.slug)}` })),
     associatedMedia: [
       { "@type": "MediaObject", contentUrl: `${SITE_ORIGIN}${PUT_YOUR_FARM_FILES.docx}`, encodingFormat: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
       { "@type": "MediaObject", contentUrl: `${SITE_ORIGIN}${PUT_YOUR_FARM_FILES.pdf}`, encodingFormat: "application/pdf" },
     ],
   };
+  const p = pyfPath;
   return (
-    <div className="listing-page-wrap">
+    <div className="listing-page-wrap pyf-wrap">
       <PageMeta
         title={`${title} — Free Guide — Hudson Valley Almanac`}
         description={description}
@@ -2621,31 +2656,26 @@ function PutYourFarmOnTheMapPage() {
           <p className="listing-page-sub">{subtitle}</p>
         </header>
         <div className="listing-page-body trail-body">
+          <PutYourFarmDownloads />
+
           <p className="trail-lede">A plain-English guide for people who sell from home. No technical skills. No expensive website. Free options first. Just one manageable job a day.</p>
+
+          <p className="pyf-start"><Link className="pyf-start-btn" to={p("start")}>Start reading <span aria-hidden="true">→</span></Link></p>
 
           <h2 className="trail-h2">What's inside</h2>
           <ul className="trail-list">
-            <li>17 one-job-a-day pages with tick-box checklists</li>
-            <li>Your Facebook Page, taking payments, Google Maps, reviews and scams</li>
-            <li>Who to call about the rules</li>
-            <li>Getting found offline</li>
-            <li>Free tools</li>
-            <li>A short guide to using AI helpers, including a prompt that writes prompts</li>
+            <li><Link to={p("day-1")}>17 one-job-a-day pages</Link> with tick-box checklists</li>
+            <li>Your <Link to={p("day-2")}>Facebook Page</Link>, <Link to={p("day-4")}>taking payments</Link>, <Link to={p("day-5")}>Google Maps</Link>, <Link to={p("day-9")}>reviews and scams</Link></li>
+            <li><Link to={p("day-11")}>Who to call about the rules</Link></li>
+            <li><Link to={`${p("day-12")}#csa`}>If you run a CSA or farm share</Link></li>
+            <li><Link to={p("day-13")}>Free farm directories</Link>, including Hudson Valley Bounty and the New York State Farm Directory</li>
+            <li><Link to={p("day-17")}>Getting found offline</Link></li>
+            <li><Link to={p("free-tools")}>Free tools</Link></li>
+            <li><Link to={p("ai-helpers")}>A short guide to using AI helpers</Link>, including a prompt that writes prompts</li>
+            <li><Link to={p("where-to-get-help")}>Where to get help in New York</Link></li>
           </ul>
 
-          <section className="guide-download" aria-labelledby="guide-download-title">
-            <div className="rambles-eyebrow">Free download</div>
-            <h2 id="guide-download-title" className="rambles-title">Download the guide</h2>
-            <p className="rambles-desc">It's free, with nothing to sign up for. The same guide in two formats: the Word file to edit, the PDF to print.</p>
-            <div className="guide-download-btns">
-              <a className="guide-download-btn" href={PUT_YOUR_FARM_FILES.docx} download="HVA_Put_Your_Farm_on_the_Map.docx">
-                Download the Word file (.docx)
-              </a>
-              <a className="guide-download-btn guide-download-btn-alt" href={PUT_YOUR_FARM_FILES.pdf} download="HVA_Put_Your_Farm_on_the_Map.pdf">
-                Download the PDF
-              </a>
-            </div>
-          </section>
+          <PyfContents />
 
           <p className="guide-note">Prices last checked October 11, 2026. Apps change their screens, so the guide tells readers to look for the same words.</p>
 

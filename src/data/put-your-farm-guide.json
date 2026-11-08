@@ -1,0 +1,5868 @@
+{
+ "source": "put-your-farm-on-the-map.docx",
+ "pages": [
+  {
+   "slug": "start",
+   "title": "Start here",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "I wrote this because I kept running into folks who make or grow something wonderful and can't be found by the people who'd love to buy it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "It's not that they can't do this stuff, nobody ever sat down and showed them. I've been through nearly every step here myself, building MeanderNY and the Hudson Valley and Mohawk Valley Almanacs, so I know where it gets confusing, and I wrote it the way I'd explain it to you across the table."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "The idea is one job a day. Do today's page, stop, and come back for the next one. A \"day\" can be a day, a week or a month, and any day that doesn't fit you can be skipped."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Free options come first, and if something costs money I'll tell you what it costs before you pay. Apps change their screens all the time, so if a button on your phone has a different name, look for the same words and keep going."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Where to start.",
+       "b": true
+      },
+      {
+       "t": " Read the \"If you only have an hour\" list below, then do Day 1. Skip any day that doesn't fit you."
+      }
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "If you only have an hour"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Start with the easy ones. None takes more than 30 minutes, none costs anything, and none needs a computer."
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Write your basics down",
+        "b": true
+       },
+       {
+        "t": " on paper or in your phone's Notes app (Day 1)."
+       }
+      ],
+      [
+       {
+        "t": "Make a farm email",
+        "b": true
+       },
+       {
+        "t": " (Day 1)."
+       }
+      ],
+      [
+       {
+        "t": "Take ten photos",
+        "b": true
+       },
+       {
+        "t": " with your phone (Day 2)."
+       }
+      ],
+      [
+       {
+        "t": "Post one photo and two sentences,",
+        "b": true
+       },
+       {
+        "t": " if you already have a Facebook Page (Day 3)."
+       }
+      ],
+      [
+       {
+        "t": "Write your prices once",
+        "b": true
+       },
+       {
+        "t": " and match them everywhere (Day 14)."
+       }
+      ],
+      [
+       {
+        "t": "Make a sign",
+        "b": true
+       },
+       {
+        "t": " you can read from the road, with your prices and \"Open\" (Day 16)."
+       }
+      ],
+      [
+       {
+        "t": "Fill a stack of \"tell a friend\" cards",
+        "b": true
+       },
+       {
+        "t": " (Day 17)."
+       }
+      ],
+      [
+       {
+        "t": "Ask three regulars",
+        "b": true
+       },
+       {
+        "t": " to follow your Page (Day 15)."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "The harder jobs (the Facebook Page setup, Google verification, the website and the rules check) can wait."
+      }
+     ]
+    }
+   ],
+   "description": "Why this guide exists, how the one-job-a-day idea works, and the easiest jobs to do first if you only have an hour.",
+   "short": "Start here"
+  },
+  {
+   "slug": "day-1",
+   "title": "DAY 1 — Basics, email and passwords",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About an hour and a half, with a break in the middle. All you need is a pen and paper (or your phone's Notes app) and your phone."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you already take photos and use the internet on your phone, you can skip the phone basics."
+      }
+     ]
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Write down my farm name and what I sell in one line"
+       }
+      ],
+      [
+       {
+        "t": "Write down my address, days, hours and months open"
+       }
+      ],
+      [
+       {
+        "t": "Write down my phone, email and how I take payment"
+       }
+      ],
+      [
+       {
+        "t": "Write a sentence of directions with a landmark"
+       }
+      ],
+      [
+       {
+        "t": "Write a 3–4 sentence description"
+       }
+      ],
+      [
+       {
+        "t": "Decide how much of my address to show"
+       }
+      ],
+      [
+       {
+        "t": "Make a free farm email at gmail.com"
+       }
+      ],
+      [
+       {
+        "t": "Write the email and password on paper, in pencil"
+       }
+      ],
+      [
+       {
+        "t": "Turn on two-step sign-in"
+       }
+      ],
+      [
+       {
+        "t": "Keep the paper list at home (not at the stand or in the truck)"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your phone company's store or help line, your library, your county Cooperative Extension office and your local Small Business Development Center all help home sellers for free. Apple and Google both publish free how-to guides for their phones."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Morning: write down your basics.",
+       "b": true
+      },
+      {
+       "t": " Every site you sign up for will ask the same questions, so answer them once, here, and copy from your notes every time after that."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Mixed-up details are the most common reason customers show up at the wrong time or can't find you at all."
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "The name,",
+        "b": true
+       },
+       {
+        "t": " exactly as it's on your sign, and "
+       },
+       {
+        "t": "what you sell",
+        "b": true
+       },
+       {
+        "t": " in one short line (\"Fresh eggs, honey and vegetables\")."
+       }
+      ],
+      [
+       {
+        "t": "Where and when:",
+        "b": true
+       },
+       {
+        "t": " your address (and how much of it you want to show), your days and hours, and the months you're open."
+       }
+      ],
+      [
+       {
+        "t": "How to reach you and pay you:",
+        "b": true
+       },
+       {
+        "t": " a phone number you'll actually answer, an email, and whether you take cash, check or Venmo."
+       }
+      ],
+      [
+       {
+        "t": "Directions in a sentence or two,",
+        "b": true
+       },
+       {
+        "t": " using a landmark (\"the green mailbox, second driveway\")."
+       }
+      ],
+      [
+       {
+        "t": "A short description,",
+        "b": true
+       },
+       {
+        "t": " three or four sentences: who you are, what you sell, what's special."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About your home address.",
+       "b": true
+      },
+      {
+       "t": " If you sell from your house, putting yourself on a map can show your home to anyone. If customers come to your stand, a map needs a real address, so put your hours on the listing."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If people pick up by arrangement or you sell at markets, Google lets some businesses hide the address and show only the towns they serve. And if you'd rather not be on a map at all, that's fine: your Facebook Page and a good sign by the road do most of the work."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Please don't use a made-up address or a friend's address, because Google can suspend your listing for that."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Phone basics.",
+       "b": true
+      },
+      {
+       "t": " You need to be able to tap, swipe, go back, copy and paste, take a photo and type in a search bar. If you can't yet, your phone company's store, your library or a family member can show you in about ten minutes."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Use Wi-Fi when you upload photos, since home or library Wi-Fi beats a weak cell signal."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Afternoon: a farm email and your passwords.",
+       "b": true
+      },
+      {
+       "t": " I'd make a second free email just for the farm so customers' messages don't get lost in your personal mail."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Go to gmail.com on your phone, tap "
+      },
+      {
+       "t": "Create account",
+       "b": true
+      },
+      {
+       "t": ", pick a short address that matches your farm name, and write the address and password on paper, in pencil."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "One rule for everything after this: "
+      },
+      {
+       "t": "you stay the owner of every account.",
+       "b": true
+      },
+      {
+       "t": " If a helper sets something up for you, it should be in your name, with your email, and you should know the password."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Make each important password long (a string of words that mean something to you beats a short one full of symbols), use a different one for each important account, and turn on two-step sign-in, which texts a code to your phone when you sign in."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Keep the written list at home, not at the stand or in the truck, and never write bank or card numbers on it."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: your photos and your Facebook Page."
+    }
+   ],
+   "part": {
+    "label": "PART 1: YOUR FIRST WEEKEND",
+    "intro": [
+     {
+      "t": "These three days are all free and all doable from your phone. If you stop after Day 3, you're already ahead of most home sellers.",
+      "i": true
+     }
+    ]
+   },
+   "description": "Write down your farm's basics once, make a free farm email, and set up safe passwords with two-step sign-in.",
+   "day": 1,
+   "short": "Basics, email and passwords"
+  },
+  {
+   "slug": "day-2",
+   "title": "DAY 2 — Photos and your Facebook Page",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About an hour and a half. You'll need your basics from Day 1, a Facebook account of your own and your phone. If you already run a Facebook Page for your farm, skip the Page part."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Take 10 photos in daylight (road sign, stand, entrance, best product, all products, me at work, the view)"
+       }
+      ],
+      [
+       {
+        "t": "Keep the best of each; delete the rest"
+       }
+      ],
+      [
+       {
+        "t": "Search my farm name on Facebook to see if a Page already exists"
+       }
+      ],
+      [
+       {
+        "t": "Create my Page (Menu, Pages, Create)"
+       }
+      ],
+      [
+       {
+        "t": "Add name, category, bio, profile photo and cover photo"
+       }
+      ],
+      [
+       {
+        "t": "Add phone, email, hours and directions"
+       }
+      ],
+      [
+       {
+        "t": "Choose a button I will actually answer (Call Now or Message)"
+       }
+      ],
+      [
+       {
+        "t": "On a computer: set my @username"
+       }
+      ],
+      [
+       {
+        "t": "Search my farm name to check the Page shows up"
+       }
+      ],
+      [
+       {
+        "t": "Confirm I have only ONE Page"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "Facebook moves things around. Look for the words Create, Edit, About, Hours and Action button. The words matter more than where they sit."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "the Facebook Help Center is free, and your library, your Cooperative Extension office or a friend who runs a Page can sit with you. Don't pay anyone who offers to \"verify\" or \"fix\" your Page."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Morning: take ten good photos.",
+       "b": true
+      },
+      {
+       "t": " On a sunny day, take the road sign (from the road), the stand or sign up close, the entrance and parking, your best product up close in daylight, all your products together, you at work, and the view."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Wipe the lens, hold the phone steady, take three of each and keep the best. Leave out license plates, and don't show people's faces without asking."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A privacy note on photos.",
+       "b": true
+      },
+      {
+       "t": " Photos you take on a phone can carry the exact location where you took them. If your stand is at your home, think about whether you want your address in every picture."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "On an iPhone, you can turn this off for the Camera in Settings, Privacy, Location Services. On Android, look in the Camera app's settings for location tags and turn them off."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "The apps themselves also usually remove this before showing a photo to the public, but turning it off at the source is safer."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Afternoon: make your Facebook Page.",
+       "b": true
+      },
+      {
+       "t": " A Page is a free public page for your farm. People can find it, see your hours and photos, and follow it for news, and a lot of customers look at a farm's Page before they visit."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "It's not your personal profile: your profile is for you, your Page is for your farm, and customers see the Page. Facebook is built around one personal account per person, so please don't make a second account for the farm. The farm gets a Page."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "First check that you don't already have one. Search your farm name on Facebook from your phone. If a Page you run comes up, update that one."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If a Page for your farm comes up that you didn't make, look on that Page for an option such as Request access or Claim, and check Facebook's Page help center for the current steps."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you don't have a Facebook account at all, open the app or go to facebook.com, tap "
+      },
+      {
+       "t": "Create new account",
+       "b": true
+      },
+      {
+       "t": ", and use your own name."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Already selling through your personal Facebook profile?",
+       "b": true
+      },
+      {
+       "t": " Lots of people do. A Page is better for a business, but you don't have to lose anyone. Make the Page, then post once on your profile saying \"Find our farm news here\" with the Page's name."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Ask your friends and regulars to follow the Page. Leave your old profile alone and keep it private. Don't delete it. From your Page, look for the option to invite friends to follow it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Now make the Page. Tap "
+      },
+      {
+       "t": "Menu",
+       "b": true
+      },
+      {
+       "t": " (on some phones it's your profile picture), then "
+      },
+      {
+       "t": "Pages",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "Create",
+       "b": true
+      },
+      {
+       "t": ". Type your farm name exactly as it's on your sign, pick a category such as \"Farm,\" \"Farmers market\" or \"Bakery,\" and create it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Then add the rest: a short bio from your basics, your profile photo (your logo or a clear photo of your sign), a cover photo (your best photo of the farm), your phone and email, your hours, and your directions in the About section."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If your Page offers a button such as "
+      },
+      {
+       "t": "Call Now",
+       "b": true
+      },
+      {
+       "t": " or "
+      },
+      {
+       "t": "Message",
+       "b": true
+      },
+      {
+       "t": ", pick the one you'll actually answer. If you work from home, look in the Page's address or location settings for an option to show only the area you serve instead of your street address."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A username like @yourfarmname is nice to have, but Facebook doesn't let you change it in the phone app. Use a computer browser: go into your Page, then "
+      },
+      {
+       "t": "Settings",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Page setup",
+       "b": true
+      },
+      {
+       "t": ", and edit the username."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "It needs at least five characters, and has to be one nobody else has taken."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " Search for your farm name on Facebook from your phone. Does your Page show up with the right hours, phone and photos? Do you have just one Page for your farm?"
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: your first post."
+    }
+   ],
+   "description": "Take ten good photos with your phone and make a free Facebook Page for your farm, step by step.",
+   "day": 2,
+   "short": "Photos and your Facebook Page"
+  },
+  {
+   "slug": "day-3",
+   "title": "DAY 3 — Your first post and a weekly habit",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About an hour. You'll need your Page, a photo and your Notes app."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Write and publish my first post (1–2 sentences and 1 photo)"
+       }
+      ],
+      [
+       {
+        "t": "Pin it to the top if Facebook allows"
+       }
+      ],
+      [
+       {
+        "t": "Pick my weekly posting day and write down my plan"
+       }
+      ],
+      [
+       {
+        "t": "Write 4 posts in Notes for the next month"
+       }
+      ],
+      [
+       {
+        "t": "(Optional) Try scheduling in Meta Business Suite"
+       }
+      ],
+      [
+       {
+        "t": "(Optional) Make an Event for an opening day or sale"
+       }
+      ],
+      [
+       {
+        "t": "Put links in the first comment, or type them as plain text"
+       }
+      ],
+      [
+       {
+        "t": "(Optional) Add a helper with the smallest access level"
+       }
+      ],
+      [
+       {
+        "t": "Look at my Page the way a customer would"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "the Facebook Help Center is free. Your library or Cooperative Extension office may run free social media classes for small business owners."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Your first post.",
+       "b": true
+      },
+      {
+       "t": " Tap "
+      },
+      {
+       "t": "Create post",
+       "b": true
+      },
+      {
+       "t": ", write one or two short sentences (\"We're open this Saturday from 9 to 4. Fresh eggs and honey. Come see us.\"), add one photo and tap "
+      },
+      {
+       "t": "Post",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If Facebook lets you pin it to the top, do. After that, aim for about one post a week."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Plan your posts ahead.",
+       "b": true
+      },
+      {
+       "t": " Pick one day a week, such as Sunday evening, and write the week's posts in your Notes app. Then post them when you have Wi-Fi."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Facebook's scheduling for Pages lives in Meta Business Suite, a tool Facebook builds in. Look for an option to schedule a post for later. Paid Meta plans add extras, so check the screen before you pay for anything."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If it feels like too much, just post by hand."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Keep it small.",
+       "b": true
+      },
+      {
+       "t": " One Facebook Page is enough to start. Instagram, TikTok and Pinterest can wait. You don't need them to be found."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "An event.",
+       "b": true
+      },
+      {
+       "t": " If you have a farm day, a sale or an opening day coming, look for "
+      },
+      {
+       "t": "Event",
+       "b": true
+      },
+      {
+       "t": " on your Page, give it a name, date, time and place, add a photo and create it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "When you can't think what to say,",
+       "b": true
+      },
+      {
+       "t": " pick one:"
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "\"We're open this weekend. Here are the hours.\""
+       }
+      ],
+      [
+       {
+        "t": "A photo of what's ready this week, with the price."
+       }
+      ],
+      [
+       {
+        "t": "\"Eggs are back!\""
+       }
+      ],
+      [
+       {
+        "t": "\"First day of the season is [date].\""
+       }
+      ],
+      [
+       {
+        "t": "\"We're closed this Saturday. See you next week.\""
+       }
+      ],
+      [
+       {
+        "t": "\"Meet the farmer\": a photo of you and two sentences."
+       }
+      ],
+      [
+       {
+        "t": "\"We take cash, check and Venmo.\""
+       }
+      ],
+      [
+       {
+        "t": "\"Thank you for a great season.\""
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A note on links.",
+       "b": true
+      },
+      {
+       "t": " Meta has said it's testing limits on link posts for some Pages unless they pay for a subscription. I couldn't confirm what the limit is today, so check Facebook's help pages."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Here's what I do: put your message in the post, and put the link in the first comment, or type the web address as plain text."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Add a helper safely.",
+       "b": true
+      },
+      {
+       "t": " If someone's going to help you with the Page, switch into your Page, then "
+      },
+      {
+       "t": "Menu",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Settings & privacy",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Settings",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Page setup",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Page access",
+       "b": true
+      },
+      {
+       "t": ", and add them by name."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Facebook's roles are called "
+      },
+      {
+       "t": "Full control",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Partial control",
+       "b": true
+      },
+      {
+       "t": " and "
+      },
+      {
+       "t": "Task access",
+       "b": true
+      },
+      {
+       "t": ", so give the smallest one that does the job. Turn on two-step sign-in for your own account too."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "You stay the owner, and your helper helps. When customers recommend your Page, say thank you, and don't pay for a recommendation or give a prize for one."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " Look at your Page like a customer would. Is your first post at the top?"
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "That's the end of Part 1. Everything after this is optional."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Next: Day 4 starts Part 2, with payments."
+    }
+   ],
+   "description": "Write your first Facebook post, plan a simple weekly posting habit, and add a helper to your Page safely.",
+   "day": 3,
+   "short": "Your first post and a weekly habit"
+  },
+  {
+   "slug": "day-4",
+   "title": "DAY 4 — Take payments without cash",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About an hour. You'll need your phone and a bank account. Skip this day if cash and checks work fine for you. Plenty of farm stands do fine with cash and checks, but a lot of customers carry very little cash these days."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Decide: do I want to take payments other than cash and checks?"
+       }
+      ],
+      [
+       {
+        "t": "Read the fees for the options I'm considering"
+       }
+      ],
+      [
+       {
+        "t": "Pick ONE payment app (or skip)"
+       }
+      ],
+      [
+       {
+        "t": "Make a $1 test payment, then refund it"
+       }
+      ],
+      [
+       {
+        "t": "Check I have a signal at the stand"
+       }
+      ],
+      [
+       {
+        "t": "Make a payment sign (or hand-write my payment name)"
+       }
+      ],
+      [
+       {
+        "t": "Put the sign in a plastic sleeve"
+       }
+      ],
+      [
+       {
+        "t": "Ask my bank if Zelle is available (optional)"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "these apps change their buttons often. Look for the words Business, Create or QR. If you're not sure, start with a QR sign and keep taking cash and checks."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your bank or credit union can tell you which payment apps work with your account, and it's free to ask. Each app has a free Help Center, and your Small Business Development Center or SCORE can help you decide for free whether a card reader is worth the cost."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Free to set up, simplest first.",
+       "b": true
+      },
+      {
+       "t": " Cash and checks have no fees. Keep a locking cash box and bring it in at night. A QR payment sign comes next: the customer scans a square code on their phone and pays you, with no machine."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Every way that isn't cash costs something.",
+       "b": true
+      },
+      {
+       "t": " The companies take a small fee from each payment, the fees change, and money can take a day or two to reach your bank."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Money you take in is income however it arrives, so ask a tax preparer how to report it. Here is what each company's own pages said on October 11, 2026:"
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Venmo business profile.",
+        "b": true
+       },
+       {
+        "t": " A business profile needs a personal Venmo account to go with it. Venmo's rule is that personal profiles aren't for receiving business payments, apart from a narrow case where the sender marks a payment as a purchase. The fee is 1.9% + $0.10 when you receive a payment (2.29% + $0.09 for Tap to Pay). To switch, go to the "
+       },
+       {
+        "t": "Me",
+        "b": true
+       },
+       {
+        "t": " tab, open the drop-down near the top and tap "
+       },
+       {
+        "t": "Create a business profile",
+        "b": true
+       },
+       {
+        "t": ", or tap the settings gear and choose "
+       },
+       {
+        "t": "Create Business Profile",
+        "b": true
+       },
+       {
+        "t": ". An EIN is optional. Without one, you sign up as a sole proprietor with your Social Security number or ITIN. For the QR code, tap "
+       },
+       {
+        "t": "Charge",
+        "b": true
+       },
+       {
+        "t": ", then "
+       },
+       {
+        "t": "QR Code",
+        "b": true
+       },
+       {
+        "t": "."
+       }
+      ],
+      [
+       {
+        "t": "Cash App for business.",
+        "b": true
+       },
+       {
+        "t": " Cash App says personal accounts shouldn't be used to accept business payments. Business accounts are free to create, and the fee is 2.6% + $0.15 per payment (3% for Tap to Pay). On your personal account, tap your picture at the top right, then "
+       },
+       {
+        "t": "Create a business account",
+        "b": true
+       },
+       {
+        "t": ". I couldn't confirm where the QR code lives in the app, so look in your profile and check it against Cash App's help page."
+       }
+      ],
+      [
+       {
+        "t": "PayPal.",
+        "b": true
+       },
+       {
+        "t": " It's free to open an account or a PayPal.Me link (paypal.me/YourFarm), and business accounts can accept only Goods and Services payments. PayPal lists 2.29% + $0.09 for QR-code payments and 2.99% for other Goods and Services payments, and I couldn't find a separate rate for PayPal.Me, so check PayPal's fee page before you rely on it."
+       }
+      ],
+      [
+       {
+        "t": "Zelle.",
+        "b": true
+       },
+       {
+        "t": " It runs through your bank, and not every bank offers Zelle for small businesses. Call and ask: \"Can I take Zelle payments for my farm business, and what does it cost?\" A Zelle payment can't be canceled once it goes to someone who's enrolled."
+       }
+      ],
+      [
+       {
+        "t": "Cards with Square.",
+        "b": true
+       },
+       {
+        "t": " The free plan has no monthly fee, and in-person payments are 2.6% + 15¢. Square says your first magstripe reader is free (extras are $10), and the contactless-and-chip reader is $59. Tap to Pay needs an iPhone XS or newer running iOS 16.7 or later, or a compatible Android phone on Android 9 or later. Money usually lands the next business day if you take the payment before 8 p.m. Eastern. Square's online payment links have no monthly fee and run 3.3% + 30¢."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you can't decide, here's what I'd do.",
+       "b": true
+      },
+      {
+       "t": " Keep taking cash and checks. Ask three regulars which app they already use, and set up a QR sign for that one."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you'd rather take cards, Square is the one to look at first. If all of this makes you uneasy, skip the day. A farm stand runs fine on cash and a locked box."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Pick one to try today.",
+       "b": true
+      },
+      {
+       "t": " Make a one-dollar test payment with your own card or a friend's phone, then refund it, and check that you have a signal at the stand."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Make your payment sign.",
+       "b": true
+      },
+      {
+       "t": " Use dark letters on a light background, big enough to read from a car: your farm name, what's for sale today, how to pay, and your phone number."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Take a screenshot of your QR code and print it big, or ask your library or a family member to print it. No printer? Write the payment name by hand on a sign instead, such as \"Venmo: @YourFarm,\" and put it in a plastic sleeve where customers can reach it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Test it by paying yourself one dollar from a friend's phone."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Paying ahead.",
+       "b": true
+      },
+      {
+       "t": " For CSA and meat shares, customers can pay by check in the mail or by a payment link from Square or PayPal. Keep a list: name, share, amount, date paid."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Never give a code from a text message to anyone who calls or messages you."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Next: Google Maps."
+    }
+   ],
+   "part": {
+    "label": "PART 2: ONE OPTIONAL DAY EACH",
+    "intro": [
+     {
+      "t": "These days cost nothing unless I say so, and you can do them in order or skip around. Money-related ones tell you the price up front.",
+      "i": true
+     }
+    ]
+   },
+   "description": "Take payments without cash: Venmo, Cash App, PayPal, Zelle and Square fees as of October 11, 2026, plus a QR payment sign.",
+   "day": 4,
+   "short": "Take payments without cash"
+  },
+  {
+   "slug": "day-5",
+   "title": "DAY 5 — Google Maps: find or make your listing",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 30 minutes. You'll need your basics, a Google account (a Gmail address works) and your phone. Skip Days 5 through 8 if you'd rather not be on a map."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Decide whether I want to be on a map (skip Days 5–8 if not)"
+       }
+      ],
+      [
+       {
+        "t": "Decide: fixed stand with a sign, or service area?"
+       }
+      ],
+      [
+       {
+        "t": "Search my farm name and town in Google Maps"
+       }
+      ],
+      [
+       {
+        "t": "If found: tap Claim this business"
+       }
+      ],
+      [
+       {
+        "t": "If not found: go to business.google.com/add (computer is easiest)"
+       }
+      ],
+      [
+       {
+        "t": "Name it exactly as on my sign (no taglines)"
+       }
+      ],
+      [
+       {
+        "t": "Choose how to verify"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "Google changes these screens often. Look for "
+      },
+      {
+       "t": "Claim this business",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Manage now",
+       "b": true
+      },
+      {
+       "t": " and "
+      },
+      {
+       "t": "Add your business",
+       "b": true
+      },
+      {
+       "t": " and work from there."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "Google has a free Business Profile Help page and a Help Community. Your library, your SBDC, your Cooperative Extension office or a helper can sit with you."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "When someone searches \"farm stand near me\" or your farm's name, Google shows a box with your name, hours, phone, photos and a map. Google calls it a "
+      },
+      {
+       "t": "Business Profile",
+       "b": true
+      },
+      {
+       "t": ", and it's free. It's the most useful thing in Part 2."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Can a farm stand have one?",
+       "b": true
+      },
+      {
+       "t": " Google's test is whether you have a physical location customers can visit, or you travel to customers where they are."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you show an address, Google says to keep permanent fixed signage with your business name at it. Seasonal businesses can mark themselves temporarily closed in the off-season and set regular hours again when they reopen."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Google's pages don't mention farm stands by name, so I can't promise you'll be approved. If you only run a website and have no place where customers visit you, Google won't keep a Business Profile for you, so skip Days 5 through 8."
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "A fixed stand with a permanent sign",
+        "b": true
+       },
+       {
+        "t": " and set hours: list it as a regular business with an address."
+       }
+      ],
+      [
+       {
+        "t": "You deliver or meet customers elsewhere:",
+        "b": true
+       },
+       {
+        "t": " Google calls that a service-area business. You hide your address and list the towns you serve."
+       }
+      ],
+      [
+       {
+        "t": "No permanent sign:",
+        "b": true
+       },
+       {
+        "t": " if customers come to your address, Google expects a permanent sign with your business name, so put one up before you apply. If you mostly travel or deliver, use the service-area choice above."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "See if you already have a listing.",
+       "b": true
+      },
+      {
+       "t": " Open the Google Maps app, tap the search bar and type your farm name and town. If your farm shows up, tap it and look for "
+      },
+      {
+       "t": "Claim this business",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If it says someone else may manage it, go to business.google.com/add, find your business, and tap "
+      },
+      {
+       "t": "Request Access",
+       "b": true
+      },
+      {
+       "t": ". The current owner has 3 days to respond."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If it doesn't show up, you'll make a new listing."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Claim it, or make it.",
+       "b": true
+      },
+      {
+       "t": " To claim, tap "
+      },
+      {
+       "t": "Claim this business",
+       "b": true
+      },
+      {
+       "t": " (look for it under "
+      },
+      {
+       "t": "About",
+       "b": true
+      },
+      {
+       "t": "), then "
+      },
+      {
+       "t": "Manage now",
+       "b": true
+      },
+      {
+       "t": ", and pick a way to verify. To make a new one, a computer is easiest: go to business.google.com/add in any browser, add your business, and follow the screens using your basics."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A helper with a computer makes this easier. Name it exactly as it's on your sign. Google says to leave out anything unnecessary (taglines, hours, phone numbers), and it can suspend a profile for that."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You either started a claim, started a new listing, or decided a map listing isn't for you. All three are fine."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Never pay someone who phones or emails offering to \"fix\" or \"rank\" your listing."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: prove it's yours."
+    }
+   ],
+   "description": "Find or make your farm's free Google Business Profile so you show up on Google Maps.",
+   "day": 5,
+   "short": "Google Maps: find or make your listing"
+  },
+  {
+   "slug": "day-6",
+   "title": "DAY 6 — Prove your listing is yours",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 15 minutes today, then a wait of a few days. You'll need your phone, your Business Profile and, for a stand, your sign. Skip this day if Google already told you you're verified."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "While you wait.",
+       "b": true
+      },
+      {
+       "t": " Verification can take a couple of weeks, so don't just sit there. Put a reminder in your phone for 14 days from today."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "In the meantime, keep going with your Facebook Page, Day 14 and Day 17, and come back to Day 7 when Google says you're verified."
+      }
+     ]
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Tap Get verified in my Business Profile"
+       }
+      ],
+      [
+       {
+        "t": "Choose the method Google offers"
+       }
+      ],
+      [
+       {
+        "t": "Postcard? Don't change my name, address or category while I wait"
+       }
+      ],
+      [
+       {
+        "t": "Enter the code Google gives me"
+       }
+      ],
+      [
+       {
+        "t": "Never share the code with anyone who calls"
+       }
+      ],
+      [
+       {
+        "t": "Check for the \"verified\" email"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "the verify choices change from one person to the next. Take whatever Google offers you."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "Google's Business Profile Help page. If a code never comes, wait, then try another way to verify."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "From your Business Profile, tap "
+      },
+      {
+       "t": "Get verified",
+       "b": true
+      },
+      {
+       "t": ". Google decides which ways to offer you, based on your business type, region and hours. The choices are a phone call or text, email, a postcard, a live video call or a recorded video."
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Postcard:",
+        "b": true
+       },
+       {
+        "t": " Google mails a 5-digit code. Most arrive within 14 days, and the code expires after 30. While you wait, don't change your business name, address or category, and don't ask for a second code, because that cancels the first."
+       }
+      ],
+      [
+       {
+        "t": "Phone, text or email:",
+        "b": true
+       },
+       {
+        "t": " answer the call or open the message, then type the code into your profile."
+       }
+      ],
+      [
+       {
+        "t": "Live video call:",
+        "b": true
+       },
+       {
+        "t": " this is only offered during your business hours, and you need to be at the business."
+       }
+      ],
+      [
+       {
+        "t": "Recorded video:",
+        "b": true
+       },
+       {
+        "t": " it has to be at least 30 seconds, one unedited take, filmed live, with no bank, tax or ID numbers in it and no other people's faces. For a stand, show street signs or landmarks, your sign, and you doing something only the owner does, such as opening the cash box. For a service-area business, show landmarks at your address, your tools or products, and yourself doing the work."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Google says review takes up to 5 business days, and rarely longer. "
+      },
+      {
+       "t": "Google will never ask you for your verification code,",
+       "b": true
+      },
+      {
+       "t": " so don't give it to anyone who calls, even someone who says they manage your profile."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " Google emailed you that you're verified, or the Business Profile no longer asks you to verify. Photos only show up after you're verified."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: your pin, hours and details. If you're still waiting on Google, do it when verification comes through."
+    }
+   ],
+   "description": "Verify your Google Business Profile by postcard, phone, email or video, and keep the code safe.",
+   "day": 6,
+   "short": "Prove your listing is yours"
+  },
+  {
+   "slug": "day-7",
+   "title": "DAY 7 — Pin, hours and details",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About an hour. You'll need your verified profile and your basics."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Move the map pin onto my stand or driveway"
+       }
+      ],
+      [
+       {
+        "t": "Have a friend find me using only the map"
+       }
+      ],
+      [
+       {
+        "t": "Put driving directions in my description, Page and sign"
+       }
+      ],
+      [
+       {
+        "t": "Set my regular hours"
+       }
+      ],
+      [
+       {
+        "t": "Add Special hours for holidays"
+       }
+      ],
+      [
+       {
+        "t": "Choose a category (Farm stand, Farm, Bakery)"
+       }
+      ],
+      [
+       {
+        "t": "Write a description under 750 characters, mentioning my season"
+       }
+      ],
+      [
+       {
+        "t": "Open my farm in Maps and check what I see"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "look for "
+      },
+      {
+       "t": "Edit profile",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Business",
+       "b": true
+      },
+      {
+       "t": " and "
+      },
+      {
+       "t": "More",
+       "b": true
+      },
+      {
+       "t": " and work from there. Changes can take about 10 minutes to show, and sometimes longer."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "Google's Business Profile Help page, and your library or Cooperative Extension office."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Fix the map pin.",
+       "b": true
+      },
+      {
+       "t": " On farm roads, GPS often points to the wrong spot. In the Maps app, tap "
+      },
+      {
+       "t": "Business",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "Edit profile",
+       "b": true
+      },
+      {
+       "t": ", and look for "
+      },
+      {
+       "t": "Location",
+       "b": true
+      },
+      {
+       "t": " and then Edit next to Business location to check your address."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "I could only confirm moving the pin in Google's Search or computer version, so if you can't move it on your phone, ask a helper with a computer."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Ask a friend to drive to you using only the map. Google has no box for driving directions, so put them in your description, on your Facebook Page and on your sign."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Hours.",
+       "b": true
+      },
+      {
+       "t": " In "
+      },
+      {
+       "t": "Edit profile",
+       "b": true
+      },
+      {
+       "t": ", choose "
+      },
+      {
+       "t": "Hours",
+       "b": true
+      },
+      {
+       "t": ", set your open days and times, and save. For holidays use "
+      },
+      {
+       "t": "Special hours",
+       "b": true
+      },
+      {
+       "t": ": choose "
+      },
+      {
+       "t": "Add a date",
+       "b": true
+      },
+      {
+       "t": " and set "
+      },
+      {
+       "t": "Closed",
+       "b": true
+      },
+      {
+       "t": " or times."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Google says special hours are for closures of 7 days or less. For the off-season or a longer closing, use "
+      },
+      {
+       "t": "Temporarily closed",
+       "b": true
+      },
+      {
+       "t": " and keep your sign up. "
+      },
+      {
+       "t": "Don't tap \"Permanently closed\"",
+       "b": true
+      },
+      {
+       "t": " unless you're going out of business."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Change Google the same day your real hours change, because wrong hours send customers to a locked gate and they remember it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Category and description.",
+       "b": true
+      },
+      {
+       "t": " Tap "
+      },
+      {
+       "t": "Business category",
+       "b": true
+      },
+      {
+       "t": " and type what you are (\"Farm stand,\" \"Farm,\" \"Bakery\") and pick from the list. For the description, use three to five sentences from your basics, under 750 characters, and mention your season (\"Open May to October\")."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Google says no web addresses or code, and to describe the business rather than promotions, prices or sales."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " Open your farm on Google Maps. Do you see the right hours and pin? Did a friend find you using only the map?"
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: photos, a post and a helper."
+    }
+   ],
+   "description": "Fix your map pin, set your hours and special hours, and write your Google category and description.",
+   "day": 7,
+   "short": "Pin, hours and details"
+  },
+  {
+   "slug": "day-8",
+   "title": "DAY 8 — Google photos, a post and a helper",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 30 minutes. You'll need your photos from Day 2. Skip the helper part if you're doing this on your own."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Add several photos (and a cover photo or logo)"
+       }
+      ],
+      [
+       {
+        "t": "Write my first Google post"
+       }
+      ],
+      [
+       {
+        "t": "(Optional) Add a helper as Manager, not Owner"
+       }
+      ],
+      [
+       {
+        "t": "Check my photos show up in a day or two"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "Google's Business Profile Help page."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "In Maps, tap "
+      },
+      {
+       "t": "Business",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "More",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "Add photo",
+       "b": true
+      },
+      {
+       "t": ", pick several, and tap "
+      },
+      {
+       "t": "Post",
+       "b": true
+      },
+      {
+       "t": " (it says "
+      },
+      {
+       "t": "Publish",
+       "b": true
+      },
+      {
+       "t": " on an iPhone). Photos can take up to 24 to 48 hours to show up."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Set a cover photo or logo from the same menu. For a post, look for "
+      },
+      {
+       "t": "Posts",
+       "b": true
+      },
+      {
+       "t": " and "
+      },
+      {
+       "t": "Add post",
+       "b": true
+      },
+      {
+       "t": ", add a photo and a few words, such as \"Fresh eggs are back this weekend,\" and tap "
+      },
+      {
+       "t": "Post",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Add your helper.",
+       "b": true
+      },
+      {
+       "t": " In your Business Profile, tap "
+      },
+      {
+       "t": "More",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "Business Profile settings",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "People and access",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "Add",
+       "b": true
+      },
+      {
+       "t": ". Type your helper's email and choose "
+      },
+      {
+       "t": "Owner",
+       "b": true
+      },
+      {
+       "t": " or "
+      },
+      {
+       "t": "Manager",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Choose "
+      },
+      {
+       "t": "Manager",
+       "b": true
+      },
+      {
+       "t": ", so you stay the owner. Each person needs their own Google account, and you should never share your password."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " Your photos show on your listing within a couple of days."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: reviews, and staying safe from scams."
+    }
+   ],
+   "description": "Add photos and a post to your Google listing, and add a helper as a Manager so you stay the owner.",
+   "day": 8,
+   "short": "Google photos, a post and a helper"
+  },
+  {
+   "slug": "day-9",
+   "title": "DAY 9 — Reviews and scams",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 45 minutes. You'll need your Business Profile, if you made one. Skip the review part if you don't have a Google listing. Don't skip the scams part."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Ask 2 regulars in person for an honest Google review"
+       }
+      ],
+      [
+       {
+        "t": "Get my review QR code (on a computer) or tell people to search my name"
+       }
+      ],
+      [
+       {
+        "t": "Reply to every review"
+       }
+      ],
+      [
+       {
+        "t": "Read the scam list below out loud"
+       }
+      ],
+      [
+       {
+        "t": "Save ReportFraud.ftc.gov in my phone"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "Google's Business Profile Help page, the FTC's \"Scams and Your Small Business\" guide, and your library or Cooperative Extension office. Never pay a company that promises to remove reviews or write them for you."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Reviews.",
+       "b": true
+      },
+      {
+       "t": " Good reviews on Google bring in new customers, and they come with rules. Never write a fake review of your own farm, and never ask a friend or relative to pretend to be a customer."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Never offer anything in exchange: Google says free or discounted goods for reviews is \"fake and misleading content\" and is strictly prohibited. Don't tell people what to write, just ask for an honest one."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Customers need a Google account to leave a Google review."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Ask in person:",
+       "b": true
+      },
+      {
+       "t": " \"If you liked the eggs, would you leave us a rating on Google?\" Ask your regulars after a good visit, and don't ask the same person twice."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Get your review link.",
+       "b": true
+      },
+      {
+       "t": " Google says review QR codes can only be made on a computer. Ask your helper to open your Business Profile on a computer, choose "
+      },
+      {
+       "t": "Read reviews",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "Get more reviews",
+       "b": true
+      },
+      {
+       "t": ", and save the QR code."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Or just tell customers to search your farm name on Google."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Answer every review:",
+       "b": true
+      },
+      {
+       "t": " open your Business Profile, tap "
+      },
+      {
+       "t": "Read reviews",
+       "b": true
+      },
+      {
+       "t": ", then "
+      },
+      {
+       "t": "Reply",
+       "b": true
+      },
+      {
+       "t": ". For a good review, keep it short and warm. For a bad review, wait a day, don't argue, say sorry once, and offer to make it right by phone, in three sentences or fewer."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Report a review only if it's spam, abusive or not from a real customer, not just because you disagree with it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Scams that target small businesses:",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "\"Your Google listing will be removed unless you pay.\"",
+        "b": true
+       },
+       {
+        "t": " Google doesn't work this way."
+       }
+      ],
+      [
+       {
+        "t": "A bill for something you didn't order.",
+        "b": true
+       },
+       {
+        "t": " Don't pay an invoice you don't recognize."
+       }
+      ],
+      [
+       {
+        "t": "\"Tech support\" calls.",
+        "b": true
+       },
+       {
+        "t": " Hang up."
+       }
+      ],
+      [
+       {
+        "t": "Anyone asking for your verification code.",
+        "b": true
+       },
+       {
+        "t": " Google will never ask for it."
+       }
+      ],
+      [
+       {
+        "t": "A check for more than the price,",
+        "b": true
+       },
+       {
+        "t": " with a request to send back the difference. The check is fake. Don't accept it, and don't send money back."
+       }
+      ],
+      [
+       {
+        "t": "A fake \"payment sent\" message.",
+        "b": true
+       },
+       {
+        "t": " Open your payment app yourself (not from a link in a message) and check before you hand over anything."
+       }
+      ],
+      [
+       {
+        "t": "Odd ways to pay:",
+        "b": true
+       },
+       {
+        "t": " wires, crypto or gift cards."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If someone calls, hang up and call the company yourself, using the number on its website. Meet strangers at the stand, out in the open, and keep your home address off your posts if your farm is your home."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If money left your account, call your bank right away and report it to the FTC at ReportFraud.ftc.gov."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You can say out loud the three scams you're most likely to see."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: keeping it all working."
+    }
+   ],
+   "description": "Ask for honest Google reviews, answer every review, and learn the scams that target small businesses.",
+   "day": 9,
+   "short": "Reviews and scams"
+  },
+  {
+   "slug": "day-10",
+   "title": "DAY 10 — Keep it working",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 15 minutes, then 10 minutes a month. You'll need your phone and a calendar."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Add a monthly reminder in my phone calendar"
+       }
+      ],
+      [
+       {
+        "t": "Each month: check hours on Google and Facebook, post, answer reviews, check the pin"
+       }
+      ],
+      [
+       {
+        "t": "Late winter: post my opening date"
+       }
+      ],
+      [
+       {
+        "t": "Start of season: update hours"
+       }
+      ],
+      [
+       {
+        "t": "End of season: set the listing to Temporarily closed"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "Google's Business Profile Help page, and your library or Cooperative Extension office."
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Same-day trouble",
+        "b": true
+       },
+       {
+        "t": " (storm, power out, sick day): post on Facebook, and for one day or a few, add Special hours on Google."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If something goes wrong.",
+       "b": true
+      },
+      {
+       "t": " If your verification code never comes, wait, then try another way to verify. If your listing is suspended, read Google's notice for the reason and fix what it names."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Google's appeal form can be used only once, so put in your evidence first, such as a business license or a utility bill, and be honest."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Google also says not to start a new profile for the same business. If the reason is that you're an online-only business, an appeal won't help."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you're locked out, use Google's account recovery. If the address or pin is wrong, fix it under "
+      },
+      {
+       "t": "Edit profile",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You have a reminder set."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "That's the end of Part 2. Part 3 is good to know, and you can do it in any order."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Next: Day 11 starts Part 3, with the rules for selling."
+    }
+   ],
+   "description": "Ten minutes a month to keep your hours, posts, reviews and map pin right, and what to do if something goes wrong.",
+   "day": 10,
+   "short": "Keep it working"
+  },
+  {
+   "slug": "day-11",
+   "title": "DAY 11 — Check the rules before you sell",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About an hour, mostly a phone call or two. You'll need a list of what you sell."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Make a list of everything I sell"
+       }
+      ],
+      [
+       {
+        "t": "Call Ag and Markets about home-made foods, eggs, milk or meat (whichever applies)"
+       }
+      ],
+      [
+       {
+        "t": "Ask the tax department if any items are taxable and whether to register"
+       }
+      ],
+      [
+       {
+        "t": "Ask my town clerk about stand and sign rules"
+       }
+      ],
+      [
+       {
+        "t": "Call my insurance agent about selling from my property"
+       }
+      ],
+      [
+       {
+        "t": "Ask a tax preparer how to report income"
+       }
+      ],
+      [
+       {
+        "t": "Write down each answer, or a name and number to follow up"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "if you can't tell which rule applies, call your county Cooperative Extension office. They answer this kind of question for free and know which office to send you to."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your county Cooperative Extension office, NY Department of Agriculture and Markets, NY FarmNet, your Small Business Development Center, and a local tax preparer. Search each one by name, or ask your library to look it up with you."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Most small sellers never have a problem. But a few rules are easy to miss, and finding out after a complaint is a lot worse than finding out now."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "I'm not going to tell you what the rules are, because they depend on what you sell and they change. What I can do is tell you who to call and what to ask."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Write down each answer, along with the name of the person you talked to and the date. If you'd rather have it in writing, send the same questions by email."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "NY Department of Agriculture and Markets",
+       "b": true
+      },
+      {
+       "t": " (food and farm rules). Ask: \"I want to sell [what you sell] from my home. Do I need a license, a registration, or nothing?"
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Are there limits on what I can sell, where I can sell it, or how I can advertise it? What does the label have to say?"
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Is there a fee, and how long does it take?\" If you sell eggs, milk or meat, also ask what you need for storage, cartons and labels."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "NY Department of Taxation and Finance",
+       "b": true
+      },
+      {
+       "t": " (sales tax). Ask: \"Is anything I sell taxable? Do I need to register, and how far ahead of my first sale?\""
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Your town clerk or code office.",
+       "b": true
+      },
+      {
+       "t": " Ask: \"Can I run a stand at my address? Are there rules for signs?\""
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Your homeowner's insurance agent.",
+       "b": true
+      },
+      {
+       "t": " Ask: \"Does my policy cover selling from my property? Is there an add-on, and what does it cost?\""
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A tax preparer.",
+       "b": true
+      },
+      {
+       "t": " Ask: \"How do I report what I take in, and what records should I keep?\""
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Not sure who to ask?",
+       "b": true
+      },
+      {
+       "t": " Call your county Cooperative Extension office and say, \"I want to sell [what you sell] from home. Who should I talk to?\""
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You have a written answer, or a name and a phone number to follow up with, for each item that applies to you."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: a free form so people can order from you."
+    }
+   ],
+   "part": {
+    "label": "PART 3: THE RULES, THE PAPERWORK AND THE STAND",
+    "intro": [
+     {
+      "t": "These days aren't about being found. They're about selling without trouble, and about the things that keep customers coming back. I'm not a lawyer or an accountant, and rules change, so treat this as a list of what to ask and who to ask.",
+      "i": true
+     }
+    ]
+   },
+   "description": "Who to call in New York about the rules for selling from home, and exactly what to ask each office.",
+   "day": 11,
+   "short": "Check the rules before you sell"
+  },
+  {
+   "slug": "day-12",
+   "title": "DAY 12 — Take orders with a free Google Form",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 30 minutes. You'll need a Google account and your list of what you sell."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Go to forms.google.com and start a blank form"
+       }
+      ],
+      [
+       {
+        "t": "Title it"
+       }
+      ],
+      [
+       {
+        "t": "Add questions: name, phone, what, how many, pickup day"
+       }
+      ],
+      [
+       {
+        "t": "Turn on email notifications under Responses"
+       }
+      ],
+      [
+       {
+        "t": "Fill it out myself as a test"
+       }
+      ],
+      [
+       {
+        "t": "Copy the link and post it on my Page"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "Google moves buttons around. Look for "
+      },
+      {
+       "t": "Send",
+       "b": true
+      },
+      {
+       "t": ", "
+      },
+      {
+       "t": "Responses",
+       "b": true
+      },
+      {
+       "t": " and "
+      },
+      {
+       "t": "Add question",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "Google Forms has a free help center, and your library can sit with you for the first one."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A Google Form is a free web page that collects answers into a list. I use it for pre-orders, CSA or share sign-ups, a waitlist, or a \"tell me when the eggs are back\" list."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A Form can't take payment, so it only takes the order. You collect payment at pickup or through your payment app."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Build it.",
+       "b": true
+      },
+      {
+       "t": " Go to "
+      },
+      {
+       "t": "forms.google.com",
+       "b": true
+      },
+      {
+       "t": " and sign in with your farm email. Start a "
+      },
+      {
+       "t": "blank form",
+       "b": true
+      },
+      {
+       "t": ", give it a title such as \"Smith Farm Pre-Orders\" (a plain name is fine), and add questions: name, phone, what they want, how many, and which pickup day."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Open the "
+      },
+      {
+       "t": "Responses",
+       "b": true
+      },
+      {
+       "t": " tab and turn on email notifications for new answers. Then tap "
+      },
+      {
+       "t": "Send",
+       "b": true
+      },
+      {
+       "t": ", copy the link, and post it on your Facebook Page."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Test it.",
+       "b": true
+      },
+      {
+       "t": " Fill it out yourself once and check that the answer reached you. That's the whole step."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Keep customers' information safe.",
+       "b": true
+      },
+      {
+       "t": " Collect only what you need. Don't share people's names or numbers with anyone. Never ask for card numbers on a Form."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You received your own test order."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: getting known in the places your neighbors already look."
+    },
+    {
+     "type": "sidebar",
+     "title": "If you run a CSA or farm share",
+     "items": [
+      [
+       {
+        "t": "Say how many shares you have, the season dates, the price and how pickup works."
+       }
+      ],
+      [
+       {
+        "t": "Take sign-ups with the Day 12 form or a notebook. Collect payment by check, or by a payment link (Day 4)."
+       }
+      ],
+      [
+       {
+        "t": "Keep a list: name, share, amount, date paid, pickup day."
+       }
+      ],
+      [
+       {
+        "t": "Email members before the season opens, and when pickup details change."
+       }
+      ],
+      [
+       {
+        "t": "Post \"shares open\" and \"shares full\" on your Page and listing. Update them as soon as that changes."
+       }
+      ],
+      [
+       {
+        "t": "If shares include meat, eggs or milk, ask Ag and Markets what you need (Day 11)."
+       }
+      ]
+     ]
+    }
+   ],
+   "description": "Take orders and sign-ups with a free Google Form, plus a short checklist for running a CSA or farm share.",
+   "day": 12,
+   "short": "Take orders with a free Google Form"
+  },
+  {
+   "slug": "day-13",
+   "title": "DAY 13 — Get found where your neighbors already look",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About an hour, spread over a few days. You'll need your Facebook Page and your basics page."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Join 1–2 local Facebook groups and read their rules"
+       }
+      ],
+      [
+       {
+        "t": "Ask an admin before posting about what I sell"
+       }
+      ],
+      [
+       {
+        "t": "(Optional) List something on Facebook Marketplace"
+       }
+      ],
+      [
+       {
+        "t": "Ask Cooperative Extension which farm directories people use"
+       }
+      ],
+      [
+       {
+        "t": "Submit my farm to the Almanac(s)"
+       }
+      ],
+      [
+       {
+        "t": "Ask my library about its community board"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "these sites change their rules. When in doubt, read the group's or the site's own rules."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your Cooperative Extension office and your library can tell you which groups and lists people use near you."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Local Facebook groups.",
+       "b": true
+      },
+      {
+       "t": " Town groups, farm and food groups, buy-local groups. Read each group's rules first, and ask an admin before you post about what you sell."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Many allow it on certain days or in a certain thread. Don't post the same message in many groups on the same day."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Facebook Marketplace.",
+       "b": true
+      },
+      {
+       "t": " Good for local pickup of single items such as eggs, plants or crafts. Facebook sets its own rules, so read them before you list."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Free farm directories.",
+       "b": true
+      },
+      {
+       "t": " Examples are LocalHarvest and your county's farm map or farm trail, if there is one. Ask your Cooperative Extension office which ones people use near you, and check each one's cost and rules before you sign up."
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Hudson Valley Bounty.",
+        "b": true
+       },
+       {
+        "t": " A free, searchable guide to local farms and food businesses covering Albany, Columbia, Dutchess, Orange, Rensselaer, Sullivan, Ulster and Washington counties. The business has to be tied to local farms or food. You make an account, then a business profile, and staff review it before it goes live. The site says it takes 15 to 30 minutes. Link: "
+       },
+       {
+        "t": "hudsonvalleybounty.com/add-your-business",
+        "href": "https://hudsonvalleybounty.com/add-your-business"
+       }
+      ],
+      [
+       {
+        "t": "New York State Farm Directory.",
+        "b": true
+       },
+       {
+        "t": " The state keeps a public list of New York farms. Farms choose what to share, such as products and contact information. Ask the Department of Agriculture and Markets how to add or update yours; I didn't see a fee mentioned, so confirm that when you call. Link: "
+       },
+       {
+        "t": "agriculture.ny.gov/farming/new-york-state-farm-directory",
+        "href": "https://agriculture.ny.gov/farming/new-york-state-farm-directory"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "note",
+     "runs": [
+      {
+       "t": "Last checked November 7, 2026.",
+       "i": true
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "The Almanacs.",
+       "b": true
+      },
+      {
+       "t": " The Hudson Valley Almanac and the Mohawk Valley Almanac list farms and food businesses for free. Tap Submit a Listing at the top of the site (on a phone, tap Menu first). Have your Day 1 basics ready. The form asks for your business name, a category (pick one from the list), your town and county, a short description, a few tags (words people might search for, with commas between them), your phone, the year you started, your address, your website and your hours. Only the name, category and town have to be filled in. It also asks for your name and email, which aren't published. Tap Submit Listing for Review. Every listing is checked before it goes live, and most show up by the next morning. After it goes live, check that your hours, address and phone are right."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Pride of New York.",
+       "b": true
+      },
+      {
+       "t": " The state's program for New York products. Ask what it costs and whether your product qualifies."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Your library and town bulletin boards.",
+       "b": true
+      },
+      {
+       "t": " Many have a free community board."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Keep it matching.",
+       "b": true
+      },
+      {
+       "t": " Use the same farm name, address, phone and hours on every listing, Facebook and Google. Small differences, like \"Rd\" in one place and \"Road\" in another, confuse customers."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A note on Facebook links.",
+       "b": true
+      },
+      {
+       "t": " Facebook may limit link posts, as I said on Day 3. If your link posts get little reach, post a photo with the web address typed out as plain text instead. Facebook's help pages have the current rules."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You're listed or joined in at least one new place."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: setting a price, and keeping a record."
+    }
+   ],
+   "description": "Get found in local Facebook groups, Marketplace, free farm directories such as Hudson Valley Bounty, and the Almanacs.",
+   "day": 13,
+   "short": "Get found where your neighbors already look"
+  },
+  {
+   "slug": "day-14",
+   "title": "DAY 14 — Know your prices and your numbers",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 30 minutes to set up, then two minutes a day. You'll need a notebook or your phone's Notes app."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Add up what each item costs me to make"
+       }
+      ],
+      [
+       {
+        "t": "Add a fair amount for my time"
+       }
+      ],
+      [
+       {
+        "t": "Check neighbors' and the market's prices"
+       }
+      ],
+      [
+       {
+        "t": "Choose round prices and write them down"
+       }
+      ],
+      [
+       {
+        "t": "Use the same prices on sign, Page and payment app"
+       }
+      ],
+      [
+       {
+        "t": "Start a daily sales log (date, what, how much, how paid)"
+       }
+      ],
+      [
+       {
+        "t": "Start an envelope for receipts"
+       }
+      ],
+      [
+       {
+        "t": "Add up the week every Sunday"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your SBDC or SCORE adviser can look at your numbers for free. A tax preparer can tell you what to keep and for how long."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Setting a price.",
+       "b": true
+      },
+      {
+       "t": " Add up what it costs to make one (seed, feed, jars, packaging, gas). Add a fair amount for your time. Please don't leave this out."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Look at what neighbors and the farmers market charge for the same thing, and pick a round price that's easy to make change for. Write your prices down and keep them the same on your sign, your Page and your payment app."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Keep a simple log.",
+       "b": true
+      },
+      {
+       "t": " Each day you sell, write one line: the date, what sold, how much, and how you were paid (cash, check, app). On Sunday, add up the week."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Keep a separate note of what you spend and save receipts in an envelope. Once a month, subtract what you spent from what you took in. That's your rough profit."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You know what you made last month."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: staying in touch with your regulars."
+    }
+   ],
+   "description": "Set fair prices, keep them the same everywhere, and keep a simple daily sales log.",
+   "day": 14,
+   "short": "Know your prices and your numbers"
+  },
+  {
+   "slug": "day-15",
+   "title": "DAY 15 — Stay in touch with your regulars",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "About 20 minutes. You'll need your farm email and your phone."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Ask customers to follow my Page"
+       }
+      ],
+      [
+       {
+        "t": "Start a sign-up notebook or share my Google Form"
+       }
+      ],
+      [
+       {
+        "t": "Only add people who say yes"
+       }
+      ],
+      [
+       {
+        "t": "Send my first group email using Bcc"
+       }
+      ],
+      [
+       {
+        "t": "Remove anyone who asks, the same day"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your library or a friend can sit with you for your first group email."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Facebook followers.",
+       "b": true
+      },
+      {
+       "t": " Ask customers to follow your Page and post when something is new."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A sign-up notebook or the Google Form from Day 12.",
+       "b": true
+      },
+      {
+       "t": " Ask first: \"Would you like a text or email when the eggs are back?\" Only add people who say yes."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Email.",
+       "b": true
+      },
+      {
+       "t": " Send from your farm Gmail. When you write to more than one person, put everyone's address in the "
+      },
+      {
+       "t": "Bcc",
+       "b": true
+      },
+      {
+       "t": " line, not the "
+      },
+      {
+       "t": "To",
+       "b": true
+      },
+      {
+       "t": " line, so no one sees anyone else's address."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you don't see Bcc, tap the small arrow near the To line."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Make it easy to stop.",
+       "b": true
+      },
+      {
+       "t": " If someone asks to come off your list, remove them the same day. When you do write, keep it short, add a photo, and send it only when you have something to say."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " You have a list of people who said yes, and you've sent one message to it."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: your stand itself."
+    }
+   ],
+   "description": "Stay in touch with your regulars through Facebook, a sign-up notebook and a group email sent with Bcc.",
+   "day": 15,
+   "short": "Stay in touch with your regulars"
+  },
+  {
+   "slug": "day-16",
+   "title": "DAY 16 — Your stand itself",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Online helps, but a lot of customers still find you by driving past. A few simple things:"
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "A sign people can read from the road.",
+        "b": true
+       },
+       {
+        "t": " Dark letters on a light background, big enough to read at driving speed. Put your name, what you sell, and \"Open\" or your hours."
+       }
+      ],
+      [
+       {
+        "t": "Prices posted.",
+        "b": true
+       },
+       {
+        "t": " People buy more when they don't have to ask."
+       }
+      ],
+      [
+       {
+        "t": "A way to pay on the sign.",
+        "b": true
+       },
+       {
+        "t": " Cash, check, and your payment app if you use one."
+       }
+      ],
+      [
+       {
+        "t": "A locked cash box,",
+        "b": true
+       },
+       {
+        "t": " and bring it in when you close. If you use an honor box, bolt it down or make it hard to carry off, keep only small change in it, and expect some loss."
+       }
+      ],
+      [
+       {
+        "t": "Weather and wear.",
+        "b": true
+       },
+       {
+        "t": " A cover over the stand and a plastic sleeve for signs."
+       }
+      ],
+      [
+       {
+        "t": "A \"closed\" sign",
+        "b": true
+       },
+       {
+        "t": " you can put up quickly. Also post closures on your Page."
+       }
+      ],
+      [
+       {
+        "t": "Safety.",
+        "b": true
+       },
+       {
+        "t": " Keep your phone with you, meet strangers at the stand in the open, and don't count cash where people can see."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your town clerk for sign rules, and a neighbor or farmers market manager for what works on your road."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Check your town's rules for roadside signs before you put one up."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Tomorrow: ways to be found without a phone."
+    }
+   ],
+   "description": "A sign people can read from the road, posted prices, a locked cash box and other simple things for your stand.",
+   "day": 16,
+   "short": "Your stand itself"
+  },
+  {
+   "slug": "day-17",
+   "title": "DAY 17 — Offline ways to be found",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Not everything has to happen on a phone. A lot of customers still find a home seller the old way, and these cost almost nothing. Pick one or two to start. You'll need index cards and a pen."
+      }
+     ],
+     "lede": true
+    },
+    {
+     "type": "checklist-heading",
+     "text": "TODAY'S CHECKLIST (details below)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Word-of-mouth cards.",
+        "b": true
+       },
+       {
+        "t": " A short \"tell a friend\" card with your name, what you sell, your hours and a phone number. Tuck one in every bag and leave a stack at the stand."
+       }
+      ],
+      [
+       {
+        "t": "Bulletin boards.",
+        "b": true
+       },
+       {
+        "t": " Libraries, feed stores, post offices, laundromats and church halls often have a free board. Ask first."
+       }
+      ],
+      [
+       {
+        "t": "Markets and club sales.",
+        "b": true
+       },
+       {
+        "t": " A table once a month at a farmers market, church sale or club event puts you in front of regulars. Ask the organizer about fees and rules."
+       }
+      ],
+      [
+       {
+        "t": "A second sign down the road,",
+        "b": true
+       },
+       {
+        "t": " a short way before your turn (\"Eggs, 1/2 mile\"). Check town rules first."
+       }
+      ],
+      [
+       {
+        "t": "A chalkboard at the stand",
+        "b": true
+       },
+       {
+        "t": " that says what's ready this week."
+       }
+      ],
+      [
+       {
+        "t": "Samples and gifts.",
+        "b": true
+       },
+       {
+        "t": " A jar or a dozen eggs with a card for a neighbor or a local shop. Do it sparingly."
+       }
+      ],
+      [
+       {
+        "t": "Local papers and radio.",
+        "b": true
+       },
+       {
+        "t": " Many have a free community calendar. Send a short note when your season opens."
+       }
+      ],
+      [
+       {
+        "t": "A phone tree.",
+        "b": true
+       },
+       {
+        "t": " A written list of regulars who've said yes to a call or text."
+       }
+      ],
+      [
+       {
+        "t": "Trade with other sellers.",
+        "b": true
+       },
+       {
+        "t": " The neighbor who sells honey and you who sell eggs can each put the other's card at your stand."
+       }
+      ],
+      [
+       {
+        "t": "A guest notebook",
+        "b": true
+       },
+       {
+        "t": " at the stand for people who want to hear when you have more. Only use what people choose to give you."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "IF IT LOOKS DIFFERENT",
+     "runs": [
+      {
+       "t": "if a place says no, thank them and try another. A board that's full this month may have room next month."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "your library, your Cooperative Extension office and your farmers market manager can tell you which boards, markets and papers people near you use."
+      }
+     ]
+    },
+    {
+     "type": "did-it-work",
+     "runs": [
+      {
+       "t": "Did it work?",
+       "b": true
+      },
+      {
+       "t": " At least one new person tells you they heard about you from a card, a board or a neighbor."
+      }
+     ]
+    },
+    {
+     "type": "next",
+     "text": "Next: the free tools that make all of this easier."
+    }
+   ],
+   "description": "Offline ways to be found: tell-a-friend cards, bulletin boards, markets, a chalkboard and local papers.",
+   "day": 17,
+   "short": "Offline ways to be found"
+  },
+  {
+   "slug": "free-tools",
+   "title": "Free tools",
+   "blocks": [
+    {
+     "type": "checklist-heading",
+     "text": "CHECKLIST"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Decide if I want a website at all"
+       }
+      ],
+      [
+       {
+        "t": "If yes, pick one of the three below"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Three free websites"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "You don't need a website to sell from your house. A Facebook Page and a Google listing do most of the work. But if you want one, these are the three I'd look at first."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Square Online and Carrd have free plans, and Google Sites works with the Google account you already have. None of them is free if you want your own web address (like smithfarm.com), which costs money each year wherever you buy it."
+      }
+     ]
+    },
+    {
+     "type": "numbered",
+     "items": [
+      [
+       {
+        "t": "Google Sites",
+        "b": true
+       },
+       {
+        "t": " (sites.google.com). Uses the Google account you already made on Day 1. You drag in text, photos and a map, and it works on phones."
+       }
+      ]
+     ],
+     "start": 1
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "It's the plainest of the three and the easiest to keep up. You can also drop in the Google Form from Day 12 so people can order."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A custom web address costs extra. Google's help pages don't list a price, so check the screen before you pay."
+      }
+     ]
+    },
+    {
+     "type": "numbered",
+     "items": [
+      [
+       {
+        "t": "Square Online",
+        "b": true
+       },
+       {
+        "t": " (squareup.com). Free plan for a small online store: you list what you sell, customers pick a pickup time, and they pay online or at pickup."
+       }
+      ]
+     ],
+     "start": 2
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "It's the best fit if you want real online ordering. The catch is that Square takes a fee on each card payment, so decide whether that works for your prices."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Square's pricing page shows a Free plan at $0 a month. Online card payments on the free plan are 3.3% + 30¢ per sale (2.9% + 30¢ on the paid plans), and in-person card payments are 2.6% + 15¢."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Paid plans start at $49 a month, so you don't need one to begin. Fees change, so check Square's pricing page."
+      }
+     ]
+    },
+    {
+     "type": "numbered",
+     "items": [
+      [
+       {
+        "t": "Carrd",
+        "b": true
+       },
+       {
+        "t": " (carrd.co). A one-page site: your name, what you sell, hours, a map link and a phone number. A free Carrd page may show a small Carrd link and use a carrd.co address, so check Carrd's pricing page for what you get."
+       }
+      ]
+     ],
+     "start": 3
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Carrd lists paid plans at $9 a year (up to three sites, no Carrd branding) and $19 a year (up to ten sites). You'd still buy a web address separately."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If one clean page is all you want, this is the quickest."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "You may also hear about "
+      },
+      {
+       "t": "Wix",
+       "b": true
+      },
+      {
+       "t": ". It has a free plan, but the free version adds Wix branding and sometimes ads, and removing them costs a monthly fee. WordPress.com, Weebly and Canva's website tool also have free plans with similar limits."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "How to choose:",
+       "i": true
+      },
+      {
+       "t": " want to do the least? Carrd or Google Sites. Want people to order and pay? Square Online. Not sure? Start with Google Sites. You can always move later."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Easiest first, in my opinion:",
+       "i": true
+      },
+      {
+       "t": " Carrd is the quickest if all you need is one page. Google Sites comes next, because you already have the account."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Square Online takes the longest to set up, but it's the only one of the three that takes real orders. I haven't built all three myself, so this ranking comes from reading each company's own pages and a handful of reviews. Try the free plan before you decide."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A thing that used to be free and isn't:",
+       "i": true
+      },
+      {
+       "t": " Google once let a Business Profile come with a free simple website. Google shut that feature off in 2024, according to news reports I found."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If an old guide tells you to \"just use the website from your Google listing,\" it's out of date."
+      }
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Those ads for apps that build your website for you"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you've been seeing ads that say \"Get a website in 60 seconds with AI,\" you're not imagining it, and you're not alone. Here's what they are, what's real about them, and what to watch for."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "What they are.",
+       "b": true
+      },
+      {
+       "t": " An AI website builder asks you a few questions (your business name, what you sell, where you are), then writes the words, picks the photos and colors, and builds a starter site in a few minutes."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Durable and Hostinger are two of the names that advertise heavily. Wix, Squarespace and GoDaddy have added AI tools to their builders too."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "What's real.",
+       "b": true
+      },
+      {
+       "t": " They do save time. For a farm stand, a starter site with your name, hours, what you sell and a phone number is mostly what you need, and an AI builder can have that in minutes."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "You still have to read every line and fix what it got wrong. It may invent things, such as products you don't sell or a history you don't have."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "What they cost.",
+       "b": true
+      },
+      {
+       "t": " Here's what two of them said on their own pages when I looked on October 11, 2026:"
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Durable.",
+        "b": true
+       },
+       {
+        "t": " There's a free plan at $0, with a free address that ends in durable.site, 300 \"AI credits,\" and basic help. The paid plans are listed at $25 a month (Launch) and $49 a month (Grow). The page says a custom web address is free with a paid plan. It doesn't say whether the free plan asks for a credit card."
+       }
+      ],
+      [
+       {
+        "t": "Hostinger.",
+        "b": true
+       },
+       {
+        "t": " No free plan. It offers a 14-day free trial and a 30-day money-back guarantee. The ad price is $2.99 a month, but the regular price is listed at $11.99 a month and the price when it renews at $10.99 a month, and the plans are paid up front for long terms (the page shows up to 48 months, which is a $143.52 bill for the cheapest one). A free web address comes for one year on yearly plans."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Prices and terms change often, and I haven't tried either, so read the current page."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "What to watch for.",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "The ad price is not the price you'll keep paying.",
+        "b": true
+       },
+       {
+        "t": " Look for words like \"first term\" or \"renews at.\" The renewal price is the real price."
+       }
+      ],
+      [
+       {
+        "t": "Long prepaid terms.",
+        "b": true
+       },
+       {
+        "t": " A low monthly price may mean paying for two, three or four years at once."
+       }
+      ],
+      [
+       {
+        "t": "Free trials that ask for a card.",
+        "b": true
+       },
+       {
+        "t": " If you give a card number, put a reminder in your calendar for the day before it ends."
+       }
+      ],
+      [
+       {
+        "t": "The web address.",
+        "b": true
+       },
+       {
+        "t": " A \"free domain\" is often free for one year only. After that, you pay a renewal."
+       }
+      ],
+      [
+       {
+        "t": "Getting out.",
+        "b": true
+       },
+       {
+        "t": " Ask whether you can take your pictures and words with you if you leave. Some builders make that hard."
+       }
+      ],
+      [
+       {
+        "t": "Help.",
+        "b": true
+       },
+       {
+        "t": " In one study of 600 one-star reviews of five builders, the most common complaint, about four in ten, was not being able to reach a real person or get useful help. The study was done by one of the companies in it and only counts unhappy reviewers, so I wouldn't read much into the exact numbers, but it matches what I'd expect."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "My advice.",
+       "b": true
+      },
+      {
+       "t": " A free plan, a free address and no card is plenty for a farm stand. If you'd like to try an AI builder, use only the free plan, don't enter a card, and skip any offer that makes you pay for years up front."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If one asks you to pay, run it past your library, your Cooperative Extension office or your SBDC first. And if the ad itself looks like a Google or Facebook notice (\"your site was flagged,\" \"your listing expires\"), it's a scam. Don't click it."
+      }
+     ]
+    },
+    {
+     "type": "checklist-heading",
+     "text": "BEFORE I PAY ANYONE FOR A WEBSITE"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "I tried the free plan first"
+       }
+      ],
+      [
+       {
+        "t": "I know what it costs after the first term"
+       }
+      ],
+      [
+       {
+        "t": "I know how long I'm paying for"
+       }
+      ],
+      [
+       {
+        "t": "I did not give a card for a \"free\" trial, or I set a reminder to cancel"
+       }
+      ],
+      [
+       {
+        "t": "I know what the web address costs next year"
+       }
+      ],
+      [
+       {
+        "t": "I know how to take my words and photos with me"
+       }
+      ],
+      [
+       {
+        "t": "I asked a person I trust"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Free programs worth knowing"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "I've listed these by what you'd use them for. Most are Google, because one free Google account opens all of them. You don't need all of them. Pick the two or three that fit."
+      }
+     ]
+    },
+    {
+     "type": "checklist-heading",
+     "text": "CHECKLIST"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Put my price list and photos in Google Drive"
+       }
+      ],
+      [
+       {
+        "t": "Make my sales log in Google Sheets"
+       }
+      ],
+      [
+       {
+        "t": "Put markets and pickup days in Google Calendar"
+       }
+      ],
+      [
+       {
+        "t": "(Optional) Make a sign in Canva or Google Slides"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "From Google (all free with your Google account):",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Gmail.",
+        "b": true
+       },
+       {
+        "t": " Your farm email. Free."
+       }
+      ],
+      [
+       {
+        "t": "Google Drive.",
+        "b": true
+       },
+       {
+        "t": " Online storage, 15 GB free, shared across Gmail, Drive and Photos. Keep your price list, logo and photos here so they're safe if your phone breaks."
+       }
+      ],
+      [
+       {
+        "t": "Google Docs.",
+        "b": true
+       },
+       {
+        "t": " For flyers, price lists, letters, sign wording and a one-page \"about us.\""
+       }
+      ],
+      [
+       {
+        "t": "Google Sheets.",
+        "b": true
+       },
+       {
+        "t": " A spreadsheet for your sales log (Day 14), egg counts, inventory and a customer list."
+       }
+      ],
+      [
+       {
+        "t": "Google Forms.",
+        "b": true
+       },
+       {
+        "t": " Orders and sign-ups (Day 12)."
+       }
+      ],
+      [
+       {
+        "t": "Google Slides.",
+        "b": true
+       },
+       {
+        "t": " Simple signs, flyers and a menu board you can print at the library."
+       }
+      ],
+      [
+       {
+        "t": "Google Calendar.",
+        "b": true
+       },
+       {
+        "t": " Markets, pickup days and reminders. You can set it to remind you to post."
+       }
+      ],
+      [
+       {
+        "t": "Google Photos.",
+        "b": true
+       },
+       {
+        "t": " Backs up your photos and does basic editing, such as cropping and brightening."
+       }
+      ],
+      [
+       {
+        "t": "Google Business Profile.",
+        "b": true
+       },
+       {
+        "t": " Your map listing (Days 5–8)."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Skip these for now: Google Search Console, Analytics, Alerts, Meet, Translate, Voice and My Maps. They're fine tools, but you can run a farm stand without them."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "One more to skip: Google Merchant Center's free product listings are built for online shops that ship things, not for a farm stand."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Free and not from Google:",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Canva",
+        "b": true
+       },
+       {
+        "t": " (canva.com). Free plan for signs, flyers, price cards and Facebook graphics, with templates to start from."
+       }
+      ],
+      [
+       {
+        "t": "Facebook Page and Meta Business Suite.",
+        "b": true
+       },
+       {
+        "t": " Run your Page and plan posts from one app."
+       }
+      ],
+      [
+       {
+        "t": "Square, PayPal, Venmo, Cash App.",
+        "b": true
+       },
+       {
+        "t": " Payments, with fees (Day 4)."
+       }
+      ],
+      [
+       {
+        "t": "LibreOffice.",
+        "b": true
+       },
+       {
+        "t": " A free Word-and-Excel-style program for your computer, if you don't want Google's."
+       }
+      ],
+      [
+       {
+        "t": "Your phone's own apps.",
+        "b": true
+       },
+       {
+        "t": " Notes, Calendar, Camera and Reminders are free and already there."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A word of caution:",
+       "i": true
+      },
+      {
+       "t": " free programs are free because they want something, usually your attention or your data. Read what you agree to, don't put customers' phone numbers in a program you don't understand, and don't sign up for the paid trial unless you mean to."
+      }
+     ]
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Pick ONE place to post (usually my Facebook Page)"
+       }
+      ],
+      [
+       {
+        "t": "Choose my rhythm: weekly, monthly or seasonal"
+       }
+      ],
+      [
+       {
+        "t": "Set one day a month to take photos and write posts"
+       }
+      ],
+      [
+       {
+        "t": "Turn off notifications for likes and comments"
+       }
+      ],
+      [
+       {
+        "t": "Set a 15-minute timer"
+       }
+      ],
+      [
+       {
+        "t": "Turn off location tagging on my phone's camera"
+       }
+      ],
+      [
+       {
+        "t": "Plan a \"closed for the season\" post"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "label": "WHERE TO GET HELP",
+     "runs": [
+      {
+       "t": "each company's help center, your library, and a patient friend."
+      }
+     ]
+    }
+   ],
+   "part": {
+    "label": "PART 4",
+    "intro": [
+     {
+      "t": "Everything in this part is optional. I'd rather you use two tools well than ten badly. Prices and free limits change, so before you sign up, look at the company's own pricing page and make sure the free plan still covers what you need."
+     }
+    ]
+   },
+   "description": "Three free website builders, what to know about AI website ads, and the free Google and other programs worth knowing.",
+   "short": "Free tools"
+  },
+  {
+   "slug": "ai-helpers",
+   "title": "A short introduction to AI helpers",
+   "blocks": [
+    {
+     "type": "checklist-heading",
+     "text": "CHECKLIST"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "Try one question with an AI assistant"
+       }
+      ],
+      [
+       {
+        "t": "Ask it to make a sales-log spreadsheet"
+       }
+      ],
+      [
+       {
+        "t": "Check everything it says before I use it"
+       }
+      ],
+      [
+       {
+        "t": "Never paste in passwords or customers' details"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "What it is.",
+       "b": true
+      },
+      {
+       "t": " An AI assistant is a program you talk to by typing or speaking, the way you'd text a helpful person. You say what you need, and it writes back."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "An "
+      },
+      {
+       "t": "agent",
+       "b": true
+      },
+      {
+       "t": " goes a step further. Instead of just answering, it can do small jobs for you, such as creating a document or a spreadsheet and handing you the file."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "What it can do for a small seller:",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Write and fix text.",
+        "b": true
+       },
+       {
+        "t": " A \"Welcome to our farm stand\" post, a price sign, a short \"about us,\" a polite reply to a review, a thank-you email."
+       }
+      ],
+      [
+       {
+        "t": "Make documents.",
+        "b": true
+       },
+       {
+        "t": " A one-page price list, a flyer, a letter to regulars, or a checklist, ready to print."
+       }
+      ],
+      [
+       {
+        "t": "Make spreadsheets.",
+        "b": true
+       },
+       {
+        "t": " An Excel file or a Google Sheet for your sales log, your egg count, a pre-order list or your monthly costs, with the columns and the adding-up already set up."
+       }
+      ],
+      [
+       {
+        "t": "Make a posting calendar.",
+        "b": true
+       },
+       {
+        "t": " \"Give me one post a week for the strawberry season,\" and it gives you a list."
+       }
+      ],
+      [
+       {
+        "t": "Explain things.",
+        "b": true
+       },
+       {
+        "t": " \"What does Bcc mean?\" \"What's the difference between a Page and a profile?\""
+       }
+      ],
+      [
+       {
+        "t": "Work out prices.",
+        "b": true
+       },
+       {
+        "t": " Give it your costs and ask what to charge to cover them."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Free or not?",
+       "b": true
+      },
+      {
+       "t": " Free AI assistants all have usage limits that reset on a schedule, and the limits change. Claude's help pages say free users can create Word and Excel files."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "For ChatGPT and Gemini, check the app before you count on file-making. The Gemini built into Google Docs and Sheets needs a paid Google plan, but a free Gemini chat can export a reply to Docs, or to Sheets if it's a table."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Cautions, and they matter:",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Check everything.",
+        "b": true
+       },
+       {
+        "t": " AI can sound sure and be wrong, especially about rules, taxes, food safety, prices and anything with a date. It must not be your last word on the rules in Part 3. Call the office."
+       }
+      ],
+      [
+       {
+        "t": "Don't paste in private things.",
+        "b": true
+       },
+       {
+        "t": " No card numbers, passwords, or customers' names and phone numbers."
+       }
+      ],
+      [
+       {
+        "t": "Read before you post.",
+        "b": true
+       },
+       {
+        "t": " It may write something that doesn't sound like you, or claim something that isn't true about your farm. Fix it so it sounds like you and says only what's true."
+       }
+      ],
+      [
+       {
+        "t": "Don't use it to make up reviews.",
+        "b": true
+       },
+       {
+        "t": " Fake reviews break the rules of Google and Facebook and can get your listing removed."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A good first try.",
+       "b": true
+      },
+      {
+       "t": " Type: \"I sell eggs and honey from my house. Make me a simple spreadsheet to track what I sell each day, the price, and how I was paid, with a total at the bottom.\" See what comes back, open it, and change anything that's wrong."
+      }
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "What a prompt is"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A "
+      },
+      {
+       "t": "prompt",
+       "b": true
+      },
+      {
+       "t": " is whatever you type or say to an AI assistant. That's all it is. \"Write me a post about eggs\" is a prompt. The better you describe what you want, the better the answer, the same as when you ask a helper at the hardware store."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "\"A tool for the garden\" gets you a shrug. \"A trowel for planting garlic in rocky soil\" gets you the right one."
+      }
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "How to write one yourself"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "You don't need special words. Just answer these five questions in a few sentences:"
+      }
+     ]
+    },
+    {
+     "type": "numbered",
+     "items": [
+      [
+       {
+        "t": "Who am I?",
+        "b": true
+       },
+       {
+        "t": " \"I sell eggs and honey from my house in a small town.\""
+       }
+      ],
+      [
+       {
+        "t": "What do I want?",
+        "b": true
+       },
+       {
+        "t": " \"Write a Facebook post.\""
+       }
+      ],
+      [
+       {
+        "t": "What does it need to say?",
+        "b": true
+       },
+       {
+        "t": " \"We're open Saturday 9 to 4. Eggs are $5 a dozen. Cash or Venmo.\""
+       }
+      ],
+      [
+       {
+        "t": "How should it look?",
+        "b": true
+       },
+       {
+        "t": " \"Two or three short sentences. No hashtags.\""
+       }
+      ],
+      [
+       {
+        "t": "How should it sound?",
+        "b": true
+       },
+       {
+        "t": " \"Friendly and plain, like a neighbor talking.\""
+       }
+      ]
+     ],
+     "start": 1
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "That's it. Here's the whole thing put together:"
+      }
+     ]
+    },
+    {
+     "type": "prompt",
+     "text": "I sell eggs and honey from my house in a small town. Write a Facebook post. We're open Saturday 9 to 4. Eggs are $5 a dozen. Cash or Venmo. Two or three short sentences, no hashtags, friendly and plain, like a neighbor talking."
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Then talk back to it.",
+       "b": true
+      },
+      {
+       "t": " The first answer is a draft. You can say \"shorter,\" \"warmer,\" \"give me three different versions,\" \"take out the exclamation points,\" or \"that's not quite right, I don't sell honey on Saturdays.\" Keep going until it sounds like you. This back-and-forth is the whole trick."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Tips:",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Give it the real facts.",
+        "b": true
+       },
+       {
+        "t": " If you don't tell it your hours and prices, it may make some up."
+       }
+      ],
+      [
+       {
+        "t": "Say who it's for.",
+        "b": true
+       },
+       {
+        "t": " \"For customers\" and \"for the town clerk\" call for different wording."
+       }
+      ],
+      [
+       {
+        "t": "Say what to leave out.",
+        "b": true
+       },
+       {
+        "t": " \"No hashtags,\" \"no big words,\" \"don't say anything about organic.\""
+       }
+      ],
+      [
+       {
+        "t": "Ask it to ask you.",
+        "b": true
+       },
+       {
+        "t": " Try ending with \"Ask me any questions you need before you start.\""
+       }
+      ],
+      [
+       {
+        "t": "Save the ones that work.",
+        "b": true
+       },
+       {
+        "t": " Copy a prompt you liked into Notes or Google Docs, and change the details next time."
+       }
+      ],
+      [
+       {
+        "t": "Start a new chat for a new job,",
+        "b": true
+       },
+       {
+        "t": " so old details don't leak in."
+       }
+      ]
+     ]
+    },
+    {
+     "type": "checklist-heading",
+     "text": "WRITING A PROMPT"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "I said who I am and what I sell"
+       }
+      ],
+      [
+       {
+        "t": "I said what I want"
+       }
+      ],
+      [
+       {
+        "t": "I gave the real facts (hours, prices, dates)"
+       }
+      ],
+      [
+       {
+        "t": "I said how long it should be and how it should sound"
+       }
+      ],
+      [
+       {
+        "t": "I read the answer and fixed anything wrong before using it"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Make your own: let the AI write the prompt"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "You don't have to get the wording right yourself. You can ask the AI to interview you and then write the prompt for you. Copy this, change the words in [brackets], and send it."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Do it once for each job you want help with, such as your weekly post, your price sign or your reply to reviews."
+      }
+     ]
+    },
+    {
+     "type": "prompt",
+     "text": "I sell [what you sell] from my home in [your town]. I'm not good with computers. I want a prompt I can use again and again for [the job, such as writing my weekly Facebook post]. Ask me one question at a time about what you need to know: who it's for, the facts it must use, how long it should be, how it should sound, and what to leave out. When you have enough, write the finished prompt, with blanks in [brackets] for the parts that change each time. Then show me how to use it."
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Answer its questions in plain words. When it hands you the finished prompt, try it once, fix anything that's off, and save it in your Notes app or a notebook."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "The same warning applies here: don't tell it passwords, card numbers, or customers' names and phone numbers."
+      }
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Ready-made prompts to try"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Copy any of these, then change the words in [brackets]. Try one a week. If one doesn't work, change it and try again."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "For posts and signs",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "prompt",
+     "label": "A WEEKLY POST",
+     "text": "\"I sell [what you sell] from my home in [town]. Write a short, friendly Facebook post saying what's ready this week: [list]. Prices: [prices]. Open [days and hours]. Two or three sentences, no hashtags.\""
+    },
+    {
+     "type": "prompt",
+     "label": "A MONTH OF POSTS",
+     "text": "\"Give me one Facebook post idea a week for four weeks for a [farm stand / bakery / honey business] in [season]. For each, say what photo to take. Keep the posts short and plain.\""
+    },
+    {
+     "type": "prompt",
+     "label": "CLOSED FOR THE SEASON",
+     "text": "\"Write a warm, short post saying we're closed for the season, thanking customers, and saying we'll be back in [month].\""
+    },
+    {
+     "type": "prompt",
+     "label": "A PRICE SIGN",
+     "text": "\"Make a simple price list for a farm stand: [item and price, item and price]. Big, plain wording I can print on one page.\""
+    },
+    {
+     "type": "prompt",
+     "label": "A SHORT DESCRIPTION",
+     "text": "\"Here are the facts about my business: [name, what I sell, where, hours, what's special]. Write a description in under 750 characters. Plain words, no big claims.\""
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "For documents and spreadsheets",
+       "b": true
+      },
+      {
+       "t": " (a plain chat can give you the text; an AI agent that can make files can hand you the file itself)"
+      }
+     ]
+    },
+    {
+     "type": "prompt",
+     "label": "A SALES LOG",
+     "text": "\"Make me a simple spreadsheet to track what I sell each day. Columns for date, item, quantity, price, how they paid, and a total at the bottom. I want to open it in [Excel / Google Sheets].\""
+    },
+    {
+     "type": "prompt",
+     "label": "A MONTHLY MONEY SHEET",
+     "text": "\"Make a spreadsheet with money in and money spent by month, and a line that subtracts one from the other. Keep it simple.\""
+    },
+    {
+     "type": "prompt",
+     "label": "A PRICE CALCULATOR",
+     "text": "\"Make a sheet where I enter the cost of ingredients, packaging and my time for each product and it shows a price that covers them.\""
+    },
+    {
+     "type": "prompt",
+     "label": "A PRE-ORDER SHEET",
+     "text": "\"Make a spreadsheet to track pre-orders: name, what they ordered, amount, paid yes or no, picked up yes or no.\""
+    },
+    {
+     "type": "prompt",
+     "label": "A FLYER OR CARD",
+     "text": "\"Make a one-page flyer for [farm name]: what I sell, hours, address area, phone. Large letters. Black on white so it prints well.\""
+    },
+    {
+     "type": "prompt",
+     "label": "A LETTER TO REGULARS",
+     "text": "\"Write a short email to my regular customers saying [news]. Friendly, under 100 words.\""
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "For customers and reviews",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "prompt",
+     "label": "REPLY TO A GOOD REVIEW",
+     "text": "\"Write a short, warm reply to this review: [paste it]. Don't offer anything in return.\""
+    },
+    {
+     "type": "prompt",
+     "label": "REPLY TO A BAD REVIEW",
+     "text": "\"A customer left this review: [paste it]. Write a calm, three-sentence reply that says sorry once, doesn't argue, and asks them to call me at [number].\""
+    },
+    {
+     "type": "prompt",
+     "label": "A \"WE'RE OUT\" NOTE",
+     "text": "\"Write a polite sign saying we're out of [item] and when it'll be back.\""
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "For learning and planning",
+       "b": true
+      }
+     ]
+    },
+    {
+     "type": "prompt",
+     "label": "EXPLAIN IT SIMPLY",
+     "text": "\"Explain [Bcc / a Business Profile / a QR code] in plain words, like I've never used a computer.\""
+    },
+    {
+     "type": "prompt",
+     "label": "STEP BY STEP",
+     "text": "\"I'm using [Facebook on an iPhone]. Walk me through [adding my hours] one step at a time. I'll tell you what I see after each step.\""
+    },
+    {
+     "type": "prompt",
+     "label": "RULES QUESTIONS (NOT ANSWERS)",
+     "text": "\"I want to sell [homemade jam / eggs / baked goods] from my home in New York. Don't tell me the rules. Make me a list of questions to ask the state and my town, and who to call.\""
+    },
+    {
+     "type": "prompt",
+     "label": "A 30-DAY PLAN",
+     "text": "\"I sell [what] from home. I have about [one hour a week] for marketing. Make me a four-week plan with one small job each week.\""
+    },
+    {
+     "type": "prompt",
+     "label": "CHECK MY WORK",
+     "text": "\"Here's my sign: [paste]. Tell me anything unclear, confusing or missing, in a short list.\""
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Experiment.",
+       "b": true
+      },
+      {
+       "t": " Take any prompt above and change one thing at a time: the length, the tone, the audience. Ask for three versions and pick the one that sounds most like you."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Ask it to make something funnier, plainer or shorter. You can also use the \"Make your own\" prompt above to have it write a better prompt for you."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A caution that bears repeating:",
+       "b": true
+      },
+      {
+       "t": " never trust an AI assistant on rules, taxes, food safety or dates without checking. Use it to write and to plan. Use the offices on the \"where to get help\" list to confirm."
+      }
+     ]
+    }
+   ],
+   "part": {
+    "label": "PART 5",
+    "intro": [
+     {
+      "t": "You may have heard about AI, and about AI \"agents.\" Here's what that means for a person like you, in plain words, with no hype."
+     }
+    ]
+   },
+   "description": "What AI assistants can do for a small seller, how to write a prompt, and ready-made prompts to copy.",
+   "short": "A short introduction to AI helpers"
+  },
+  {
+   "slug": "where-to-get-help",
+   "title": "Where to get help in New York",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Every day in this guide ends with a \"where to get help\" line. Here they are in one place. I list names, not phone numbers, because numbers change. Search each one by name, or ask your library to look it up with you."
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Cornell Cooperative Extension, your county office.",
+        "b": true
+       },
+       {
+        "t": " Free help and classes for farms and home sellers."
+       }
+      ],
+      [
+       {
+        "t": "NY Small Business Development Centers (SBDC).",
+        "b": true
+       },
+       {
+        "t": " Free business advising."
+       }
+      ],
+      [
+       {
+        "t": "SCORE.",
+        "b": true
+       },
+       {
+        "t": " Free mentoring from retired and working business owners."
+       }
+      ],
+      [
+       {
+        "t": "NY FarmNet.",
+        "b": true
+       },
+       {
+        "t": " Free, confidential consulting for New York farm families."
+       }
+      ],
+      [
+       {
+        "t": "NY Department of Agriculture and Markets.",
+        "b": true
+       },
+       {
+        "t": " Food and farm rules, and the Pride of New York program."
+       }
+      ],
+      [
+       {
+        "t": "New York State Farm Directory.",
+        "b": true
+       },
+       {
+        "t": " The state's public list of New York farms. Ask Ag and Markets to add or update yours."
+       }
+      ],
+      [
+       {
+        "t": "Hudson Valley Bounty.",
+        "b": true
+       },
+       {
+        "t": " A free guide to local farms and food businesses."
+       }
+      ],
+      [
+       {
+        "t": "NY Department of Taxation and Finance.",
+        "b": true
+       },
+       {
+        "t": " Sales tax questions."
+       }
+      ],
+      [
+       {
+        "t": "Your town clerk or code office.",
+        "b": true
+       },
+       {
+        "t": " Stand and sign rules."
+       }
+      ],
+      [
+       {
+        "t": "Your public library.",
+        "b": true
+       },
+       {
+        "t": " Free computers, printing, and staff who will sit with you."
+       }
+      ],
+      [
+       {
+        "t": "Your phone company's store.",
+        "b": true
+       },
+       {
+        "t": " Phone help."
+       }
+      ],
+      [
+       {
+        "t": "ReportFraud.ftc.gov.",
+        "b": true
+       },
+       {
+        "t": " To report a scam. If the site is down, Consumer.ftc.gov has guidance."
+       }
+      ]
+     ]
+    }
+   ],
+   "description": "Free help for New York farms and home sellers, in one list: Cooperative Extension, SBDC, SCORE, NY FarmNet, state offices and directories.",
+   "short": "Where to get help in New York"
+  },
+  {
+   "slug": "word-list",
+   "title": "Plain-English word list",
+   "blocks": [
+    {
+     "type": "list",
+     "items": [
+      [
+       {
+        "t": "Account:",
+        "b": true
+       },
+       {
+        "t": " your name and password with a company, such as Google or Facebook."
+       }
+      ],
+      [
+       {
+        "t": "App:",
+        "b": true
+       },
+       {
+        "t": " a program on your phone, such as Maps or Facebook."
+       }
+      ],
+      [
+       {
+        "t": "Business Profile:",
+        "b": true
+       },
+       {
+        "t": " Google's name for the box with your farm's name, hours and map. It used to be called Google My Business."
+       }
+      ],
+      [
+       {
+        "t": "Claim:",
+        "b": true
+       },
+       {
+        "t": " to take over a listing that already exists for your farm."
+       }
+      ],
+      [
+       {
+        "t": "Domain:",
+        "b": true
+       },
+       {
+        "t": " your own web address, such as smithfarm.com. It costs money each year."
+       }
+      ],
+      [
+       {
+        "t": "Listing:",
+        "b": true
+       },
+       {
+        "t": " your farm's entry in a map or directory."
+       }
+      ],
+      [
+       {
+        "t": "Page (Facebook):",
+        "b": true
+       },
+       {
+        "t": " a free public page for a business, not a personal profile."
+       }
+      ],
+      [
+       {
+        "t": "Post:",
+        "b": true
+       },
+       {
+        "t": " one message and photo you put on your Page."
+       }
+      ],
+      [
+       {
+        "t": "QR code:",
+        "b": true
+       },
+       {
+        "t": " a square a phone camera can read. It opens a web page or a payment screen."
+       }
+      ],
+      [
+       {
+        "t": "Review:",
+        "b": true
+       },
+       {
+        "t": " what a customer writes about you on Google or Facebook."
+       }
+      ],
+      [
+       {
+        "t": "Service area:",
+        "b": true
+       },
+       {
+        "t": " the towns you travel to, instead of one address people visit."
+       }
+      ],
+      [
+       {
+        "t": "Two-step sign-in:",
+        "b": true
+       },
+       {
+        "t": " a second check, such as a code texted to your phone, when you sign in."
+       }
+      ],
+      [
+       {
+        "t": "Verify:",
+        "b": true
+       },
+       {
+        "t": " to prove to Google that the business is really yours."
+       }
+      ],
+      [
+       {
+        "t": "AI agent:",
+        "b": true
+       },
+       {
+        "t": " a program you talk to that can also do small jobs for you, such as making a document or a spreadsheet."
+       }
+      ],
+      [
+       {
+        "t": "Prompt:",
+        "b": true
+       },
+       {
+        "t": " whatever you type or say to an AI assistant."
+       }
+      ]
+     ]
+    }
+   ],
+   "description": "Plain-English meanings for the words in this guide, from account and Business Profile to QR code, verify and prompt.",
+   "short": "Plain-English word list"
+  },
+  {
+   "slug": "what-to-do-next",
+   "title": "You did it. What to do next",
+   "blocks": [
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you worked through even Part 1, you did something a lot of home sellers never get around to. You wrote down the facts about your farm, you got your phone and sign-ins in order, and you put a Page up where neighbors can find you. That's a real start."
+      }
+     ]
+    },
+    {
+     "type": "checklist-heading",
+     "text": "WHAT I SHOULD HAVE BY NOW (TICK WHAT'S DONE)"
+    },
+    {
+     "type": "checklist",
+     "items": [
+      [
+       {
+        "t": "My basics written down in one place"
+       }
+      ],
+      [
+       {
+        "t": "A farm email and safe sign-ins"
+       }
+      ],
+      [
+       {
+        "t": "Good photos"
+       }
+      ],
+      [
+       {
+        "t": "A Facebook Page with hours, photo and first post"
+       }
+      ],
+      [
+       {
+        "t": "A way to take payment that fits me"
+       }
+      ],
+      [
+       {
+        "t": "A map listing (if I chose one)"
+       }
+      ],
+      [
+       {
+        "t": "I know who to call about the rules"
+       }
+      ],
+      [
+       {
+        "t": "A few places and people who know I'm there"
+       }
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If you don't have everything, that's fine. Pick the next one that matters most to you and do just that. Every day stands on its own and will keep."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "A simple plan for the next 30 days.",
+       "b": true
+      },
+      {
+       "t": " Week 1: post twice on your Page and check that your hours are right everywhere you're listed. Week 2: do one outside step, such as joining a local group or putting a card on a bulletin board."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Week 3: set up one new thing from Part 2 or Part 4. Week 4: do your monthly check from Day 10 and look at your sales log from Day 14. What sold? What didn't?"
+      }
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "A few practical notes"
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Keep it up without letting it take over.",
+       "b": true
+      },
+      {
+       "t": " Ten minutes a week does more than a big push once a year. Change your hours the day they change, answer reviews, and post when you have something to say."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "If it starts to feel like a chore, do less. A simple, accurate Page beats a busy one."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Know when to ask for help.",
+       "b": true
+      },
+      {
+       "t": " You never have to do this alone. If something doesn't work, go back to the \"where to get help\" line on that day."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Your library, your Cooperative Extension office and your SBDC are free, and they like helping people like you."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Things change.",
+       "b": true
+      },
+      {
+       "t": " Websites and apps change all the time, and parts of this guide will go out of date. When something on your screen doesn't match, trust the company's own page, and keep going. You'll figure it out."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Pass it on.",
+       "b": true
+      },
+      {
+       "t": " If this guide helped, tell a neighbor who sells from home. The farmer down the road with a hand-lettered sign and no Page is probably wondering where to start."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Thank you for reading, and good luck with your season."
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "— Devlin Foster, Hudson Valley Almanac",
+       "i": true
+      }
+     ]
+    },
+    {
+     "type": "p",
+     "runs": [
+      {
+       "t": "Free, no ads, nothing to sign up for.",
+       "i": true
+      }
+     ]
+    }
+   ],
+   "description": "A checklist of what you should have by now, a simple plan for the next 30 days, and a few practical notes.",
+   "short": "You did it. What to do next"
+  }
+ ]
+}

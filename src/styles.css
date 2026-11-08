@@ -628,3 +628,97 @@
     .trip-page .mp-result { break-inside: avoid; }
     .trip-page a { color: #000; text-decoration: none; }
   }
+
+  /* ---- Put Your Farm on the Map: landing table of contents and the web
+     version's pages (/put-your-farm-on-the-map/<slug>). Phone first: 16px side
+     gutters, 18px text, 44px tap targets. Colors are tokens so the guide pages
+     get their own dark palette (the rest of the site stays light). ---- */
+  .pyf-wrap {
+    --pyf-bg: #EFF0E8; --pyf-panel: #F5F6F0; --pyf-text: #1A2B3C; --pyf-muted: #4A6472;
+    --pyf-rule: rgba(28,58,94,0.22); --pyf-navy: #1C3A5E; --pyf-link: #8A5513; --pyf-link-hover: #14304F;
+    --pyf-green: #244B35; --pyf-callout: #EEF3EC; --pyf-prompt: #F6F1E6; --pyf-check: #244B35;
+    background: var(--pyf-bg); color: var(--pyf-text);
+  }
+  .pyf-wrap .listing-page-body { background: var(--pyf-panel); }
+  .pyf-wrap .trail-body p, .pyf-wrap .trail-list li, .pyf-wrap .trail-crosslinks { color: var(--pyf-text); }
+  .pyf-wrap .trail-h2, .pyf-wrap .trail-close, .pyf-wrap .back-link { color: var(--pyf-text); }
+  .pyf-wrap .trail-lede, .pyf-wrap .trail-body .guide-note { color: var(--pyf-muted); }
+  .pyf-wrap .trail-list strong { color: inherit; }
+  .pyf-wrap .trail-body a:not(.guide-download-btn):not(.pyf-pager-link):not(.pyf-start-btn):not(.pyf-toc-link),
+  .pyf-wrap .trail-crosslinks a { color: var(--pyf-link); text-decoration: underline; text-underline-offset: 2px; }
+  .pyf-wrap .trail-body a:not(.guide-download-btn):not(.pyf-pager-link):not(.pyf-start-btn):not(.pyf-toc-link):hover { color: var(--pyf-link-hover); }
+  .pyf-wrap a:focus-visible, .pyf-wrap input:focus-visible { outline: 3px solid #C4862D; outline-offset: 2px; }
+  .pyf-wrap .listing-page-title { overflow-wrap: anywhere; }
+
+  .pyf-body p, .pyf-body li { font-family: 'Lora', serif; font-size: 18px; line-height: 1.7; overflow-wrap: break-word; }
+  .pyf-body p { margin-bottom: 18px; }
+  .pyf-body strong { color: inherit; }
+  .pyf-body .pyf-lede { font-style: italic; color: var(--pyf-muted); }
+  .pyf-h2 { font-family: 'Libre Baskerville', serif; font-size: 22px; line-height: 1.3; font-weight: 700; color: var(--pyf-text); margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--pyf-navy); }
+  .pyf-checklist-head { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pyf-green); margin: 26px 0 8px; }
+  .pyf-checklist { list-style: none; margin: 0 0 22px; padding: 0; }
+  .pyf-checklist li { margin: 0; border-bottom: 1px solid var(--pyf-rule); }
+  .pyf-checklist li:last-child { border-bottom: none; }
+  .pyf-checklist label { display: flex; align-items: flex-start; gap: 12px; min-height: 44px; padding: 10px 0; cursor: pointer; }
+  .pyf-checklist input { flex: none; width: 24px; height: 24px; margin: 3px 0 0; accent-color: var(--pyf-check); cursor: pointer; }
+  .pyf-checklist input:checked + span { color: var(--pyf-muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .pyf-list, .pyf-numbered { margin: 0 0 20px; padding-left: 24px; }
+  .pyf-list li, .pyf-numbered li { margin-bottom: 10px; padding-left: 4px; }
+  .pyf-list li::marker { color: var(--pyf-green); }
+  .pyf-callout { background: var(--pyf-callout); border-left: 4px solid var(--pyf-green); padding: 14px 16px; margin: 0 0 14px; font-family: 'Lora', serif; font-size: 17px; line-height: 1.65; color: var(--pyf-text); }
+  .pyf-callout-label { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: var(--pyf-green); }
+  .pyf-callout + p, .pyf-callout + .pyf-part { margin-top: 22px; }
+  .pyf-sidebar { background: var(--pyf-callout); border: 2px solid var(--pyf-green); padding: 18px 18px 6px; margin: 30px 0 22px; scroll-margin-top: 80px; }
+  .pyf-sidebar-title { font-family: 'Libre Baskerville', serif; font-size: 20px; line-height: 1.3; font-weight: 700; color: var(--pyf-green); margin: 0 0 12px; }
+  .pyf-prompt { background: var(--pyf-prompt); border-left: 4px solid var(--pyf-green); padding: 14px 16px; margin: 0 0 16px; }
+  .pyf-prompt-label { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--pyf-green); margin-bottom: 6px; }
+  .pyf-body .pyf-prompt p { margin: 0; font-size: 17px; }
+  .pyf-body .pyf-note { font-style: italic; color: var(--pyf-muted); font-size: 16px; }
+  .pyf-body .pyf-did-it-work { border-top: 1px solid var(--pyf-rule); padding-top: 16px; margin-top: 26px; }
+  .pyf-body .pyf-tomorrow { font-style: italic; }
+  .pyf-part { border: 1px solid var(--pyf-rule); border-left: 4px solid #C4862D; padding: 14px 16px; margin: 0 0 24px; }
+  .pyf-part-label { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pyf-muted); margin-bottom: 6px; }
+  .pyf-body .pyf-part p { margin: 0; font-style: italic; }
+  .pyf-pager { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 34px 0 18px; padding-top: 22px; border-top: 3px double var(--pyf-navy); }
+  .pyf-wrap a.pyf-pager-link { display: flex; flex-direction: column; gap: 4px; min-height: 44px; padding: 12px 14px; border: 1.5px solid var(--pyf-navy); color: var(--pyf-text); text-decoration: none; background: var(--pyf-bg); }
+  .pyf-wrap a.pyf-pager-link:hover { box-shadow: 2px 2px 0 var(--pyf-navy); }
+  .pyf-pager-next { text-align: right; }
+  .pyf-pager-dir { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pyf-link); }
+  .pyf-pager-title { font-family: 'Lora', serif; font-size: 17px; line-height: 1.4; }
+  @media (min-width: 601px) { .pyf-pager { grid-template-columns: 1fr 1fr; } }
+  .pyf-body .pyf-download-note { margin-top: 10px; }
+
+  .pyf-start { margin: 0 0 8px; }
+  .pyf-wrap a.pyf-start-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 18px; background: var(--pyf-navy); color: #EFF0E8; font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }
+  .pyf-wrap a.pyf-start-btn:hover { background: #14304F; }
+  .pyf-toc { margin-top: 10px; }
+  .pyf-toc-group { margin-bottom: 18px; }
+  .pyf-toc-group-title { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pyf-muted); margin: 18px 0 6px; }
+  .pyf-toc-list { list-style: none; margin: 0; padding: 0; }
+  .pyf-toc-list li { border-bottom: 1px solid var(--pyf-rule); }
+  .pyf-wrap .trail-body .pyf-toc-list a { display: flex; align-items: baseline; gap: 10px; min-height: 44px; padding: 10px 0; text-decoration: none; color: var(--pyf-text); font-family: 'Lora', serif; font-size: 17px; line-height: 1.4; }
+  .pyf-wrap .trail-body .pyf-toc-list a:hover .pyf-toc-name { text-decoration: underline; }
+  .pyf-toc-day { flex: none; min-width: 3.6em; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pyf-link); }
+
+  @media (max-width: 600px) {
+    .pyf-wrap .listing-page-nav { padding: 16px 16px 0; }
+    .pyf-wrap .listing-page-article { padding: 14px 0 48px; }
+    .pyf-wrap .listing-page-masthead { padding: 22px 16px 20px; border-left: none; border-right: none; }
+    .pyf-wrap .listing-page-body { padding: 20px 16px 24px; border-left: none; border-right: none; }
+    .pyf-wrap .guide-download { margin-left: 0; margin-right: 0; }
+    .pyf-wrap .listing-page-title { font-size: 26px; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .pyf-wrap {
+      --pyf-bg: #0E1822; --pyf-panel: #15222E; --pyf-text: #E8EAE2; --pyf-muted: #A9B8C2;
+      --pyf-rule: rgba(232,234,226,0.18); --pyf-navy: #6E8FB3; --pyf-link: #F0B35E; --pyf-link-hover: #FFD49A;
+      --pyf-green: #8CC7A1; --pyf-callout: #1A2E25; --pyf-prompt: #2A2519; --pyf-check: #8CC7A1;
+      color-scheme: dark;
+    }
+    .pyf-wrap .listing-page-masthead { background: #1C3A5E; border-color: #2C527D; }
+    .pyf-wrap .listing-page-body { border-color: #2C527D; }
+    .pyf-wrap .guide-download { border-color: #2C527D; }
+    .pyf-wrap a.pyf-start-btn { background: #2C527D; }
+    .pyf-wrap a.pyf-start-btn:hover { background: #3A6696; }
+  }
