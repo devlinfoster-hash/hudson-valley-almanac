@@ -1,0 +1,172 @@
+[
+ {
+  "slug": "start",
+  "title": "Start here",
+  "short": "Start here",
+  "description": "Why this guide exists, how the one-job-a-day idea works, and the easiest jobs to do first if you only have an hour."
+ },
+ {
+  "slug": "day-1",
+  "title": "DAY 1 — Basics, email and passwords",
+  "short": "Basics, email and passwords",
+  "description": "Write down your farm's basics once, make a free farm email, and set up safe passwords with two-step sign-in.",
+  "day": 1,
+  "part": {
+   "label": "PART 1: YOUR FIRST WEEKEND"
+  }
+ },
+ {
+  "slug": "day-2",
+  "title": "DAY 2 — Photos and your Facebook Page",
+  "short": "Photos and your Facebook Page",
+  "description": "Take ten good photos with your phone and make a free Facebook Page for your farm, step by step.",
+  "day": 2
+ },
+ {
+  "slug": "day-3",
+  "title": "DAY 3 — Your first post and a weekly habit",
+  "short": "Your first post and a weekly habit",
+  "description": "Write your first Facebook post, plan a simple weekly posting habit, and add a helper to your Page safely.",
+  "day": 3
+ },
+ {
+  "slug": "day-4",
+  "title": "DAY 4 — Take payments without cash",
+  "short": "Take payments without cash",
+  "description": "Take payments without cash: Venmo, Cash App, PayPal, Zelle and Square fees as of October 11, 2026, plus a QR payment sign.",
+  "day": 4,
+  "part": {
+   "label": "PART 2: ONE OPTIONAL DAY EACH"
+  }
+ },
+ {
+  "slug": "day-5",
+  "title": "DAY 5 — Google Maps: find or make your listing",
+  "short": "Google Maps: find or make your listing",
+  "description": "Find or make your farm's free Google Business Profile so you show up on Google Maps.",
+  "day": 5
+ },
+ {
+  "slug": "day-6",
+  "title": "DAY 6 — Prove your listing is yours",
+  "short": "Prove your listing is yours",
+  "description": "Verify your Google Business Profile by postcard, phone, email or video, and keep the code safe.",
+  "day": 6
+ },
+ {
+  "slug": "day-7",
+  "title": "DAY 7 — Pin, hours and details",
+  "short": "Pin, hours and details",
+  "description": "Fix your map pin, set your hours and special hours, and write your Google category and description.",
+  "day": 7
+ },
+ {
+  "slug": "day-8",
+  "title": "DAY 8 — Google photos, a post and a helper",
+  "short": "Google photos, a post and a helper",
+  "description": "Add photos and a post to your Google listing, and add a helper as a Manager so you stay the owner.",
+  "day": 8
+ },
+ {
+  "slug": "day-9",
+  "title": "DAY 9 — Reviews and scams",
+  "short": "Reviews and scams",
+  "description": "Ask for honest Google reviews, answer every review, and learn the scams that target small businesses.",
+  "day": 9
+ },
+ {
+  "slug": "day-10",
+  "title": "DAY 10 — Keep it working",
+  "short": "Keep it working",
+  "description": "Ten minutes a month to keep your hours, posts, reviews and map pin right, and what to do if something goes wrong.",
+  "day": 10
+ },
+ {
+  "slug": "day-11",
+  "title": "DAY 11 — Check the rules before you sell",
+  "short": "Check the rules before you sell",
+  "description": "Who to call in New York about the rules for selling from home, and exactly what to ask each office.",
+  "day": 11,
+  "part": {
+   "label": "PART 3: THE RULES, THE PAPERWORK AND THE STAND"
+  }
+ },
+ {
+  "slug": "day-12",
+  "title": "DAY 12 — Take orders with a free Google Form",
+  "short": "Take orders with a free Google Form",
+  "description": "Take orders and sign-ups with a free Google Form, plus a short checklist for running a CSA or farm share.",
+  "day": 12
+ },
+ {
+  "slug": "day-13",
+  "title": "DAY 13 — Get found where your neighbors already look",
+  "short": "Get found where your neighbors already look",
+  "description": "Get found in local Facebook groups, Marketplace, free farm directories such as Hudson Valley Bounty, and the Almanacs.",
+  "day": 13
+ },
+ {
+  "slug": "day-14",
+  "title": "DAY 14 — Know your prices and your numbers",
+  "short": "Know your prices and your numbers",
+  "description": "Set fair prices, keep them the same everywhere, and keep a simple daily sales log.",
+  "day": 14
+ },
+ {
+  "slug": "day-15",
+  "title": "DAY 15 — Stay in touch with your regulars",
+  "short": "Stay in touch with your regulars",
+  "description": "Stay in touch with your regulars through Facebook, a sign-up notebook and a group email sent with Bcc.",
+  "day": 15
+ },
+ {
+  "slug": "day-16",
+  "title": "DAY 16 — Your stand itself",
+  "short": "Your stand itself",
+  "description": "A sign people can read from the road, posted prices, a locked cash box and other simple things for your stand.",
+  "day": 16
+ },
+ {
+  "slug": "day-17",
+  "title": "DAY 17 — Offline ways to be found",
+  "short": "Offline ways to be found",
+  "description": "Offline ways to be found: tell-a-friend cards, bulletin boards, markets, a chalkboard and local papers.",
+  "day": 17
+ },
+ {
+  "slug": "free-tools",
+  "title": "Free tools",
+  "short": "Free tools",
+  "description": "Three free website builders, what to know about AI website ads, and the free Google and other programs worth knowing.",
+  "part": {
+   "label": "PART 4"
+  }
+ },
+ {
+  "slug": "ai-helpers",
+  "title": "A short introduction to AI helpers",
+  "short": "A short introduction to AI helpers",
+  "description": "What AI assistants can do for a small seller, how to write a prompt, and ready-made prompts to copy.",
+  "part": {
+   "label": "PART 5"
+  }
+ },
+ {
+  "slug": "where-to-get-help",
+  "title": "Where to get help in New York",
+  "short": "Where to get help in New York",
+  "description": "Free help for New York farms and home sellers, in one list: Cooperative Extension, SBDC, SCORE, NY FarmNet, state offices and directories."
+ },
+ {
+  "slug": "word-list",
+  "title": "Plain-English word list",
+  "short": "Plain-English word list",
+  "description": "Plain-English meanings for the words in this guide, from account and Business Profile to QR code, verify and prompt."
+ },
+ {
+  "slug": "what-to-do-next",
+  "title": "You did it. What to do next",
+  "short": "You did it. What to do next",
+  "description": "A checklist of what you should have by now, a simple plan for the next 30 days, and a few practical notes."
+ }
+]
